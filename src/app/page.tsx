@@ -180,8 +180,9 @@ export default function Home() {
 
                   <div className="flex items-center justify-between pt-6 border-t border-white/10">
                     <div>
-                      <p className="text-zinc-400 text-sm">Build price</p>
-                      <p className="text-3xl font-bold">${prd.price}</p>
+                      <p className="text-zinc-400 text-sm">Pay today</p>
+                      <p className="text-4xl font-bold">$0</p>
+                      <p className="text-zinc-500 text-xs mt-1">Then 6 × $4.83/mo · Total $29</p>
                     </div>
                     <div className="flex gap-3">
                       <Link
@@ -194,7 +195,7 @@ export default function Home() {
                         href={`/build/${prd.id}`}
                         className="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 font-medium flex items-center gap-2 transition-all"
                       >
-                        Start Building
+                        Start Building Now
                         <ChevronRight className="w-4 h-4" />
                       </Link>
                     </div>
