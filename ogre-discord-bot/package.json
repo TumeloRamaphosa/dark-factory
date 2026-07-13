@@ -1,0 +1,16 @@
+{
+  "name": "ogre-discord-bot",
+  "version": "1.0.0",
+  "description": "OGRE Discord Bot — Cipher Tr@ce on Discord",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
