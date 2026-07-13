@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+*.log
+SrudEx-Agents-Nest-Cloud-VM/
+StudExHermes-Command/
+dark-factory/
+obsidian-brain/
+robusca-brain/

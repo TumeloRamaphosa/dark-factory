@@ -1,7 +1,0 @@
-{
-  "name": "ogre-content-hub",
-  "version": 2,
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
-}
