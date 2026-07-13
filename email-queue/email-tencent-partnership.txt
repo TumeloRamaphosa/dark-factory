@@ -1,0 +1,35 @@
+To: cloudpartner@tencent.com
+Subject: Partnership Proposal — Tencent Cloud × OGRE Computer (South Africa)
+
+---
+
+Dear Tencent Cloud Partner Team,
+
+OGRE Computer (a division of Studex Group, South Africa) proposes a strategic partnership to position Tencent Cloud as the dominant AI infrastructure partner in South Africa's government and enterprise sector.
+
+WHO WE ARE:
+OGRE Computer — sovereign AI infrastructure for African governments and enterprises.
+Studex Group: B-BBEE Level 1, 11-year operating history, AWS + Google Cloud certified partner. Founder Tumelo Ramaphosa is a recognized African tech entrepreneur (IBM/Cardano blockchain wildlife conservation, Forbes Africa coverage).
+
+THE OPPORTUNITY:
+South Africa's government AI market is projected to exceed R8 billion by 2028.
+The SA Department of Health alone has R200M+ active AI tenders closing July 2026.
+Government requires: local data residency, B-BBEE compliance, sovereign VM infrastructure.
+
+OUR PROPOSITION:
+OGRE becomes an authorized Tencent Cloud channel partner for South Africa.
+We integrate Tencent Cloud AI services (computer vision, speech AI, LLM APIs) into our Dark Factory agent platform — then sell to government + enterprise.
+
+IMMEDIATE OPPORTUNITY — SA DoH EMR Tender (NDoH-11):
+R200M+ contract. We are preparing a joint bid. Are you able to provide:
+1. Letter of Support / Technology Endorsement
+2. Preferred partner pricing for GPU compute
+3. SA government reference customers
+
+We would welcome a 30-minute call this week.
+
+Best regards,
+Tumelo Ramaphosa / Cipher Tr@ce
+OGRE Computer · Studex Group
+cto@studex-group.com
+---

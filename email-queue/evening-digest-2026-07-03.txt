@@ -1,0 +1,140 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: Friday, July 3rd, 2026 | 18:00 PM SAST
+═══════════════════════════════════════
+
+MAJOR: WHAT SHIPPED TODAY
+═══════════════════════════════════════
+
+🚀 DarkDesk™ — LIVE
+→ https://hgjcgc2esiki.space.minimax.io
+Secure Business AI Companion. Voice + chat. POPIA-compliant. Runs in a sovereign SA VM.
+Built from RileyJarvis (MIT). R2,500–R25K/month. 4 tiers.
+Target markets: law firms, medical practices, finance, C-suite executives.
+Key differentiator: Data never leaves South Africa. Full POPIA compliance baked in.
+
+🚀 AutoFlex Pro™ — LIVE
+→ https://3twhamln9rsh.space.minimax.io
+AI Web Agent. Embeds inside any website. Reads forms, fills them, qualifies leads,
+books appointments — via natural language. Built from Alibaba Page-Agent (MIT).
+R1,500–R35K/month. 4 tiers.
+Target markets: healthcare, gyms, recruitment, government portals, B2B e-commerce.
+Key differentiator: No chatbot. Real AI that reads and acts on the actual DOM.
+
+🚀 OGRE GAME PLAN Q3 — BUILT
+→ /workspace/OGRE-GAME-PLAN-2026.md
+Full Q3 strategy covering: 3 standard products, tender strategy, PRD scoping system,
+agent integration plan, 30-day sprint, revenue targets.
+
+🚀 OGRE TENDER ATTACK PLAN — 6 LIVE TENDERS IDENTIFIED
+→ /workspace/OGRE-TENDER-ATTACK-PLAN-2026.md
+Pipeline value: R6–20M reachable within 90 days.
+Most urgent: SA DoH EMR NDoH-11 — closes 13 JULY. 10 days.
+
+🚀 PRD SYSTEM — STANDARDISED
+→ /workspace/PRD-SYSTEM/
+5-question intake. 4-tier pricing. POPIA complexity score. Standard proposal format.
+Every client now gets a consistent, professional scoping document.
+
+🚀 Agent VM Install Scripts — READY
+→ /workspace/ogre-vm-install/
+page-agent-install.sh + rileyjarvis-install.sh
+Ready to run on D@RK F@C#ORY VM via SSH.
+
+🚀 cto@studex-group.com Setup Guide — DONE
+→ /workspace/email-system/cto-email-setup.md
+Cloudflare Email Routing (free) → all client intake automated.
+5-minute setup. No cost.
+
+───────────────────────────────────────────────
+OPPORTUNITY: WHAT TO ACT ON
+───────────────────────────────────────────────
+
+🇿🇦 SA DoH EMR Tender (closes 13 July) — 10 DAYS LEFT
+→ This is the #1 opportunity right now.
+→ Download docs tonight from health.gov.za/tenders
+→ Find the winning EMR vendors (likely 2-3)
+→ Approach them as the AI agent overlay
+→ We don't bid the EMR — we bid the AI LAYER that sits on top
+
+💬 LAISA Phase A — 4 days since proposal
+→ Dr. Musa has had the proposal since Monday
+→ Single WhatsApp or voice note is the close. Don't overthink it.
+→ Follow up tomorrow morning first thing.
+
+🆕 DarkDesk + AutoFlex Pro — first sales conversations
+→ Both products are live. Both have clear ICPs.
+→ This weekend: Identify 3 law firms + 3 medical practices to approach next week
+→ AutoFlex: target the gym chains and recruitment firms you already know
+
+🇬🇭 Ghana + 🇷🇼 Rwanda tenders
+→ Not as urgent as SA DoH, but both closing within 3 weeks
+→ Monday: find Ghana local consultant, submit Rwanda EOI
+
+───────────────────────────────────────────────
+TOMORROW: PRIORITIES FOR SATURDAY / MONDAY
+───────────────────────────────────────────────
+
+IF WORKING SATURDAY:
+→ Submit SA DoH EOI + approach EMR vendor
+→ Setup Cloudflare cto@ email routing (5 min)
+→ WhatsApp LAISA Dr. Musa
+→ Download Ghana tender docs
+
+MONDAY 6 JULY:
+→ [1] LAISA Phase A close — Tumelo call or WhatsApp
+→ [2] SA DoH tender — approach EMR vendor, submit pre-qualification
+→ [3] SoftBank Africa Scout outreach — email
+→ [4] Jasiri AI Nigeria LOI — send
+→ [5] Kenya ICT Authority vendor registration — complete
+→ [6] Start DarkDesk pilot conversation — target SA law firm or medical practice
+
+───────────────────────────────────────────────
+REVENUE SNAPSHOT — FRIDAY 3 JULY
+───────────────────────────────────────────────
+
+Live MRR:          R45,000 (Red Team Agent)
+New MRR opportunity: R3,000–60,500/mo (DarkDesk + AutoFlex)
+Proposals out:     R350K + R55K/mo (LAISA Phase A)
+Tender pipeline:   R6–20M (SA + Ghana + Rwanda + Kenya + Nigeria)
+Pharmasyntez:      R2.99M Y1 (proposal written)
+
+Today closes:      R0
+Week closes:       R0
+Urgency:          🔴 LAISA + SA DoH = R5M+ in play right now
+
+───────────────────────────────────────────────
+CITATION: WHAT THE AGENTS DID
+───────────────────────────────────────────────
+
+Cipher Tr@ce (CEO, always active):
+→ Led full product strategy session
+→ Built + deployed DarkDesk + AutoFlex Pro
+→ Researched + integrated Page-Agent + RileyJarvis onto OGRE OS
+→ Identified 6 live government tenders
+→ Drafted full game plan for Q3 2026
+
+Research Agent (3AM cron, completed ✅):
+→ Compiled Global AI Landscape Brief (9 countries)
+→ Full Page-Agent + RileyJarvis technical analysis
+→ POPIA compliance requirements documented
+→ Agent pricing models researched (B2B SaaS frameworks)
+
+Revenue Agent (5PM cron, completed ✅):
+→ Full revenue pipeline logged to /workspace/memory/revenue-log.md
+→ Evening digest written + saved to email-queue
+
+Builder Agent (10PM cron, pending):
+→ Scheduled to run tonight — build DarkDesk + AutoFlex landing page variants
+→ Will produce A/B test assets by morning
+
+───────────────────────────────────────────────
+
+Friday is done. Two products shipped. Six tenders identified.
+One close in reach. The weekend is for thinking. Monday is for winning.
+
+OGRE runs on systems. Dark Factory builds in public.
+🏭 Friday, 3 July 2026.
+
+═══════════════════════════════════════
+*Cipher Tr@ce · Dark Factory · OGRE Computer*
+*cto@studex-group.com · Studex Group*

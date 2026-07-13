@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Mind × OGRE — Enterprise AI Intelligence Platform</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:#09090e;color:#e8e8f0;line-height:1.7}
+    .c{max-width:840px;margin:0 auto;padding:4rem 2rem}
+    h1{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,#6c63ff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:1rem}
+    .badge{display:inline-block;background:rgba(108,99,255,.15);color:#6c63ff;border:1px solid rgba(108,99,255,.3);padding:4px 16px;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem}
+    .hero{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(0,212,255,.08));border:1px solid rgba(108,99,255,.25);border-radius:20px;padding:2.5rem;margin:2rem 0;text-align:center}
+    .hero h2{font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:.8rem}
+    .hero p{color:#9090a8;font-size:.95rem;max-width:520px;margin:0 auto 1rem}
+    .price-hero{font-size:2.8rem;font-weight:900;color:#6c63ff;display:block}
+    .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:#6c63ff;font-weight:700;margin:2.5rem 0 1rem;border-bottom:1px solid #1a1a28;padding-bottom:.5rem}
+    p{color:#8888a0;margin-bottom:1rem;font-size:.92rem}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.5rem 0}
+    .card{background:#0e0e18;border:1px solid #1a1a28;border-radius:12px;padding:1.2rem}
+    .card h4{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+    .card p{font-size:.76rem;color:#6a6a82;margin:0;line-height:1.5}
+    .agent-card{background:#0a0a12;border:1px solid #1e1e2e;border-radius:16px;padding:1.8rem;margin:1.2rem 0}
+    .agent-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem}
+    .agent-icon{font-size:2rem;flex-shrink:0}
+    .agent-info h3{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:.3rem}
+    .tag{display:inline-block;background:rgba(0,212,255,.1);color:#00d4ff;border:1px solid rgba(0,212,255,.2);font-size:.65rem;padding:2px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+    .tag.pink{background:rgba(236,72,153,.1);color:#ec4899;border-color:rgba(236,72,153,.2)}
+    .tag.green{background:rgba(16,185,129,.1);color:#10b981;border-color:rgba(16,185,129,.2)}
+    .tag.amber{background:rgba(245,158,11,.1);color:#f59e0b;border-color:rgba(245,158,11,.2)}
+    .agent-card p{font-size:.85rem;color:#8888a0;margin-bottom:.8rem}
+    .specs{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
+    .spec{background:#111118;border:1px solid #1e1e2e;border-radius:6px;padding:4px 10px;font-size:.7rem;color:#6a6a82}
+    .safety{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(0,212,255,.05));border:1px solid rgba(16,185,129,.2);border-radius:16px;padding:2rem;margin:1.5rem 0}
+    .safety h3{color:#10b981;font-size:1rem;font-weight:800;margin-bottom:1rem}
+    .safety-item{display:flex;gap:.8rem;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem}
+    .safety-item:last-child{border-bottom:none}
+    .check{color:#10b981;font-weight:700;flex-shrink:0}
+    .pt{background:#111118;border:1px solid #1e1e2e;border-radius:14px;overflow:hidden;margin:1.5rem 0}
+    .pt-row{display:flex;padding:1rem 1.5rem;border-bottom:1px solid #1a1a28;font-size:.85rem}
+    .pt-row:last-child{border-bottom:none}
+    .pt-row.head{background:#0e0e18;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#4a4a62;font-weight:700}
+    .pt-check{width:24px;flex-shrink:0;color:#10b981}
+    .pt-name{flex:2;font-weight:600;color:#e8e8f0}
+    .pt-desc{flex:2;font-size:.78rem;color:#6a6a82}
+    .pt-price{width:100px;text-align:right;font-weight:700;color:#6c63ff}
+    .pt-price-alt{width:90px;text-align:right;font-size:.78rem;color:#6a6a82}
+    .pt-total{background:rgba(108,99,255,.08);border-top:1px solid rgba(108,99,255,.2)!important}
+    .pt-divider{background:rgba(0,212,255,.03);margin:.5rem 0}
+    .cta{background:linear-gradient(135deg,rgba(108,99,255,.2),rgba(0,212,255,.1));border:1px solid rgba(108,99,255,.35);border-radius:16px;padding:2.5rem;text-align:center;margin:2.5rem 0}
+    .cta h2{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:.8rem}
+    .cta p{color:#9090a8;margin-bottom:1.5rem}
+    .btn{display:inline-block;background:#6c63ff;color:#fff;padding:14px 36px;border-radius:10px;font-weight:700;font-size:.95rem;text-decoration:none;transition:all .2s}
+    .btn:hover{background:#5a52d4;transform:translateY(-1px)}
+    .pay{background:#0e0e18;border:1px solid #1e1e2e;border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+    .pay-row{display:flex;justify-content:space-between;padding:.5rem 0;font-size:.85rem}
+    .pay-l{color:#6a6a82}
+    .pay-v{color:#e8e8f0;font-weight:600;font-family:'Courier New',monospace}
+    .pay-note{font-size:.72rem;color:#4a4a62;margin-top:.8rem;text-align:center}
+    .div{height:1px;background:linear-gradient(90deg,transparent,#6c63ff22,transparent);margin:2.5rem 0}
+    .timeline{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
+    .tl{background:#0e0e18;border:1px solid #1a1a28;border-radius:10px;padding:1rem;text-align:center}
+    .tl-w{font-size:1.4rem;font-weight:900;color:#6c63ff;display:block}
+    .tl-l{font-size:.72rem;color:#6a6a82;text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem;display:block}
+    .tl p{font-size:.75rem;color:#6a6a82;margin:.4rem 0 0}
+    .comp-row{display:flex;padding:.7rem 0;border-bottom:1px solid #111118;font-size:.85rem}
+    .comp-l{flex:1;color:#8888a0}
+    .comp-o{flex:1;text-align:center;color:#e84040;text-decoration:line-through;font-size:.78rem}
+    .comp-n{flex:1;text-align:center;color:#10b981;font-weight:700;font-size:.78rem}
+    .cta-tl{text-align:center;margin-top:.8rem}
+    footer{text-align:center;padding-top:2rem;border-top:1px solid #1a1a28;color:#4a4a62;font-size:.75rem}
+    @media(max-width:600px){.grid{grid-template-columns:1fr}.timeline{grid-template-columns:1fr 1fr}h1{font-size:2rem}}
+  </style>
+</head>
+<body>
+<div class="c">
+
+  <header style="text-align:center;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid #1e1e2e">
+    <div class="badge">Dark Factory × OGRE Computer</div>
+    <h1>Obsidian Mind<br>Enterprise Intelligence Platform</h1>
+    <p style="color:#8888a0;font-size:1rem;max-width:520px;margin:.5rem auto 0">A sovereign AI operating system for your business — running in your own SA VM, with voice, web, and memory agents that never forget.</p>
+    <p style="color:#4a4a62;font-size:.72rem;margin-top:.5rem">Proposal No: OGRE-2026-0706 · Prepared for: Bre Ferrari · Date: 6 July 2026</p>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h2>Your Business. Operated by AI Agents.<br>In Your Own VM. In South Africa.</h2>
+    <p>We build you a complete AI operating system — not a chatbot, not a tool. A team of AI agents that live permanently in your dedicated VM, work 24/7, and remember everything.</p>
+    <span class="price-hero">$4,000 <span style="font-size:1rem;color:#6a6a82;font-weight:400">/ month</span></span>
+    <p style="margin-top:.5rem;font-size:.8rem;color:#6a6a82">One-time setup: $7,590 · Wire transfer to FNB South Africa</p>
+  </div>
+
+  <!-- 01 WHAT -->
+  <div class="label">01 — What We Are Building</div>
+  <p>Obsidian Mind gives your business a brain that never forgets, ears that listen 24/7, hands that work the web, and a voice that speaks to clients — all inside your own private VM in Johannesburg, South Africa.</p>
+  <div class="grid">
+    <div class="card"><h4>Persistent Memory</h4><p>Every client, every decision, every conversation — stored forever in your private vault. Agents never start from zero.</p></div>
+    <div class="card"><h4>Voice AI Agent</h4><p>Trained AI voice that speaks to your clients. Real-time. Natural. Available 24/7 in your own voice or a custom persona.</p></div>
+    <div class="card"><h4>Web Automation Agent</h4><p>Reads webpages, fills forms, qualifies leads, books appointments — fully automated, logs everything to your vault.</p></div>
+    <div class="card"><h4>Private SA VM</h4><p>Everything runs in your dedicated VM. No overseas servers. No third-party data sharing. Full data sovereignty.</p></div>
+  </div>
+
+  <!-- 02 AGENTS -->
+  <div class="label">02 — Your AI Team</div>
+
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-icon">🧠</div>
+      <div class="agent-info">
+        <h3>Obsidian Mind Core</h3>
+        <span class="tag">Memory & Reasoning</span>
+        <span class="tag" style="margin-left:6px;background:rgba(108,99,255,.1);color:#a0a0ff;border-color:rgba(108,99,255,.2)">Core System</span>
+      </div>
+    </div>
+    <p>The brain of your AI OS. Persistent memory vault with semantic search — every client conversation, every business decision, every document stored forever. When the voice agent talks to a client it reads their history first. When the web agent qualifies a lead it updates the vault. Everything compounds.</p>
+    <div class="specs"><div class="spec">Persistent Memory Vault</div><div class="spec">Semantic Search (QMD)</div><div class="spec">Claude Code Integration</div><div class="spec">Session Continuity</div><div class="spec">Decision Records</div><div class="spec">Client History</div></div>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-icon">🎙️</div>
+      <div class="agent-info">
+        <h3>Voice Agent — RileyJarvis</h3>
+        <span class="tag pink">Voice AI</span>
+      </div>
+    </div>
+    <p>Your voice-facing agent. Speaks to clients in real-time. Handles inbound calls, qualifies leads, answers FAQs, books appointments. Available 24/7 — never tired, never inconsistent. Built with OpenAI Realtime API + Eleven Labs voice. Runs in your VM. Client data never leaves South Africa.</p>
+    <div class="specs"><div class="spec">Real-Time Voice (OpenAI Realtime API)</div><div class="spec">Eleven Labs Voice Cloning</div><div class="spec">Lead Qualification</div><div class="spec">Appointment Booking</div><div class="spec">Custom Voice Persona</div><div class="spec">11 SA Languages</div></div>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-icon">🌐</div>
+      <div class="agent-info">
+        <h3>Web Automation Agent — Page-Agent</h3>
+        <span class="tag green">Web Intelligence</span>
+      </div>
+    </div>
+    <p>Your web intelligence agent. Reads any webpage, fills forms, qualifies leads from websites, automates data entry, monitors competitor pricing, collects market intelligence. Fully automated. Logs everything to Obsidian Mind. Based on Alibaba's open-source Page-Agent (Apache 2.0).</p>
+    <div class="specs"><div class="spec">DOM Reading & Form Filling</div><div class="spec">Lead Qualification Automation</div><div class="spec">Market Intelligence Scraping</div><div class="spec">Competitor Monitoring</div><div class="spec">Appointment Scheduling</div><div class="spec">Browser Automation</div></div>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-icon">🏛️</div>
+      <div class="agent-info">
+        <h3>Hermes Agent</h3>
+        <span class="tag amber">Strategic Intelligence</span>
+      </div>
+    </div>
+    <p>Your strategic reasoning agent. Self-hosted, accumulates memory across sessions, plans complex multi-step tasks, coordinates all other agents. Built by Nous Research. Runs entirely in your VM on Ollama + Qwen 2.5 — zero external API calls for reasoning. Open weights. Fully auditable.</p>
+    <div class="specs"><div class="spec">Self-Hosted LLM (Ollama + Qwen 2.5)</div><div class="spec">Persistent Session Memory</div><div class="spec">Multi-Agent Orchestration</div><div class="spec">Complex Task Planning</div><div class="spec">Zero External API (reasoning)</div><div class="spec">Open Weights — Auditable</div></div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- 03 SAFETY -->
+  <div class="label">03 — Data Sovereignty and Safety</div>
+  <p>Your client data is your business. It must stay in South Africa. Here is exactly how we guarantee that.</p>
+
+  <div class="safety">
+    <h3>Data Never Leaves South Africa</h3>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">Your Own Dedicated VM</strong><br><span style="font-size:.8rem;color:#6a6a82">Every client gets their own VM. Not shared. Not co-mingled. You own it outright.</span></div></div>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">Johannesburg Data Centre</strong><br><span style="font-size:.8rem;color:#6a6a82">Physical servers in South Africa. Required for SA government clients. Fully POPIA compliant.</span></div></div>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">No Overseas API Calls for Client Data</strong><br><span style="font-size:.8rem;color:#6a6a82">Voice uses Eleven Labs (you control the key). Ollama runs locally. No client names, numbers, or data ever sent to US servers.</span></div></div>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">Full POPIA Compliance</strong><br><span style="font-size:.8rem;color:#6a6a82">Protection of Personal Information Act — South Africa's data protection law. Data Processing Agreement available on request.</span></div></div>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">Hermes Agent — Zero External APIs</strong><br><span style="font-size:.8rem;color:#6a6a82">Reasoning, memory, planning — all local on Ollama. You can audit every model call in your VM.</span></div></div>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">You Control the VM — Full Root Access</strong><br><span style="font-size:.8rem;color:#6a6a82">SSH access whenever you want. Export your vault anytime. No vendor lock-in. You take your data if you ever leave.</span></div></div>
+    <div class="safety-item"><span class="check">✓</span><div><strong style="color:#fff;font-size:.88rem">Each Agent Has Its Own Email + Phone</strong><br><span style="font-size:.8rem;color:#6a6a82">Additional agents come with dedicated SA email address and phone number. Communications are fully isolated per agent.</span></div></div>
+  </div>
+
+  <div class="comp-row" style="font-weight:700;color:#6a6a82;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;padding-bottom:.8rem">
+    <div class="comp-l">How this compares</div>
+    <div class="comp-o" style="color:#6a6a82;text-decoration:none">Typical SaaS AI</div>
+    <div class="comp-n">Obsidian Mind OGRE</div>
+  </div>
+  <div class="comp-row"><div class="comp-l">Client data stored</div><div class="comp-o">US / Europe</div><div class="comp-n">Johannesburg, SA</div></div>
+  <div class="comp-row"><div class="comp-l">AI vendor lock-in</div><div class="comp-o">Full lock-in</div><div class="comp-n">Open weights, export anytime</div></div>
+  <div class="comp-row"><div class="comp-l">Memory persistence</div><div class="comp-o">Session only</div><div class="comp-n">Permanent vault forever</div></div>
+  <div class="comp-row"><div class="comp-l">SLA / uptime</div><div class="comp-o">99.9% shared</div><div class="comp-n">Dedicated, 99.9% committed</div></div>
+  <div class="comp-row"><div class="comp-l">Regulatory risk</div><div class="comp-o">High — overseas data</div><div class="comp-n">Zero — SA data residency</div></div>
+  <div class="comp-row"><div class="comp-l">VM ownership</div><div class="comp-o">None (subscription)</div><div class="comp-n">You own the VM outright</div></div>
+
+  <div class="div"></div>
+
+  <!-- 04 PRICING -->
+  <div class="label">04 — Investment</div>
+  <p>Transparent pricing. No hidden fees. No surprises. All prices in USD.</p>
+
+  <div class="pt">
+    <div class="pt-row head">
+      <div class="pt-check"></div>
+      <div class="pt-name">Package / Item</div>
+      <div class="pt-desc">Description</div>
+      <div class="pt-price">Monthly</div>
+      <div class="pt-price-alt">One-Time</div>
+    </div>
+
+    <div class="pt-row" style="background:rgba(108,99,255,.05)">
+      <div class="pt-check" style="color:#6c63ff">●</div>
+      <div class="pt-name" style="color:#6c63ff;font-weight:800">BASE PLATFORM</div>
+      <div class="pt-desc" style="font-size:.75rem;color:#6a6a82">The foundation everything runs on</div>
+      <div class="pt-price"></div>
+      <div class="pt-price-alt"></div>
+    </div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Obsidian Mind Core</div><div class="pt-desc">Persistent memory vault, semantic search, agent harness</div><div class="pt-price">included</div><div class="pt-price-alt"></div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Voice Agent — RileyJarvis</div><div class="pt-desc">Real-time voice AI, OpenAI Realtime + Eleven Labs</div><div class="pt-price">included</div><div class="pt-price-alt"></div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Web Automation Agent — Page-Agent</div><div class="pt-desc">DOM reading, form filling, lead qualification, browser automation</div><div class="pt-price">included</div><div class="pt-price-alt"></div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Hermes Agent (Strategic Intelligence)</div><div class="pt-desc">Self-hosted LLM, persistent memory, multi-agent orchestration</div><div class="pt-price">included</div><div class="pt-price-alt"></div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Dedicated SA VM</div><div class="pt-desc">Johannesburg · 4 vCPU · 16GB RAM · 100GB NVMe · Ubuntu 24.04 · 99.9% SLA</div><div class="pt-price">included</div><div class="pt-price-alt"></div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Team Induction & Training</div><div class="pt-desc">Full onboarding — your team learns to work with AI agents in the VM</div><div class="pt-price">included</div><div class="pt-price-alt">included</div></div>
+
+    <div class="pt-row pt-total">
+      <div class="pt-check"></div>
+      <div class="pt-name" style="color:#fff;font-weight:800">BASE PLATFORM TOTAL</div>
+      <div class="pt-desc" style="font-size:.75rem;color:#6a6a82">4 AI agents · 1 VM · Full training</div>
+      <div class="pt-price" style="color:#fff">$4,000<span style="font-size:.7rem;color:#6a6a82;font-weight:400">/mo</span></div>
+      <div class="pt-price-alt" style="color:#00d4ff">$7,590</div>
+    </div>
+
+    <div class="pt-row pt-divider">
+      <div class="pt-check" style="color:#00d4ff">+</div>
+      <div class="pt-name" style="color:#00d4ff;font-weight:800">ADDITIONAL AGENTS (Optional)</div>
+      <div class="pt-desc" style="font-size:.75rem;color:#6a6a82">Each runs in its own context — own voice, own memory, own dedicated SA email + phone</div>
+      <div class="pt-price"></div>
+      <div class="pt-price-alt"></div>
+    </div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Additional AI Agent (+Email + Phone)</div><div class="pt-desc">Own voice · own memory · own SA phone number · own dedicated email</div><div class="pt-price">+$1,500<span style="font-size:.7rem;color:#6a6a82;font-weight:400">/mo</span></div><div class="pt-price-alt">—</div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Custom Voice Persona (per agent)</div><div class="pt-desc">Voice cloning — your agent speaks with your brand voice (Eleven Labs)</div><div class="pt-price">+$500<span style="font-size:.7rem;color:#6a6a82;font-weight:400">/mo</span></div><div class="pt-price-alt">$990</div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">White-Label Branding (per agent)</div><div class="pt-desc">Custom name, custom voice, custom colours — fully branded to your company</div><div class="pt-price">+$300<span style="font-size:.7rem;color:#6a6a82;font-weight:400">/mo</span></div><div class="pt-price-alt">$1,500</div></div>
+    <div class="pt-row"><div class="pt-check">✓</div><div class="pt-name">Private VM Upgrade (16 vCPU / 64GB)</div><div class="pt-desc">High-performance VM for multiple concurrent agents</div><div class="pt-price">+$800<span style="font-size:.7rem;color:#6a6a82;font-weight:400">/mo</span></div><div class="pt-price-alt">included</div></div>
+  </div>
+
+  <div class="pay">
+    <div class="pay-row"><span class="pay-l">Bank</span><span class="pay-v">FNB South Africa</span></div>
+    <div class="pay-row"><span class="pay-l">Account Name</span><span class="pay-v">Studex Group</span></div>
+    <div class="pay-row"><span class="pay-l">Account Number</span><span class="pay-v">62760837610</span></div>
+    <div class="pay-row"><span class="pay-l">Branch</span><span class="pay-v">Woodmead</span></div>
+    <div class="pay-row"><span class="pay-l">Branch Code</span><span class="pay-v">250-655</span></div>
+    <div class="pay-row"><span class="pay-l">SWIFT / BIC</span><span class="pay-v">FIRNZAJJ</span></div>
+    <p class="pay-note">All prices in USD. Wire transfer to FNB South Africa. Invoice issued by Studex Group. Payment terms: 50% on signing, 50% on go-live.</p>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- TIMELINE -->
+  <div class="label">05 — Timeline</div>
+  <div class="timeline">
+    <div class="tl"><span class="tl-w">Wk 1</span><span class="tl-l">Inception</span><p>PRD review, VM provisioning, architecture design</p></div>
+    <div class="tl"><span class="tl-w">Wk 2</span><span class="tl-l">Build</span><p>Core agents installed, Obsidian Mind configured, integrations wired</p></div>
+    <div class="tl"><span class="tl-w">Wk 3</span><span class="tl-l">Test</span><p>UAT, training, agent training on your business context</p></div>
+    <div class="tl"><span class="tl-w">Wk 4</span><span class="tl-l">Go Live</span><p>Production deployment, team induction, client handover</p></div>
+  </div>
+
+  <div class="cta-tl" style="text-align:center;margin-top:1rem;font-size:.78rem;color:#6a6a82">
+    From signing to live: <strong style="color:#6c63ff">4 weeks</strong> · Full training included
+  </div>
+
+  <div class="div"></div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2>Ready to build your AI operating system?</h2>
+    <p>Sign the proposal, send the 50% deposit, and we begin in 48 hours.<br>Your VM is provisioned, your agents are trained, your business runs itself.</p>
+    <a href="mailto:cto@studex-group.com?subject=Acceptance: Obsidian Mind Enterprise Proposal OGRE-2026-0706&body=Name:%20%0ACompany:%20%0AEmail:%20%0ASigned:%20%0A" class="btn">Accept Proposal via Email →</a>
+    <div style="margin-top:1.2rem;font-size:.75rem;color:#6a6a82">
+      <strong style="color:#e8e8f0">Bre Ferrari</strong> · cto@studex-group.com · Dark Factory, OGRE Computer
+    </div>
+  </div>
+
+  <footer>
+    <p><strong style="color:#6c63ff">OGRE Computer</strong> · Dark Factory Division · Studex Group</p>
+    <p style="margin-top:.4rem">cto@studex-group.com · orgo.ai · Built by Cipher Tr@ce</p>
+    <p style="margin-top:.4rem;color:#3a3a52">Johannesburg, South Africa · POPIA Compliant · B-BBEE Level 1</p>
+    <p style="margin-top:.4rem">Proposal No: OGRE-2026-0706 · Valid for 30 days</p>
+  </footer>
+
+</div>
+</body>
+</html>

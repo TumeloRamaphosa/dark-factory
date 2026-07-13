@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>OGRE Content Hub — File Uploader</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f0f0f0;font-family:system-ui,sans-serif;min-height:100vh}
+header{background:linear-gradient(135deg,#ff6b00,#ff8c00);padding:20px 32px;
+  display:flex;align-items:center;gap:12px;margin-bottom:32px}
+header h1{font-size:20px;font-weight:900}
+header span{font-size:11px;opacity:0.9;font-family:monospace}
+
+.wrap{max-width:700px;margin:0 auto;padding:0 24px 80px}
+
+.dropzone{border:2px dashed #ff6b00;border-radius:16px;padding:56px 32px;
+  text-align:center;cursor:pointer;transition:all 0.2s;background:#11111a;margin-bottom:24px}
+.dropzone:hover,.dropzone.dragover{border-color:#ffaa00;background:rgba(255,107,0,0.06)}
+.dropzone input[type=file]{display:none}
+.dropzone .icon{font-size:48px;margin-bottom:14px}
+.dropzone h2{font-size:17px;font-weight:700;margin-bottom:6px}
+.dropzone p{color:#555;font-size:13px;line-height:1.6}
+.dropzone .formats{color:#333;font-size:11px;margin-top:10px;font-family:monospace}
+
+.batch{border:2px solid #1a1a2a;border-radius:12px;overflow:hidden;margin-bottom:32px}
+.batch-header{display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:#11111a;border-bottom:1px solid #1a1a2a}
+.batch-header .icon{font-size:20px}
+.batch-header .label{flex:1;font-size:13px;font-weight:600}
+.batch-header .count{font-size:11px;color:#555;background:#1a1a2a;padding:3px 8px;border-radius:20px}
+.batch-row{display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-bottom:1px solid #11111a;transition:background 0.15s}
+.batch-row:last-child{border-bottom:none}
+.batch-row .thumb{width:36px;height:36px;border-radius:6px;background:#141420;
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.batch-row .info{flex:1;min-width:0}
+.batch-row .fname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.batch-row .fsize{font-size:11px;color:#444;margin-top:1px}
+.batch-row .status{font-size:11px;font-family:monospace;flex-shrink:0}
+.batch-row .status.pending{color:#555}.batch-row .status.uploading{color:#ff8c00}
+.batch-row .status.done{color:#4ade80}.batch-row .status.error{color:#f87171}
+.batch-row .url-box{flex:1;padding:6px 10px;background:#0a0a0f;border:1px solid #2a2a3a;
+  border-radius:6px;font-size:11px;font-family:monospace;color:#888;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;display:none}
+.batch-row.done .url-box{display:block}
+.batch-row.done .status{color:#4ade80}
+
+.actions{display:flex;gap:10px;margin-bottom:32px}
+.btn{flex:1;padding:12px;border-radius:10px;font-size:13px;font-weight:700;
+  cursor:pointer;border:none;transition:all 0.2s;text-align:center}
+.btn-primary{background:linear-gradient(135deg,#ff6b00,#ff8c00);color:#fff}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none;filter:none}
+.btn-secondary{background:#11111a;border:1px solid #222;color:#555;font-size:12px}
+.btn-secondary:hover{background:#16162a}
+
+.done-section h3{font-size:11px;color:#444;text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:14px}
+.done-section h3 span{color:#ff6b00}
+.file-card{background:#11111a;border:1px solid #1a1a24;border-radius:12px;
+  padding:14px 16px;margin-bottom:8px}
+.file-card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.file-card-header .icon{font-size:18px}
+.file-card-header .fname{flex:1;font-size:13px;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.url-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.url-field{flex:1;padding:7px 10px;background:#0a0a0f;border:1px solid #2a2a3a;
+  border-radius:7px;font-size:11px;font-family:monospace;color:#888;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.copy-btn{background:#ff6b00;border:none;color:#fff;font-size:11px;font-weight:700;
+  padding:7px 12px;border-radius:7px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.copy-btn:hover{background:#ff8c00}
+.embed-label{font-size:10px;color:#333;margin-bottom:4px;font-family:monospace}
+.embed-field{flex:1;padding:5px 8px;background:#0a0a0f;border:1px solid #222;
+  border-radius:6px;font-size:10px;font-family:monospace;color:#555;min-width:0;overflow:hidden}
+
+.howto{background:#0e0e16;border:1px solid #17171f;border-radius:12px;
+  padding:18px 20px;margin-top:32px}
+.howto h4{font-size:12px;font-weight:700;color:#555;margin-bottom:10px}
+.howto ol{color:#333;font-size:12px;line-height:2.2;padding-left:18px}
+.howto code{background:#141420;padding:1px 6px;border-radius:4px;color:#ff8c00;font-size:11px}
+
+.toast{position:fixed;bottom:24px;right:24px;background:#ff6b00;color:#fff;
+  padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;
+  opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.error{background:#dc2626}
+
+.note{background:#0d0d14;border:1px solid #1a1a2a;border-radius:10px;
+  padding:14px 16px;margin-bottom:28px;font-size:12px;color:#444;line-height:1.6}
+.note strong{color:#ff6b00}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏭 OGRE Content Hub</h1>
+  <span>Upload → I host it → You paste the URL</span>
+</header>
+
+<div class="wrap">
+
+<div class="note">
+<strong>How it works:</strong> Select files below → click "Upload to CDN" → I upload them to the CDN and return the URLs → copy the URL and paste it into any text on Dark Factory.
+</div>
+
+<div class="dropzone" id="dz">
+  <div class="icon">📁</div>
+  <h2>Select files from your computer</h2>
+  <p>Images · Videos · Documents<br/>I'll upload them to CDN and give you the URLs</p>
+  <p class="formats">jpg · png · webp · gif · svg · mp4 · webm · pdf · max 100MB</p>
+  <input type="file" id="fi" multiple accept="image/*,video/*,.pdf"/>
+</div>
+
+<div id="batchList"></div>
+
+<div class="actions">
+  <button class="btn btn-primary" id="uploadBtn" disabled onclick="startUpload()">
+    Upload to CDN
+  </button>
+  <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+</div>
+
+<div class="done-section" id="doneSection" style="display:none">
+  <h3>✅ Uploaded Files — <span>copy the URL and paste into Dark Factory</span></h3>
+  <div id="doneList"></div>
+</div>
+
+<div class="howto">
+  <h4>How to use</h4>
+  <ol>
+    <li>Click the drop zone above → select files from your computer</li>
+    <li>Click <strong>Upload to CDN</strong> — I upload them right now</li>
+    <li>Copy the <strong>CDN URL</strong> for that file</li>
+    <li>On Dark Factory, paste the URL into any text box:<br/>
+      Images: <code>&lt;img src="PASTE_URL"&gt;</code><br/>
+      Videos: <code>&lt;video src="PASTE_URL"&gt;&lt;/video&gt;</code></li>
+    <li>Or just paste the URL into the PRD form or portfolio editor</li>
+  </ol>
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const dz = document.getElementById('dz');
+const fi = document.getElementById('fi');
+const batch = document.getElementById('batchList');
+const uploadBtn = document.getElementById('uploadBtn');
+const doneSec = document.getElementById('doneSection');
+const doneList = document.getElementById('doneList');
+
+let files = [];
+let uploaded = [];
+
+function toast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast' + (isError?' error':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+dz.addEventListener('click', () => fi.click());
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover');
+  if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+fi.addEventListener('change', () => { if(fi.files.length) addFiles(fi.files); });
+
+function addFiles(newFiles) {
+  files = [...files, ...Array.from(newFiles)];
+  renderBatch();
+  uploadBtn.disabled = files.length === 0;
+}
+
+function renderBatch() {
+  if (!files.length) { batch.innerHTML = ''; return; }
+  const total = files.length;
+  batch.innerHTML = `
+    <div class="batch">
+      <div class="batch-header">
+        <span class="icon">📋</span>
+        <span class="label">${total} file${total>1?'s':''} selected</span>
+        <span class="count">${total}</span>
+      </div>
+      ${files.map((f,i) => `
+        <div class="batch-row" id="row-${i}">
+          <div class="thumb">${f.type.startsWith('image/')?'🖼':f.type.startsWith('video/')?'🎬':'📄'}</div>
+          <div class="info">
+            <div class="fname">${f.name}</div>
+            <div class="fsize">${(f.size/1024/1024).toFixed(1)}MB · ${f.type}</div>
+            <div class="url-box" id="url-${i}"></div>
+          </div>
+          <span class="status pending" id="status-${i}">pending</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function clearAll() { files = []; uploaded = []; renderBatch(); renderDone();
+  uploadBtn.disabled = true; doneSec.style.display = 'none'; }
+
+async function startUpload() {
+  if (!files.length) return;
+  uploadBtn.disabled = true;
+  uploadBtn.textContent = 'Uploading...';
+
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    const row = document.getElementById('row-' + i);
+    const statusEl = document.getElementById('status-' + i);
+
+    // Mark as uploading
+    row.classList.remove('done');
+    statusEl.textContent = '⏳ uploading...'; statusEl.className = 'status uploading';
+
+    try {
+      // Send to OGRE agent for CDN upload
+      const formData = new FormData();
+      formData.append('file', f);
+      formData.append('name', f.name);
+
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (data.cdn_url) {
+        statusEl.textContent = '✅ done'; statusEl.className = 'status done';
+        row.classList.add('done');
+        const urlEl = document.getElementById('url-' + i);
+        urlEl.textContent = data.cdn_url;
+        uploaded.push({ name: f.name, cdn_url: data.cdn_url, type: f.type });
+        renderDone();
+        toast('✅ ' + f.name + ' uploaded!');
+      } else {
+        throw new Error(data.error || 'Upload failed');
+      }
+    } catch(e) {
+      statusEl.textContent = '❌ error'; statusEl.className = 'status error';
+      toast('❌ ' + e.message, true);
+    }
+  }
+
+  uploadBtn.textContent = 'Upload to CDN';
+  uploadBtn.disabled = files.length === 0;
+}
+
+function renderDone() {
+  if (!uploaded.length) { doneSec.style.display = 'none'; return; }
+  doneSec.style.display = 'block';
+  doneList.innerHTML = uploaded.map((u,i) => `
+    <div class="file-card">
+      <div class="file-card-header">
+        <span class="icon">${u.type.startsWith('image/')?'🖼':u.type.startsWith('video/')?'🎬':'📄'}</span>
+        <span class="fname">${u.name}</span>
+      </div>
+      <div class="url-row">
+        <div class="url-field" id="done-url-${i}">${u.cdn_url}</div>
+        <button class="copy-btn" onclick="copyUrl('${u.cdn_url}')">Copy URL</button>
+      </div>
+      <div class="embed-label">EMBED HTML:</div>
+      <div class="url-row">
+        <div class="embed-field" id="done-embed-${i}">${u.type.startsWith('image/')
+          ? `<img src="${u.cdn_url}" alt="${u.name}"/>`
+          : u.type.startsWith('video/')
+          ? `<video src="${u.cdn_url}" controls></video>`
+          : `<a href="${u.cdn_url}" target="_blank">${u.name}</a>`
+        }</div>
+        <button class="copy-btn" style="background:#222;border:1px solid #333"
+          onclick="copyUrl(document.getElementById('done-embed-${i}').textContent)">Copy HTML</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.copyUrl = text => {
+  navigator.clipboard.writeText(text).then(() => toast('📋 Copied!')).catch(() => toast('Copy failed', true));
+};
+</script>
+</body>
+</html>

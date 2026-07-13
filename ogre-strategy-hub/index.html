@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Africa Strategy — ART×Harvard×GITEX</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#111118;--surface2:#1a1a24;--border:#22222e;--accent:#00ff88;--gold:#D4AF37;--cyan:#00d4ff;--pink:#ec4899;--text:#e8e8f0;--dim:#9ca3af}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.5}
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem}
+.hero{padding:3rem 0 2rem;text-align:center}
+.eyebrow{font-family:monospace;font-size:0.7rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1rem}
+.hero h1 .g{color:var(--accent)}.hero h1 .h{color:var(--gold)}.hero h1 .n{color:var(--cyan)}
+.hero p{max-width:560px;margin:0 auto 1.5rem;color:var(--dim);font-size:0.9rem;line-height:1.7}
+.badges{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.badge{display:inline-block;padding:0.25rem 0.7rem;border-radius:5px;font-size:0.7rem;font-family:monospace;letter-spacing:0.06em}
+.bg-a{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--accent)}
+.bg-g{background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:var(--gold)}
+.bg-c{background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:var(--cyan)}
+.bg-r{background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.3);color:var(--pink)}
+.card{background:rgba(17,17,24,0.95);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.25rem}
+.card-a{border-top:3px solid var(--accent)}
+.card-g{border-top:3px solid var(--gold)}
+.card-c{border-top:3px solid var(--cyan)}
+.card-r{border-top:3px solid var(--pink)}
+.card h2{font-size:1.05rem;font-weight:700;margin-bottom:0.3rem}
+.card-a h2{color:var(--accent)}.card-g h2{color:var(--gold)}.card-c h2{color:var(--cyan)}.card-r h2{color:var(--pink)}
+.sub{font-size:0.7rem;color:var(--dim);font-family:monospace;margin-bottom:1rem;letter-spacing:0.04em}
+p,.card li{font-size:0.84rem;line-height:1.75;color:var(--dim)}
+li{margin-bottom:0.3rem}
+ul{padding-left:1.2rem;margin:0.4rem 0}
+table{width:100%;border-collapse:collapse;margin:0.75rem 0;font-size:0.8rem}
+th{background:rgba(26,26,36,0.8);color:var(--accent);text-align:left;padding:0.5rem 0.85rem;border-bottom:2px solid var(--border);font-family:monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase}
+td{padding:0.5rem 0.85rem;border-bottom:1px solid var(--border);color:var(--dim)}
+.highlight{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.15);border-radius:8px;padding:1rem;margin:0.75rem 0}
+.highlight h3{color:var(--accent);font-size:0.85rem;margin-bottom:0.4rem}
+blockquote{border-left:3px solid var(--gold);padding-left:0.85rem;margin:0.6rem 0;color:var(--text);font-style:italic;font-size:0.85rem}
+.triple{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0.75rem;margin:0.75rem 0}
+.mini-card{background:rgba(26,26,36,0.7);border:1px solid var(--border);border-radius:7px;padding:0.85rem}
+.mc{font-size:1.2rem;margin-bottom:0.2rem}.mt{font-weight:700;font-size:0.85rem;margin-bottom:0.15rem;color:var(--text)}.md{font-size:0.7rem;color:var(--dim)}
+.toc{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.toc a{display:inline-block;padding:0.3rem 0.75rem;background:rgba(17,17,24,0.9);border:1px solid var(--border);border-radius:5px;font-size:0.73rem;color:var(--dim);text-decoration:none;transition:all 0.2s}
+.toc a:hover{border-color:var(--accent);color:var(--accent)}
+.cta-row{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1.25rem}
+.btn{display:inline-block;padding:0.5rem 1.1rem;border-radius:7px;font-size:0.78rem;font-weight:600;text-decoration:none}
+.btn-a{background:var(--accent);color:#000}.btn-g{background:var(--gold);color:#000}.btn-c{background:var(--cyan);color:#000}.btn-o{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+footer{text-align:center;color:#444;font-size:0.7rem;padding:1.5rem 0;border-top:1px solid var(--border);margin-top:2rem;font-family:monospace}
+footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="wrap">
+<div class="hero">
+<div class="eyebrow">OGRE COMPUTER · STRATEGIC DOCUMENT · 9 JULY 2026</div>
+<h1><span class="g">ART</span> × <span class="h">HARVARD</span> × <span class="n">GITEX</span></h1>
+<p>The three-partner strategy to become Africa's first sovereign AI infrastructure provider — deploying 1 AI-ready data centre in 1 African city every month, starting September 2026.</p>
+<div class="badges">
+<span class="badge bg-a">🤝 ART Engineering Partnership</span>
+<span class="badge bg-g">🎓 Olu Olufemi-White / Harvard</span>
+<span class="badge bg-c">🌐 GITEX Nigeria Aug 31</span>
+<span class="badge bg-r">👨‍🚀 10,000 Youth Trained</span>
+</div>
+</div>
+
+<div class="toc">
+<a href="#art">🤝 ART</a>
+<a href="#olu">🎓 Harvard</a>
+<a href="#gitex">🌐 GITEX</a>
+<a href="#youth">👨‍🚀 Youth</a>
+<a href="#events">📅 Events</a>
+<a href="#actions">⚡ Actions</a>
+</div>
+
+<div class="card card-a" id="art">
+<h2>🤝 ART Engineering Partnership</h2>
+<div class="sub">art-engineer.ru · Moscow · UPTIME INSTITUTE certified · 10+ years</div>
+<p><strong>ART Engineering</strong> is a Russian manufacturer of turnkey modular and mobile data centres. They design, manufacture, deliver, install, and maintain complete DC infrastructure across Russia and CIS. Their <strong>ART MODULAR</strong> and <strong>ART MOBILE</strong> products deploy in any African city within 30–60 days.</p>
+<div class="highlight">
+<h3>软硬一体 — The Bundle That Wins Africa</h3>
+<p>ART Engineering = physical hardware. OGRE = AI VM software + African market access. Together: complete AI-ready data centre infrastructure sold as one bundle to African governments, enterprises, and operators.</p>
+</div>
+<div class="triple">
+<div class="mini-card"><div class="mc">🏗️</div><div class="mt">ART MODULAR</div><div class="md">Factory-built modular DC. Deploys in 30–45 days in any city.</div></div>
+<div class="mini-card"><div class="mc">🚛</div><div class="mt">ART MOBILE</div><div class="md">Container-sized, relocatable. For mining, construction, remote cities.</div></div>
+<div class="mini-card"><div class="mc">⚡</div><div class="mt">TOWNSCAPE</div><div class="md">UPS + power modules. Solves Africa power reliability.</div></div>
+</div>
+<div class="highlight">
+<h3>📍 1 City Per Month — Deployment Plan</h3>
+<table>
+<tr><th>Month</th><th>City</th><th>Country</th><th>Unit</th><th>VMs</th></tr>
+<tr><td>Sep 2026</td><td>Lagos</td><td>Nigeria</td><td>ART MODULAR</td><td>200</td></tr>
+<tr><td>Oct 2026</td><td>Nairobi</td><td>Kenya</td><td>ART MODULAR</td><td>200</td></tr>
+<tr><td>Nov 2026</td><td>Addis Ababa</td><td>Ethiopia</td><td>ART MOBILE</td><td>100</td></tr>
+<tr><td>Dec 2026</td><td>Accra</td><td>Ghana</td><td>ART MODULAR</td><td>200</td></tr>
+</table>
+<p><strong>4 DCs by Dec 2026 = R1.4M/month MRR</strong></p>
+</div>
+</div>
+
+<div class="card card-g" id="olu">
+<h2>🎓 Olu Olufemi-White — The Intellectual Bridge</h2>
+<div class="sub">Harvard Kennedy School 2025 Fellow · Alami Capital · Epistemic Sovereignty Researcher</div>
+<p><strong>Who she is:</strong> 2025 Fellow at Harvard Kennedy School. Her research is on <em>epistemic sovereignty</em> — how African nations protect their digital agency. She is also founder of <strong>Alami Capital</strong>, redesigning African access to capital through ethical investment.</p>
+<blockquote>"Africa cannot have epistemic sovereignty without technological sovereignty. And technological sovereignty requires African-owned compute infrastructure."</blockquote>
+<div class="highlight">
+<h3>Why OGRE needs her</h3>
+<div class="triple">
+<div class="mini-card"><div class="mc">🏛️</div><div class="mt">Policy Bridge</div><div class="md">Introduces OGRE to African government procurement decision-makers</div></div>
+<div class="mini-card"><div class="mc">💰</div><div class="mt">Alami Capital</div><div class="md">Impact investment for DC infrastructure + youth training</div></div>
+<div class="mini-card"><div class="mc">🌍</div><div class="mt">Harvard Network</div><div class="md">World Bank, AfDB, African development finance institutions</div></div>
+</div>
+</div>
+<div class="highlight">
+<h3>📧 Email ready to send — subject line:</h3>
+<p style="font-family:monospace;font-size:0.8rem;color:var(--gold)">"Africa's sovereign AI infrastructure — Harvard connection from South Africa"</p>
+</div>
+</div>
+
+<div class="card card-c" id="gitex">
+<h2>🌐 GITEX Nigeria — The Launchpad</h2>
+<div class="sub">Aug 31–Sep 3, 2026 · Lagos + Abuja · 1,000+ startups, investors, government</div>
+<p>Africa's largest tech event. Key topics: AI, Cloud & Data Centres, Cybersecurity, HealthTech, FinTech, Smart Cities. OGRE applies as an <strong>Emerging Technology Partner</strong> + <strong>Cloud & Data Centre Track Sponsor</strong>.</p>
+<table>
+<tr><th>Track</th><th>OGRE Product</th><th>Target</th></tr>
+<tr><td>AI</td><td>All products</td><td>Startups, enterprise</td></tr>
+<tr><td>Cloud & Data Centres</td><td>Mission Control + Agent OS</td><td>All sectors</td></tr>
+<tr><td>Cybersecurity</td><td>Red Team Agent</td><td>Government, finance</td></tr>
+<tr><td>HealthTech</td><td>DarkDesk + AutoFlex Pro</td><td>Hospitals, pharma</td></tr>
+<tr><td>Smart Cities</td><td>ART MODULAR partnership</td><td>State governments</td></tr>
+</table>
+<div class="highlight">
+<h3>⚡ 4 Demos to Run at the Booth</h3>
+<ol style="padding-left:1.2rem">
+<li><strong>OGRE Mission Control</strong> — Live: 6 AI agents managing a fictional SA government dept</li>
+<li><strong>DarkDesk Voice AI</strong> — Real-time voice. SOE procurement workflow live.</li>
+<li><strong>Red Team Agent</strong> — Live vulnerability scan + POPIA violation detection.</li>
+<li><strong>ART MODULAR Video</strong> — "This unit ships to Lagos. Live in 45 days."</li>
+</ol>
+</div>
+<div class="cta-row">
+<a href="mailto:Gitexnigeriasales@dwtc.com?subject=OGRE%20Computer%20Exhibitor%20Application%20GITEX%20Nigeria%202026" class="btn btn-c">📧 Email GITEX Sales</a>
+<a href="https://www.gitexnigeria.ng" class="btn btn-o" target="_blank">🌐 Register at gitexnigeria.ng</a>
+</div>
+</div>
+
+<div class="card card-r" id="youth">
+<h2>👨‍🚀 Youth Team Programme — Africa's AI Workforce</h2>
+<div class="sub">10,000 youth trained as AI engineers and data centre technicians by 2028</div>
+<div class="triple">
+<div class="mini-card"><div class="mc">📅</div><div class="mt">3-Month Programme</div><div class="md">Linux · AI Agents · n8n · ART DC Operations · Real client project</div></div>
+<div class="mini-card"><div class="mc">🏆</div><div class="mt">3 Certifications</div><div class="md">OGRE AI Tech · ART DC Ops · n8n Automation Associate</div></div>
+<div class="mini-card"><div class="mc">💼</div><div class="mt">6 Career Pathways</div><div class="md">Studex · ART · Franchise · OGRE Agent · University · Own DC</div></div>
+</div>
+<table>
+<tr><th>Year</th><th>Cities</th><th>Youth Trained</th><th>MRR</th></tr>
+<tr><td>Year 1</td><td>8</td><td>160</td><td>R2.8M</td></tr>
+<tr><td>Year 2</td><td>20</td><td>500</td><td>R7M</td></tr>
+<tr><td>Year 3</td><td>44</td><td>1,000+</td><td>R15M+</td></tr>
+</table>
+<div class="highlight">
+<h3>💡 Self-Funding Model</h3>
+<p>Each cohort (20 students) costs $15,000. Each city's DC generates R350,000/month. <strong>The DC funds the next cohort in month 1.</strong> By Year 2, every city funds its own youth training from DC revenue alone.</p>
+</div>
+</div>
+
+<div class="card" id="events">
+<h2>📅 Africa Events Calendar 2026–2027</h2>
+<table>
+<tr><th>Event</th><th>Date</th><th>City</th><th>OGRE Track</th><th>Action</th></tr>
+<tr><td><strong>🇳🇬 GITEX Nigeria ⚡</strong></td><td>Aug 31–Sep 3, 2026</td><td>Lagos + Abuja</td><td>AI + DC + HealthTech</td><td style="color:var(--cyan)">APPLY NOW</td></tr>
+<tr><td>🇰🇪 Kenya Kitchen & Food Expo</td><td>Aug 19, 2026</td><td>Nairobi</td><td>AgriTech + AI</td><td style="color:var(--gold)">Evaluate</td></tr>
+<tr><td>🇺🇬 Uganda Trade Fair</td><td>Oct 3, 2026</td><td>Kampala</td><td>General trade</td><td>Register</td></tr>
+<tr><td>🇪🇹 Ethiopia Medical & Health Expo 🟡</td><td>Nov 14, 2026</td><td>Addis Ababa</td><td>Pharma + Health AI</td><td>Register</td></tr>
+<tr><td>🇪🇹 Ethiopia Food Expo</td><td>Nov 14, 2026</td><td>Addis Ababa</td><td>AgriTech</td><td>Register</td></tr>
+<tr><td>🇰🇪 Kenya Homes Expo</td><td>Apr 2027</td><td>Nairobi</td><td>Smart cities</td><td>Plan</td></tr>
+<tr><td>🇺🇬 Uganda Food Expo</td><td>May 2027</td><td>Kampala</td><td>AgriTech</td><td>Plan</td></tr>
+</table>
+</div>
+
+<div class="card card-a" id="actions">
+<h2>⚡ Actions This Week — All Owners</h2>
+<table>
+<tr><th>#</th><th>Action</th><th>Owner</th><th>Deadline</th></tr>
+<tr><td>1</td><td>Send LOI to ART Engineering (art-engineer.ru)</td><td>Tumelo</td><td>Today</td></tr>
+<tr><td>2</td><td>Apply as exhibitor to GITEX Nigeria</td><td>Cipher + Tumelo</td><td>Today</td></tr>
+<tr><td>3</td><td>Send email to Olu Olufemi-White</td><td>Tumelo</td><td>This week</td></tr>
+<tr><td>4</td><td>Request ART MODULAR quote for Lagos DC</td><td>Cipher</td><td>This week</td></tr>
+<tr><td>5</td><td>Register Ethiopia Medical & Health Expo</td><td>Cipher</td><td>This week</td></tr>
+<tr><td>6</td><td>GitHub push: ART partnership docs + GITEX app</td><td>Cipher</td><td>Today</td></tr>
+</table>
+</div>
+
+<footer>
+Cipher Tr@ce · CEO · Dark Factory<br>
+OGRE Computer — Africa's Sovereign AI Infrastructure<br>
+<a href="https://058y6btui24n.space.minimax.io">Portfolio →</a> · 
+<a href="https://8zh65ozf7jc7.space.minimax.io">Nigeria Brief →</a> · 
+<a href="https://art-engineer.ru">ART Engineering →</a>
+</footer>
+</div>
+<script>
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+let w,h,nodes=[],frame=0;
+const resize=()=>{w=canvas.width=innerWidth;h=canvas.height=innerHeight};
+resize();window.addEventListener('resize',resize);
+for(let i=0;i<80;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*2+1,pulse:Math.random()*Math.PI*2});
+const draw=()=>{ctx.clearRect(0,0,w,h);frame+=0.003;
+for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<180){ctx.beginPath();ctx.strokeStyle=`rgba(0,255,136,${(1-d/180)*0.22})`;ctx.lineWidth=0.7;ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}}
+nodes.forEach(n=>{n.x+=n.vx+Math.sin(frame+n.y*0.006)*0.25;n.y+=n.vy+Math.cos(frame+n.x*0.006)*0.25;if(n.x<0)n.x=w;if(n.x>w)n.x=0;if(n.y<0)n.y=h;if(n.y>h)n.y=h;
+const b=0.55+Math.sin(frame*1.5+n.pulse)*0.25;
+ctx.beginPath();ctx.arc(n.x,n.y,b*2.5,0,Math.PI*2);ctx.fillStyle=`rgba(0,255,136,${b*0.14})`;ctx.fill();
+ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=`rgba(180,255,220,${b})`;ctx.fill()});
+requestAnimationFrame(draw);};
+draw();
+</script>
+</body>
+</html>

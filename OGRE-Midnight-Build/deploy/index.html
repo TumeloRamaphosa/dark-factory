@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OGRE Midnight Build — Global AI Intelligence Briefing | 2026-07-13</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#09090e; --surface:#111118; --surface2:#18181f; --border:#1e1e2e; --text:#e8e8f0; --text-dim:#8888a0; --accent:#6c63ff; --accent2:#00d4ff; --green:#22c55e; --red:#ef4444; --orange:#f97316; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg); color:var(--text); font-family:'Plus Jakarta Sans',sans-serif; line-height:1.7; min-height:100vh; }
+    a { color:var(--accent2); text-decoration:none; }
+    .site-header { background:linear-gradient(135deg,#0a0a14 0%,#0d0d1a 50%,#09090e 100%); border-bottom:1px solid var(--border); padding:48px 24px 40px; text-align:center; position:relative; overflow:hidden; }
+    .site-header::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(108,99,255,0.12) 0%,transparent 70%); pointer-events:none; }
+    .eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent2); letter-spacing:3px; text-transform:uppercase; margin-bottom:16px; }
+    .site-header h1 { font-size:clamp(28px,5vw,52px); font-weight:800; background:linear-gradient(135deg,#fff 0%,var(--accent) 50%,var(--accent2) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; line-height:1.1; }
+    .subtitle { color:var(--text-dim); font-size:15px; margin-bottom:28px; }
+    .meta-pills { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .pill { background:var(--surface2); border:1px solid var(--border); border-radius:100px; padding:6px 16px; font-size:12px; font-family:'JetBrains Mono',monospace; color:var(--text-dim); }
+    .pill strong { color:var(--accent2); }
+    .container { max-width:860px; margin:0 auto; }
+    .exec-summary { background:linear-gradient(135deg,rgba(108,99,255,0.08) 0%,rgba(0,212,255,0.05) 100%); border:1px solid rgba(108,99,255,0.25); border-radius:16px; padding:32px; margin:40px auto; }
+    .exec-summary h2 { font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:16px; font-family:'JetBrains Mono',monospace; }
+    .exec-summary ul { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:10px; }
+    .exec-summary li { font-size:14px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px; border-left:3px solid var(--accent); line-height:1.6; }
+    .section { max-width:860px; margin:0 auto 40px; padding:0 20px; }
+    .section-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; overflow:hidden; }
+    .section-header { padding:24px 28px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:14px; background:var(--surface2); }
+    .section-number { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0; }
+    .section-title { font-size:17px; font-weight:700; color:#fff; }
+    .section-subtitle { font-size:12px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+    .section-body { padding:24px 28px; }
+    .build-list { list-style:none; margin-bottom:20px; }
+    .build-list li { padding:12px 16px; background:rgba(255,255,255,0.025); border-radius:10px; margin-bottom:8px; font-size:14px; border-left:3px solid var(--text-dim); line-height:1.6; }
+    .build-list li::before { content:'▸ '; color:var(--accent2); font-weight:bold; }
+    .action-box { background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.3); border-radius:12px; padding:16px 20px; margin-top:20px; }
+    .action-label { font-size:11px; text-transform:uppercase; letter-spacing:2px; color:var(--accent); font-family:'JetBrains Mono',monospace; margin-bottom:8px; font-weight:600; }
+    .action-text { font-size:14px; font-weight:600; color:#fff; margin-bottom:10px; line-height:1.6; }
+    .urgency-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:100px; font-size:12px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+    .urgency-NOW { background:rgba(239,68,68,0.15); color:var(--red); border:1px solid rgba(239,68,68,0.3); }
+    .urgency-MONTH { background:rgba(249,115,22,0.15); color:var(--orange); border:1px solid rgba(249,115,22,0.3); }
+    .urgency-WATCH { background:rgba(34,197,94,0.1); color:var(--green); border:1px solid rgba(34,197,94,0.25); }
+    .matrix-section { max-width:860px; margin:0 auto 40px; padding:0 20px; }
+    .matrix-title { font-size:20px; font-weight:800; color:#fff; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+    .matrix-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .matrix-table th { background:var(--surface2); padding:10px 14px; text-align:left; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); border-bottom:2px solid var(--border); }
+    .matrix-table td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:top; }
+    .matrix-table tr:hover td { background:rgba(108,99,255,0.04); }
+    .action-cell { font-weight:600; color:#fff; }
+    .section-divider { border:none; border-top:1px solid var(--border); max-width:860px; margin:0 auto; }
+    .final-brief { background:linear-gradient(135deg,rgba(108,99,255,0.12) 0%,rgba(0,212,255,0.06) 100%); border:1px solid rgba(108,99,255,0.3); border-radius:16px; padding:32px; margin:40px auto; max-width:860px; }
+    .final-brief h2 { font-size:18px; font-weight:800; color:#fff; margin-bottom:16px; }
+    .final-brief p { font-size:15px; color:var(--text-dim); line-height:1.8; margin-bottom:12px; }
+    .highlight { color:var(--accent2); font-weight:600; }
+    .site-footer { border-top:1px solid var(--border); padding:32px 24px; text-align:center; margin-top:60px; }
+    .footer-brand { font-size:18px; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+    .footer-tagline { color:var(--text-dim); font-size:13px; font-style:italic; margin-bottom:16px; }
+    .footer-meta { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); }
+    @media(max-width:600px){ .matrix-table{font-size:12px} .matrix-table th,.matrix-table td{padding:8px 10px} .section-body{padding:20px 18px} .section-header{padding:18px 18px 16px} }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="eyebrow">&#128298; Dark Factory — OGRE Research Division</div>
+  <h1>OGRE Midnight Build</h1>
+  <p class="subtitle">Global AI Intelligence Briefing — Studex Group</p>
+  <div class="meta-pills">
+    <span class="pill"><strong>Date:</strong> 2026-07-13</span>
+    <span class="pill"><strong>Time:</strong> 03:00 AM SAST</span>
+    <span class="pill"><strong>Sections:</strong> 9</span>
+    <span class="pill"><strong>By:</strong> Cipher Tr&#64;ce</span>
+  </div>
+</header>
+
+<div class="exec-summary container">
+  <h2>Executive Pulse — July 13, 2026</h2>
+  <ul>
+    <li><strong>Qwen3.7-Max</strong> released (May 2026) — open-weight 1T-param model, beats Kimi K2, DeepSeek 3.1, Claude Opus 4</li>
+    <li><strong>Kimi K2.6</strong> from Moonshot AI — ties GPT-5.5 on SWE-bench, Agent Swarm (100 agents in parallel)</li>
+    <li><strong>Africa:</strong> 200+ AI startups active; NG/KE/EG AI policies live; SA govt procuring AI via eTenders NOW</li>
+    <li><strong>Devin Desktop</strong> launched (Jun 26, 2026) — autonomous coding agent goes mainstream</li>
+    <li><strong>OpenClaw 2026.6.9</strong> stable — richer channels, session recovery, plugin ops; production-ready</li>
+    <li><strong>Manus AI</strong> (Butterfly Effect, Singapore) — fastest-growing Asian general-purpose agent platform</li>
+    <li><strong>Xiaomi</strong> committing $8.7B to AI over 3 years — Lei Jun's AI-first ecosystem expanding fast</li>
+    <li><strong>OGRE's play:</strong> Sovereign AI infrastructure for Africa — no one else is doing this</li>
+  </ul>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">1</div><div><div class="section-title">OpenClaw &amp; Hermes Agents</div><div class="section-subtitle">openclaw.ai &nbsp;|&nbsp; nousresearch.com</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>OpenClaw 2026.6.9</strong> (Stable, Jun 21 2026): Richer channel integrations (Telegram, Discord, WhatsApp), session recovery, expanded plugin ops. April 2026 shipped <strong>TaskFlow, providence-rich memory, Codex OOTH routing</strong> — now production-grade agentic runtime. Self-hosted, no seat minimums, model-agnostic.</li>
+        <li><strong>Hermes Agent</strong> (Nous Research): Open-source, provider-agnostic. Connects Telegram, Discord, Slack, WhatsApp, Signal, Email. Runs $5 VPS to GPU cluster. Autonomous, 24/7, gets smarter the longer it runs.</li>
+        <li><strong>Competitive:</strong> Cursor leads codebase-aware coding (40-60% time savings). GitHub Copilot 56.0% SWE-bench vs Cursor 51.7%. OpenClaw wins on self-hosted privacy + unlimited agents.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Integrate OpenClaw as OGRE's primary agent orchestration layer. Run Tumelo's multi-agent pipelines (tender bot, client onboarding, coding agents). Pair with Hermes as lightweight Telegram/WhatsApp relay. OpenClaw 2026.6.9 is production-ready NOW.</div><span class="urgency-badge urgency-NOW">&#128308; NOW</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">2</div><div><div class="section-title">Alibaba AI / Qwen / Taobao AI</div><div class="section-subtitle">qwen.ai &nbsp;|&nbsp; alibabacloud.com</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>Qwen3.7-Max</strong> (May 19, 2026): 1-trillion parameter flagship. Beats Kimi K2, DeepSeek 3.1, Claude Opus 4 on all major benchmarks. Native MCP support, enhanced agent/coding. Apache 2.0 for smaller variants.</li>
+        <li><strong>Qwen Pricing 2026:</strong> Qwen-Turbo $0.20/1M output. Qwen-Max $2.50 in / $7.50 out per 1M tokens. Qwen3-Max batch input drops to $0.60/1M. Self-hosting Qwen3 = <strong>zero per-token cost</strong> on your own GPUs.</li>
+        <li><strong>Alibaba AI for Africa:</strong> Global Initiatives hosting African founders at Xixi Campus. CXO events in Johannesburg + Cape Town. China dominant external player building Africa's AI infrastructure.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Deploy Qwen3.7-Max on D@RK F@C#ORY VM via Ollama — one command, zero per-token cost. Use Qwen as primary inference layer for tender analysis, document processing, client communication. Cuts LLM API costs to near zero.</div><span class="urgency-badge urgency-NOW">&#128308; NOW</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">3</div><div><div class="section-title">Kimi Moonshot (Moonshot AI)</div><div class="section-subtitle">moonshot.ai &nbsp;|&nbsp; kimichat.com</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>Kimi K2.6</strong> (April 20, 2026): 1T-parameter open-weight model. Ties GPT-5.5 on SWE-bench Pro (58.6%), leads on multiple benchmarks. Long-horizon coding, autonomous execution, multi-agent orchestration. Via DeepInfra API.</li>
+        <li><strong>Agent Swarm Technology:</strong> Kimi K2.5/K2.6 coordinates up to 100 specialized AI agents simultaneously — parallel swarm execution. Paradigm shift for complex multi-step pipelines.</li>
+        <li><strong>Kimi consumer:</strong> Moonshot AI's ChatGPT competitor in China. Multimodal reasoning (text + images + code). K2 flagship now on API.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Pilot Kimi K2.6 via DeepInfra API for OGRE's multilingual African + Chinese communication layer. Agent Swarm = perfect for tender discovery → analysis → proposal writing in parallel. Watch for DeepSeek + Kimi as joint go-to-market for African enterprise.</div><span class="urgency-badge urgency-MONTH">&#128993; THIS MONTH</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 4 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">4</div><div><div class="section-title">MiniMax (China)</div><div class="section-subtitle">minimax.io &nbsp;|&nbsp; Hailuo AI Video</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>Hailuo AI Video v2.3:</strong> Text-to-video and image-to-video with realistic motion, HD output. $0.32/768P 10s video, $0.28/768P 6s. Package plans up to 20% discount at Scale tier. 10M+ users on Hailuo and Talkie apps.</li>
+        <li><strong>MiniMax-M3 Text Model:</strong> $0.30/1M input, $1.20/1M output tokens. Speech &amp; Music models also available. All-in-one AI stack (language + video + audio) with one unified API.</li>
+        <li><strong>B2B API growth:</strong> MiniMax positioned as complete AI stack for developers. Growing enterprise base. Hailuo + speech + text = full content pipeline from one vendor.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Integrate MiniMax Hailuo video API for OGRE's client deliverables. Create AI video reports, tender summary videos, product demo clips. Pair with MiniMax speech API for voice-over narration in African languages. Differentiates OGRE from text-only competitors.</div><span class="urgency-badge urgency-MONTH">&#128993; THIS MONTH</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 5 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">5</div><div><div class="section-title">Xiaomi AI Ecosystem</div><div class="section-subtitle">xiaomi.com &nbsp;|&nbsp; Lei Jun AI Strategy 2026</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>$8.7B AI Investment</strong> (Lei Jun, Mar 2026): Xiaomi committing $8.7B over 3 years to AI — large AI models, computing infrastructure, AI+IoT integration. Lei Jun: &quot;Xiaomi AI will reduce our work week to only 3 days.&quot;</li>
+        <li><strong>AI+IoT Ecosystem:</strong> Xiaomi AIOS integrating across smartphones, tablets, IoT devices, SU7 electric vehicle. Xiaomi Book S 12.4&quot; and RedmiBook Pro as AI PC entry points.</li>
+        <li><strong>Xiaomi AI Laptops:</strong> Snapdragon X Elite options (20+ hr battery, NPU-focused). RedmiBook Pro targeting creative professionals with on-device AI inference.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Explore Xiaomi AI hardware as OGRE client onboarding kit. Affordable AI-capable devices (phones ~$200, laptops ~$600) with on-device models. OGRE could bundle Xiaomi IoT + AI PC setups for African SMEs. Track Xiaomi AIOS — mainstream by Q3 2026.</div><span class="urgency-badge urgency-WATCH">&#128994; WATCH</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 6 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">6</div><div><div class="section-title">AI Laptops &amp; PCs (Local Model Hardware)</div><div class="section-subtitle">Local LLM Running Guide 2026</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>NPU Battle 2026:</strong> Qualcomm X2 Elite: 80 TOPS. AMD Ryzen AI 400: 60 TOPS. Intel Panther Lake: 50 TOPS. Apple M5/M4 Neural Engine leads in efficiency. Snapdragon Copilot+ PCs: 20+ hour battery + on-device AI, zero cloud dependency.</li>
+        <li><strong>Apple Silicon Dominates Local AI:</strong> Mac Mini M4 Pro 48GB ($1,799) = best value local AI workstation. Mac Mini M4 16GB ($799) handles Llama 3.2 7B and Mistral. Any Apple Silicon 16GB+ runs local models today.</li>
+        <li><strong>Best Local LLMs 2026:</strong> Llama 3.3, Mistral Small 3, Phi-4-mini, Qwen 3 deliver code/capability parity with closed models. Self-hosting cost = zero per token.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Build OGRE's &quot;AI Workstation-in-a-Box&quot; package using Mac Mini M4 Pro 48GB + Ollama + Qwen3. One-time hardware cost vs $50-200/month SaaS. Price at $1,999 — cheaper than 2 years of cloud AI. Game-changer for African clients with unreliable internet.</div><span class="urgency-badge urgency-MONTH">&#128993; THIS MONTH</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 7 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">7</div><div><div class="section-title">Solopreneur Agent Stacks</div><div class="section-subtitle">How Top Solopreneurs Build in 2026</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>Top Solopreneur Stacks:</strong> n8n (workflows) + Claude Code/Cursor (coding) + Supabase (backend/DB) + Render/Vercel (hosting) + OpenClaw (orchestration) + Stripe (billing). Noah Kagan: Claude + Gumroad + Twitter DMs. Pieter Levels: 12 businesses automated with AI agents.</li>
+        <li><strong>Revenue Models $0-10K/month:</strong> $0-500: info products on Gumroad. $500-2K: micro SaaS on Lemon Squeezy. $2K-5K: agency work automated with agents. $5K-10K: AI-native SaaS. Top performers use AI agents to 10x output.</li>
+        <li><strong>Self-Building vs OGRE:</strong> Solopreneurs CAN self-build — but takes 3-6 months. OGRE's value: pre-built, tested, production-ready agent pipelines. OGRE's moat: sovereign infrastructure + African market focus that no global tool provides out of the box.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Publish OGRE's &quot;Solopreneur Agent Stack&quot; as a packaged offering: $499 setup + $99/month. Includes pre-configured n8n workflows, OpenClaw agents, Supabase DB, and OGRE's tender pipeline agent pre-loaded. Target: African founders who want to compete globally without hiring devs. <strong>OGRE's Shopify moment.</strong></div><span class="urgency-badge urgency-NOW">&#128308; NOW</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 8 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">8</div><div><div class="section-title">Latest AI Agents (June-July 2026)</div><div class="section-subtitle">Devin &middot; Cursor &middot; Manus &middot; Trae &middot; AutoGPT &middot; 11Labs</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>Devin (Cognition) — Jun 2026:</strong> Devin Desktop launched, turning Windsurf surface into agent command center. Archive/Unarchive sessions (Jun 26). PR diffs, code analysis, Devin Review chat agent. Goldman Sachs hired Devin as first AI employee.</li>
+        <li><strong>Cursor v3.0 (Early 2026):</strong> Background Agents, Cloud Agents, Composer 2.0. Cursor Automations (always-on agents + trigger system). Cursor Mobile iOS beta (Jun 17) — code from your phone. Agent Mode is headline feature.</li>
+        <li><strong>Manus AI</strong> (Butterfly Effect, Singapore): General-purpose autonomous agent. &quot;Goes beyond answers to execute tasks, automate workflows, extend human reach.&quot; HQ Singapore since mid-2025. Fastest-growing Asian agent platform.</li>
+        <li><strong>Trae AI (ByteDance):</strong> Free AI code editor from TikTok's parent. Privacy concerns noted but genuinely capable. 2026 review: ambitious but proving itself. VS Code Jul 8 2026 update expands agent workflows.</li>
+        <li><strong>AutoGPT:</strong> Still ships (182k GitHub stars, 50k Discord) but community consensus = zombie project. Replaced by OpenClaw, Cursor Agent, Devin, Manus. 11Labs still voice AI leader. Notion Workers (Aug 11 2026) = Notion connects directly to APIs.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Monitor Trae AI (ByteDance) closely — free, capable, well-resourced. If Trae ships enterprise features, evaluate for client dev work. Lock OGRE's stack: Cursor (primary dev) + Devin Desktop (review/analysis) + OpenClaw (orchestration).</div><span class="urgency-badge urgency-MONTH">&#128993; THIS MONTH</span></div>
+    </div>
+  </div>
+</div>
+<hr class="section-divider" />
+
+<!-- SECTION 9 -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-header"><div class="section-number">9</div><div><div class="section-title">African AI Landscape</div><div class="section-subtitle">Nigeria &middot; Kenya &middot; Ghana &middot; Egypt &middot; South Africa</div></div></div>
+    <div class="section-body">
+      <ul class="build-list">
+        <li><strong>200+ AI Startups Active (Jul 2026):</strong> Africa's AI industry exploding — 200+ startups across healthcare, agriculture, fintech, logistics. Nigeria and Kenya lead. Kenya most mature (42% in growth phase vs 25% NG, 24% ZA). Egypt fastest recent growth.</li>
+        <li><strong>Sovereign AI Policies (Jan 2025+):</strong> Nigeria, Egypt, Kenya all released draft AI policies identifying U.S. tech dependency as a threat. African governments seeking local/alternative AI partners. South Africa actively procuring AI via eTenders.</li>
+        <li><strong>SA Government AI Tenders:</strong> AITenders.co.za using AI to match businesses with govt tenders (1,755 live). Active: AI/Data professional services (12814084). Multiple AI tenders with Jul 13, 2026 deadline. Government AI procurement accelerating.</li>
+        <li><strong>China's Position:</strong> China dominant external player building Africa's digital/AI infrastructure. Alibaba, Huawei, Tencent all active. Africa = new frontier: mobile-first, English + local languages, low data costs, AI policy frameworks newly live.</li>
+      </ul>
+      <div class="action-box"><div class="action-label">OGRE Action Item</div><div class="action-text">Position OGRE as Africa's sovereign AI infrastructure company. Apply for SA govt AI tenders NOW via AITenders.co.za and eTenders.gov.za. Use Qwen3 + MiniMax as tech base (no U.S. dependency = political advantage in tender scoring). Target: SITA, Stats SA, provincial education. Kenya/Nigeria market entry = Q3 2026 goal.</div><span class="urgency-badge urgency-NOW">&#128308; NOW</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIORITY MATRIX -->
+<div class="matrix-section">
+  <div class="matrix-title">&#128298; OGRE Priority Action Matrix</div>
+  <table class="matrix-table">
+    <thead><tr><th>Priority</th><th>Action</th><th>Section</th><th>Deadline</th></tr></thead>
+    <tbody>
+      <tr><td><span class="urgency-badge urgency-NOW" style="font-size:10px;">&#128308; NOW</span></td><td class="action-cell">Deploy Qwen3.7-Max on D@RK F@C#ORY VM via Ollama</td><td>&#167;2</td><td>This week</td></tr>
+      <tr><td><span class="urgency-badge urgency-NOW" style="font-size:10px;">&#128308; NOW</span></td><td class="action-cell">Register OGRE on SA eTenders.gov.za + AITenders.co.za</td><td>&#167;9</td><td>This week</td></tr>
+      <tr><td><span class="urgency-badge urgency-NOW" style="font-size:10px;">&#128308; NOW</span></td><td class="action-cell">Publish &quot;Solopreneur Agent Stack&quot; package ($499+$99/mo)</td><td>&#167;7</td><td>This week</td></tr>
+      <tr><td><span class="urgency-badge urgency-MONTH" style="font-size:10px;">&#128993; MONTH</span></td><td class="action-cell">Pilot Kimi K2.6 via DeepInfra API for multilingual pipeline</td><td>&#167;3</td><td>End July</td></tr>
+      <tr><td><span class="urgency-badge urgency-MONTH" style="font-size:10px;">&#128993; MONTH</span></td><td class="action-cell">Integrate MiniMax Hailuo video API for client deliverables</td><td>&#167;4</td><td>End July</td></tr>
+      <tr><td><span class="urgency-badge urgency-MONTH" style="font-size:10px;">&#128993; MONTH</span></td><td class="action-cell">Build OGRE AI Workstation package (Mac Mini M4 Pro 48GB)</td><td>&#167;6</td><td>End July</td></tr>
+      <tr><td><span class="urgency-badge urgency-MONTH" style="font-size:10px;">&#128993; MONTH</span></td><td class="action-cell">Evaluate Trae AI + Cursor Mobile iOS beta for dev tools</td><td>&#167;8</td><td>End July</td></tr>
+      <tr><td><span class="urgency-badge urgency-WATCH" style="font-size:10px;">&#128994; WATCH</span></td><td class="action-cell">Xiaomi AIOS ecosystem (Lei Jun $8.7B AI investment)</td><td>&#167;5</td><td>Q3 2026</td></tr>
+      <tr><td><span class="urgency-badge urgency-WATCH" style="font-size:10px;">&#128994; WATCH</span></td><td class="action-cell">Kenya/Nigeria market entry via local partner channels</td><td>&#167;9</td><td>Q3 2026</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FINAL BRIEF -->
+<div class="final-brief">
+  <h2>&#128298; The OGRE Strategic Position</h2>
+  <p>OGRE Computer is sitting on a convergence of forces that create a once-in-a-generation opportunity:</p>
+  <p><span class="highlight">1. Open-source AI</span> is making sovereign deployment free — Qwen3.7-Max and Kimi K2.6 deliver frontier-level capability at zero per-token cost on your own infrastructure.</p>
+  <p><span class="highlight">2. Africa's governments</span> are actively procuring AI solutions post-2025 policy frameworks — and they're specifically looking for non-U.S. technology partners.</p>
+  <p><span class="highlight">3. 200+ African AI startups</span> are scaling and need infrastructure, not just tools — the addressable market is growing faster than anywhere else on Earth.</p>
+  <p><span class="highlight">4. The global solopreneur economy</span> is exploding, but African founders are underserved by every global tool.</p>
+  <p><strong>The play is singular: OGRE = AI infrastructure for sovereign Africa.</strong></p>
+  <p>Not just selling tools — building the stack that African governments and founders actually trust. No one else is doing this. Not yet. That's OGRE's window.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">OGRE Midnight Build</div>
+  <div class="footer-tagline">&quot;Build in the dark. Ship at dawn.&quot;</div>
+  <div class="footer-meta">
+    Brief compiled: 2026-07-13 03:00 SAST &nbsp;|&nbsp; Next run: 2026-07-14 03:00 SAST<br/>
+    Distribution: Tumelo Ramaphosa (CEO), OGRE Research Division<br/>
+    Classification: Internal — Confidential
+  </div>
+</footer>
+</body>
+</html>

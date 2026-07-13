@@ -1,0 +1,73 @@
+OGRE MORNING BRIEF — STUDEX GROUP
+Date: Tuesday, 30 June 2026 | 08:00 AM SAST
+═══════════════════════════════════════
+
+TOP 3 PRIORITIES TODAY
+═══════════════════════════════════════
+1. LAISA v4 proposal — Follow up: proposal link sent, awaiting client sign-off
+2. Dark Factory push — Push dark-factory repo to GitHub, trigger Vercel deploy
+3. CSIR lobby window — July 15 Cabinet deadline: prepare OGRE partnership brief NOW
+
+GLOBAL AI LANDSCAPE — 30 JUNE 2026
+═══════════════════════════════════════
+
+USA: OpenAI gating GPT-5.6 behind admin approval. Anthropic deploying Claude at 
+     CA state scale. → Sign frontier AI API deals NOW before SA gets locked out.
+     OGRE action: Draft API partnership brief for OpenAI + Anthropic SA resellers
+
+China: DeepSeek valued at $45-50B with full government backing. Huawei closing 
+       self-reliance loop on chips. → Fine-tune DeepSeek/Qwen on SA datasets ASAP.
+       OGRE action: Initiate Alibaba Cloud Africa + Wits AI MOU discussions
+
+Japan: SoftBank + OpenAI Japan joint venture live. → Bilateral AI model available 
+       to SA RIGHT NOW.
+       OGRE action: Approach Japanese embassy trade desk for AI partnership
+
+India: Krutrim is the Global South AI blueprint. 60-day window for SA knowledge MOU.
+       OGRE action: Send intro letter to IIT Madras / Krutrim team this week
+
+Nigeria: Flutterwave AI processing $16B+ txns. Jasiri AI for B2B SME.
+         → Pan-African payments AI bridge available to partner IMMEDIATELY.
+         OGRE action: Reach out to Flutterwave AI team for SA integration
+
+Ghana: Cropin farming AI across 40+ countries. AU AI Agriculture nomination deadline: 30 July.
+       OGRE action: Register SA with AU AI Agriculture initiative — 30-day window
+
+South Africa: Discovery Health AI on 4.5M members. Media24 producing 10,000+ 
+              African-language AI articles daily. CSIR strategy going to Cabinet Q3.
+              OGRE action: Lock in CSIR partnership brief before July 15 Cabinet deadline
+
+IMMEDIATE ACTION MATRIX (30/90/180 DAYS)
+═══════════════════════════════════════
+
+BY 30 JULY (30 days):
+[1] Initiate DeepSeek/Qwen SA fine-tuning MOU — Alibaba Cloud Africa + Wits AI
+[2] Draft CSIR private-sector AI implementation partnership brief
+[3] Contact Flutterwave AI team for SA payments integration
+[4] Send Krutrim intro letter to IIT Madras
+
+BY 30 AUGUST (60 days):
+[5] Approach SARB with Brazil fintech-AI compliance model (Nubank playbook)
+[6] Register SA with AU AI for Agriculture initiative — Cropin + Dept Agriculture
+[7] Lock in SAHPRA licence for Studex Global Markets (Pharmasyntez pipeline)
+
+BY 30 SEPTEMBER (90 days):
+[8] Build Flutterwave-Jasiri-SA Payments AI bridge
+[9] OGRE positioned as Africa's AI deployment hub — continental MOU network live
+
+KEY DEADLINES THIS WEEK
+═══════════════════════════════════════
+📅 July 1:  Dark Factory Vercel deployment target
+📅 July 7:  LAISA v4 follow-up with anchor client
+📅 July 15: CSIR Cabinet submission deadline — OGRE MUST have brief ready
+📅 July 30: AU AI Agriculture nominations close
+
+BOTTOM LINE
+═══════════════════════════════════════
+Africa has not chosen its AI layer. OGRE has 90 days to position SA as Africa's 
+AI deployment hub. After that, the continent gets carved up by Chinese 
+infrastructure and US data-sovereignty gatekeepers. Start the clock.
+
+---
+OGRE Computer | Studex Group | Dark Factory
+Next run: July 1, 2026 — 03:00 SAST

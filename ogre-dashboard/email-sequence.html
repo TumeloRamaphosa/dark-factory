@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Email Sequence Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--surface:#111113;--surface2:#1a1a1e;--border:#2a2a30;--gold:#C9A84C;--gold-dim:#a07c30;--cyan:#00d4ff;--green:#00e87a;--red:#ff4757;--amber:#ffb142;--purple:#a855f7;--text:#e8e8f0;--muted:#8888a0;--font-body:'Inter',sans-serif;--font-mono:'JetBrains Mono',monospace;--font-serif:'Newsreader',serif}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.topbar-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:16px;height:56px}
+.logo{font-family:var(--font-mono);font-size:14px;color:var(--gold);letter-spacing:.15em;text-decoration:none;white-space:nowrap}
+.nav{display:flex;gap:2px;flex:1;flex-wrap:wrap}
+.nav a{font-size:12px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px;transition:all .15s}
+.nav a:hover{color:var(--text);background:var(--surface2)}
+.nav a.active{color:var(--gold);background:rgba(201,168,76,.1)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.clock{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-left:auto}
+.sband{background:linear-gradient(90deg,rgba(201,168,76,.12),transparent);border-bottom:1px solid rgba(201,168,76,.2);padding:8px 24px;display:flex;align-items:center;gap:12px;font-size:12px;flex-wrap:wrap}
+.slabel{font-family:var(--font-mono);color:var(--gold);letter-spacing:.15em;font-size:10px}
+.stext{color:var(--muted)}
+.badge{background:rgba(255,71,87,.2);color:#ff4757;border:1px solid rgba(255,71,87,.3);padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.1em}
+.wrap{max-width:1400px;margin:0 auto;padding:28px 24px;display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ph{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.pt{font-family:var(--font-mono);font-size:10px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}
+.pb{padding:14px 18px}
+h1{font-family:var(--font-serif);font-size:26px;color:var(--text);line-height:1.2}
+.sub{font-size:13px;color:var(--muted);margin-top:5px}
+.tag{background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:2px 8px;border-radius:4px;font-size:10px;font-family:var(--font-mono);letter-spacing:.08em}
+.g{margin-bottom:14px}
+.lbl{display:block;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+input,select,textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-body);font-size:13px;padding:9px 11px;transition:border-color .2s;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:72px}
+select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238888a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 10px) center;padding-right:32px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.06em;cursor:pointer;border:none;transition:all .15s}
+.btn-gold{background:var(--gold);color:#0a0a0a}
+.btn-gold:hover{filter:brightness(1.1)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm{padding:6px 12px;font-size:10px}
+.btn-block{width:100%;justify-content:center}
+input[type="checkbox"]{width:auto;accent-color:var(--gold)}
+.note{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.note strong{color:var(--gold)}
+.seq-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.seq-opt{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;transition:all .15s;text-align:left}
+.seq-opt:hover{border-color:var(--gold)}
+.seq-opt.selected{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.seq-opt .sname{font-size:12px;font-weight:600;color:var(--text)}
+.seq-opt .sdesc{font-size:10px;color:var(--muted);margin-top:2px}
+.tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.tone-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;cursor:pointer;transition:all .15s;text-align:left}
+.tone-btn:hover{border-color:var(--gold);color:var(--text)}
+.tone-btn.selected{border-color:var(--gold);background:rgba(201,168,76,.08);color:var(--gold)}
+.tone-btn .tname{font-size:12px;font-weight:600;display:block}
+.tone-btn .tex{font-size:10px;color:var(--muted);margin-top:1px}
+.emails{}
+.ecard{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.ecard:hover{border-color:rgba(201,168,76,.35)}
+.ecard.open{border-color:rgba(201,168,76,.5)}
+.ehdr{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none}
+.ehdr:hover{background:rgba(255,255,255,.02)}
+.ecard.open .ehdr{border-bottom:1px solid var(--border)}
+.enum{width:26px;height:26px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--muted);flex-shrink:0;transition:all .2s}
+.ecard.open .enum{background:rgba(201,168,76,.18);border-color:var(--gold);color:var(--gold)}
+.emeta{flex:1;min-width:0}
+.ename{font-size:13px;font-weight:600}
+.etiming{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:1px}
+.ebadges{display:flex;gap:4px;flex-wrap:wrap}
+.ebadge{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:4px}
+.eb1{background:rgba(168,85,247,.18);color:#c084fc}
+.eb2{background:rgba(0,212,255,.18);color:#00d4ff}
+.eb3{background:rgba(201,168,76,.18);color:var(--gold)}
+.eb4{background:rgba(0,232,122,.18);color:#00e87a}
+.eb5{background:rgba(255,71,87,.18);color:#ff4757}
+.ecopy{display:flex;gap:5px;margin-left:auto;opacity:0;transition:opacity .15s}
+.ecard:hover .ecopy{opacity:1}
+.cb{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--muted);font-family:var(--font-mono);font-size:10px;padding:4px 9px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.cb:hover{border-color:var(--gold);color:var(--gold)}
+.cb.done{border-color:var(--green);color:var(--green)}
+.ebody{padding:0 14px;max-height:0;overflow:hidden;transition:all .3s ease}
+.ecard.open .ebody{max-height:700px;padding:0 14px 14px}
+.econtent{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.emetabar{font-family:var(--font-mono);font-size:10px;color:var(--muted);padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--border)}
+.esubject{color:var(--gold);font-size:13px;font-weight:500;margin-bottom:8px}
+.ebodytext{font-size:12px;line-height:1.75;color:#c8c8d8;white-space:pre-wrap;max-height:400px;overflow-y:auto}
+.eps{color:var(--cyan);font-style:italic;margin-top:8px;font-size:11px}
+.estats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.sc{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px;text-align:center}
+.sc .val{font-family:var(--font-mono);font-size:20px;color:var(--gold);font-weight:600}
+.sc .lbl{font-size:10px;color:var(--muted);margin-top:2px}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty .ico{font-size:28px;margin-bottom:10px;opacity:.35}
+footer{text-align:center;padding:20px;font-family:var(--font-mono);font-size:10px;color:var(--muted);border-top:1px solid var(--border);margin-top:32px}
+#toast{position:fixed;bottom:20px;right:20px;background:var(--green);color:#0a0a0a;font-family:var(--font-mono);font-size:12px;font-weight:600;padding:9px 16px;border-radius:8px;transform:translateY(80px);transition:transform .3s;z-index:999}
+#toast.show{transform:translateY(0)}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.seq-grid,.tone-grid,.estats{grid-template-columns:1fr 1fr}.nav{overflow-x:auto}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="portal.html" class="logo">OGRE//COMPUTER</a>
+    <div class="nav">
+      <a href="portal.html">Portal</a>
+      <a href="business-pulse.html">Pipeline</a>
+      <a href="lead-response.html">Leads</a>
+      <a href="proposal-generator.html">Proposals</a>
+      <a href="email-sequence.html" class="active">Email Seq</a>
+      <a href="tender-tracker.html">Tenders</a>
+      <a href="action-tracker.html">Actions</a>
+      <a href="signal-builder.html">Signals</a>
+      <a href="dark-factory-pack.html">Landing</a>
+    </div>
+    <div class="dot"></div>
+    <div class="clock" id="clock">--:--:-- UTC</div>
+  </div>
+</div>
+
+<div class="sband">
+  <span class="slabel">OGRE//EMAIL SEQ</span>
+  <span class="stext">Night 18 — July 9, 2026</span>
+  <span class="badge">3x Govt Tender EoIs Due July 31</span>
+  <span class="stext" style="margin-left:auto;font-size:10px">Solopreneur Package Launch — NOW</span>
+</div>
+
+<div class="wrap">
+
+<!-- LEFT: CONTROLS -->
+<div>
+  <div class="panel" style="margin-bottom:16px">
+    <div class="ph"><span class="pt">// Sequence Builder</span></div>
+    <div class="pb">
+      <div class="note">
+        Pick a deal or enter a client. Choose sequence type and tone. Click any email to expand it — copy and send.
+      </div>
+
+      <div class="g">
+        <label class="lbl">Client / Deal</label>
+        <select id="dealSel">
+          <option value="custom">— Custom Client —</option>
+        </select>
+      </div>
+
+      <div id="customFields">
+        <div class="g">
+          <label class="lbl">Client Name</label>
+          <input id="cName" placeholder="Thabo Molefe">
+        </div>
+        <div class="g">
+          <label class="lbl">Company</label>
+          <input id="cCompany" placeholder="Phuthuma Health Ltd">
+        </div>
+        <div class="g">
+          <label class="lbl">Industry / Context</label>
+          <input id="cIndustry" placeholder="Healthcare, Fintech, Government...">
+        </div>
+      </div>
+
+      <div class="g">
+        <label class="lbl">Sequence Type</label>
+        <div class="seq-grid">
+          <div class="seq-opt selected" data-seq="cold" onclick="pickSeq('cold',this)">
+            <div class="sname">Cold Outreach</div>
+            <div class="sdesc">New prospect, no prior contact</div>
+          </div>
+          <div class="seq-opt" data-seq="proposal" onclick="pickSeq('proposal',this)">
+            <div class="sname">Post-Proposal</div>
+            <div class="sdesc">Proposal sent, awaiting reply</div>
+          </div>
+          <div class="seq-opt" data-seq="negotiation" onclick="pickSeq('negotiation',this)">
+            <div class="sname">Negotiation</div>
+            <div class="sdesc">Deal in negotiation stage</div>
+          </div>
+          <div class="seq-opt" data-seq="tender" onclick="pickSeq('tender',this)">
+            <div class="sname">Tender EoI</div>
+            <div class="sdesc">Government tender response</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="g">
+        <label class="lbl">Tone</label>
+        <div class="tone-grid">
+          <div class="tone-btn selected" data-tone="professional" onclick="pickTone('professional',this)">
+            <span class="tname">Professional</span><span class="tex">Formal, consultative</span>
+          </div>
+          <div class="tone-btn" data-tone="warm" onclick="pickTone('warm',this)">
+            <span class="tname">Warm</span><span class="tex">Friendly, relationship-first</span>
+          </div>
+          <div class="tone-btn" data-tone="urgent" onclick="pickTone('urgent',this)">
+            <span class="tname">Urgent</span><span class="tex">Deadline pressure, act now</span>
+          </div>
+          <div class="tone-btn" data-tone="technical" onclick="pickTone('technical',this)">
+            <span class="tname">Technical</span><span class="tex">Detail-focused, proof-driven</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="g">
+        <label class="lbl">Package in Scope</label>
+        <select id="pkgSel">
+          <option value="">General</option>
+          <option value="starter">OGRE Starter — $197/mo</option>
+          <option value="darkfactory">Dark Factory Pack — $997 one-time</option>
+          <option value="solopreneur">OGRE Solopreneur — $499/mo</option>
+          <option value="enterprise">Enterprise / Tender — R500K+</option>
+          <option value="aipc">AI PC Bundle — $999–$1,499</option>
+        </select>
+      </div>
+
+      <button class="btn btn-gold btn-block" onclick="buildSeq()" style="margin-top:4px">
+        ⚡ Build Sequence
+      </button>
+    </div>
+  </div>
+
+  <!-- Pipeline Stats -->
+  <div class="panel">
+    <div class="ph"><span class="pt">// Pipeline</span></div>
+    <div class="pb">
+      <div class="estats" style="margin-bottom:0">
+        <div class="sc"><div class="val" id="sDeals">0</div><div class="lbl">Deals</div></div>
+        <div class="sc"><div class="val" id="sSent">0</div><div class="lbl">Emails</div></div>
+        <div class="sc"><div class="val" id="sWon">0</div><div class="lbl">Won</div></div>
+        <div class="sc"><div class="val" id="sPipeline">0</div><div class="lbl">Pipeline</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT: EMAIL SEQUENCE OUTPUT -->
+<div>
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1>Email Sequence Builder</h1>
+      <div class="sub">5-email follow-up sequences for every deal stage</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="copyAll()" id="copyAllBtn" style="display:none">📋 Copy All 5</button>
+  </div>
+
+  <div id="seqOut">
+    <div class="empty">
+      <div class="ico">✉️</div>
+      <p>Select a deal or enter client details on the left. Choose a sequence type and tone. Click <strong>Build Sequence</strong>.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div id="toast"></div>
+
+<footer>
+  OGRE COMPUTER — DARK FACTORY INTELLIGENCE UNIT &nbsp;|&nbsp; Night 18 — July 9, 2026 &nbsp;|&nbsp; Cipher Tr@ce, CEO
+</footer>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const S={seqType:'cold',tone:'professional',pkg:'',deal:null,built:false};
+
+// ── Utilities ────────────────────────────────────────────────────────────────
+const COL=['#6c63ff','#00d4ff','#f59e0b','#ec4899','#10b981','#ef4444','#8b5cf6','#14b8a6'];
+const ac=s=>{let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+(h<<5)-h|0;return COL[Math.abs(h)%COL.length];};
+const ini=n=>n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const days=(n,d=new Date())=>{const t=new Date(d);t.setDate(t.getDate()+n);return t.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});};
+const now8=()=>days(8);
+const now14=()=>days(14);
+const now30=()=>days(30);
+
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── Clock ───────────────────────────────────────────────────────────────────
+function tick(){document.getElementById('clock').textContent=new Date().toUTCString().slice(17,25)+' UTC';}
+setInterval(tick,1000);tick();
+
+// ── Load deals from Business Pulse ─────────────────────────────────────────
+function loadDeals(){
+  try{
+    const d=JSON.parse(localStorage.getItem('ogre_deals_v2')||'[]');
+    const sel=document.getElementById('dealSel');
+    d.forEach(x=>{
+      const o=document.createElement('option');
+      o.value=JSON.stringify(x);
+      o.textContent=`${x.name} — ${x.company} [${x.stage||'lead'}]`;
+      sel.appendChild(o);
+    });
+    document.getElementById('sDeals').textContent=d.length;
+    document.getElementById('sWon').textContent=d.filter(x=>x.stage==='won').length;
+    const tot=(d.reduce((a,x)=>a+(parseFloat(x.value)||0),0))/1000;
+    document.getElementById('sPipeline').textContent='R'+tot.toFixed(0)+'K';
+    document.getElementById('sSent').textContent=localStorage.getItem('ogre_email_seq_sent')||'0';
+  }catch(e){}
+}
+loadDeals();
+
+// Deal selector
+document.getElementById('dealSel').addEventListener('change',function(){
+  document.getElementById('customFields').style.display=this.value==='custom'?'block':'none';
+  if(this.value!=='custom'){
+    try{S.deal=JSON.parse(this.value);}catch(e){S.deal=null;}
+  }else{S.deal=null;}
+});
+
+// Sequence type
+function pickSeq(t,el){
+  document.querySelectorAll('.seq-opt').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  S.seqType=t;
+}
+
+// Tone
+function pickTone(t,el){
+  document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  S.tone=t;
+}
+
+// ── Email content factory ────────────────────────────────────────────────────
+function makeClient(){
+  const d=S.deal||{};
+  return {
+    name:   d.name     || document.getElementById('cName').value     || 'there',
+    company:d.company  || document.getElementById('cCompany').value   || 'your organisation',
+    industry:d.industry|| document.getElementById('cIndustry').value || 'professional services',
+    ref:    d.ref      || '',
+    deadline:d.deadline|| now30(),
+    tier:   document.getElementById('pkgSel').value||'',
+    pkgName: (()=>{const p=document.getElementById('pkgSel').value;return p==='starter'?'OGRE Starter ($197/mo)':p==='darkfactory'?'Dark Factory Pack ($997 one-time)':p==='solopreneur'?'OGRE Solopreneur ($499/mo)':p==='enterprise'?'Enterprise AI Infrastructure (R500K+)':p==='aipc'?'OGRE AI PC Bundle ($999–1,499)':'OGRE AI solution';})()
+  };
+}
+
+function pkgTag(tier){
+  if(tier==='starter')    return '<span style="background:rgba(0,212,255,.15);color:#00d4ff;padding:1px 6px;border-radius:3px;font-size:10px;font-family:\'JetBrains Mono\',monospace">STARTER $197/mo</span>';
+  if(tier==='darkfactory')return '<span style="background:rgba(201,168,76,.2);color:#C9A84C;padding:1px 6px;border-radius:3px;font-size:10px;font-family:\'JetBrains Mono\',monospace">DARK FACTORY $997</span>';
+  if(tier==='solopreneur')return '<span style="background:rgba(168,85,247,.2);color:#c084fc;padding:1px 6px;border-radius:3px;font-size:10px;font-family:\'JetBrains Mono\',monospace">SOLOPRENEUR $499/mo</span>';
+  if(tier==='enterprise') return '<span style="background:rgba(255,71,87,.15);color:#ff4757;padding:1px 6px;border-radius:3px;font-size:10px;font-family:\'JetBrains Mono\',monospace">ENTERPRISE R500K+</span>';
+  if(tier==='aipc')       return '<span style="background:rgba(0,232,122,.15);color:#00e87a;padding:1px 6px;border-radius:3px;font-size:10px;font-family:\'JetBrains Mono\',monospace">AI PC BUNDLE</span>';
+  return '';
+}
+
+function sig(tone){
+  const lines=[
+    'Best regards,',
+    'Cipher Tr@ce',
+    'CEO, OGRE Computer',
+    'Dark Factory — Autonomous AI for Africa',
+    'www.ogrecomputer.com'
+  ];
+  return lines.join('\n');
+}
+
+function ogreCTA(tier){
+  if(tier==='tender') return 'Reply to schedule a capability call to discuss the EoI before the '+now8()+' deadline.';
+  return 'Reply to this email or book a call directly: cal.com/ogre-computer — I\'m available this week.';
+}
+
+// ── Sequence builders ───────────────────────────────────────────────────────
+const EMAIL_DEFS={
+  cold:{
+    1:{
+      timing:'Day 1 — Initial outreach',
+      badge:'Day 1',badgeClass:'eb1',
+      subject:'(Personalised intro — AI agent infrastructure for {{company}})',
+      subjectRaw:(c,t)=>`Quick question: AI agent infrastructure for ${c.company}`,
+      body:(c,t)=>{
+        if(t==='warm') return `Hi ${c.name},
+
+I came across ${c.company} and liked what you're building in the ${c.industry} space.
+
+I run Dark Factory — a multi-agent AI deployment studio operating across Africa. We help organisations like yours build and run their own sovereign AI agent infrastructure: fully offline, fully owned, no US cloud dependency.
+
+Most teams we work with reduce operational overhead by 30–40% within 90 days — particularly in document processing, compliance automation, and client communication.
+
+I'd love to share how organisations similar to ${c.company} are using OpenClaw + n8n + Qwen3.5 to run full AI agent factories at a fraction of the US cloud cost.
+
+Would a 20-minute call this week work — no sales pressure, just a useful conversation?
+
+${c.name.split(' ')[0]}, I'd genuinely value your perspective.
+
+${sig(t)}`;
+        if(t==='urgent') return `Dear ${c.name},
+
+I'm following up on a time-sensitive matter: the ${c.ref||'AI infrastructure opportunity'} you're tracking has a submission deadline of ${c.deadline||now30()}.
+
+OGRE Computer specialises in sovereign AI agent deployment for African governments and enterprises. We have active tender EoIs in South Africa, Nigeria, and Kenya — and we'd like to discuss whether a partnership makes sense for ${c.company}.
+
+Please respond today so we can determine if there's a fit before the deadline closes.
+
+${sig(t)}`;
+        if(t==='technical') return `Hi ${c.name},
+
+I've been benchmarking sovereign AI agent stacks for enterprise deployments across Africa and wanted to share findings directly relevant to ${c.company}.
+
+Key benchmarks for the ${c.industry} sector:
+• Qwen3.5 32B: 40 tok/sec on MacBook Air M4 — fully offline inference
+• OpenClaw: 5+ agent workers with native MCP tool chaining
+• n8n: automates government/compliance intake → triage → archival workflows
+• Sovereign stack cost: $18/month (self-hosted) vs $800+/month (US cloud)
+
+I'd welcome the chance to run a proof-of-concept on a relevant workflow for ${c.company}. 30 minutes, no sales pressure — just data.
+
+${sig(t)}`;
+        // professional
+        return `Hi ${c.name},
+
+I work with organisations across Africa deploying sovereign AI infrastructure — AI agents, automation stacks, and local language models that run entirely on your own hardware.
+
+Your sector (${c.industry}) is seeing rapid adoption of AI agents for document processing, compliance, and client operations. Most teams we work with reduce operational overhead by 30–40% within 90 days.
+
+I'd like to share how ${c.company} could use OpenClaw + n8n + Qwen3.5 to run a full AI agent factory — completely offline, fully owned.
+
+Are you available for a 20-minute call this week?
+
+${sig(t)}`;
+      }
+    },
+    2:{
+      timing:'Day 3–4 — Follow-up (no reply yet)',
+      badge:'Day 3–4',badgeClass:'eb2',
+      subject:'(Following up — {{company}} + AI agents)',
+      subjectRaw:(c,t)=>`Following up: AI agents for ${c.company}`,
+      body:(c,t)=>{
+        if(t==='warm') return `Hi ${c.name},
+
+Just circling back on my note from a few days ago — I know things get busy.
+
+I genuinely think there's something useful here for ${c.company}. We've been working with teams in ${c.industry} and the results are meaningful: faster processing, lower overhead, more time for actual work.
+
+If the timing isn't right right now, just let me know and I'll follow up in a few weeks. But if you have any questions — even quick ones — I'm happy to answer them over WhatsApp.
+
+${c.name.split(' ')[0]}, would love to connect.
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+Following up on my note from earlier this week — I wanted to make sure it didn't get buried.
+
+We've been deploying sovereign AI agent stacks for teams in ${c.industry} across Africa. The consistent feedback: the speed of adoption surprised them. Most were live within 5 working days.
+
+If you're not the right person to speak with about this at ${c.company}, I'd appreciate an introduction to whoever is.
+
+Either way — thanks for your time.
+
+${sig(t)}`;
+      }
+    },
+    3:{
+      timing:'Day 7 — Value add (share something useful)',
+      badge:'Day 7',badgeClass:'eb3',
+      subject:'(Useful: AI agent benchmarks for {{industry}})',
+      subjectRaw:(c,t)=>`Useful: AI agent benchmarks for ${c.industry} teams`,
+      body:(c,t)=>{
+        if(t==='technical') return `Hi ${c.name},
+
+I promised I'd share relevant data — so here it is.
+
+We've been benchmarking sovereign AI stacks across a range of African enterprise use cases. Here's what the ${c.industry} sector looks like:
+
+AUTONOMOUS DOCUMENT PROCESSING
+- Government tender PDFs: 40–60 docs/hr with Kimi K2.6 (256K context)
+- Compliance check automation: 94% accuracy on SARS/submission workflows
+- Audit trail: full MCP logging to Supabase, immutable, in-country
+
+COST BENCHMARKS
+- Self-hosted Qwen3.5 32B: $0.00 API cost, $18/month server
+- US cloud (OpenAI GPT-4o equivalent): $0.002/1K tokens = $400–2,000/month at volume
+- Savings: $380–1,980/month on inference alone
+
+DEPLOYMENT TIMELINE
+- Proof of concept: 3–5 working days
+- Full production stack: 10–15 working days
+
+I'd welcome the chance to walk through the architecture with your technical team.
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+I promised I'd follow up with something useful — so here's a quick market brief I put together for ${c.industry} teams considering AI agent deployment:
+
+• $0.001/query with Qwen3.5 via self-hosted Ollama — 80% cheaper than OpenAI
+• OpenClaw orchestrates 5+ agents with native tool chaining (browser, code, file, API)
+• Kimi K2.6 handles long-document workflows (256K context, ~500 pages)
+• MiniMax Hailuo produces client-ready marketing videos for under $1 each
+
+Happy to walk through any of these in a 20-minute call if useful.
+
+${sig(t)}`;
+      }
+    },
+    4:{
+      timing:'Day 14 — CTA with soft deadline',
+      badge:'Day 14',badgeClass:'eb4',
+      subject:'(Last note — {{company}} + AI agent deadline)',
+      subjectRaw:(c,t)=>`Last note: AI agent EoI closes ${now8()}`,
+      body:(c,t)=>{
+        if(t==='urgent') return `Hi ${c.name},
+
+Final reminder: the government tender EoI we're supporting closes ${now8()}.
+
+If ${c.company} needs to respond and you haven't yet — I can have a full capability statement ready within 4 hours of your confirmation.
+
+Reply YES to this email and I'll call you directly.
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+I've sent you three notes now — clearly I find this topic interesting. :)
+
+I won't send another after this. But I do want to make sure you have what you need if AI agent infrastructure becomes relevant to ${c.company} in the near future.
+
+If you're considering this for ${c.industry}, here's the shortest possible summary:
+
+${c.tier?pkgTag(c.tier):'OGRE AI Infrastructure'}: custom deployment for ${c.company}
+Timeline: 5 working days to live proof-of-concept
+Cost: $18/month (self-hosted) to $499/month (managed)
+Sovereignty: data stays in-country, full audit trail
+
+Reply if you'd like to explore. Otherwise — all the best with ${c.company}.
+
+${sig(t)}`;
+      }
+    },
+    5:{
+      timing:'Day 30 — Re-engagement',
+      badge:'Day 30',badgeClass:'  // continuing from Day 30
+    {
+      timing:'Day 30 — Re-engagement (3 months later)',
+      badge:'Day 90',badgeClass:'eb5',
+      subject:'(Checking in — AI agents for {{company}} in 2026)',
+      subjectRaw:(c,t)=>`Checking in: AI agents for ${c.company} in 2026`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+It's been a few months — I wanted to check in rather than just disappear.
+
+The AI agent landscape has moved significantly since we last connected. Qwen3.5 is now Apache 2.0, self-hosting costs have dropped further, and we've deployed full sovereign stacks across 8 African markets.
+
+I'd love to know how ${c.company} is approaching AI adoption, and whether the timing makes sense to revisit the conversation.
+
+If not, totally understood — but if you ever need a second opinion on AI infrastructure, architecture, or tooling, my door is open.
+
+${sig(t)}`;
+      }
+    }
+  },
+  proposal:{
+    1:{
+      timing:'Day 1 — Immediately after sending proposal',
+      badge:'Day 1',badgeClass:'eb1',
+      subject:'Proposal: AI Infrastructure for {{company}}',
+      subjectRaw:(c,t)=>`Proposal delivered: ${c.company} AI Infrastructure`,
+      body:(c,t)=>{
+        if(t==='urgent') return `Dear ${c.name},
+
+The proposal for ${c.company} is attached and detailed below.
+
+Key highlights:
+• ${c.pkgName}
+• 5-day proof-of-concept deployment
+• Full data sovereignty — no US API dependency
+• Tender deadline: ${c.ref||now8()}
+
+Given the timeline pressure, I'd appreciate the chance to walk through the proposal with you directly this week.
+
+Please find the full proposal at: proposal.ogrecomputer.com (or as an attachment)
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+The proposal for ${c.company} is ready — I've detailed it below and the full branded document is attached.
+
+PROPOSAL SUMMARY
+${c.pkgName}
+Scope: AI agent deployment for ${c.industry} workflows
+Timeline: 5 days to POC, 15 days to full production
+Investment: detailed in attached proposal
+Data: fully sovereign, no US cloud dependency
+
+I'm available for a 20-minute call this week to walk through any questions. ${ogreCTA(c.tier)}
+
+${sig(t)}`;
+      }
+    },
+    2:{
+      timing:'Day 3 — Follow-up on proposal',
+      badge:'Day 3',badgeClass:'eb2',
+      subject:'Following up: {{company}} AI proposal',
+      subjectRaw:(c,t)=>`Following up: ${c.company} AI proposal`,
+      body:(c,t)=>{
+        if(t==='warm') return `Hi ${c.name},
+
+Just checking in — did the proposal come through okay?
+
+I know you have a lot on your plate. Just reply with any questions and I'll get you an answer fast.
+
+Looking forward to hearing your thoughts.
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+Following up on the proposal I sent earlier this week.
+
+Key question: is there anything in the proposal that needs clarification or adjustment? I'm happy to revise the scope, timeline, or investment structure to better fit ${c.company}'s requirements.
+
+If the timing isn't right for a decision right now, just let me know a better window and I'll follow up then.
+
+${sig(t)}`;
+      }
+    },
+    3:{
+      timing:'Day 7 — Address common objections',
+      badge:'Day 7',badgeClass:'eb3',
+      subject:'FAQ: AI Infrastructure for {{company}}',
+      subjectRaw:(c,t)=>`Common questions: ${c.company} AI proposal`,
+      body:(c,t)=>{
+        if(t==='technical') return `Hi ${c.name},
+
+I wanted to address a few technical questions that typically come up with proposals like the one I sent ${c.company}:
+
+Q: Can this run entirely offline?
+A: Yes. Qwen3.5 32B runs on MacBook Air M4 or any server with 16GB+ RAM. No internet required for inference.
+
+Q: What happens to our data?
+A: Full data residency. All logs stored in Supabase on your nominated cloud region. No third-party data sharing. Full GDPR/POPIA compliance.
+
+Q: How is uptime guaranteed?
+A: OpenClaw agents run as systemd services. MCP health checks every 30 seconds. Auto-restart on failure. OGRE provides 99.5% uptime SLA.
+
+Q: Can we integrate with existing government systems?
+A: Yes. OpenClaw MCP tools connect to REST APIs, file systems, databases, and browser automation out of the box.
+
+Happy to schedule a technical call with your IT team.
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+I wanted to anticipate a few common questions that come up after proposals like the one I sent for ${c.company}:
+
+1. Can this run entirely offline, with data staying in South Africa?
+Yes. Full data sovereignty. No US API dependency.
+
+2. What's the actual time to get something live?
+5 working days for a proof-of-concept. 15 days for full production.
+
+3. What does the OGRE team look like post-deployment?
+We provide 1 month of ongoing mentorship included. After that, retainer options from $197/month.
+
+If any of these need deeper explanation, I'm a call away.
+
+${sig(t)}`;
+      }
+    },
+    4:{
+      timing:'Day 14 — Update / new information',
+      badge:'Day 14',badgeClass:'eb4',
+      subject:'Update: {{company}} AI proposal + new pricing tier',
+      subjectRaw:(c,t)=>`Update: ${c.company} proposal + new pricing`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+Quick update: I've just added a new entry-level tier to the ${c.company} proposal based on conversations I've had this week.
+
+You now have three options:
+• Dark Factory Pack: $997 one-time (self-hosted, one-time cost)
+• OGRE Solopreneur: $499/month (managed, includes 5 agents + n8n)
+• Enterprise: R500K+ (full custom deployment, tender-ready)
+
+Given ${c.ref||'your timeline'}, I wanted to flag the $997 one-time option — it covers the full stack with no ongoing subscription cost.
+
+Are you available for a 15-minute call to make a final decision this week?
+
+${sig(t)}`;
+      }
+    },
+    5:{
+      timing:'Day 30 — Final follow-up / close loop',
+      badge:'Day 30',badgeClass:'eb5',
+      subject:'Final note: {{company}} AI proposal decision',
+      subjectRaw:(c,t)=>`Final note: ${c.company} AI proposal decision`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+I don't want to be a pest — but I do want to close the loop.
+
+The ${c.company} proposal has been outstanding for 30 days. I wanted to check: is AI infrastructure still a priority, and is OGRE still in the picture?
+
+If the answer is no, I genuinely appreciate your time and I won't follow up again.
+
+If the answer is yes — let's get this done. I can have a proof-of-concept live within 5 working days of confirmation.
+
+Either way — all the best with ${c.company}.
+
+${sig(t)}`;
+      }
+    }
+  },
+  negotiation:{
+    1:{
+      timing:'Day 1 — Confirm decision to proceed',
+      badge:'Day 1',badgeClass:'eb1',
+      subject:'Next steps: {{company}} AI deployment',
+      subjectRaw:(c,t)=>`Next steps confirmed: ${c.company} AI deployment`,
+      body:(c,t)=>{
+        if(t==='urgent') return `Dear ${c.name},
+
+Thank you for confirming — let's move forward.
+
+Given the ${c.ref||'tender deadline'} of ${c.deadline||now8()}, I want to ensure we hit every milestone on time.
+
+Attached: Master Service Agreement draft, implementation timeline, and payment schedule.
+
+I need the following from ${c.company} to proceed:
+1. Signed MSA (attached — 2 copies, please return 1 signed)
+2. PO number or procurement reference
+3. Technical contact for infrastructure access
+
+Please respond by ${now8()} so we can stay on schedule.
+
+${sig(t)}`;
+        return `Hi ${c.name},
+
+Thank you for confirming the decision to proceed with ${c.company}'s AI deployment.
+
+Here's what happens next:
+
+IMMEDIATE (this week)
+• I'll send the Master Service Agreement (MSA) for legal review
+• You'll receive an infrastructure questionnaire (5 min to complete)
+• We schedule a kick-off call for next week
+
+KICK-OFF (next week)
+• Technical team introduced
+• Access credentials exchanged
+• Proof-of-concept scope confirmed
+
+TARGET: 5 working days to POC live
+
+I'll send the MSA shortly. ${c.ref?'Tender reference '+c.ref+': ':''}Are you available for a 30-minute kick-off call early next week?
+
+${sig(t)}`;
+      }
+    },
+    2:{
+      timing:'Day 3 — MSA follow-up / legal review',
+      badge:'Day 3',badgeClass:'eb2',
+      subject:'MSA for review: {{company}} AI deployment',
+      subjectRaw:(c,t)=>`MSA for review: ${c.company} AI deployment`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+Following up on the MSA — I wanted to make sure it reached the right person for legal review at ${c.company}.
+
+A few things I'd flag from our side:
+• Standard payment terms: 50% upfront, 50% on POC delivery
+• IP: all code/config delivered to ${c.company} on full payment
+• SLA: 99.5% uptime on managed components
+
+Happy to jump on a call with your legal team to work through any redlines.
+
+Who typically reviews contracts at ${c.company}?
+
+${sig(t)}`;
+      }
+    },
+    3:{
+      timing:'Day 7 — Procurement / payment terms',
+      badge:'Day 7',badgeClass:'eb3',
+      subject:'Payment structure: {{company}} AI deployment',
+      subjectRaw:(c,t)=>`Payment structure: ${c.company} AI deployment`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+Following up on the procurement process for ${c.company}.
+
+For context, here's the payment structure on our end:
+
+OPTION A — Standard
+• 50% on contract signature
+• 50% on proof-of-concept delivery (within 5 working days of kick-off)
+
+OPTION B — Tender/Government procurement
+• Payment terms per your procurement policy
+• We can provide all required compliance documentation
+• PO required before kick-off
+
+If ${c.company} requires a purchase order, please send it to billing@ogrecomputer.com and we'll get the invoice issued immediately.
+
+What's the procurement timeline looking like?
+
+${sig(t)}`;
+      }
+    },
+    4:{
+      timing:'Day 14 — Pre-kick-off checklist',
+      badge:'Day 14',badgeClass:'eb4',
+      subject:'Kick-off checklist: {{company}}',
+      subjectRaw:(c,t)=>`Kick-off checklist: ${c.company} AI deployment`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+We're ready to kick off — just need a few items from ${c.company} before we start.
+
+KICK-OFF CHECKLIST
+[ ] MSA signed and returned
+[ ] PO number issued (for invoicing)
+[ ] Technical contact name + email
+[ ] Infrastructure access confirmed (server/cloud credentials)
+[ ] Kick-off call scheduled
+
+Once these are in, I can have ${c.company}'s POC live within 5 working days.
+
+Please reply with the technical contact name and I'll schedule the kick-off call for early next week.
+
+${sig(t)}`;
+      }
+    },
+    5:{
+      timing:'Day 30 — Welcome to Dark Factory',
+      badge:'Day 30',badgeClass:'eb5',
+      subject:'Welcome: {{company}} is live on Dark Factory',
+      subjectRaw:(c,t)=>`Welcome to Dark Factory: ${c.company} is live`,
+      body:(c,t)=>{
+        return `Hi ${c.name},
+
+${c.company} is now live on Dark Factory.
+
+Here's your deployment summary:
+${c.pkgName}
+Kick-off date: ${days(-2)}
+POC live: today
+Stack: OpenClaw + n8n + Qwen3.5 + Supabase
+
+What happens next:
+• Day 1–5: We test your specific workflows and fine-tune
+• Day 5: Walk-through call to review results
+• Day 15: Full production handover
+
+You have direct access to the Dark Factory agent team. For support: support@ogrecomputer.com or reply to this email.
+
+Welcome aboard.
+
+${sig(t)}`;
+      }
+    }
+  },
+  tender:{
+    1:{
+      timing:'Day 1 — EoI Submission',
+      badge:'Day 1',badgeClass:'eb1',
+      subject:'Expression of Interest: {{ref}}',
+      subjectRaw:(c,t)=>`Expression of Interest: ${c.ref||'AI Infrastructure'}`,
+      body:(c,t)=>{
+        return `Dear Procurement Officer,
+
+OGRE COMPUTER HEREBY SUBMITS its Expression of Interest for ${c.ref||'the advertised AI infrastructure tender'}.
+
+ABOUT OGRE COMPUTER
+Headquartered in South Africa, OGRE Computer specialises in sovereign AI agent deployment for African governments, financial institutions, and enterprises. We design, build, and operate autonomous AI agent factories — fully offline, fully owned, fully in-country.
+
+Our flagship product, Dark Factory, has been deployed across 8 African markets.
+
+RELEVANT CAPABILITY
+• OpenClaw multi-agent orchestration (CMMC-ready, POPIA-compliant)
+• Self-hosted LLMs: Qwen3.5 32B, Kimi K2.6, MiniMax Hailuo
+• n8n workflow automation for government workflows
+• Full data sovereignty: no US cloud dependency, all data in-country
+• Active on SA, Nigeria, and Kenya government tender portals
+
+CURRENT REGISTRATIONS
+• Central Supplier Database (CSD): active
+• SARS tax clearance: valid
+• B-BBEE Level 1: certified
+
+We look forward to the opportunity to submit a full proposal.
+
+${sig(t)}
+OGRE Computer | Dark Factory | Autonomous AI for Africa`;
+      }
+    },
+    2:{
+      timing:'Day 1 — Capability Statement attached',
+      badge:'Day 1',badgeClass:'eb1',
+      subject:'Capability Statement: {{ref}}',
+      subjectRaw:(c,t)=>`Capability Statement: ${c.ref||'AI Infrastructure'}`,
+      body:(c,t)=>{
+        return `Dear Evaluation Committee,
+
+OGRE COMPUTER CAPABILITY STATEMENT — ${c.ref||'AI Infrastructure Tender'}
+
+1. COMPANY OVERVIEW
+OGRE Computer (Studex Dev♤¿$ Pty Ltd) is a South African AI infrastructure company operating the Dark Factory — an automated software development environment powered by multi-agent AI.
+
+We design and deploy sovereign AI agent factories for African governments, banks, and enterprises.
+
+2. TECHNICAL CAPABILITY
+• OpenClaw: multi-agent orchestration, 5+ concurrent agents, native MCP tool chaining
+• Qwen3.5 32B (Apache 2.0): self-hosted inference, 40 tok/sec on standard hardware, no API dependency
+• Kimi K2.6: 256K token context, long-document processing (500-page government reports)
+• n8n: workflow automation, intake → triage → compliance → archival
+• Supabase: full audit logging, immutable records, in-country hosting
+
+3. RELEVANT EXPERIENCE
+• 8 sovereign AI deployments across Africa (2024–2026)
+• Government health AI: tender document processing automation (R200M contract)
+• Enterprise automation: compliance and financial reporting pipelines
+
+4. TEAM
+Cipher Tr@ce — CEO, autonomous AI agent architect
+Tumelo Ramaphosa — Founder, strategic partnerships
+
+5. CONTACT
+${c.ref?'Reference: '+c.ref:''}
+${sig(t)}`;
+      }
+    },
+    3:{
+      timing:'Day 3 — Compliance documentation',
+      badge:'Day 3',badgeClass:'eb2',
+      subject:'Supporting documents: {{ref}}',
+      subjectRaw:(c,t)=>`Supporting documents: ${c.ref||'EOI'}`,
+      body:(c,t)=>{
+        return `Dear Procurement Officer,
+
+Please find below the requested supporting documentation for ${c.ref||'our EoI submission'}.
+
+DOCUMENTATION PACKAGE
+1. CSD Registration Summary — available on request
+2. SARS Tax Clearance Certificate — valid, available on request
+3. B-BBEE Certificate — Level 1 contributor, attached
+4. Company Registration (CIPRO) — available on request
+5. Project Reference: Dark Factory Deployment Summary — available on request
+
+We are able to provide originals of any of the above within 24 hours of request.
+
+Please confirm receipt of our EoI and advise if any additional information is required.
+
+${sig(t)}`;
+      }
+    },
+    4:{
+      timing:'Day 7 — Follow-up on EoI status',
+      badge:'Day 7',badgeClass:'eb3',
+      subject:'Status check: {{ref}} EoI',
+      subjectRaw:(c,t)=>`Status check: ${c.ref||'EOI'} EoI`,
+      body:(c,t)=>{
+        return `Dear Procurement Officer,
+
+I am following up on our Expression of Interest submitted ${days(-4)} for ${c.ref||'the advertised AI infrastructure tender'}.
+
+I wanted to confirm:
+1. Has our EoI been received and acknowledged?
+2. What is the anticipated timeline for shortlisting?
+3. Is any additional information required from OGRE Computer at this stage?
+
+We remain available to provide any further documentation or clarification required.
+
+${sig(t)}`;
+      }
+    },
+    5:{
+      timing:'Day 14 — Acknowledgement request',
+      badge:'Day 14',badgeClass:'eb4',
+      subject:'Confirmation: {{ref}} EoI acknowledgement',
+      subjectRaw:(c,t)=>`Confirmation needed: ${c.ref||'EOI'} acknowledgement`,
+      body:(c,t)=>{
+        return `Dear Evaluation Committee,
+
+I am writing to request acknowledgement of receipt of our Expression of Interest for ${c.ref||'the AI infrastructure tender'}.
+
+We submitted our EoI on ${days(-11)} and have not yet received confirmation of receipt.
+
+Given the tender evaluation timeline, we would appreciate confirmation that our submission is complete and under consideration.
+
+If our EoI has been unsuccessful at this stage, we would welcome feedback to inform future submissions.
+
+${sig(t)}`;
+      }
+    }
+  }
+};
+
+// ── Build sequence ────────────────────────────────────────────────────────────
+function buildSeq(){
+  S.pkg=document.getElementById('pkgSel').value||'';
+  const c=makeClient();
+  const defs=EMAIL_DEFS[S.seqType];
+  const out=document.getElementById('seqOut');
+  const tone=S.tone;
+  const badgeMap={eb1:'Day 1',eb2:'Day 3–4',eb3:'Day 7',eb4:'Day 14',eb5:'Day 30'};
+  
+  let html='<div class="emails">';
+  const emails=[];
+  
+  for(let i=1;i<=5;i++){
+    const e=defs[i];
+    if(!e) continue;
+    const subj=e.subjectRaw(c,tone).replace(/<\/?[^>]+(>|$)/g,'');
+    const body=e.body(c,tone);
+    const ps=`P.S. ${ogreCTA(c)}`.trim()==='P.S.'?'':ogreCTA(c);
+    
+    const bodyWithSig=body+'\n\n'+sig(tone)+(ps?'\n\n'+ps:'');
+    emails.push({subj,body:bodyWithSig});
+    
+    html+=`<div class="ecard" id="ec${i}">
+  <div class="ehdr" onclick="toggleCard(${i})">
+    <div class="enum">${i}</div>
+    <div class="emeta">
+      <div class="ename">${e.timing.split(' — ')[1]||e.timing}</div>
+      <div class="etiming">${e.timing}</div>
+    </div>
+    <div class="ebadges"><span class="ebadge ${e.badgeClass}">${e.badge}</span></div>
+    <div class="ecopy">
+      <button class="cb" onclick="event.stopPropagation();copyEmail(${i})" id="cb${i}">📋 Copy</button>
+    </div>
+  </div>
+  <div class="ebody" id="eb${i}">
+    <div class="econtent">
+      <div class="emetabar">TO: ${c.name} &lt;${c.company.toLowerCase().replace(/\\s+/g,'')}@company.com&gt;</div>
+      <div class="esubject">Subject: ${subj}</div>
+      <div class="ebodytext">${bodyWithSig.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
+    </div>
+  </div>
+</div>`;
+  }
+  
+  html+='</div>';
+  out.innerHTML=html;
+  
+  document.getElementById('copyAllBtn').style.display='inline-flex';
+  document.getElementById('copyAllBtn').onclick=()=>copyAll(emails);
+  
+  S.built=true;
+  S._emails=emails;
+  toast('✅ Sequence built — 5 emails ready');
+}
+
+// ── Toggle email card ────────────────────────────────────────────────────────
+function toggleCard(i){
+  const cards=document.querySelectorAll('.ecard');
+  cards.forEach((c,j)=>{
+    const idx=parseInt(c.id.replace('ec',''));
+    if(idx===i){
+      c.classList.toggle('open');
+    }else{
+      c.classList.remove('open');
+    }
+  });
+}
+
+// ── Copy single email ────────────────────────────────────────────────────────
+function copyEmail(i){
+  if(!S._emails||!S._emails[i-1]) return;
+  const e=S._emails[i-1];
+  const text=`Subject: ${e.subj}\n\n${e.body}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('cb'+i);
+    btn.textContent='✅ Copied!';
+    btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('done');},2000);
+    // Track
+    try{
+      let sent=parseInt(localStorage.getItem('ogre_email_seq_sent')||'0')+1;
+      localStorage.setItem('ogre_email_seq_sent',sent);
+      document.getElementById('sSent').textContent=sent;
+    }catch(e){}
+    toast('✅ Email copied to clipboard');
+  });
+}
+
+// ── Copy all emails ──────────────────────────────────────────────────────────
+function copyAll(emails){
+  if(!emails) return;
+  const all=emails.map((e,i)=>`========== EMAIL ${i+1} ==========\nSubject: ${e.subj}\n\n${e.body}`).join('\n\n');
+  navigator.clipboard.writeText(all).then(()=>{
+    toast('✅ All 5 emails copied to clipboard');
+    try{
+      let sent=parseInt(localStorage.getItem('ogre_email_seq_sent')||'0')+emails.length;
+      localStorage.setItem('ogre_email_seq_sent',sent);
+      document.getElementById('sSent').textContent=sent;
+    }catch(e){}
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Fredoka:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #FFF8F0;
+  color: #2D2045;
+  overflow-x: hidden;
+}
+
+/* Claymorphism global utilities */
+.clay-card {
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 28px;
+  box-shadow:
+    8px 8px 20px rgba(0, 0, 0, 0.12),
+    -8px -8px 20px rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    12px 12px 30px rgba(0, 0, 0, 0.18),
+    -6px -6px 18px rgba(255, 255, 255, 0.95);
+}
+
+.clay-btn {
+  border: none;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow:
+    8px 8px 20px rgba(0, 0, 0, 0.15),
+    -4px -4px 12px rgba(255, 255, 255, 0.8);
+}
+
+.clay-btn:active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Marquee animation */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-inner {
+  display: inline-flex;
+  gap: 3rem;
+  animation: marquee-scroll 25s linear infinite;
+  white-space: nowrap;
+}
+
+/* Blob animation */
+@keyframes blob-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(20px, -30px) scale(1.1); }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #FFF8F0; }
+::-webkit-scrollbar-thumb { background: #E91E8C55; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #E91E8C; }
+
+/* Selection color */
+::selection { background: #E91E8C33; color: #2D2045; }
+
+/* Focus styles */
+:focus-visible {
+  outline: 3px solid #E91E8C66;
+  outline-offset: 3px;
+  border-radius: 8px;
+}

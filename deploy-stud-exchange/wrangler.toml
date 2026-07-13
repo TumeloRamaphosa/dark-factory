@@ -1,0 +1,7 @@
+name = "laisa-demo"
+compatibility_date = "2024-01-01"
+account_id = "studexchange-933155"
+pages_build_output_dir = "./"
+
+[[pages]]
+project_name = "laisa-demo"

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA Agent OS — 30-Day Strategic Plan</title>
+<style>
+:root{--obs:#0a0a0a;--obs2:#141414;--gold:#c9a84c;--cream:#f5f0e8;--green:#22c55e;--orange:#f97316;--purple:#8b5cf6;--blue:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--obs);color:var(--cream);font-size:11pt;line-height:1.6}
+.grid{position:fixed;inset:0;background:linear-gradient(rgba(201,168,76,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.glow{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none}
+.g1{width:500px;height:500px;top:-150px;left:-150px;background:rgba(201,168,76,.07)}
+.g2{width:500px;height:500px;bottom:-150px;right:-150px;background:rgba(139,92,246,.07)}
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:60px 40px}
+h1{font-size:46px;font-weight:800;letter-spacing:-2px;margin-bottom:8px}
+h1 span{background:linear-gradient(135deg,var(--gold),var(--cream));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{font-size:17px;color:rgba(245,240,232,.5);margin-bottom:48px}
+.section{margin-bottom:40px;padding:28px;background:var(--obs2);border:1px solid rgba(255,255,255,.06);border-radius:16px}
+h2{font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+h2::before{content:'';display:block;width:20px;height:2px;background:var(--gold)}
+h3{font-size:14px;font-weight:700;color:var(--cream);margin:16px 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th{text-align:left;padding:10px 14px;background:rgba(201,168,76,.08);border-bottom:1px solid rgba(201,168,76,.2);font-family:monospace;font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.05);font-size:10.5pt;vertical-align:top}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.tag{display:inline-block;padding:3px 10px;border-radius:100px;font-size:9px;font-weight:700}
+.tg{background:rgba(34,197,94,.12);color:#4ade80}
+.to{background:rgba(249,115,22,.12);color:#fb923c}
+.tp{background:rgba(139,92,246,.12);color:#a78bfa}
+.tb{background:rgba(59,130,246,.12);color:#60a5fa}
+.td{background:rgba(245,240,232,.08);color:rgba(245,240,232,.6)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border:1px solid var(--gold);border-radius:100px;font-family:monospace;font-size:11px;color:var(--gold);margin:4px}
+.pill.green{border-color:var(--green);color:var(--green)}
+.call{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.2);border-radius:16px;padding:28px;text-align:center}
+.call h3{font-size:16px;color:var(--cream);margin-bottom:8px}
+.call p{color:rgba(245,240,232,.5);font-size:12px;margin-bottom:16px}
+.input{display:block;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;color:var(--cream);font-size:13px;margin:8px 0;font-family:inherit}
+.input:focus{outline:none;border-color:var(--gold)}
+.btn{background:var(--gold);color:var(--obs);border:none;border-radius:10px;padding:14px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
+.btn:hover{background:#e8c96a}
+.step{display:flex;gap:16px;margin-bottom:16px;align-items:flex-start}
+.num{width:32px;height:32px;background:var(--gold);color:var(--obs);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.step strong{color:var(--cream);display:block;font-size:11pt;margin-bottom:2px}
+.step p{color:rgba(245,240,232,.4);font-size:10px;margin:0}
+.urgent{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:16px;color:#f87171;font-size:12px;margin-bottom:16px}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.flow-item{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:10px 16px;font-size:10px;color:var(--gold);font-family:monospace}
+.arrow{color:rgba(245,240,232,.2);font-size:16px}
+.footer{text-align:center;padding:32px;border-top:1px solid rgba(255,255,255,.05);font-family:monospace;font-size:10px;color:rgba(245,240,232,.25)}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div class="glow g1"></div>
+<div class="glow g2"></div>
+
+<div class="wrap">
+<div class="pill" style="margin-bottom:20px">📋 Strategic Plan — v1.0</div>
+<h1>LAISA Agent OS<br><span>30-Day Plan</span></h1>
+<p class="sub">Studex Group × headroom × Sub-agents × SaaS<br>Chief Engineer: AI Agent · CTO-in-Training: Tumelo Ramaphosa</p>
+
+<!-- ASSETS LIVE NOW -->
+<div class="section">
+<h2>✅ Deployed Assets — Live Right Now</h2>
+<table>
+<tr><th>Asset</th><th>URL</th><th>Status</th></tr>
+<tr><td>Full Demo (9 pages)</td><td><a href="https://wpkuimu7y7gy.space.minimax.io" style="color:var(--gold)">wpkuimu7y7gy.space.minimax.io</a></td><td><span class="tag tg">● Live</span></td></tr>
+<tr><td>Proposal (printable)</td><td><a href="https://78jccbd42jnj.space.minimax.io" style="color:var(--gold)">78jccbd42jnj.space.minimax.io</a></td><td><span class="tag tg">● Live</span></td></tr>
+<tr><td>CTO Study Path (PDF)</td><td><a href="https://wyjxwjot79nu.space.minimax.io" style="color:var(--gold)">wyjxwjot79nu.space.minimax.io</a></td><td><span class="tag tg">● Live</span></td></tr>
+<tr><td>Dark Factory v3</td><td><a href="https://oayrrm9gbsj5.space.minimax.io" style="color:var(--gold)">oayrrm9gbsj5.space.minimax.io</a></td><td><span class="tag tg">● Live</span></td></tr>
+<tr><td>SafeSight Repo</td><td colspan="2"><code style="font-size:10px">/workspace/safesight-laisa-proposal/</code> (30 files cloned)</td></tr>
+</table>
+</div>
+
+<!-- Q1: HEADROOM -->
+<div class="section">
+<h2>🤖 Q1: How headroom Makes Me a Better Coder</h2>
+<div class="flow">
+<div class="flow-item">Task arrives</div><span class="arrow">→</span>
+<div class="flow-item">headroom reads memory</div><span class="arrow">→</span>
+<div class="flow-item">Context compressed 60-95%</div><span class="arrow">→</span>
+<div class="flow-item">Failure mining check</div><span class="arrow">→</span>
+<div class="flow-item">Code 80% faster</div><span class="arrow">→</span>
+<div class="flow-item" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.15);color:#4ade80">Result stored</div>
+</div>
+<h3>3 Superpowers</h3>
+<table>
+<tr><th>Superpower</th><th>What It Does</th><th>Benefit</th></tr>
+<tr><td><strong>Persistent Memory</strong></td><td>Every project file, decision, error stored in SQLite</td><td>Never start from scratch. I know what was built.</td></tr>
+<tr><td><strong>Cross-Agent Memory</strong></td><td>Charlie talks → CashClaw knows immediately</td><td>Zero repeated questions. Instant handoffs.</td></tr>
+<tr><td><strong>Failure Mining</strong></td><td>Every failure logged + fix written</td><td>Same bug never happens twice. Compounding improvement.</td></tr>
+</table>
+</div>
+
+<!-- Q2: SUB-AGENTS -->
+<div class="section">
+<h2>🧠 Q2: Sub-Agent Architecture — How It Works</h2>
+<div class="flow" style="margin-bottom:16px">
+<div class="flow-item" style="background:rgba(201,168,76,.2)">CLIENT</div>
+<span class="arrow">→</span>
+<div class="flow-item" style="background:rgba(139,92,246,.15)">SUPERAGENT</div>
+<span class="arrow">→</span>
+<div class="flow-item">Devika</div>
+<div class="flow-item">headroom</div>
+<div class="flow-item">last30days</div>
+<div class="flow-item">Cursor</div>
+<div class="flow-item">gstack</div>
+</div>
+<table>
+<tr><th>Agent</th><th>Role</th><th>What It Does</th></tr>
+<tr><td><strong>Devika</strong></td><td>Coder</td><td>Writes code, tests, deploys. Autonomous.</td></tr>
+<tr><td><strong>headroom</strong></td><td>Memory</td><td>Compresses context, stores results, shares across agents.</td></tr>
+<tr><td><strong>last30days</strong></td><td>Researcher</td><td>Real-time market intelligence. Reddit, X, Polymarket.</td></tr>
+<tr><td><strong>Cursor</strong></td><td>Reviewer</td><td>Code review, POPIA checks, bug finding.</td></tr>
+<tr><td><strong>gstack</strong></td><td>Process</td><td>/office-hours, /plan, /build, /qa, /ship. YC sprint.</td></tr>
+<tr><td><strong>spec-kit</strong></td><td>Planner</td><td>Write spec first. You approve. Then build.</td></tr>
+</table>
+</div>
+
+<!-- Q3: 30-DAY PLAN -->
+<div class="section">
+<h2>📅 Q3: 30-Day Action Plan</h2>
+
+<div style="margin-bottom:24px">
+<span class="tag to" style="margin-right:8px">⚡ IMMEDIATE</span>
+<span class="tag tb" style="margin-right:8px">📅 This Week</span>
+<span class="tag tp" style="margin-right:8px">📆 Weeks 2-4</span>
+<span class="tag tg" style="margin-right:8px">🎯 Month 2-3</span>
+</div>
+
+<table>
+<tr><th>When</th><th>Task</th><th>Owner</th><th>Why</th></tr>
+<tr style="background:rgba(239,68,68,.04)">
+<td><span class="tag to">⚡ NOW</span></td>
+<td><strong>Give me 3-5 client emails</strong></td>
+<td>Tumelo</td>
+<td>Send demo links and close first clients</td>
+</tr>
+<tr style="background:rgba(239,68,68,.04)">
+<td><span class="tag to">⚡ NOW</span></td>
+<td><strong>Give me email: Gmail app password OR Resend API key</strong></td>
+<td>Tumelo</td>
+<td>Enable automated demo delivery to clients</td>
+</tr>
+<tr>
+<td><span class="tag to">⚡ NOW</span></td>
+<td>Install Cursor on your Mac (cursor.com — free tier)</td>
+<td>Tumelo</td>
+<td>Interactive coding IDE for sub-agents</td>
+</tr>
+<tr>
+<td><span class="tag tb">This Week</span></td>
+<td>Spawn 3 sub-agents to build client portal</td>
+<td>Me (AI)</td>
+<td>Portal done in hours, not days</td>
+</tr>
+<tr>
+<td><span class="tag tb">This Week</span></td>
+<td>Install headroom on D@RK F@C#ORY VM</td>
+<td>Me (AI)</td>
+<td>80% token savings + persistent memory</td>
+</tr>
+<tr>
+<td><span class="tag tb">This Week</span></td>
+<td>Send personalised demo emails to all leads</td>
+<td>Me + Tumelo</td>
+<td>Get first interested responses</td>
+</tr>
+<tr>
+<td><span class="tag tp">Week 2</span></td>
+<td>Client portal live (internal) — test with SafeSight</td>
+<td>Sub-agents</td>
+<td>First real product usage test</td>
+</tr>
+<tr>
+<td><span class="tag tp">Week 2</span></td>
+<td>Build landing page (laisaagentos.co.za)</td>
+<td>Sub-agents</td>
+<td>Real commercial web presence</td>
+</tr>
+<tr>
+<td><span class="tag tp">Week 2</span></td>
+<td>Set up Stripe for payments</td>
+<td>Me (AI)</td>
+<td>Collect first R599 payment</td>
+</tr>
+<tr>
+<td><span class="tag tp">Week 3</span></td>
+<td>First R599 payment received ✅</td>
+<td>Client</td>
+<td>First revenue!</td>
+</tr>
+<tr>
+<td><span class="tag tp">Week 3</span></td>
+<td>headroom learns SafeSight fully (memory complete)</td>
+<td>Me (AI)</td>
+<td>I code 80% faster for SafeSight</td>
+</tr>
+<tr>
+<td><span class="tag tg">Month 2</span></td>
+<td>3 clients paying (R4,497/month)</td>
+<td>Sales</td>
+<td>R4,497/month recurring revenue</td>
+</tr>
+<tr>
+<td><span class="tag tg">Month 2</span></td>
+<td>Pharmasyntez SA VM live</td>
+<td>Studex + Me</td>
+<td>R8,500-R15,000/month opportunity</td>
+</tr>
+<tr>
+<td><span class="tag tg">Month 3</span></td>
+<td>10 clients (R29,970/month)</td>
+<td>Sales + Product</td>
+<td>Real scale. Real SaaS.</td>
+</tr>
+</table>
+</div>
+
+<!-- WHAT WE NEED -->
+<div class="section">
+<h2>🔑 What I Need From You Right Now</h2>
+<div class="urgent">⚠️ Without these 3 things, nothing moves forward. Everything else depends on this.</div>
+
+<div class="step">
+<div class="num">1</div>
+<div>
+<strong>3-5 client email addresses</strong>
+<p>Who should see the demo? Give me names + emails + clinic names.</p>
+</div>
+</div>
+<div class="step">
+<div class="num">2</div>
+<div>
+<strong>Email for sending demos</strong>
+<p>Option A: Gmail address + App Password (free)<br>Option B: Resend API key at resend.com (free — 3,000 emails/month)</p>
+</div>
+</div>
+<div class="step">
+<div class="num">3</div>
+<div>
+<strong>Cursor installed on your Mac/PC</strong>
+<p>cursor.com — download and install. Free tier works. This is where the AI coding happens.</p>
+</div>
+</div>
+</div>
+
+<!-- CALL TO ACTION -->
+<div class="call" style="margin-top:32px">
+<h3>Let's Execute This Plan</h3>
+<p>Give me the 3 things above and I send the first demo emails<br>today. First paying client this week.</p>
+<button class="btn" onclick="window.open('mailto:agent@studexgroup.co.za?subject=Demo Emails — Give Me Client Contacts&body=Hi AI Agent,\n\nHere are 3-5 client contacts to send the LAISA demo to:\n\n1. Name: ... Email: ... Clinic: ...\n2. Name: ... Email: ... Clinic: ...\n3. Name: ... Email: ... Clinic: ...\n\nFor email sending, my preference is:\n[ ] Gmail (I'll provide app password)\n[ ] Resend (I'll sign up at resend.com)\n\nBest,\nTumelo')">✉️ Email Me These Details Now</button>
+<p style="margin-top:12px;font-size:10px;color:rgba(245,240,232,.3)">Or just reply here with the emails and I'll handle the rest.</p>
+</div>
+</div>
+
+<!-- METRICS -->
+<div class="section">
+<h2>📊 Success Metrics</h2>
+<table>
+<tr><th>Metric</th><th>Week 1</th><th>Week 2</th><th>Week 4</th><th>Month 3</th></tr>
+<tr><td>Demo emails sent</td><td>5</td><td>20</td><td>50</td><td>100</td></tr>
+<tr><td>Interested leads</td><td>2</td><td>5</td><td>15</td><td>30</td></tr>
+<tr><td>Paying clients</td><td>0</td><td>1</td><td>3</td><td>10</td></tr>
+<tr><td>Monthly revenue</td><td>R0</td><td>R599</td><td>R4,497</td><td>R29,970</td></tr>
+<tr><td>headroom tasks run</td><td>5</td><td>20</td><td>50</td><td>200</td></tr>
+<tr><td>Sub-agents spawned</td><td>3</td><td>10</td><td>30</td><td>100</td></tr>
+</table>
+</div>
+
+<!-- REVENUE MODEL -->
+<div class="section">
+<h2>💰 Revenue Model — The Math</h2>
+<table>
+<tr><th>Tier</th><th>Price</th><th>Cost to Serve</th><th>Profit/Client</th></tr>
+<tr><td>Essential VM</td><td>R599/month</td><td>R350/month</td><td>R249/month</td></tr>
+<tr><td>Intelligence VM</td><td>R1,499/month</td><td>R550/month</td><td>R949/month</td></tr>
+<tr><td>Enterprise VM</td><td>R3,499/month</td><td>R850/month</td><td>R2,649/month</td></tr>
+</table>
+<p style="margin-top:12px;font-size:10px;color:rgba(245,240,232,.4)">
+headroom reduces LLM costs by 80%. Supabase is free tier for <5K clients. Ogre VM is R150/month.<br>
+At 10 clients × R1,499 = R14,990/month. At 50 clients = R74,950/month.
+</p>
+</div>
+
+</div>
+
+<div class="footer">
+Studex Group (Pty) Ltd · Johannesburg, South Africa · Chief Engineer: AI Agent · CTO-in-Training: Tumelo Ramaphosa<br>
+LAISA Agent OS · headroom · Sub-agents · SaaS · June 2026
+</div>
+
+</div>
+</body>
+</html>

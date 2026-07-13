@@ -1,0 +1,513 @@
+{
+  "name": "StudEx Social Media Automation",
+  "nodes": [
+    {
+      "id": "manual-trigger",
+      "name": "Manual + Schedule Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [100, 400],
+      "parameters": {}
+    },
+    {
+      "id": "schedule-trigger",
+      "name": "Schedule: Weekly (Mondays)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 600],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cron",
+              "expression": "0 8 * * 1"
+            }
+          ]
+        },
+        "options": {
+          "timezone": "Africa/Johannesburg"
+        }
+      }
+    },
+    {
+      "id": "generate-content-prompt",
+      "name": "Prepare Content Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [300, 400],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "prompt",
+              "name": "contentPrompt",
+              "value": "Generate 7 days of social media content for an AI automation agency serving African SMBs (StudEx Super Agents). For each day, provide:\n\n1. Twitter/X post (max 280 chars, punchy, hashtag)\n2. LinkedIn post (professional, 150-200 words, 3-5 relevant hashtags)\n3. Instagram caption (engaging, emoji-heavy, 100-150 words, 5-8 hashtags)\n4. Suggested image prompt (for AI image generation)\n\nDays should cover: education, testimonials/social proof, product/service features, behind-the-scenes, industry news, call-to-action, engagement question.\n\nBusiness: AI & automation solutions for South African small businesses\nIndustry: Technology / SaaS / AI\nTarget: SMB owners, entrepreneurs, 25-55 age group\nTone: Professional but accessible, African context, empowering\n\nFormat as JSON array with keys: day, theme, twitter_text, linkedin_text, instagram_caption, image_prompt",
+              "type": "string"
+            },
+            {
+              "id": "week-start",
+              "name": "weekStart",
+              "value": "={{$now.format('YYYY-MM-DD')}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "generate-content",
+      "name": "Generate 7-Day Content Calendar",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 2,
+      "position": [500, 400],
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a social media strategist for an AI automation agency serving African small businesses.\n\nGenerate a 7-day content calendar in JSON format. Return ONLY the JSON array — no preamble, no explanation, no markdown code blocks.\n\nFormat:\n[\n  {\n    \"day\": \"Day 1\",\n    \"theme\": \"Theme name\",\n    \"twitter_text\": \"...\",\n    \"linkedin_text\": \"...\",\n    \"instagram_caption\": \"...\",\n    \"image_prompt\": \"...\"\n  },\n  ...\n]"
+            },
+            {
+              "role": "user",
+              "content": "={{$json.contentPrompt}}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 4000,
+          "temperature": 0.8,
+          "responseFormat": { "type": "json_object" }
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-creds",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "id": "parse-content",
+      "name": "Parse Content Items",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 2,
+      "position": [700, 400],
+      "parameters": {
+        "mode": "splitOutItems",
+        "fieldToSplitOut": "={{$json.content}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "generate-image",
+      "name": "Generate Image (AI)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.IMAGE_GEN_API_URL}}/generate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.IMAGE_GEN_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{$json.item.image_prompt}}"
+            },
+            {
+              "name": "aspect_ratio",
+              "value": "1:1"
+            },
+            {
+              "name": "resolution",
+              "value": "1024x1024"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "post-buffer-twitter",
+      "name": "Post to Buffer (Twitter/X)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 250],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.bufferapp.com/1/updates/create.json",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "={{$env.BUFFER_ACCESS_TOKEN}}"
+            },
+            {
+              "name": "profile_ids[]",
+              "value": "={{$env.BUFFER_TWITTER_PROFILE_ID}}"
+            },
+            {
+              "name": "text",
+              "value": "={{$json.item.twitter_text}}"
+            },
+            {
+              "name": "scheduled_at",
+              "value": "={{$json.item.day === 'Day 1' ? $now.format('YYYY-MM-DDTHH:mm:ssZ') : $now.plus($number($json.item.day.split(' ')[1]), 'day').format('YYYY-MM-DDTHH:mm:ssZ')}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "post-buffer-linkedin",
+      "name": "Post to Buffer (LinkedIn)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.bufferapp.com/1/updates/create.json",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "={{$env.BUFFER_ACCESS_TOKEN}}"
+            },
+            {
+              "name": "profile_ids[]",
+              "value": "={{$env.BUFFER_LINKEDIN_PROFILE_ID}}"
+            },
+            {
+              "name": "text",
+              "value": "={{$json.item.linkedin_text}}"
+            },
+            {
+              "name": "scheduled_at",
+              "value": "={{$json.item.day === 'Day 1' ? $now.format('YYYY-MM-DDTHH:mm:ssZ') : $now.plus($number($json.item.day.split(' ')[1]), 'day').format('YYYY-MM-DDTHH:mm:ssZ')}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "post-buffer-instagram",
+      "name": "Post to Buffer (Instagram)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 550],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.bufferapp.com/1/updates/create.json",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "={{$env.BUFFER_ACCESS_TOKEN}}"
+            },
+            {
+              "name": "profile_ids[]",
+              "value": "={{$env.BUFFER_INSTAGRAM_PROFILE_ID}}"
+            },
+            {
+              "name": "text",
+              "value": "={{$json.item.instagram_caption}}"
+            },
+            {
+              "name": "scheduled_at",
+              "value": "={{$json.item.day === 'Day 1' ? $now.format('YYYY-MM-DDTHH:mm:ssZ') : $now.plus($number($json.item.day.split(' ')[1]), 'day').format('YYYY-MM-DDTHH:mm:ssZ')}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "save-draft",
+      "name": "Save as Draft CSV",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [1300, 400],
+      "parameters": {
+        "fileName": "/data/studex-content/{{$now.format('YYYY-MM-DD')}}-content-draft.csv",
+        "data": "={{$json | string}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "compile-weekly-report",
+      "name": "Compile Engagement Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1500, 400],
+      "parameters": {
+        "jsCode": "// Compile social media campaign summary\nconst results = $input.all();\nconst generated = $('generate-content-prompt').first().json;\nconst dateStr = new Date().toISOString().split('T')[0];\n\nconst posted = results.filter(r => r.json.success || r.json.ok).length;\nconst total = 21; // 7 days x 3 platforms\nconst failed = total - posted;\n\n const report = {\n  weekOf: generated.weekStart,\n  generatedAt: new Date().toISOString(),\n  totalScheduled: total,\n  successCount: posted,\n  failedCount: failed,\n  status: failed === 0 ? '✅ All posts scheduled successfully' : `⚠️ ${failed} posts failed — check Buffer`\n};\n\nreturn [{ json: report }];"
+      }
+    },
+    {
+      "id": "email-report",
+      "name": "Email Social Media Report",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1700, 400],
+      "parameters": {
+        "to": "={{$env.CLIENT_EMAIL}}",
+        "from": "social@studexagents.africa",
+        "subject": "📱 Social Media Content — Week of {{$('generate-content-prompt').item.json.weekStart}}",
+        "text": "Weekly social media content has been generated and scheduled.\\n\\nStatus: {{$json.status}}\\nTotal posts: {{$json.totalScheduled}}\\nScheduled: {{$json.successCount}}\\nFailed: {{$json.failedCount}}\\n\\nDraft saved to: /data/studex-content/{{$now.format('YYYY-MM-DD')}}-content-draft.csv",
+        "options": {}
+      },
+      "credentials": {
+        "smtp": {
+          "id": "smtp-creds",
+          "name": "StudEx SMTP"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "manual-trigger": {
+      "main": [
+        [
+          {
+            "node": "generate-content-prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "generate-content-prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate-content-prompt": {
+      "main": [
+        [
+          {
+            "node": "generate-content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate-content": {
+      "main": [
+        [
+          {
+            "node": "parse-content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse-content": {
+      "main": [
+        [
+          {
+            "node": "generate-image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate-image": {
+      "main": [
+        [
+          {
+            "node": "post-buffer-twitter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "post-buffer-linkedin",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "post-buffer-instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "post-buffer-twitter": {
+      "main": [
+        [
+          {
+            "node": "save-draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "post-buffer-linkedin": {
+      "main": [
+        [
+          {
+            "node": "save-draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "post-buffer-instagram": {
+      "main": [
+        [
+          {
+            "node": "save-draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save-draft": {
+      "main": [
+        [
+          {
+            "node": "compile-weekly-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "compile-weekly-report": {
+      "main": [
+        [
+          {
+            "node": "email-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "studex"
+    },
+    {
+      "name": "social-media"
+    },
+    {
+      "name": "content"
+    },
+    {
+      "name": "buffer"
+    }
+  ],
+  "meta": {
+    "templateCredsSetup": [
+      {
+        "name": "OpenAI API",
+        "id": "openai-creds",
+        "type": "apiKey",
+        "required": true
+      },
+      {
+        "name": "Buffer API",
+        "id": "buffer-creds",
+        "type": "httpHeaderAuth",
+        "required": true
+      },
+      {
+        "name": "StudEx SMTP",
+        "id": "smtp-creds",
+        "type": "smtp",
+        "required": true
+      }
+    ],
+    "templateVariables": [
+      {
+        "id": "BUFFER_ACCESS_TOKEN",
+        "name": "Buffer Access Token",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "BUFFER_TWITTER_PROFILE_ID",
+        "name": "Buffer Twitter/X Profile ID",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "BUFFER_LINKEDIN_PROFILE_ID",
+        "name": "Buffer LinkedIn Profile ID",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "BUFFER_INSTAGRAM_PROFILE_ID",
+        "name": "Buffer Instagram Profile ID",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "IMAGE_GEN_API_URL",
+        "name": "AI Image Generation API URL",
+        "type": "string",
+        "default": "https://api.openai.com/v1/images/generations"
+      },
+      {
+        "id": "IMAGE_GEN_API_KEY",
+        "name": "AI Image Generation API Key",
+        "type": "string",
+        "required": false
+      },
+      {
+        "id": "CLIENT_EMAIL",
+        "name": "Client Email",
+        "type": "string",
+        "required": true
+      }
+    ],
+    "studexVersion": "1.0.0",
+    "studexDescription": "Generates 7 days of Twitter/X, LinkedIn, and Instagram content using AI — creates images, schedules via Buffer, saves drafts, and emails a weekly summary report."
+  }
+}

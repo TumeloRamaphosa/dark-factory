@@ -1,0 +1,124 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: Sunday, 5 July 2026 | 18:00 PM SAST
+═══════════════════════════════════════
+
+MAJOR: WHAT HAPPENED TODAY
+═══════════════════════════════════════
+
+🏭 DARK FACTORY: Steady — no new builds
+→ All 4 products live and holding (DarkDesk, AutoFlex Pro, Red Team Agent, Unified Portfolio)
+→ No new deployments today (Sunday)
+→ Qwen3-32B flagged for GPU deployment this week — zero API cost vs OpenAI
+
+📧 EMAIL SYSTEM: Still blocked
+→ GMAIL_APP_PASSWORD not configured
+→ Morning brief + research brief written but not delivered
+→ Email queue: /workspace/email-queue/morning-brief-2026-07-05.txt
+→ ACTION NEEDED: Tumelo to share Gmail app password
+
+💼 GITHUB: PAT question surfaced
+→ github.com/TumeloRamaphosa/dark-factory — public, accessible
+→ Push access blocked — no GitHub PAT or SSH key configured
+→ Vercel CI/CD also blocked by this
+→ ACTION NEEDED: Generate GitHub PAT (classic, scopes: repo + workflow)
+
+───────────────────────────────────────────────
+TODAY'S ACTIONS: STATUS CHECK
+───────────────────────────────────────────────
+
+❌ Dr. Musa (LAISA Phase A) — Not confirmed reached today
+→ Day 5 of proposal. Was supposed to be first thing Sunday morning.
+→ TOMORROW: WhatsApp follow-up FIRST THING
+
+❌ SA DoH EMR docs — Not confirmed downloaded
+→ Was supposed to be downloaded from health.gov.za
+→ 8 DAYS LEFT — closes Monday 13 July ⚡⚡⚡
+→ TOMORROW: Download + vendor identification FIRST THING
+
+❌ DarkDesk outreach — 6 messages not confirmed sent
+→ 3 law firms + 3 medical practices
+→ TOMORROW: Send during the day
+
+───────────────────────────────────────────────
+REVENUE: SUNDAY STATUS
+───────────────────────────────────────────────
+
+Live MRR:           R45,000 (Red Team Agent ✅)
+Proposals out:      R350K + R55K/mo (LAISA Phase A — day 5)
+Tender pipeline:    R200M+ (SA DoH EMR — 8 DAYS LEFT ⚡)
+Ghana AI:           $250M (closes 24 July — 19 days)
+Today closes:        R0 (Sunday — expected)
+Week closes:        R0 — THIS WEEK MUST CHANGE
+
+───────────────────────────────────────────────
+TOMORROW: MONDAY 6 JULY PRIORITIES
+───────────────────────────────────────────────
+
+[1] SA DoH EMR (NDoH-11) — DOWNLOAD DOCS FIRST THING
+→ health.gov.za → tenders → "NDoH-11" or "EMR"
+→ 8 DAYS LEFT. This is the biggest opportunity in the pipeline.
+→ Identify EMR vendors. Prepare approach as B-BBEE + AI + cloud player.
+
+[2] WhatsApp Dr. Musa — LAISA Phase A close
+→ Day 6. "Hi Dr Musa, wanted to check if you've had a chance to review the proposal?"
+→ R350K + R55K/month. Most likely close this week.
+
+[3] DarkDesk outreach — 6 messages
+→ 3 law firms + 3 medical practices (JHB/CPT, 10-50 staff)
+→ R2,500/mo Solo → R25,000/mo Enterprise
+
+───────────────────────────────────────────────
+TENDER COUNTDOWN MATRIX
+───────────────────────────────────────────────
+
+| Tender | Value | Closes | Days Left | Priority |
+|--------|-------|--------|-----------|----------|
+| SA DoH EMR (NDoH-11) | R200M+ | 13 July | ⚡ 8 days | 🔴 CRITICAL |
+| Ghana AI Ministry | $250M | 24 July | 19 days | 🟡 HIGH |
+| Kenya ICT tenders | Various | Rolling | Ongoing | 🟡 HIGH |
+| Rwanda AI (World Bank) | TBC | Soon | TBC | 🟢 WATCH |
+
+───────────────────────────────────────────────
+PARTNER STATUS — SUNDAY EVENING
+───────────────────────────────────────────────
+
+✅ ACTIVE:
+→ Red Team Agent — R45K/mo live
+→ DarkDesk + AutoFlex Pro — deployed
+
+⏳ PENDING RESPONSE:
+→ LAISA Phase A — Dr. Musa (follow up Monday AM)
+→ Pharmasyntez — R2.99M Y1 proposal
+→ SoftBank Africa Scout — outreach pending
+→ Jasiri AI Nigeria — LOI pending
+
+🎯 NEW THIS WEEK:
+→ Qwen3-32B on OGRE GPU — deploy this week (free Apache 2.0)
+→ Ghana tender docs — download Monday (19 days)
+→ MiniMax Hailuo + 11Labs — voice/video pipeline
+
+───────────────────────────────────────────────
+WEEK SUMMARY — SUNDAY 5 JULY
+───────────────────────────────────────────────
+
+Sunday was a planning + research day:
+→ Morning brief delivered
+→ Midnight research build on global AI landscape completed
+→ Revenue meeting held at 5PM SA
+→ GitHub access gap identified and surfaced
+
+Tomorrow is the day that matters:
+→ SA DoH docs MUST be downloaded
+→ Dr. Musa MUST be reached
+→ DarkDesk sales push MUST start
+
+8 days until SA DoH closes.
+R5M+ in active pipeline.
+LAISA close this week.
+
+OGRE runs on systems. Dark Factory builds while others rest.
+🏭 Sunday, 5 July 2026.
+
+═══════════════════════════════════════
+*Cipher Tr@ce · Dark Factory · OGRE Computer*
+*cto@studex-group.com*

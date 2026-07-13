@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudEx Global VM Cloud — PharmaSyntez Africa Distribution</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--surface:#0F0F0F;--surface2:#141414;--border:#1E1E1E;--gold:#C9A84C;--gold-d:#9A7A3A;--cyan:#29B6F6;--green:#4CAF50;--red:#E05050;--text:#F0EDE6;--muted:#888;--muted2:#555;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;--fb:'Inter',system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6}
+h1,h2,h3{font-family:var(--fd);font-weight:700;line-height:1.15}
+.mono{font-family:var(--fm)}
+.label{font-family:var(--fm);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+section{padding:80px 0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:oklch(5% 0 0/.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.25em;text-transform:uppercase}
+.nav-logo span{color:var(--muted);font-weight:400}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.btn{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
+.btn-gold{background:var(--gold);color:#080808;border-color:var(--gold)}
+.btn-gold:hover{background:oklch(82% .18 85)}
+.btn-outline{background:transparent;color:var(--muted);border-color:var(--border2)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* HERO */
+.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:120px 0 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,oklch(72% .16 85 / .05) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--fm);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border:1px solid oklch(72% .16 85 / .25);padding:6px 14px;margin-bottom:32px}
+.hero-badge-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px var(--gold)}
+.hero h1{font-size:clamp(44px,6vw,80px);margin-bottom:20px;max-width:800px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:20px;color:var(--muted);max-width:600px;line-height:1.65;margin-bottom:40px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-meta{display:flex;gap:40px;margin-top:60px;padding-top:40px;border-top:1px solid var(--border)}
+.hero-meta-item{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2)}
+.hero-meta-item span{color:var(--gold);display:block;font-size:20px;font-family:var(--fd);letter-spacing:0}
+
+/* PARTNER BANNER */
+.partner-banner{background:linear-gradient(135deg,#0a1628 0%,#0d2818 100%);border-bottom:1px solid var(--border);padding:40px 0;overflow:hidden}
+.partner-scroll{display:flex;gap:0;animation:partnerScroll 25s linear infinite;width:max-content}
+.partner-item{display:flex;align-items:center;gap:10px;padding:0 48px;border-right:1px solid var(--border);height:40px;white-space:nowrap}
+.partner-item span{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.partner-item strong{font-family:var(--fm);font-size:9px;letter-spacing:.15em;color:var(--gold)}
+@keyframes partnerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* INTRO */
+.intro{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.intro h2{margin-bottom:20px}
+.intro p{color:var(--muted);font-size:17px;line-height:1.7;margin-bottom:16px}
+.intro-highlight{background:var(--surface);border:1px solid var(--border);padding:32px;margin-top:24px}
+.intro-highlight-title{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.intro-highlight-text{font-family:var(--fd);font-size:22px;font-weight:700;line-height:1.3;color:var(--text)}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat-item{text-align:center;padding:40px 20px;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-val{font-family:var(--fd);font-size:clamp(28px,3vw,44px);font-weight:700;color:var(--gold);line-height:1}
+.stat-lbl{font-family:var(--fm);font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* PHARMASYNTZ SECTION */
+.pharma-section{border-top:1px solid var(--border)}
+.pharma-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:60px}
+.pharma-card{background:var(--surface);border:1px solid var(--border);padding:40px}
+.pharma-card h3{font-size:22px;margin-bottom:12px}
+.pharma-card p{color:var(--muted);font-size:15px;line-height:1.65;margin-bottom:20px}
+.pharma-products{display:flex;flex-wrap:wrap;gap:6px}
+.product-tag{font-family:var(--fm);font-size:8px;letter-spacing:.1em;padding:4px 10px;border:1px solid oklch(72% .16 85 / .15);color:var(--gold);background:oklch(72% .16 85 / .04);border-radius:1px}
+.pharma-map{background:var(--bg);border:1px solid var(--border);padding:40px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.pharma-map-title{font-family:var(--fm);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.pharma-map-note{font-size:13px;color:var(--muted);margin-top:20px;line-height:1.5}
+
+/* GROWTH DATA */
+.growth-section{background:var(--surface);border-top:1px solid var(--border)}
+.growth-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px}
+.growth-card{background:var(--bg);border:1px solid var(--border);padding:32px}
+.growth-region{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.growth-company{font-family:var(--fd);font-size:20px;font-weight:700;margin-bottom:8px}
+.growth-stat{font-family:var(--fd);font-size:40px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px}
+.growth-desc{font-size:13px;color:var(--muted);margin-bottom:12px}
+.growth-action{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--green)}
+
+/* AFRICA MAP SECTION */
+.africa-section{border-top:1px solid var(--border)}
+.africa-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:60px}
+.africa-text h3{font-size:28px;margin-bottom:16px}
+.africa-text p{color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:24px}
+.africa-countries{display:flex;flex-wrap:wrap;gap:8px}
+.africa-country{font-family:var(--fm);font-size:9px;letter-spacing:.1em;padding:6px 12px;border:1px solid var(--border);color:var(--text)}
+.africa-country.active{border-color:var(--gold);color:var(--gold);background:oklch(72% .16 85 / .04)}
+.africa-country.planned{border-color:var(--cyan);color:var(--cyan);background:oklch(75% .14 200 / .04)}
+.africa-map-box{background:var(--surface);border:1px solid var(--border);padding:40px;text-align:center}
+
+/* VM GLOBAL MARKETS */
+.vm-offer{background:var(--surface);border-top:1px solid var(--border)}
+.vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:60px}
+.vm-text h3{font-size:28px;margin-bottom:16px}
+.vm-text p{color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:24px}
+.vm-price-card{background:var(--bg);border:2px solid var(--gold);padding:48px;text-align:center;position:relative}
+.vm-price-card::before{content:'PARTICIPATION FEE';position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:9px;letter-spacing:.25em;text-transform:uppercase;background:var(--gold);color:#080808;padding:4px 16px}
+.vm-amount{font-family:var(--fd);font-size:clamp(52px,7vw,80px);font-weight:700;color:var(--gold);line-height:1}
+.vm-period{font-family:var(--fm);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.vm-includes{margin-top:32px;text-align:left}
+.vm-include{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--muted)}
+.vm-include::before{content:'◈';color:var(--gold);flex-shrink:0;margin-top:1px}
+.vm-cta{display:block;margin-top:32px;font-family:var(--fm);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:16px;background:var(--gold);color:#080808);text-align:center;text-decoration:none;transition:background .2s}
+.vm-cta:hover{background:oklch(82% .18 85)}
+
+/* PARTICIPANTS */
+.participants{border-top:1px solid var(--border)}
+.participants h2{margin-bottom:12px}
+.participants p{color:var(--muted);margin-bottom:40px}
+.participants-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:40px}
+.participant-card{background:var(--surface);border:1px solid var(--border);padding:32px;transition:border-color .3s}
+.participant-card:hover{border-color:oklch(72% .16 85 / .3)}
+.participant-logo{font-size:32px;margin-bottom:16px;filter:drop-shadow(0 0 8px oklch(72% .16 85 / .2))}
+.participant-name{font-family:var(--fd);font-size:18px;font-weight:700;margin-bottom:4px}
+.participant-country{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.participant-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.participant-status{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-family:var(--fm);font-size:8px;letter-spacing:.15em;text-transform:uppercase}
+.participant-status.active{color:var(--green)}
+.participant-status.pending{color:var(--gold)}
+.status-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* PROPOSAL */
+.proposal{background:var(--surface);border-top:1px solid var(--border)}
+.proposal-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:60px}
+.proposal-card{background:var(--bg);border:1px solid var(--border);padding:40px}
+.proposal-card.featured{border-color:var(--gold);background:oklch(72% .16 85 / .03)}
+.proposal-card h3{font-size:22px;margin-bottom:8px}
+.proposal-card p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.6}
+.proposal-price{font-family:var(--fd);font-size:40px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.proposal-price span{font-size:16px;color:var(--muted)}
+.proposal-features{list-style:none;margin-bottom:24px}
+.proposal-features li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--muted)}
+.proposal-features li::before{content:'◈';color:var(--gold);flex-shrink:0;margin-top:1px}
+.proposal-note{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2);margin-top:16px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:center}
+footer p{font-family:var(--fm);font-size:9px;letter-spacing:.2em;color:var(--muted2);text-transform:uppercase}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:900px){nav{padding:16px 24px}nav .nav-links{display:none}.container{padding:0 24px}.intro,.pharma-grid,.africa-grid,.vm-grid,.proposal-grid{grid-template-columns:1fr}.stats-bar,.growth-grid,.participants-grid{grid-template-columns:1fr 1fr}.hero-meta{flex-wrap:wrap;gap:20px}footer{flex-direction:column;gap:16px;text-align:center}}
+@media(max-width:600px){.stats-bar,.growth-grid,.participants-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">StudEx <span>// Global VM</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">LAISA Demo</a></li>
+    <li><a href="invoice.html">Invoice</a></li>
+    <li><a href="global-markets.html">Global VM</a></li>
+    <li><a href="store.html">Health Store</a></li>
+  </ul>
+  <a href="#join" class="btn btn-gold">Join VM Global Markets</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="hero-badge-dot"></span>StudEx Global VM Cloud — Africa Distribution Network</div>
+    <h1>AI-Powered Pharma Distribution.<br><em>Built for Africa.</em></h1>
+    <p class="hero-sub">PharmaSyntez is expanding into Africa — North, West, East, and Southern. The AI layer for that distribution is being built by OGRE Computer. This is how your company participates.</p>
+    <div class="hero-actions">
+      <a href="#offer" class="btn btn-gold">$499/Month — Join the Network</a>
+      <a href="#pharmasyntez" class="btn btn-outline">PharmaSyntez Overview</a>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">Africa Pharma Market<span>$27.65B → $36.96B</span>2024–2033</div>
+      <div class="hero-meta-item">Pharmasyntez Growth<span>52% YoY</span>Top 3 Russian Pharma</div>
+      <div class="hero-meta-item">Participating<span>3 Companies</span>Currently Onboarded</div>
+      <div class="hero-meta-item">Proposed Expansion<span>14 Countries</span>Africa Coverage</div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER SCROLLING BANNER -->
+<div class="partner-banner">
+  <div class="partner-scroll">
+    <div class="partner-item"><span>PharmaSyntez</span><strong>Russia · 5 Plants</strong></div>
+    <div class="partner-item"><span>Pharmaniaga Berhad</span><strong>Malaysia · ASEAN Hub</strong></div>
+    <div class="partner-item"><span>Studex Group</span><strong>South Africa · D@RK F@C#ORY</strong></div>
+    <div class="partner-item"><span> Libya</span><strong>GMP Certified — North Africa</strong></div>
+    <div class="partner-item"><span>OGRE Computer</span><strong>AI Layer · LAISA OS</strong></div>
+    <div class="partner-item"><span>Mali</span><strong>2026 Planned Expansion</strong></div>
+    <div class="partner-item"><span>Morocco</span><strong>2026 Planned Expansion</strong></div>
+    <div class="partner-item"><span>Vietnam</span><strong>2026 Planned Expansion</strong></div>
+    <div class="partner-item"><span>PharmaSyntez</span><strong>Russia · 5 Plants</strong></div>
+    <div class="partner-item"><span>Pharmaniaga Berhad</span><strong>Malaysia · ASEAN Hub</strong></div>
+    <div class="partner-item"><span>Studex Group</span><strong>South Africa · D@RK F@C#ORY</strong></div>
+    <div class="partner-item"><span> Libya</span><strong>GMP Certified — North Africa</strong></div>
+    <div class="partner-item"><span>OGRE Computer</span><strong>AI Layer · LAISA OS</strong></div>
+    <div class="partner-item"><span>Mali</span><strong>2026 Planned Expansion</strong></div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section>
+  <div class="container">
+    <div class="intro">
+      <div>
+        <div class="label">The Opportunity</div>
+        <h2>Africa needs medicine.<br>AI makes it move.</h2>
+        <p>The African pharmaceutical market is worth $27.65 billion today — growing at 3.3% per year to $36.96 billion by 2033. The gap is not medicine. The gap is distribution intelligence.</p>
+        <p>Pharmasyntez — Russia's fastest-growing pharmaceutical company — is entering Africa. They have GMP certification for Libya. They are planning Mali, Morocco, and 5 more countries in 2026. They do not have South Africa, Nigeria, Kenya, or Ghana yet.</p>
+        <div class="intro-highlight">
+          <div class="intro-highlight-title">OGRE Computer's Position</div>
+          <div class="intro-highlight-text">Studex Group is being positioned as PharmaSyntez's AI and distribution partner for Southern and East Africa — powered by LAISA running on the D@RK F@C#ORY VM cloud.</div>
+        </div>
+      </div>
+      <div>
+        <div class="label">Africa Pharma Growth</div>
+        <h3 style="margin-bottom:24px">The Numbers That Matter</h3>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:var(--surface);border:1px solid var(--border);padding:24px">
+            <div style="font-family:var(--fd);font-size:48px;font-weight:700;color:var(--gold);line-height:1">$27.65B</div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Africa Pharma Market — 2024</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);padding:24px">
+            <div style="font-family:var(--fd);font-size:48px;font-weight:700;color:var(--gold);line-height:1">$36.96B</div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Africa Pharma Market — 2033 Projected</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);padding:24px">
+            <div style="font-family:var(--fd);font-size:48px;font-weight:700;color:var(--green);line-height:1">3.3%</div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Annual Growth Rate (CAGR)</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);padding:24px">
+            <div style="font-family:var(--fd);font-size:48px;font-weight:700;color:var(--cyan);line-height:1">52%</div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Pharmasyntez Year-on-Year Growth</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHARMASYNTEZ -->
+<section class="pharma-section" id="pharmasyntez">
+  <div class="container">
+    <div class="label">Partner Profile</div>
+    <h2 style="margin:16px 0 12px">PharmaSyntez — Russia's Top 3<br>Fastest Growing Pharma</h2>
+    <p style="color:var(--muted);max-width:600px">Five cities. Five plants. One mission: Creating Drugs to Save Lives. Now entering Africa.</p>
+    <div class="pharma-grid">
+      <div class="pharma-card">
+        <h3>Who They Are</h3>
+        <p>Pharmasyntez Group is a Russian pharmaceutical leader with manufacturing across Moscow, St. Petersburg, Tyumen, Bratsk, and Irkutsk. Ranked among the top 3 fastest-growing pharmaceutical companies in Russia, achieving 52% year-on-year growth in the retail commercial market.</p>
+        <p>Investing over 25 billion rubles in St. Petersburg production expansion. Partnership with Pharmaniaga Berhad (Malaysia) opens ASEAN access. Libya GMP certification opens North Africa.</p>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Product Portfolio</div>
+          <div class="pharma-products">
+            <span class="product-tag">Anti-TB</span>
+            <span class="product-tag">Antibiotics</span>
+            <span class="product-tag">Cardiology</span>
+            <span class="product-tag">Diabetes</span>
+            <span class="product-tag">Oncology</span>
+            <span class="product-tag">HIV Treatment</span>
+            <span class="product-tag">Corticoid Hormones</span>
+            <span class="product-tag">Neurology</span>
+            <span class="product-tag">COVID-19</span>
+            <span class="product-tag">Hepatitis B</span>
+            <span class="product-tag">Immunology</span>
+            <span class="product-tag">MRI Contrast</span>
+            <span class="product-tag">Infusion Solutions</span>
+            <span class="product-tag">Biopharmaceuticals</span>
+          </div>
+        </div>
+      </div>
+      <div class="pharma-map">
+        <div class="pharma-map-title">Pharmasyntez — Current Africa Presence</div>
+        <div style="font-size:80px;margin-bottom:16px;filter:drop-shadow(0 0 16px oklch(72% .16 85 / .2))">🌍</div>
+        <div style="font-family:var(--fd);font-size:24px;font-weight:700;color:var(--gold);margin-bottom:8px">North Africa: Active</div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:8px">Libya GMP certified — March 2025<br>Export supply agreements active</div>
+        <div style="font-family:var(--fd);font-size:20px;font-weight:700;color:var(--cyan);margin-bottom:8px;margin-top:16px">2026 Expansion Targets</div>
+        <div style="font-size:14px;color:var(--muted)">Mali · Morocco · Afghanistan<br>Venezuela · Vietnam · Bosnia · Ecuador</div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-top:16px">South Africa, Nigeria, Kenya, Ghana: OPEN</div>
+        <div class="pharma-map-note">Pharmasyntez has NO current presence in South Africa, Nigeria, Kenya, Ghana, Tanzania, Ethiopia, or Uganda. These markets are available for distribution partnership.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROWTH COMPARISON -->
+<section class="growth-section">
+  <div class="container">
+    <div class="label">Market Intelligence</div>
+    <h2 style="margin:16px 0 12px">PharmaSyntez &amp; StudEx —<br>Growing Together in Africa</h2>
+    <div class="growth-grid">
+      <div class="growth-card">
+        <div class="growth-region">🇷🇺 Russia</div>
+        <div class="growth-company">Pharmasyntez — Russia HQ</div>
+        <div class="growth-stat">52% YoY</div>
+        <div class="growth-desc">Top 3 fastest-growing Russian pharma. 5 plants. 25B ruble expansion investment. Over 100 pharmaceutical product registrations.</div>
+        <div class="growth-action">→ Africa expansion via Libya in 2025, Mali in 2026</div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-region">🇲🇾 Malaysia</div>
+        <div class="growth-company">Pharmaniaga Berhad</div>
+        <div class="growth-stat">ASEAN Hub</div>
+        <div class="growth-desc">Top Malaysian pharmaceutical company. Strategic partner for PharmaSyntez ASEAN + Africa distribution. Oncology and biopharma focus.</div>
+        <div class="growth-action">→ PharmaSyntez regulatory + manufacturing partner for Africa</div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-region">🇿🇦 South Africa</div>
+        <div class="growth-company">Studex Group / OGRE Computer</div>
+        <div class="growth-stat">LAISA v5</div>
+        <div class="growth-desc">6 AI agents operational. 847 patient records. D@RK F@C#ORY VM cloud. Cloudflare + Supabase stack. PharmaSyntez distribution partner candidate.</div>
+        <div class="growth-action">→ AI layer for PharmaSyntez Africa distribution</div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-region">🇳🇬 Nigeria</div>
+        <div class="growth-company">Nigeria Pharma Market</div>
+        <div class="growth-stat">$2.1B</div>
+        <div class="growth-desc">Africa's largest pharma market by volume. Flutterwave cross-border payments infrastructure. Large generic drug distribution networks.</div>
+        <div class="growth-action">→ PharmaSyntez market not yet entered — open distribution slot</div>
+      </div>
+      <div class="growth-card">
+        <div class="growth-region">🇬🇭 Ghana</div>
+        <div class="growth-company">Ghana National AI Strategy</div>
+        <div class="growth-stat">2026 Active</div>
+        <div class="growth-desc">Africa's first national AI strategy. Responsible AI Authority established. Cropin AI for agriculture. mNotify government comms AI.</div>
+        <div class="growth-action">→ OGRE AI implementation partner potential for West Africa</div>
+      </div>
+      <div class="growth-card" style="background:oklch(72% .16 85 / .03);border-color:var(--gold)">
+        <div class="growth-region" style="color:var(--gold)">🌍 Pan-African</div>
+        <div class="growth-company" style="color:var(--gold)">AU Health Sovereignty Fund</div>
+        <div class="growth-stat" style="color:var(--gold)">$800M</div>
+        <div class="growth-desc" style="color:var(--muted)">Africa Union health fund allocating in Q3 2026. For health AI, pharmaceutical infrastructure, and medical device deployment across 55 AU member states.</div>
+        <div class="growth-action" style="color:var(--gold)">→ Studex Group positioned for AU health AI contracts</div>
+      </div>
+    </div>
+  </div>
+</section>    </div>
+  </div>
+</section>
+
+<!-- VM GLOBAL MARKETS OFFER -->
+<section class="vm-offer" id="offer">
+  <div class="container">
+    <div class="label">The Offering</div>
+    <h2 style="margin:16px 0 12px">StudEx Global VM Cloud —<br>Join the Distribution Network</h2>
+    <div class="vm-grid">
+      <div class="vm-text">
+        <h3>$499/Month — Be Part of the Network</h3>
+        <p>The StudEx Global VM Cloud is the AI infrastructure layer for PharmaSyntez's Africa expansion. For $499/month, your company gets LAISA Agent OS running on the D@RK F@C#ORY VM, connected to the PharmaSyntez distribution network, with your own branded health store.</p>
+        <div class="vm-includes">
+          <div class="vm-include">LAISA Agent OS — 6 AI agents (WhatsApp, voice, CRM, billing, compliance)</div>
+          <div class="vm-include">D@RK F@C#ORY VM — dedicated instance on OGRE cloud infrastructure</div>
+          <div class="vm-include">PharmaSyntez Product Catalog — access to full product range for your market</div>
+          <div class="vm-include">Branded Health Store — white-label online store powered by PharmaSyntez products</div>
+          <div class="vm-include">Africa Distribution Network — referrals to PharmaSyntez regional managers</div>
+          <div class="vm-include">Monthly AI Intelligence Report — PharmaSyntez market updates, Africa health AI trends</div>
+          <div class="vm-include">Priority Support — dedicated OGRE Computer Slack channel</div>
+        </div>
+      </div>
+      <div class="vm-price-card">
+        <div class="vm-amount">$499</div>
+        <div class="vm-period">per month · cancel anytime</div>
+        <a href="#contact" class="vm-cta">Apply for Participation →</a>
+        <div style="margin-top:20px;font-size:12px;color:var(--muted);line-height:1.5">
+          Annual prepay: $4,990/year (2 months free)<br>
+          South African Rand: R8,999/mo
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTICIPANTS -->
+<section class="participants">
+  <div class="container">
+    <div class="label">Current Participants</div>
+    <h2 style="margin:16px 0 12px">Companies Already in the Network</h2>
+    <p>Three companies have joined. Spaces for 7 more in 2026.</p>
+    <div class="participants-grid">
+      <div class="participant-card">
+        <div class="participant-logo">🏥</div>
+        <div class="participant-name">SafeSight Clinic</div>
+        <div class="participant-country">🇿🇦 South Africa</div>
+        <div class="participant-desc">Medical clinic using LAISA for patient intake, billing, and WhatsApp booking.</div>
+        <div class="participant-status active"><span class="status-dot"></span> Active — Production</div>
+      </div>
+      <div class="participant-card">
+        <div class="participant-logo">🏢</div>
+        <div class="participant-name">Studex Meat Co.</div>
+        <div class="participant-country">🇿🇦 South Africa</div>
+        <div class="participant-desc">Meat industry using LAISA for inventory AI, WhatsApp orders, compliance.</div>
+        <div class="participant-status active"><span class="status-dot"></span> Active — Production</div>
+      </div>
+      <div class="participant-card">
+        <div class="participant-logo">🏭</div>
+        <div class="participant-name">Pharmaniaga Berhad</div>
+        <div class="participant-country">🇲🇾 Malaysia</div>
+        <div class="participant-desc">Strategic distribution partner for PharmaSyntez ASEAN + Africa.</div>
+        <div class="participant-status active"><span class="status-dot"></span> Distribution Partner</div>
+      </div>
+      <div class="participant-card" style="border-style:dashed">
+        <div class="participant-logo">➕</div>
+        <div class="participant-name">Your Company Here</div>
+        <div class="participant-country">🌍 Africa</div>
+        <div class="participant-desc">Join as a distribution partner for your market. Limited spots in 2026.</div>
+        <div class="participant-status pending"><span class="status-dot"></span> Open — Your Market</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPOSAL -->
+<section class="proposal">
+  <div class="container">
+    <div class="label">Full Proposal</div>
+    <h2 style="margin:16px 0 40px">Complete Packages</h2>
+    <div class="proposal-grid">
+      <div class="proposal-card">
+        <h3>LAISA Agent OS</h3>
+        <p>Complete AI operating system. 6 agents, full integration, Supabase, WhatsApp, voice, billing, POPIA compliance, dashboard.</p>
+        <div class="proposal-price">R93,200 <span>+ R4,999/mo</span></div>
+        <ul class="proposal-features">
+          <li>6 AI agents — all modules</li>
+          <li>WhatsApp Business integration</li>
+          <li>Voice transcription (Charlie)</li>
+          <li>Automated billing + invoicing</li>
+          <li>POPIA compliance layer</li>
+          <li>Supabase full schema</li>
+          <li>Command Centre dashboard</li>
+          <li>30-day support included</li>
+        </ul>
+        <div class="proposal-note">50% upfront to begin. Full payment on delivery.</div>
+      </div>
+      <div class="proposal-card featured">
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">★ Recommended</div>
+        <h3>LAISA + Global VM + Health Store</h3>
+        <p>Full LAISA + dedicated VM + PharmaSyntez network access + branded health store. Complete business transformation.</p>
+        <div class="proposal-price">R149,000 <span>+ R12,999/mo</span></div>
+        <ul class="proposal-features">
+          <li>Everything in LAISA (left)</li>
+          <li>Dedicated VM instance (D@RK F@C#ORY)</li>
+          <li>PharmaSyntez product catalog access</li>
+          <li>White-label health store</li>
+          <li>Africa distribution network referrals</li>
+          <li>Monthly AI intelligence report</li>
+          <li>Dedicated Slack support channel</li>
+          <li>AU Health Sovereignty Fund application support</li>
+        </ul>
+        <div class="proposal-note">50% upfront. Includes health store setup (2 weeks).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Studex Group — OGRE Computer — <a href="index.html">LAISA</a> · <a href="invoice.html">Invoice</a> · <a href="global-markets.html">Global VM</a> · <a href="store.html">Health Store</a></p>
+  <p>PharmaSyntez Distribution Partner · D@RK F@C#ORY VM · orgo.ai</p>
+</footer>
+</body>
+</html>

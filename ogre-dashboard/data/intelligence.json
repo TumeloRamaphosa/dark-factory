@@ -1,0 +1,210 @@
+{
+  "generated": "2026-07-04T22:00:00.000Z",
+  "cycle": "Nightly 3AM Scan",
+  "research_file": "RESEARCH-2026-07-04.md",
+  "report_id": "OGRE-INTEL-20260704",
+  "verdict": "OGRE has 10 concrete moves this week. Register on government databases, spin up Qwen3.5 POC, add MiniMax TTS. OpenClaw is the operating system — now wire it to n8n, Hailuo, and government procurement. 18-24 month sovereign AI window still open.",
+  "stats": {
+    "market_size": "7.2B",
+    "cagr": "38.4%",
+    "enterprise_adoption": "43%",
+    "sa_executive_priority": "75%",
+    "tender_pipeline": "R350M+",
+    "actions_now": 4,
+    "actions_month": 5,
+    "actions_watch": 1
+  },
+  "actions": [
+    {
+      "id": 1,
+      "priority": 1,
+      "urgency": "now",
+      "section": "§9 African AI Landscape",
+      "title": "Register on government supplier databases (SA, Nigeria, Kenya)",
+      "desc": "SA: CSD. Nigeria: NECC. Kenya: E-Procurement portal. Worth $100K-$5M each.",
+      "deadline": "2026-07-07",
+      "deadline_label": "7 Jul 2026"
+    },
+    {
+      "id": 2,
+      "priority": 2,
+      "urgency": "now",
+      "section": "§2 Alibaba / Qwen",
+      "title": "Spin up Qwen3.5 proof-of-concept",
+      "desc": "Fine-tune Qwen3.5-397B on Studex context. Replace $400-800/mo OpenAI API spend.",
+      "deadline": "2026-07-07",
+      "deadline_label": "7 Jul 2026"
+    },
+    {
+      "id": 3,
+      "priority": 3,
+      "urgency": "now",
+      "section": "§4 MiniMax",
+      "title": "Add MiniMax TTS to OGRE agent stack",
+      "desc": "Replace ElevenLabs with MiniMax speech API. Test Hailuo 2.3 for proposal video summaries.",
+      "deadline": "2026-07-07",
+      "deadline_label": "7 Jul 2026"
+    },
+    {
+      "id": 4,
+      "priority": 4,
+      "urgency": "now",
+      "section": "§1 OpenClaw",
+      "title": "Deploy OpenClaw for client onboarding pipeline",
+      "desc": "Wire OpenClaw to n8n and Hailuo. Full inbound: email, qualification, briefing, allocation.",
+      "deadline": "2026-07-11",
+      "deadline_label": "11 Jul 2026"
+    },
+    {
+      "id": 5,
+      "priority": 5,
+      "urgency": "month",
+      "section": "§6 AI PCs",
+      "title": "Build OGRE AI PC Bundle (3 tiers)",
+      "desc": "Starter $800 / Pro $1,400 / Enterprise $2,200. Pre-install OpenClaw, Ollama, Qwen3.5.",
+      "deadline": "2026-07-18",
+      "deadline_label": "18 Jul 2026"
+    },
+    {
+      "id": 6,
+      "priority": 6,
+      "urgency": "month",
+      "section": "§3 Kimi Moonshot",
+      "title": "Build Kimi 'Bilateral Trade AI Assistant' pilot",
+      "desc": "Chinese contract in, African analysis + translation out. First case: Gauteng logistics.",
+      "deadline": "2026-07-18",
+      "deadline_label": "18 Jul 2026"
+    },
+    {
+      "id": 7,
+      "priority": 7,
+      "urgency": "month",
+      "section": "§5 Xiaomi AI",
+      "title": "Write Xiaomi Africa partnership brief",
+      "desc": "OGRE as the AI OS layer for Xiaomi hardware sold into African SMBs.",
+      "deadline": "2026-07-18",
+      "deadline_label": "18 Jul 2026"
+    },
+    {
+      "id": 8,
+      "priority": 8,
+      "urgency": "month",
+      "section": "§7 Solopreneur Stacks",
+      "title": "Publish 'African Solopreneur AI Stack' guide",
+      "desc": "Free guide + n8n template. Premium: $299-999/month retainer setup service.",
+      "deadline": "2026-07-25",
+      "deadline_label": "25 Jul 2026"
+    },
+    {
+      "id": 9,
+      "priority": 9,
+      "urgency": "month",
+      "section": "§8 AI Agents",
+      "title": "Publish internal AI Agent Audit (Devin vs Cursor vs Manus)",
+      "desc": "Build a decision tree on OGRE website — content marketing for inbound leads.",
+      "deadline": "2026-07-25",
+      "deadline_label": "25 Jul 2026"
+    },
+    {
+      "id": 10,
+      "priority": 10,
+      "urgency": "watch",
+      "section": "§8 AI Agents",
+      "title": "Monitor Trae AI SA developer ecosystem development",
+      "desc": "Open-source Cursor alternative built for SA devs. Watch for community growth signals.",
+      "deadline": null,
+      "deadline_label": "Monthly review"
+    }
+  ],
+  "countries": [
+    {
+      "code": "US",
+      "name": "United States",
+      "urgency": "high",
+      "players": "OpenAI, Anthropic, Google AI, Cursor",
+      "building": "GPT-5 coding agents, Claude 4.5 enterprise agents, Cursor $2.5B valuation",
+      "ogre_action": "OpenClaw as personal AI OS vs Cursor as AI IDE — position both for client dev teams",
+      "timeline": "NOW"
+    },
+    {
+      "code": "CN",
+      "name": "China",
+      "urgency": "high",
+      "players": "Alibaba Qwen, Moonshot Kimi, MiniMax, Xiaomi, DeepSeek",
+      "building": "Qwen3.5 397B (Feb 2026), Kimi K2.7-Code, Hailuo 2.3 video, Xiaomi $8.7B AI bet",
+      "ogre_action": "Qwen3.5 POC — fine-tune on African data, replace $400-800/mo OpenAI spend",
+      "timeline": "NOW"
+    },
+    {
+      "code": "JP",
+      "name": "Japan",
+      "urgency": "high",
+      "players": "SoftBank, Preferred Networks, Sony, NEC",
+      "building": "Yen1T physical AI foundation model for robotics and automation",
+      "ogre_action": "Monitor Japan-Africa AI corridor; position SA as Preferred Networks of Africa",
+      "timeline": "6 months"
+    },
+    {
+      "code": "IN",
+      "name": "India",
+      "urgency": "medium",
+      "players": "Government AI Mission, Infosys, Tata",
+      "building": "India AI Mission $1.2B, national language LLM",
+      "ogre_action": "Kimi Bilateral Trade AI — bridge African-Indian enterprise",
+      "timeline": "0-3 months"
+    },
+    {
+      "code": "BR",
+      "name": "Brazil",
+      "urgency": "medium",
+      "players": "Nubank, iFood, Mercado Libre",
+      "building": "Fintech AI, logistics AI, agricultural AI — Latin America's AI leader",
+      "ogre_action": "Cross-reference with Kimi bilateral trade use case",
+      "timeline": "0-3 months"
+    },
+    {
+      "code": "MX",
+      "name": "Mexico",
+      "urgency": "low",
+      "players": "Government digital agency, BBVA Mexico",
+      "building": "Government AI digitization, fintech AI",
+      "ogre_action": "Low priority — monitor only for North America adjacency",
+      "timeline": "3-6 months"
+    },
+    {
+      "code": "NG",
+      "name": "Nigeria",
+      "urgency": "high",
+      "players": "Flutterwave, NCAIR, Jumia",
+      "building": "Banking AI, NITDA $50M AI grants, Alibaba Africa priority market",
+      "ogre_action": "NECC registration + Kimi bilateral trade pilot",
+      "timeline": "NOW"
+    },
+    {
+      "code": "GH",
+      "name": "Ghana",
+      "urgency": "medium",
+      "players": "MEST, Farmerline, Ghana AI",
+      "building": "Agritech AI, agritech AI, government AI strategy in progress",
+      "ogre_action": "Agritech AI partnership exploration",
+      "timeline": "0-3 months"
+    },
+    {
+      "code": "ZA",
+      "name": "South Africa",
+      "urgency": "high",
+      "players": "Discovery, Discovery Health, CSIR, SITA, CIPC",
+      "building": "Health AI, tender procurement (R350M+), sovereign AI infrastructure",
+      "ogre_action": "CSD registration + Qwen3.5 POC + OpenClaw onboarding pipeline — all NOW",
+      "timeline": "NOW"
+    }
+  ],
+  "models": [
+    {"name": "Qwen3.5 397B", "provider": "Alibaba", "context": "397B params, hybrid thinking modes, 100+ languages incl. Swahili/Zulu", "cost": "Free (open-source)", "best_for": "Enterprise automation"},
+    {"name": "Kimi K2.7-Code", "provider": "Moonshot AI", "context": "256K token window, GPT-4-level coding", "cost": "~$0.50/M tokens", "best_for": "Long context, bilingual contracts"},
+    {"name": "MiniMax-M3", "provider": "MiniMax", "context": "Text + TTS + Video API in one", "cost": "$0.30/$1.20 per M tokens", "best_for": "Voice AI, video summaries"},
+    {"name": "Hailuo 2.3", "provider": "MiniMax", "context": "Text-to-video, 6-10s generation", "cost": "$0.25/generation", "best_for": "Proposal video summaries"},
+    {"name": "Llama 3.1 70B", "provider": "Meta", "context": "Free open-source, 70B params", "cost": "Free (open-source)", "best_for": "Local inference"},
+    {"name": "GPT-4o", "provider": "OpenAI", "context": "Benchmark model", "cost": "$5/$15 per M tokens", "best_for": "Benchmark reference"}
+  ]
+}

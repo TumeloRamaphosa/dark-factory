@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DarkDesk™ — Secure Business AI Companion | OGRE Computer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #09090e;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #6c63ff;
+      --cyan: #00d4ff;
+      --gold: #f59e0b;
+      --green: #22c55e;
+      --red: #ef4444;
+      --text: #e8e8f0;
+      --muted: #6b7280;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    /* Node Canvas Background */
+    #canvas-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(9,9,14,0.85);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--cyan); }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #7c74ff; transform: translateY(-1px); }
+    .btn-cyan {
+      background: var(--cyan);
+      color: #000;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-cyan:hover { background: #00e5ff; transform: translateY(-1px); }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      background: transparent;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      padding: 160px 0 100px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+    .badge.cyan { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--cyan); }
+    .badge.green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--green); }
+    h1 {
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    h1 .accent { color: var(--accent); }
+    h1 .cyan { color: var(--cyan); }
+    .hero-sub {
+      font-size: 20px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .hero-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .hero-note svg { color: var(--green); }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.7s ease both; }
+    .fade-up-1 { animation-delay: 0.1s; }
+    .fade-up-2 { animation-delay: 0.2s; }
+    .fade-up-3 { animation-delay: 0.3s; }
+    .fade-up-4 { animation-delay: 0.4s; }
+
+    /* Section */
+    section { padding: 100px 0; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-label.cyan { color: var(--cyan); }
+    .section-title {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+    .section-desc.center { text-align: center; margin: 0 auto 60px; }
+
+    /* What is it */
+    .what-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 60px;
+    }
+    .what-visual {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .what-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(108,99,255,0.08) 0%, rgba(0,212,255,0.05) 100%);
+    }
+    .agent-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 60px rgba(108,99,255,0.4);
+    }
+    .agent-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(34,197,94,0.3);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .what-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .what-list li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .what-list li .icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(108,99,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 16px;
+    }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 60px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: all 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(108,99,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* POPIA Section */
+    .popia-section {
+      background: linear-gradient(135deg, rgba(34,197,94,0.06) 0%, rgba(108,99,255,0.06) 100%);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 20px;
+      padding: 60px;
+      margin-top: 60px;
+    }
+    .popia-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .popia-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .popia-item .check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(34,197,94,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--green);
+    }
+    .popia-item p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+    .popia-item strong { color: var(--text); }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 60px;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .pricing-card.popular {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(108,99,255,0.1) 0%, rgba(0,212,255,0.05) 100%);
+    }
+    .pricing-card.popular::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 100px;
+      letter-spacing: 1px;
+    }
+    .pricing-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .pricing-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .pricing-price {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+    .pricing-price .per { font-size: 14px; color: var(--muted); font-weight: 400; }
+    .pricing-desc { font-size: 13px; color: var(--muted); margin-bottom: 24px; min-height: 40px; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-features li {
+      font-size: 13px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pricing-card .btn-outline { width: 100%; justify-content: center; }
+    .pricing-card .btn-cyan { width: 100%; justify-content: center; }
+
+    /* Comparison */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 40px;
+      font-size: 14px;
+    }
+    .comparison-table th {
+      text-align: left;
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .comparison-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(30,30,46,0.5);
+      color: var(--muted);
+    }
+    .comparison-table td:first-child { color: var(--text); font-weight: 500; }
+    .comparison-table td.dark { background: rgba(9,9,14,0.3); }
+    .comparison-table td .check { color: var(--green); }
+    .comparison-table td .cross { color: var(--red); }
+    .comparison-table tr:last-child td { border-bottom: none; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 120px 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(108,99,255,0.05) 100%);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <a href="https://ey8zue6ymxtk.space.minimax.io" class="nav-logo">DARK<span>DESK</span></a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#popia">POPIA</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://ey8zue6ymxtk.space.minimax.io">← Portfolio</a>
+      <a href="mailto:cto@studex-group.com" class="btn-primary">Get DarkDesk</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="badge cyan fade-up">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Secure · Sovereign · South African
+    </div>
+    <h1 class="fade-up fade-up-1">
+      Your AI Companion<br />
+      <span class="accent">Lives in a</span><br />
+      <span class="cyan">Sovereign VM</span>
+    </h1>
+    <p class="hero-sub fade-up fade-up-2">
+      DarkDesk is a business AI companion that runs inside an isolated, POPIA-compliant
+      virtual machine on South African infrastructure. Voice. Chat. Research. Drafting.
+      It works while you sleep. Your data never leaves your server.
+    </p>
+    <div class="hero-actions fade-up fade-up-3">
+      <a href="mailto:cto@studex-group.com?subject=DarkDesk%20Demo" class="btn-cyan">
+        Request a Demo →
+      </a>
+      <a href="#pricing" class="btn-outline">See Pricing</a>
+    </div>
+    <p class="hero-note fade-up fade-up-4">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      POPIA-compliant · B-BBEE Level 1 supplier · 99.5% uptime SLA
+    </p>
+  </div>
+</section>
+
+<!-- What is it -->
+<section id="what">
+  <div class="container">
+    <div class="what-grid">
+      <div>
+        <div class="section-label">What is DarkDesk?</div>
+        <h2 class="section-title">An AI agent VM<br />that speaks<br />your language</h2>
+        <p class="section-desc">
+          DarkDesk is a dedicated virtual machine running a full AI agent team — research,
+          writing, research, scheduling, image generation. It lives on South African
+          infrastructure. Your team accesses it via dashboard, WhatsApp, or voice.
+          They talk to it like a colleague. It works like a team.
+        </p>
+        <ul class="what-list" style="margin-top: 32px;">
+          <li>
+            <div class="icon">🎤</div>
+            <div>
+              <strong>Voice + Chat</strong><br />
+              Speak or type. DarkDesk responds naturally, drafts documents, books meetings, sends emails.
+            </div>
+          </li>
+          <li>
+            <div class="icon">🔒</div>
+            <div>
+              <strong>Isolated VM</strong><br />
+              Every client gets their own VM. No data sharing. No cross-contamination. Complete isolation.
+            </div>
+          </li>
+          <li>
+            <div class="icon">🇿🇦</div>
+            <div>
+              <strong>South African Data Residency</strong><br />
+              All data stays in South Africa. Full POPIA compliance. Not a single byte to US cloud.
+            </div>
+          </li>
+          <li>
+            <div class="icon">⚡</div>
+            <div>
+              <strong>Works 24/7</strong><br />
+              While your team sleeps, DarkDesk is researching, drafting, and preparing for tomorrow.
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="what-visual">
+        <div style="position:relative; z-index:1;">
+          <div class="agent-avatar">🤖</div>
+          <div class="agent-status">
+            <div class="pulse-dot"></div>
+            ONLINE — Ready to assist
+          </div>
+          <div style="text-align:center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 20px;">
+            DarkDesk v1.0 · SA-VM-001<br />
+            Uptime: 99.9% · Latency: 12ms
+          </div>
+          <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px;">
+            <div style="color: var(--cyan); margin-bottom: 8px;">> Initiating session...</div>
+            <div style="color: var(--accent); margin-bottom: 8px;">> VM: secure-south-01</div>
+            <div style="color: var(--green); margin-bottom: 8px;">> POPIA: COMPLIANT</div>
+            <div style="color: var(--gold);">> Agents loaded: 3/3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">Core Capabilities</div>
+    <h2 class="section-title">Everything an AI<br />team can do</h2>
+    <p class="section-desc">
+      Built on RileyJarvis architecture, extended for enterprise. Each DarkDesk ships
+      with a pre-configured agent team ready to work from day one.
+    </p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎤</div>
+        <h3>Voice Conversation</h3>
+        <p>Speak to DarkDesk. Get instant voice responses. MiniMax TTS or OpenAI Realtime API. Works in English, Afrikaans, and Zulu.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📧</div>
+        <h3>Email Drafting</h3>
+        <p>DarkDesk drafts professional emails, proposals, and responses. You review and send. Saves 2+ hours per day per user.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Web Research</h3>
+        <p>Ask: "Research our top 5 competitors in SA fintech." DarkDesk searches, summarises, and delivers a report in 5 minutes.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Image Generation</h3>
+        <p>Generate presentations, charts, and visuals on demand using MiniMax AI. Perfect for pitches, proposals, and reports.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Meeting Prep</h3>
+        <p>DarkDesk researches attendees, prepares briefing documents, drafts agenda items, and sends calendar invites before every meeting.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <h3>Document Intelligence</h3>
+        <p>Upload contracts, proposals, or reports. DarkDesk reads, summarises, extracts key terms, and flags risks. POPIA-secure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Who is it for -->
+<section id="who" style="padding: 80px 0;">
+  <div class="container">
+    <div class="section-label">Target Markets</div>
+    <h2 class="section-title">Built for SA businesses<br />that can't risk US cloud</h2>
+    <p class="section-desc">
+      Every organisation processing South African personal data faces the same problem:
+      global AI tools send your data to US servers. DarkDesk solves that.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px;">
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px;">
+        <div style="font-size: 32px; margin-bottom: 12px;">⚖️</div>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Law Firms & Legal</h3>
+        <p style="font-size: 14px; color: var(--muted);">Client confidentiality is legally mandated. US cloud AI is a liability. DarkDesk runs entirely in SA.</p>
+        <div style="margin-top: 16px; font-size: 13px; color: var(--green);">R8K–R25K/mo · 3–10 lawyers</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px;">
+        <div style="font-size: 32px; margin-bottom: 12px;">🏥</div>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Medical Practices</h3>
+        <p style="font-size: 14px; color: var(--muted);">Patient data is special personal information under POPIA. DarkDesk's isolated VM is the only compliant option.</p>
+        <div style="margin-top: 16px; font-size: 13px; color: var(--green);">R12K–R25K/mo · 5–20 staff</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px;">
+        <div style="font-size: 32px; margin-bottom: 12px;">🏦</div>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Finance & Accounting</h3>
+        <p style="font-size: 14px; color: var(--muted);">FAIS Act + POPIA + client money. Your AI must be auditable, sovereign, and traceable. DarkDesk delivers all three.</p>
+        <div style="margin-top: 16px; font-size: 13px; color: var(--green);">R15K–R35K/mo · Enterprise tier</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px;">
+        <div style="font-size: 32px; margin-bottom: 12px;">👔</div>
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Executive Assistants</h3>
+        <p style="font-size: 14px; color: var(--muted);">C-suite generates the most sensitive data. DarkDesk handles board communications, strategy docs, and meeting prep — invisibly.</p>
+        <div style="margin-top: 16px; font-size: 13px; color: var(--green);">R2,500/mo Solo · R9,500/mo Team</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POPIA Section -->
+<section id="popia">
+  <div class="container">
+    <div class="section-label cyan">POPIA Compliance</div>
+    <h2 class="section-title">Full South African<br />data law compliance</h2>
+    <p class="section-desc">
+      DarkDesk is built POPIA-first. Every deployment includes a data processing agreement,
+      privacy impact assessment, and annual compliance audit. Your data stays in South Africa — always.
+    </p>
+    <div class="popia-section" style="margin-top: 0;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <div>
+          <div style="font-size: 28px; margin-bottom: 12px;">📋</div>
+          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Data Processing Agreement</h4>
+          <p style="font-size: 13px; color: var(--muted);">Signed with every client. Defines us as the Operator, you as the Controller. Your legal protection, our legal obligation.</p>
+        </div>
+        <div>
+          <div style="font-size: 28px; margin-bottom: 12px;">🔍</div>
+          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Privacy Impact Assessment</h4>
+          <p style="font-size: 13px; color: var(--muted);">Mandatory before deployment. We handle the PIA. You get a compliance certificate valid for 12 months.</p>
+        </div>
+        <div>
+          <div style="font-size: 28px; margin-bottom: 12px;">🛡️</div>
+          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Annual POPIA Audit</h4>
+          <p style="font-size: 13px; color: var(--muted);">Third-party audit of all data flows, access logs, and agent actions. Includes breach response procedure documentation.</p>
+        </div>
+      </div>
+      <div class="popia-grid" style="margin-top: 32px;">
+        <div class="popia-item">
+          <div class="check">✓</div>
+          <p><strong>Data residency:</strong> All data stored exclusively on SA-based servers. Zero cross-border transfer without consent.</p>
+        </div>
+        <div class="popia-item">
+          <div class="check">✓</div>
+          <p><strong>Encryption:</strong> AES-256 at rest, TLS 1.3 in transit. All agent actions are logged and auditable.</p>
+        </div>
+        <div class="popia-item">
+          <div class="check">✓</div>
+          <p><strong>Right to erasure:</strong> Client can request full data deletion at any time. Complete purge within 72 hours.</p>
+        </div>
+        <div class="popia-item">
+          <div class="check">✓</div>
+          <p><strong>Breach notification:</strong> 72-hour notification to Information Regulator and affected individuals, guaranteed in contract.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Straightforward<br />monthly pricing</h2>
+    <p class="section-desc" style="margin-bottom: 0;">
+      No hidden setup fees. No per-prompt pricing surprises. One flat monthly fee,
+      all-inclusive. POPIA compliance included at every tier.
+    </p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-name">Solo</div>
+        <div class="pricing-price">R2,500<span class="per">/mo</span></div>
+        <p class="pricing-desc">For individual professionals who need a sovereign AI assistant.</p>
+        <ul class="pricing-features">
+          <li>1 user</li>
+          <li>1 dedicated VM</li>
+          <li>Research + Email agents</li>
+          <li>Voice + chat</li>
+          <li>50K tokens/mo</li>
+          <li>Email support</li>
+        </ul>
+        <a href="mailto:cto@studex-group.com?subject=DarkDesk%20Solo" class="btn-outline">Get Started</a>
+      </div>
+      <div class="pricing-card popular">
+        <div class="pricing-name">Team</div>
+        <div class="pricing-price">R9,500<span class="per">/mo</span></div>
+        <p class="pricing-desc">For growing teams needing a shared AI workspace with full agent suite.</p>
+        <ul class="pricing-features">
+          <li>Up to 10 users</li>
+          <li>Shared VM (6 agents)</li>
+          <li>Research + Builder + Social + Email + CRM + SEO</li>
+          <li>Priority support</li>
+          <li>500K tokens/mo</li>
+          <li>Monthly usage report</li>
+        </ul>
+        <a href="mailto:cto@studex-group.com?subject=DarkDesk%20Team" class="btn-cyan">Get Started</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-name">Enterprise</div>
+        <div class="pricing-price">R25,000<span class="per">/mo</span></div>
+        <p class="pricing-desc">For organisations requiring dedicated infrastructure and unlimited scale.</p>
+        <ul class="pricing-features">
+          <li>Unlimited users</li>
+          <li>Dedicated VM cluster</li>
+          <li>Full 6-agent stack</li>
+          <li>Custom integrations</li>
+          <li>Unlimited tokens</li>
+          <li>Ded

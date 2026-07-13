@@ -1,0 +1,51 @@
+═══════════════════════════════════════════════
+  OGRE COMPUTER — MORNING BRIEF
+  Monday, 22 June 2026 | 08:00 AM SAST
+  For: Studex Group Team
+═══════════════════════════════════════════════
+
+Good morning, Studex team.
+
+Here's what OGRE Computer shipped while you slept — and what you need to know to hit the ground running today.
+
+─────────────────────────────────────────────
+🚀 OGRE COMPUTER — LAST 24 HOURS
+─────────────────────────────────────────────
+
+At midnight SA time, OGRE ran its daily Midnight Build and produced the most comprehensive AI intelligence briefing we've ever generated — covering 9 countries across the USA, China, Japan, India, Brazil, Mexico, Nigeria, Ghana, and South Africa.
+
+Highlights:
+• 🇺🇸 GPT-6 is weeks away — OpenAI just broke its Azure-only deal to deploy on AWS. This triggers a frontier AI price war that OGRE is positioned to benefit from using Gemini 3.5 + DeepSeek V4.
+• 🇨🇳 DeepSeek V4 Pro now rivals Claude at 1/10th the cost — sovereign, affordable AI for SA is real and deployable today.
+• 🇿🇦 South Africa: Discovery Vitality AI is going global via Google Cloud. OGRE's LAISA platform has a 60-day window to embed itself before that wave closes.
+• 🇳🇬 Flutterwave just became a licensed bank in Nigeria — the SA-Nigeria AI payments corridor is wide open for partnership.
+
+All deployed demos remain live. Your AI infrastructure is running. 💪
+
+─────────────────────────────────────────────
+💡 TODAY'S ACTIONABLE TIP
+─────────────────────────────────────────────
+
+Use the last30days-skill every morning. Run:
+  last30days "AI agents South Africa 2026"
+It pulls real-time signals from Reddit, X, Hacker News, YouTube, GitHub and Polymarket — in under 60 seconds. Before any meeting, before any proposal, before any decision: one last30days query keeps OGRE's thinking current. It's your competitive edge in a market where most competitors are still doing weekly reviews.
+
+─────────────────────────────────────────────
+🌍 LOCAL SA AI INSIGHT
+─────────────────────────────────────────────
+
+The CSIR is building South Africa's sovereign AI cloud — and the procurement window is OPEN NOW. Registration closes Q3 2026. This is a 3–5 year government framework agreement. OGRE should file its partnership application within 14 days. First-movers with CSIR shape the procurement rules. Everyone else buys from them.
+
+─────────────────────────────────────────────
+📚 LEARN TODAY (from tonight's Midnight Build)
+─────────────────────────────────────────────
+
+Tonight's build is themed: "How AI agents chain skills together." Watch OGRE chain last30days-skill → Agent-Reach → huashu-design → minimax-pdf into a fully automated intelligence pipeline. That's agentic engineering in action — and it's the exact same pattern we'll use to build LAISA client deliverables automatically. Follow the build at /workspace/OGRE-Midnight-Build/
+
+─────────────────────────────────────────────
+
+South Africa's AI moment is arriving faster than anyone predicted. OGRE Computer is already there. Let's make today count.
+
+— OGRE Computer 🤖 | Studex Group AI Infrastructure
+  orgo.ai | LAISA Agent OS | Dark Factory
+─────────────────────────────────────────────

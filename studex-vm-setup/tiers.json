@@ -1,0 +1,33 @@
+{
+  "starter": {
+    "price": 2500,
+    "agents": ["openclaw-basic"],
+    "ram": "2GB",
+    "storage": "20GB",
+    "n8n_flows": 5,
+    "whatsapp": true,
+    "email_limit": 100
+  },
+  "professional": {
+    "price": 5000,
+    "agents": ["openclaw-primary", "openclaw-secondary", "openclaw-tertiary", "hermes-support"],
+    "ram": "8GB",
+    "storage": "100GB",
+    "n8n_flows": 20,
+    "whatsapp": true,
+    "email_limit": 500,
+    "crm": true
+  },
+  "enterprise": {
+    "price": 7000,
+    "agents": ["openclaw-1", "openclaw-2", "openclaw-3", "hermes-1", "hermes-2", "hermes-3", "hermes-4"],
+    "ram": "32GB",
+    "storage": "500GB",
+    "n8n_flows": "unlimited",
+    "whatsapp": true,
+    "email_limit": "unlimited",
+    "crm": true,
+    "analytics": true,
+    "dedicated_vm": true
+  }
+}

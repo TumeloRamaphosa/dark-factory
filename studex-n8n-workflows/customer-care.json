@@ -1,0 +1,611 @@
+{
+  "name": "StudEx Customer Care Automation",
+  "nodes": [
+    {
+      "id": "wa-trigger",
+      "name": "WhatsApp Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 400],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "studex-customer-care",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "studex-customer-care"
+    },
+    {
+      "id": "parse-message",
+      "name": "Parse Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [300, 400],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "msg-text",
+              "name": "messageText",
+              "value": "={{$json.body.message.text}}",
+              "type": "string"
+            },
+            {
+              "id": "wa-id",
+              "name": "whatsappId",
+              "value": "={{$json.body.message.from}}",
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "name": "timestamp",
+              "value": "={{$json.body.message.timestamp}}",
+              "type": "string"
+            },
+            {
+              "id": "reply-to",
+              "name": "replyTo",
+              "value": "={{$json.body.message.from}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ai-classify",
+      "name": "AI Classify Intent",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 2,
+      "position": [500, 400],
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a customer service classifier for StudEx Super Agents, an AI automation agency serving African SMBs.\n\nClassify the incoming message into exactly ONE of these categories:\n- [Support] — technical issues, bot not working, setup problems, errors\n- [Sales] — pricing questions, demo requests, feature questions, new purchases\n- [Billing] — invoice questions, payment issues, subscription changes, refunds\n- [Other] — anything that doesn't fit the above\n\nReply with ONLY the category in square brackets, e.g.: [Support]\n\nDo not add explanation. Only output the category."
+            },
+            {
+              "role": "user",
+              "content": "={{$json.messageText}}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 50,
+          "temperature": 0
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-creds",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "id": "route-intent",
+      "name": "Route by Intent",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [700, 400],
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$json.choices[0].message.content}}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "[Support]",
+              "operation": "contains"
+            },
+            {
+              "value2": "[Sales]",
+              "operation": "contains"
+            },
+            {
+              "value2": "[Billing]",
+              "operation": "contains"
+            }
+          ]
+        },
+        "fallbackOutput": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "kb-search",
+      "name": "Search Knowledge Base",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 250],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.KNOWLEDGE_BASE_API_URL}}/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.KNOWLEDGE_BASE_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{$json.messageText}}"
+            },
+            {
+              "name": "top",
+              "value": 3
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "support-auto-reply",
+      "name": "Send Support Auto-Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 250],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$('parse-message').item.json.whatsappId}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "{\"body\":\"🔧 *Support Auto-Reply:*\\n\\n{{$json.answer || 'Thanks for reaching out! A support agent will respond within 2 hours.'}}\"}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "sales-reply",
+      "name": "Send Sales Info + Pricing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$('parse-message').item.json.whatsappId}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "{\"body\":\"💡 *StudEx Super Agents — AI Solutions for African SMBs*\\n\\n📦 *Our Packages:*\\n\\n🥉 *Starter* — R2,500/month\\n  • WhatsApp AI chatbot\\n  • 100 automations/month\\n  • Email support\\n\\n🥈 *Growth* — R5,000/month\\n  • Everything in Starter\\n  • Unlimited automations\\n  • Priority support\\n  • Social media AI\\n\\n🥇 *Enterprise* — R12,000/month\\n  • Dedicated AI agent\\n  • Custom integrations\\n  • 24/7 phone support\\n  • Weekly reporting\\n\\n📞 *Want a free 30-min demo?* Reply YES and we'll call you!\"}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "schedule-callback",
+      "name": "Schedule Callback (If YES)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1300, 400],
+      "parameters": {
+        "respondWith": {},
+        "respondWithOptions": "json",
+        "responseBody": "{\"status\":\"ok\",\"message\":\"Thanks! We'll be in touch within 24 hours.\"}"
+      }
+    },
+    {
+      "id": "billing-email",
+      "name": "Email Billing Agent",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1100, 550],
+      "parameters": {
+        "to": "billing@studexagents.africa",
+        "from": "care@studexagents.africa",
+        "subject": "🚨 Billing Enquiry from {{$('parse-message').item.json.whatsappId}}",
+        "text": "New billing enquiry received via WhatsApp.\n\nFrom: {{$('parse-message').item.json.whatsappId}}\nMessage: {{$('parse-message').item.json.messageText}}\nTime: {{$('parse-message').item.json.timestamp}}\n\nPlease respond within 2 hours.",
+        "options": {}
+      },
+      "credentials": {
+        "smtp": {
+          "id": "smtp-creds",
+          "name": "StudEx SMTP"
+        }
+      }
+    },
+    {
+      "id": "log-crm",
+      "name": "Log to Google Sheets CRM",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1500, 400],
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "={{$env.GOOGLE_SHEETS_CRM_ID}}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Messages"
+        },
+        "columns": {
+          "__rl": true,
+          "mode": "define",
+          "value": {
+            "mappingMode": "defineBelow",
+            "value": [
+              {
+                "spreadsheetColumn": "A",
+                "spreadsheetColumnType": "string",
+                "value": "={{$now.format('YYYY-MM-DD HH:mm')}}"
+              },
+              {
+                "spreadsheetColumn": "B",
+                "spreadsheetColumnType": "string",
+                "value": "={{$('parse-message').item.json.whatsappId}}"
+              },
+              {
+                "spreadsheetColumn": "C",
+                "spreadsheetColumnType": "string",
+                "value": "={{$('parse-message').item.json.messageText}}"
+              },
+              {
+                "spreadsheetColumn": "D",
+                "spreadsheetColumnType": "string",
+                "value": "={{$json.choices[0].message.content}}"
+              },
+              {
+                "spreadsheetColumn": "E",
+                "spreadsheetColumnType": "string",
+                "value": "={{$now}}"
+              }
+            ]
+          }
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-creds",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "id": "auto-reply-pending",
+      "name": "Send Pending Auto-Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1700, 550],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$('parse-message').item.json.whatsappId}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "{\"body\":\"🙏 *Thanks for reaching out!*\\n\\nOur team will respond within 2 hours. We're here to help! 💬\"}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "wa-trigger": {
+      "main": [
+        [
+          {
+            "node": "parse-message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse-message": {
+      "main": [
+        [
+          {
+            "node": "ai-classify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai-classify": {
+      "main": [
+        [
+          {
+            "node": "route-intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "route-intent": {
+      "main": [
+        [
+          {
+            "node": "kb-search",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "sales-reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "billing-email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "auto-reply-pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kb-search": {
+      "main": [
+        [
+          {
+            "node": "support-auto-reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "support-auto-reply": {
+      "main": [
+        [
+          {
+            "node": "log-crm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sales-reply": {
+      "main": [
+        [
+          {
+            "node": "schedule-callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "schedule-callback": {
+      "main": [
+        [
+          {
+            "node": "log-crm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "billing-email": {
+      "main": [
+        [
+          {
+            "node": "auto-reply-pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "auto-reply-pending": {
+      "main": [
+        [
+          {
+            "node": "log-crm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "studex"
+    },
+    {
+      "name": "customer-care"
+    },
+    {
+      "name": "whatsapp"
+    },
+    {
+      "name": "ai-classification"
+    }
+  ],
+  "meta": {
+    "templateCredsSetup": [
+      {
+        "name": "WhatsApp Business API",
+        "id": "whatsapp-creds",
+        "type": "httpHeaderAuth",
+        "required": true
+      },
+      {
+        "name": "OpenAI API",
+        "id": "openai-creds",
+        "type": "apiKey",
+        "required": true
+      },
+      {
+        "name": "Google Sheets API",
+        "id": "google-sheets-creds",
+        "type": "oAuth2",
+        "required": true
+      },
+      {
+        "name": "StudEx SMTP",
+        "id": "smtp-creds",
+        "type": "smtp",
+        "required": true
+      }
+    ],
+    "templateVariables": [
+      {
+        "id": "WHATSAPP_API_URL",
+        "name": "WhatsApp Cloud API URL",
+        "type": "string",
+        "default": "https://graph.facebook.com/v18.0"
+      },
+      {
+        "id": "WHATSAPP_API_TOKEN",
+        "name": "WhatsApp Access Token",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "KNOWLEDGE_BASE_API_URL",
+        "name": "Knowledge Base API URL",
+        "type": "string",
+        "required": false
+      },
+      {
+        "id": "KNOWLEDGE_BASE_API_KEY",
+        "name": "Knowledge Base API Key",
+        "type": "string",
+        "required": false
+      },
+      {
+        "id": "GOOGLE_SHEETS_CRM_ID",
+        "name": "Google Sheets CRM Document ID",
+        "type": "string",
+        "required": true
+      }
+    ],
+    "studexVersion": "1.0.0",
+    "studexDescription": "AI-classifies incoming WhatsApp messages into Support/Sales/Billing/Other, auto-replies where possible, forwards to the right team, logs everything to CRM."
+  }
+}

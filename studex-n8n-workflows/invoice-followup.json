@@ -1,0 +1,667 @@
+{
+  "name": "StudEx Invoice Follow-Up",
+  "nodes": [
+    {
+      "id": "schedule-trigger",
+      "name": "Schedule: Daily at 9AM SA Time (07:00 UTC)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 400],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cron",
+              "expression": "0 7 * * *"
+            }
+          ]
+        },
+        "options": {
+          "timezone": "Africa/Johannesburg"
+        }
+      }
+    },
+    {
+      "id": "fetch-invoices",
+      "name": "Fetch Unpaid Invoices from Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [300, 400],
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "={{$env.GOOGLE_SHEETS_INVOICES_ID}}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Invoices"
+        },
+        "options": {
+          "outputFormatting": {
+            "general": "detectAutomatically"
+          }
+        }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-creds",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "id": "filter-unpaid",
+      "name": "Filter Unpaid Invoices",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [500, 400],
+      "parameters": {
+        "jsExpression": "const invoice = $json;\nconst dueDate = new Date(invoice['Due Date'] || invoice.due_date || invoice.DueDate);\nconst today = new Date();\ntoday.setHours(0,0,0,0);\nconst daysOverdue = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));\nconst isPaid = (invoice['Status'] || invoice.status || '').toLowerCase() === 'paid';\n\nreturn !isPaid && daysOverdue >= 0;"
+      }
+    },
+    {
+      "id": "split-invoices",
+      "name": "Split by Days Overdue",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 2,
+      "position": [700, 400],
+      "parameters": {
+        "mode": "splitOutItems",
+        "fieldToSplitOut": "={{$json}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "classify-overdue",
+      "name": "Classify Overdue Tier",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400],
+      "parameters": {
+        "jsCode": "// Classify invoice overdue tier and set reminder message\nconst invoice = $input.first().json;\nconst dueDate = new Date(invoice['Due Date'] || invoice.due_date || invoice.DueDate || invoice['Invoice Date'] || $now);\nconst today = new Date();\ntoday.setHours(0, 0, 0, 0);\nconst daysOverdue = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));\n\nlet tier = null;\nlet message = '';\nlet priority = 'low';\n\nif (daysOverdue >= 30) {\n  tier = 'final_notice';\n  priority = 'critical';\n  message = `⚠️ *FINAL NOTICE — Invoice {{invoice['Invoice Number'] || invoice.invoice_number || 'N/A'}}*\n\nDear {{invoice['Client Name'] || invoice.client_name || 'Valued Client'}},\n\nThis is our *final reminder* regarding unpaid invoice #{{invoice['Invoice Number'] || invoice.invoice_number || 'N/A'}} for *R{{invoice['Amount Due'] || invoice.amount_due || invoice.Amount || 'N/A'}}*.\n\nThis invoice is *30 days overdue*. If payment is not received within *48 hours*, we will need to escalate this matter and may suspend services.\n\nTo avoid service interruption, please pay now:\n💳 Payment link: {{$env.PAYMENT_LINK}}\n\nQuestions? Reply here immediately. We're here to help.`;\n} else if (daysOverdue >= 14) {\n  tier = 'firm_reminder';\n  priority = 'medium';\n  message = `🔴 *Urgent Reminder — Invoice {{invoice['Invoice Number'] || invoice.invoice_number || 'N/A'}}*\n\nDear {{invoice['Client Name'] || invoice.client_name || 'Valued Client'}},\n\nYour invoice of *R{{invoice['Amount Due'] || invoice.amount_due || invoice.Amount || 'N/A'}}* ({{invoice['Invoice Date'] || invoice.invoice_date || 'recent'}})\nwas due {{daysOverdue}} days ago.\n\nWe want to keep your AI systems running smoothly. Please arrange payment today:\n💳 {{$env.PAYMENT_LINK}}\n\nCan't pay right now? Let's talk — reply here and we'll work something out.`;\n} else if (daysOverdue >= 7) {\n  tier = 'friendly_reminder';\n  priority = 'low';\n  message = `💬 *Friendly reminder — Invoice {{invoice['Invoice Number'] || invoice.invoice_number || 'N/A'}}*\n\nHi {{invoice['Client Name'] || invoice.client_name || 'there'}}!\n\nJust a quick heads-up: your invoice for *R{{invoice['Amount Due'] || invoice.amount_due || invoice.Amount || 'N/A'}}* is now 7 days overdue.\n\nNo stress — life happens! Please sort it when you can:\n💳 {{$env.PAYMENT_LINK}}\n\nNeed an extension? Just reply and we'll sort it out. We value your partnership.`;\n}\n\nreturn [{\n  json: {\n    ...invoice,\n    tier,\n    daysOverdue,\n    message,\n    priority,\n    whatsappId: invoice.whatsapp_id || invoice['WhatsApp'] || invoice.whatsappId || null,\n    clientEmail: invoice.email || invoice['Client Email'] || invoice.client_email || null,\n    invoiceNumber: invoice['Invoice Number'] || invoice.invoice_number || 'N/A'\n  }\n}];"
+      }
+    },
+    {
+      "id": "send-friendly-wa",
+      "name": "Send Friendly Reminder (7 Days)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$json.whatsappId}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "={{'{\"body\":\"' + $json.message.replace(/\"/g, '\\\\\"').replace(/\\n/g, '\\\\n') + '\"}'}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "send-firm-wa",
+      "name": "Send Firm Reminder (14 Days)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$json.whatsappId}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "={{'{\"body\":\"' + $json.message.replace(/\"/g, '\\\\\"').replace(/\\n/g, '\\\\n') + '\"}'}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "send-final-wa",
+      "name": "Send Final Notice (30 Days)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 600],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$json.whatsappId}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "={{'{\"body\":\"' + $json.message.replace(/\"/g, '\\\\\"').replace(/\\n/g, '\\\\n') + '\"}'}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "log-friendly",
+      "name": "Log Friendly Reminder",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1300, 200],
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "={{$env.GOOGLE_SHEETS_INVOICES_ID}}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Interaction Log"
+        },
+        "columns": {
+          "__rl": true,
+          "mode": "define",
+          "value": [
+            {
+              "spreadsheetColumn": "A",
+              "spreadsheetColumnType": "string",
+              "value": "={{$now.format('YYYY-MM-DD HH:mm')}}"
+            },
+            {
+              "spreadsheetColumn": "B",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.invoiceNumber}}"
+            },
+            {
+              "spreadsheetColumn": "C",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.clientName || $json['Client Name'] || 'Unknown'}}"
+            },
+            {
+              "spreadsheetColumn": "D",
+              "spreadsheetColumnType": "string",
+              "value": "friendly_reminder"
+            },
+            {
+              "spreadsheetColumn": "E",
+              "spreadsheetColumnType": "string",
+              "value": "WhatsApp"
+            },
+            {
+              "spreadsheetColumn": "F",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.daysOverdue}} days overdue"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-creds",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "id": "log-firm",
+      "name": "Log Firm Reminder",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1300, 400],
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "={{$env.GOOGLE_SHEETS_INVOICES_ID}}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Interaction Log"
+        },
+        "columns": {
+          "__rl": true,
+          "mode": "define",
+          "value": [
+            {
+              "spreadsheetColumn": "A",
+              "spreadsheetColumnType": "string",
+              "value": "={{$now.format('YYYY-MM-DD HH:mm')}}"
+            },
+            {
+              "spreadsheetColumn": "B",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.invoiceNumber}}"
+            },
+            {
+              "spreadsheetColumn": "C",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.clientName || $json['Client Name'] || 'Unknown'}}"
+            },
+            {
+              "spreadsheetColumn": "D",
+              "spreadsheetColumnType": "string",
+              "value": "firm_reminder"
+            },
+            {
+              "spreadsheetColumn": "E",
+              "spreadsheetColumnType": "string",
+              "value": "WhatsApp"
+            },
+            {
+              "spreadsheetColumn": "F",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.daysOverdue}} days overdue"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-creds",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "id": "log-final",
+      "name": "Log Final Notice",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1300, 600],
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "={{$env.GOOGLE_SHEETS_INVOICES_ID}}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Interaction Log"
+        },
+        "columns": {
+          "__rl": true,
+          "mode": "define",
+          "value": [
+            {
+              "spreadsheetColumn": "A",
+              "spreadsheetColumnType": "string",
+              "value": "={{$now.format('YYYY-MM-DD HH:mm')}}"
+            },
+            {
+              "spreadsheetColumn": "B",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.invoiceNumber}}"
+            },
+            {
+              "spreadsheetColumn": "C",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.clientName || $json['Client Name'] || 'Unknown'}}"
+            },
+            {
+              "spreadsheetColumn": "D",
+              "spreadsheetColumnType": "string",
+              "value": "final_notice_sent"
+            },
+            {
+              "spreadsheetColumn": "E",
+              "spreadsheetColumnType": "string",
+              "value": "WhatsApp"
+            },
+            {
+              "spreadsheetColumn": "F",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.daysOverdue}} days overdue — FLAGGED FOR HUMAN REVIEW"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-creds",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "id": "flag-human-review",
+      "name": "Flag for Human Review (30+ Days)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1500, 600],
+      "parameters": {
+        "to": "accounts@studexagents.africa",
+        "cc": "studex@studexagents.africa",
+        "from": "accounts@studexagents.africa",
+        "subject": "🚨 URGENT: Invoice 30+ Days Overdue — {{$json.invoiceNumber}}",
+        "text": "ESCALATION — Invoice requires human intervention.\n\nInvoice: {{$json.invoiceNumber}}\nClient: {{$json.clientName || $json['Client Name']}}\nAmount: R{{$json['Amount Due'] || $json.amount_due || $json.Amount}}\nDays Overdue: {{$json.daysOverdue}}\nWhatsApp: {{$json.whatsappId}}\nEmail: {{$json.clientEmail}}\n\nFinal notice sent via WhatsApp. Please follow up manually.\n\nAction required:\n1. Call the client directly\n2. Consider service suspension if payment not received within 48h\n3. Update invoice status in Sheets",
+        "options": {}
+      },
+      "credentials": {
+        "smtp": {
+          "id": "smtp-creds",
+          "name": "StudEx SMTP"
+        }
+      }
+    },
+    {
+      "id": "compile-summary",
+      "name": "Compile Follow-Up Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1700, 400],
+      "parameters": {
+        "jsCode": "// Compile invoice follow-up summary for the day\nconst inputs = $input.all();\nconst dateStr = new Date().toISOString().split('T')[0];\nconst sent = inputs.length;\nconst tiers = inputs.map(i => i.json.tier).filter(Boolean);\n\nreturn [{\n  json: {\n    date: dateStr,\n    remindersSent: sent,\n    friendly: tiers.filter(t => t === 'friendly_reminder').length,\n    firm: tiers.filter(t => t === 'firm_reminder').length,\n    final: tiers.filter(t => t === 'final_notice').length,\n    message: `✅ Invoice follow-up complete: ${sent} reminder(s) sent — ${tiers.filter(t=>t==='final_notice').length} escalated to human review`\n  }\n}];"
+      }
+    }
+  ],
+  "connections": {
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "fetch-invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch-invoices": {
+      "main": [
+        [
+          {
+            "node": "filter-unpaid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter-unpaid": {
+      "main": [
+        [
+          {
+            "node": "split-invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split-invoices": {
+      "main": [
+        [
+          {
+            "node": "classify-overdue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "classify-overdue": {
+      "main": [
+        [
+          {
+            "node": "send-friendly-wa",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "send-firm-wa",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "send-final-wa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-friendly-wa": {
+      "main": [
+        [
+          {
+            "node": "log-friendly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-firm-wa": {
+      "main": [
+        [
+          {
+            "node": "log-firm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-final-wa": {
+      "main": [
+        [
+          {
+            "node": "log-final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "log-final": {
+      "main": [
+        [
+          {
+            "node": "flag-human-review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "log-friendly": {
+      "main": [
+        [
+          {
+            "node": "compile-summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "log-firm": {
+      "main": [
+        [
+          {
+            "node": "compile-summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "flag-human-review": {
+      "main": [
+        [
+          {
+            "node": "compile-summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "studex"
+    },
+    {
+      "name": "invoices"
+    },
+    {
+      "name": "accounts-receivable"
+    },
+    {
+      "name": "whatsapp"
+    }
+  ],
+  "meta": {
+    "templateCredsSetup": [
+      {
+        "name": "WhatsApp Business API",
+        "id": "whatsapp-creds",
+        "type": "httpHeaderAuth",
+        "required": true
+      },
+      {
+        "name": "Google Sheets API",
+        "id": "google-sheets-creds",
+        "type": "oAuth2",
+        "required": true
+      },
+      {
+        "name": "StudEx SMTP",
+        "id": "smtp-creds",
+        "type": "smtp",
+        "required": true
+      }
+    ],
+    "templateVariables": [
+      {
+        "id": "WHATSAPP_API_URL",
+        "name": "WhatsApp Cloud API URL",
+        "type": "string",
+        "default": "https://graph.facebook.com/v18.0"
+      },
+      {
+        "id": "WHATSAPP_API_TOKEN",
+        "name": "WhatsApp Access Token",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "GOOGLE_SHEETS_INVOICES_ID",
+        "name": "Google Sheets Invoices Document ID",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "PAYMENT_LINK",
+        "name": "Payment Link (Yoco / PayStack / etc.)",
+        "type": "string",
+        "required": true
+      }
+    ],
+    "studexVersion": "1.0.0",
+    "studexDescription": "Daily at 9AM SA Time — fetches unpaid invoices, sends WhatsApp reminders at 7/14/30 day overdue tiers (friendly → firm → final notice), logs all interactions to Sheets, escalates 30+ day invoices to human review."
+  }
+}

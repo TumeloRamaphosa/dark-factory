@@ -1,0 +1,132 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: 26 June 2026 | 06:00 PM UTC (8:00 PM SA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🇿🇦 OGRE COMPUTER — EVENING DIGEST
+BIGGEST BUILD DAY OF THE YEAR — 4 SUB-AGENTS RUNNING IN PARALLEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 WHAT STUDEX SUPER AGENTS SHIPPED TODAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ StudEx Super Agents — Pixel Command Center (LIVE)
+   → https://1zibcrfi7qrx.space.minimax.io
+   → Canvas 2D pixel agent animation (watch agents walk between stations)
+   → Electric green #00FF88 + gold #FFD700 on space black
+   → Orbitron + JetBrains Mono fonts, neon glow, CRT scanlines
+   → Hero + Pixel Command Center demo + Features + Pricing + How It Works
+
+✅ Marketing Strategy Package (/workspace/studex-market/)
+   → positioning.md — African SMB strategy, 6 verticals, objection handling
+   → landing-copy.md — Full website copy, testimonials, FAQ, 5-email drip
+   → go-to-market.md — 60-day bootstrap plan, R11,400 budget
+   → brand-guide.md — Pixel Noir brand bible, color hexes, tone of voice
+
+✅ n8n Automation Workflows (/workspace/studex-n8n-workflows/)
+   → client-onboarding.json — WhatsApp → Sheets → welcome message
+   → customer-care.json — Support/sales/billing AI classification + routing
+   → leads-qualification.json — HOT/WARM/COLD AI lead scoring + routing
+   → invoice-followup.json — 7/14/30-day WhatsApp payment reminders
+   → social-media-automation.json — 7-day content batch + posting
+   → daily-agent-report.json — 7AM SA briefing compiled + emailed
+
+✅ VM Provisioning System (/workspace/studex-vm-setup/)
+   → setup-studex-vm.sh — One-time ORGO VM setup (Docker + Traefik + UFW)
+   → provision.sh — Provision new client in 3 commands
+   → docker-compose.yml — Traefik v3 + n8n + landing page stack
+   → nginx-studex.conf — Reverse proxy + Let's Encrypt SSL + rate limiting
+   → tiers.json + 3 tier configs (Starter R2,500 / Pro R5,000 / Enterprise R7,000)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐻 STUDEx CLAW — THREE-TIER PRICING LAUNCHED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   STARTER CLAW        PROFESSIONAL CLAW       ENTERPRISE CLAW
+   R2,500/month        R5,000/month            R7,000/month
+   ─────────────       ───────────────         ───────────────
+   1 OpenClaw agent    3 OpenClaw + 1 Hermes   7 OpenClaw + 3 Hermes
+   WhatsApp Business   Full CRM + Analytics    Dedicated VM
+   5 n8n flows         20 n8n flows           Unlimited n8n flows
+   100 emails/day      500 emails/day          Unlimited email
+   Pixel dashboard     Client portal           White-label
+   —                   Priority support        Dedicated support
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📡 OPENCLAW AFRICA LANDSCAPE — TODAY'S SIGNAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌍 OpenClaw Africa Momentum
+   → African SMBs increasingly adopting OpenClaw for business automation
+   → WhatsApp-first AI agents = perfect fit for African market
+   → "AI agents replacing entire teams" — trending across SA/Nigeria/Kenya
+   → AI agents for SMBs recognized as top business trend Jun 2026
+
+🇿🇦 South Africa
+   → Draft National AI Policy public comment period closing mid-2026
+   → Discovery Bank AI blocked R100M fraud — enterprise trust growing
+   → Vitality Health AI launched — health AI proving real-world value
+
+🌐 Global Parallels
+   → Nat Eliason's Felix bot: $14,718 revenue in 3 weeks (autonomous)
+   → Pixel Agents (pixel-agents-hq): visual agent management = market standard
+   → n8n + WhatsApp integration = proven automation stack for SMBs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TOMORROW'S PRIORITY ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. REGISTER DOMAIN — studexagents.africa
+   → Point to ORGO VM IP
+   → Enable SSL via Let's Encrypt (certbot built into setup script)
+
+2. WHATSAPP BUSINESS API
+   → business.whatsapp.com → create app
+   → Takes 1-2 days for approval
+   → Without this, WhatsApp automations can't go live
+
+3. PAYSTACK MERCHANT ACCOUNT
+   → paystack.com — accept Rands recurring payments
+   → Essential for monthly subscription billing
+
+4. ORGO VM SSH ACCESS
+   → Need: VM IP + credentials
+   → So I can run setup-studex-vm.sh + first client provision
+
+5. GENERATE BEAR CLAW LOGO
+   → AI pixel art logo for StudEx Claw brand
+   → Drop into site header + WhatsApp profile + social
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💰 THE STUDEx OPPORTUNITY — BY THE NUMBERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Africa AI Market:     $4.5B (2025) → $16.5B (2030)
+Cloud CAGR:           16.4% through 2031
+Digital Transform:    $34.97B → $72.23B by 2031
+Target:               1.2M SA SMMEs
+Penetration:          <5% using AI agents today
+StudEx Claw from:     R2,500/month (= R83/day = R2.77/hour)
+
+Competitive:           Microsoft 365 Copilot from $12/user/month
+                      Google Gemini from $19/month
+                      StudEx Claw from R2,500/month = ~$135/month
+                      BUT: Includes n8n, WhatsApp, pixel dashboard,
+                      OpenClaw agents, Hermes agents, 24/7 support
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌙 MIDNIGHT BUILD SCHEDULED (10 PM SA / 20:00 UTC)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tonight's build:
+→ Bear Claw pixel logo generation
+→ Hero copy update with best lines from positioning docs
+→ Site rebuild + redeploy with updated branding
+→ MEMORY.md update with StudEx Super Agents architecture
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Next morning brief:  27 June 2026 | 06:00 AM UTC
+Next evening digest:  27 June 2026 | 06:00 PM UTC
+
+— OGRE Computer | Studex Group —
+   Your Second Employee is an Agent 🐻

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Agent Bake-Off</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#09090e;--bg2:#0f0f1a;--bg3:#14142a;--gold:#C9A84C;--gold2:#e8c96a;--cyan:#00d4ff;--pink:#ec4899;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;--text:#e8e8f0;--muted:#6b7280;--border:#1e1e3a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::selection{background:var(--gold);color:#000}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(9,9,14,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:16px;height:52px}
+.topbar .ogre-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:var(--gold);letter-spacing:1px;text-decoration:none;white-space:nowrap}
+.topbar nav{display:flex;gap:2px;flex:1;overflow-x:auto}
+.topbar nav a{font-size:12px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px;white-space:nowrap;transition:color .15s,background .15s}
+.topbar nav a:hover,.topbar nav a.active{color:var(--text);background:var(--bg3)}
+.topbar .clock-wrap{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.topbar .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.signal-band{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 24px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;overflow-x:auto}
+.signal-band .badge{background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.5px;white-space:nowrap}
+.signal-band .tag{color:var(--cyan);white-space:nowrap}
+.hero{padding:40px 24px 30px;text-align:center;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
+.hero .label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;text-transform:uppercase}
+.hero h1{font-family:'Newsreader',serif;font-size:clamp(26px,5vw,44px);font-weight:600;line-height:1.2;margin-bottom:12px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{font-size:14px;color:var(--muted);max-width:540px;margin:0 auto 16px;line-height:1.6}
+.hero .tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.hero .tag-chip{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace}
+.main{max-width:1200px;margin:0 auto;padding:24px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-header h2{font-family:'Newsreader',serif;font-size:20px;font-weight:600}
+.section-header .line{flex:1;height:1px;background:var(--border)}
+.task-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:28px}
+.task-card{cursor:pointer;border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--bg2);transition:border-color .2s,background .2s;text-align:center}
+.task-card:hover{border-color:var(--gold);background:var(--bg3)}
+.task-card.selected{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.task-card .icon{font-size:22px;margin-bottom:6px}
+.task-card .name{font-size:13px;font-weight:600;margin-bottom:3px}
+.task-card .desc{font-size:11px;color:var(--muted);line-height:1.4}
+.agent-cols{display:grid;grid-template-columns:220px repeat(5,1fr);gap:8px;margin-bottom:4px;align-items:end}
+.agent-col{text-align:center}
+.agent-name{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:5px 6px;border-radius:6px;display:inline-block;width:100%}
+.agent-name span{display:block;font-size:9px;font-weight:400;margin-top:1px;opacity:.7}
+.openclaw-name{background:rgba(108,99,255,.2);color:#a5a0ff}
+.manus-name{background:rgba(236,72,153,.2);color:var(--pink)}
+.autogpt-name{background:rgba(34,197,94,.2);color:var(--green)}
+.devin-name{background:rgba(249,115,22,.2);color:var(--amber)}
+.cursor-name{background:rgba(0,212,255,.15);color:var(--cyan)}
+.score-col{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-align:center;margin-top:4px}
+.weight-row{display:grid;grid-template-columns:220px repeat(5,1fr);gap:8px;align-items:center;margin-bottom:28px;padding:0 12px}
+.weight-label{font-size:12px;color:var(--muted)}
+.weight-inputs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.weight-cell{text-align:center}
+.weight-cell input{width:90%;padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;text-align:center;outline:none}
+.weight-cell input:focus{border-color:var(--gold)}
+.criteria-table{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.criterion-row{display:grid;grid-template-columns:220px repeat(5,1fr);gap:8px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px}
+.crit-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.crit-hint{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.score-cell{text-align:center}
+.score-cell input[type="range"]{width:88%;height:4px;-webkit-appearance:none;background:var(--bg3);border-radius:2px;outline:none;cursor:pointer;display:block;margin:0 auto}
+.score-cell input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--bg)}
+.score-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;margin-top:3px;text-align:center}
+.s1{color:#ef4444}.s2{color:#f97316}.s3{color:#f59e0b}.s4{color:#eab308}.s5{color:#84cc16}.s6{color:#22c55e}.s7{color:#10b981}.s8,.s9,.s10{color:var(--gold)}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.result-card{border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;background:var(--bg2);position:relative;overflow:hidden;transition:border-color .3s}
+.result-card.winner{border-color:var(--gold);background:rgba(201,168,76,.04)}
+.result-card .rank{position:absolute;top:10px;right:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.result-card .agent-icon{font-size:28px;margin-bottom:6px}
+.result-card .agent-label{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;margin-bottom:2px}
+.result-card .score-detail{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.result-card .total-score{font-family:'Newsreader',serif;font-size:34px;font-weight:600;margin:4px 0}
+.bar-bg{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:8px 0}
+.bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.result-card .raw{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.breakdown-wrap{overflow-x:auto;margin-bottom:24px}
+.breakdown-table{width:100%;border-collapse:collapse;font-size:12px;min-width:600px}
+.breakdown-table th{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.breakdown-table th:not(:first-child){text-align:center}
+.breakdown-table td{padding:8px 10px;border-bottom:1px solid rgba(30,30,58,.4);vertical-align:middle}
+.breakdown-table td:not(:first-child){text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px}
+.breakdown-table tr:hover td{background:rgba(201,168,76,.03)}
+.breakdown-table tr.total-row td{font-weight:700;background:rgba(201,168,76,.05)}
+.best-cell{color:var(--gold);font-weight:700}
+.recommendation{border:1px solid var(--border);border-radius:14px;padding:24px;background:var(--bg2);margin-bottom:24px}
+.recommendation h3{font-family:'Newsreader',serif;font-size:18px;margin-bottom:16px}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fit,mincap:190px,1fr);gap:12px}
+.rec-card{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--bg)}
+.rec-card .rec-tier{font-size:10px;font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+.rec-card .rec-agent{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;margin-bottom:3px}
+.rec-card .rec-for{font-size:11px;color:var(--muted);margin-bottom:6px}
+.rec-card .rec-note{font-size:12px;line-height:1.5}
+.rec-card .rec-pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-family:'JetBrains Mono',monospace;margin-top:6px}
+.actions-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s}
+.btn-gold{background:var(--gold);color:#000}.btn-gold:hover{background:var(--gold2)}
+.btn-outline{border:1px solid var(--border);background:transparent;color:var(--text)}.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.history-section{margin-top:28px}
+.history-list{display:flex;flex-direction:column;gap:8px}
+.history-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);font-size:13px;cursor:pointer;transition:border-color .2s}
+.history-item:hover{border-color:var(--gold)}
+.history-item .date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.history-item .task-name{flex:1;font-weight:500}
+.history-item .top-agent{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--gold)}
+.history-item .score-chip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+.history-item .del-btn{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px 8px;opacity:.4;transition:opacity .2s}
+.history-item .del-btn:hover{opacity:1;color:var(--red)}
+.history-empty{font-size:13px;color:var(--muted);padding:8px 0}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--gold);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;z-index:200;transform:translateY(80px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:700px){
+.agent-cols,.criterion-row,.weight-row{grid-template-columns:1fr}
+.agent-col,.crit-label{text-align:left!important;padding:2px 0}
+.criterion-row{padding:10px;min-width:560px}
+.weight-row{min-width:560px}
+.weight-inputs{grid-template-columns:repeat(5,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="ogre-logo" href="index.html">OGRE</a>
+  <nav>
+    <a href="portal.html">Portal</a>
+    <a href="business-pulse.html">Pipeline</a>
+    <a href="tender-tracker.html">Tenders</a>
+    <a href="proposal-generator.html">Proposals</a>
+    <a href="action-tracker.html">Actions</a>
+    <a href="roi-calculator.html">ROI Calc</a>
+    <a href="compare.html">Compare</a>
+    <a href="tools-stack.html">Tools</a>
+    <a href="signal-builder.html">Signals</a>
+    <a href="dark-factory-pack.html">Pack</a>
+    <a href="lead-response.html">Leads</a>
+    <a href="email-sequence.html">Email</a>
+    <a href="capability-statement.html">Capstone</a>
+  </nav>
+  <div class="clock-wrap">
+    <div class="live-dot"></div>
+    <span class="clock" id="clock">--:--:-- UTC</span>
+  </div>
+</div>
+
+<div class="signal-band">
+  <span class="badge">OGRE MIDNIGHT BUILD</span>
+  <span class="tag">Night 20</span>
+  <span>// Agent Bake-Off // Manus vs AutoGPT vs OpenClaw vs Devin vs Cursor //</span>
+</div>
+
+<div class="hero">
+  <div class="label">OGRE Agent Evaluation Framework</div>
+  <h1>Score every AI agent.<br><em>Pick the right one.</em></h1>
+  <p>Structured evaluation of 5 autonomous agents across 8 weighted criteria. Pick a task, score each agent, get a ranked recommendation — backed by tonight's July 11 research.</p>
+  <div class="tags">
+    <span class="tag-chip">Manus</span>
+    <span class="tag-chip">AutoGPT</span>
+    <span class="tag-chip">OpenClaw</span>
+    <span class="tag-chip">Devin</span>
+    <span class="tag-chip">Cursor</span>
+    <span class="tag-chip">8 Criteria</span>
+    <span class="tag-chip">Weighted Scoring</span>
+  </div>
+</div>
+
+<div class="main">
+
+<div class="section-header"><h2>1. Choose a Task Type</h2><div class="line"></div></div>
+<div class="task-selector" id="taskSelector">
+  <div class="task-card selected" data-task="research-brief" onclick="selectTask(this)">
+    <div class="icon">&#128240;</div><div class="name">Research Brief</div><div class="desc">Market intel, country analysis, tender summaries</div>
+  </div>
+  <div class="task-card" data-task="client-report" onclick="selectTask(this)">
+    <div class="icon">&#128203;</div><div class="name">Client Report</div><div class="desc">Proposal, capability statement, status update</div>
+  </div>
+  <div class="task-card" data-task="code-build" onclick="selectTask(this)">
+    <div class="icon">&#9889;</div><div class="name">Code and Build</div><div class="desc">Scaffold app, write features, fix bugs</div>
+  </div>
+  <div class="task-card" data-task="automation" onclick="selectTask(this)">
+    <div class="icon">&#128279;</div><div class="name">Automation</div><div class="desc">n8n workflows, integrations, data pipelines</div>
+  </div>
+  <div class="task-card" data-task="video-content" onclick="selectTask(this)">
+    <div class="icon">&#127916;</div><div class="name">Video Content</div><div class="desc">Product promo, social clip via Hailuo API</div>
+  </div>
+</div>
+
+<div class="section-header"><h2>2. Score Each Agent</h2><div class="line"></div></div>
+
+<div class="agent-cols" style="margin-bottom:4px">
+  <div></div>
+  <div class="agent-col"><div class="agent-name openclaw-name">OpenClaw <span>SELF-HOSTED</span></div><div class="score-col">weight</div></div>
+  <div class="agent-col"><div class="agent-name manus-name">Manus <span>GENERAL PURPOSE</span></div><div class="score-col">weight</div></div>
+  <div class="agent-col"><div class="agent-name autogpt-name">AutoGPT <span>LOW-CODE</span></div><div class="score-col">weight</div></div>
+  <div class="agent-col"><div class="agent-name devin-name">Devin <span>ENTERPRISE CODE</span></div><div class="score-col">weight</div></div>
+  <div class="agent-col"><div class="agent-name cursor-name">Cursor <span>AI-FIRST IDE</span></div><div class="score-col">weight</div></div>
+</div>
+
+<div class="weight-row">
+  <div class="weight-label">Overall weight</div>
+  <div class="weight-inputs">
+    <div class="weight-cell"><input type="number" id="w-openclaw" value="3" min="1" max="5" onchange="recalc()"></div>
+    <div class="weight-cell"><input type="number" id="w-manus" value="3" min="1" max="5" onchange="recalc()"></div>
+    <div class="weight-cell"><input type="number" id="w-autogpt" value="3" min="1" max="5" onchange="recalc()"></div>
+    <div class="weight-cell"><input type="number" id="w-devin" value="3" min="1" max="5" onchange="recalc()"></div>
+    <div class="weight-cell"><input type="number" id="w-cursor" value="3" min="1" max="5" onchange="recalc()"></div>
+  </div>
+</div>
+
+<div class="criteria-table" id="criteriaTable"></div>
+
+<div class="section-header"><h2>3. Run Bake-Off</h2><div class="line"></div></div>
+<div class="actions-bar">
+  <button class="btn btn-gold" onclick="runBakeOff()">&#9878; Run Bake-Off</button>
+  <button class="btn btn-outline" onclick="resetScores()">&#8617; Reset Scores</button>
+  <button class="btn btn-outline" onclick="applyTemplate()">&#128203; Apply Template</button>
+  <button class="btn btn-outline" onclick="copyResults()">&#128203; Copy Results</button>
+</div>
+
+<div class="section-header"><h2>4. Results</h2><div class="line"></div></div>
+<div class="results-grid" id="resultsGrid"></div>
+
+<div class="section-header"><h2>5. Score Breakdown</h2><div class="line"></div></div>
+<div class="breakdown-wrap">
+  <table class="breakdown-table">
+    <thead><tr><th>Criterion</th><th>Wt</th><th>OpenClaw</th><th>Manus</th><th>AutoGPT</th><th>Devin</th><th>Cursor</th></tr></thead>
+    <tbody id="breakdownBody"></tbody>
+  </table>
+</div>
+
+<div class="recommendation">
+  <h3>&#127942; OGRE Recommendation</h3>
+  <div class="rec-grid" id="recGrid"></div>
+</div>
+
+<div class="history-section">
+  <div class="section-header"><h2>6. Past Evaluations</h2><div class="line"></div></div>
+  <div class="history-list" id="historyList"></div>
+  <div class="history-empty" id="historyEmpty">No past evaluations yet.</div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function updateClock(){var d=new Date(),h=[d.getUTCHours(),d.getUTCMinutes(),d.getUTCSeconds()].map(function(v){return String(v).padStart(2,'0')}).join(':');document.getElementById('clock').textContent=h+' UTC';}
+setInterval(updateClock,1000);updateClock();
+
+var AGENTS=['openclaw','manus','autogpt','devin','cursor'];
+var AGENT_ICONS={'openclaw':'&#9881;','manus':'&#10070;','autogpt':'&#129302;','devin':'&#128187;','cursor':'&#8677;'};
+var AGENT_COLORS={'openclaw':'#a5a0ff','manus':'#ec4899','autogpt':'#22c55e','devin':'#f97316','cursor':'#00d4ff'};
+var AGENT_LABELS={'openclaw':'OpenClaw','manus':'Manus','autogpt':'AutoGPT','devin':'Devin','cursor':'Cursor'};
+var AGENT_TAGS={'openclaw':'SELF-HOSTED','manus':'GENERAL PURPOSE','autogpt':'LOW-CODE','devin':'ENTERPRISE CODE','cursor':'AI-FIRST IDE'};
+
+var CRITERIA=[
+  {id:'speed',     name:'Speed',            hint:'Task completion time'},
+  {id:'quality',   name:'Output Quality',   hint:'Accuracy and completeness'},
+  {id:'cost',      name:'Cost Efficiency',  hint:'Dollar per task or monthly'},
+  {id:'autonomy',  name:'Autonomy',         hint:'Needs supervision?'},
+  {id:'ease',      name:'Ease of Use',      hint:'Setup and daily friction'},
+  {id:'privacy',   name:'Data Sovereignty', hint:'Compliance, privacy, control'},
+  {id:'context',   name:'Context Window',  hint:'Token context length'},
+  {id:'reliability',name:'Reliability',     hint:'Consistent, predictable results'},
+];
+
+var TASK_TEMPLATES={
+  'research-brief': {speed:3,quality:4,cost:5,autonomy:4,ease:3,privacy:4,context:4,reliability:4},
+  'client-report':  {speed:3,quality:5,cost:4,autonomy:3,ease:4,privacy:4,context:4,reliability:4},
+  'code-build':    {speed:4,quality:4,cost:3,autonomy:3,ease:3,privacy:4,context:3,reliability:4},
+  'automation':    {speed:3,quality:3,cost:5,autonomy:5,ease:5,privacy:5,context:3,reliability:3},
+  'video-content': {speed:4,quality:3,cost:4,autonomy:3,ease:3,privacy:2,context:2,reliability:3},
+};
+
+var REC_AGENT_NOTES={
+  openclaw:'OGRE default for: government clients, compliance-heavy work, sovereign AI deployments. Default for all OGRE projects per July 11 research.',
+  manus:'OGRE use for: rapid research synthesis, general-purpose automation. Evaluate monthly — maturing fast per July 11 intel.',
+  autogpt:'OGRE use for: non-technical client-facing automations. Good entry point for SMB clients wanting AI agents on a budget.',
+  devin:'OGRE use for: enterprise clients with serious engineering budgets. Position for R2M+ deals only.',
+  cursor:'OGRE use for: code build tasks, Cursor Agent mode for rapid prototyping. Best developer experience in the market.'
+};
+
+var selectedTask='research-brief';
+var scores={};
+AGENTS.forEach(function(a){scores[a]={};CRITERIA.forEach(function(c){scores[a][c.id]=3;});});
+
+function init(){
+  renderCriteria();
+  renderHistory();
+  applyTemplate();
+}
+init();
+
+function selectTask(el){
+  document.querySelectorAll('.task-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  selectedTask=el.dataset.task;
+  applyTemplate();
+}
+
+function renderCriteria(){
+  var tbl=document.getElementById('criteriaTable');
+  tbl.innerHTML='';
+  CRITERIA.forEach(function(c){
+    var row=document.createElement('div');
+    row.className='criterion-row';
+    var cells=AGENTS.map(function(a){
+      return '<div class="score-cell">'+
+        '<input type="range" min="1" max="10" value="'+scores[a][c.id]+'" '+
+        'id="sl-'+a+'-'+c.id+'" '+
+        'oninput="onSlider(\''+a+'\',\''+c.id+'\',this.value)">'+
+        '<div class="score-val s'+scores[a][c.id]+'" id="sv-'+a+'-'+c.id+'">'+scores[a][c.id]+'</div>'+
+        '</div>';
+    }).join('');
+    row.innerHTML='<div><div class="crit-name">'+c.name+'</div><div class="crit-hint">'+c.hint+'</div></div>'+cells;
+    tbl.appendChild(row);
+  });
+}
+
+function onSlider(agent,critId,val){
+  val=parseInt(val);
+  scores[agent][critId]=val;
+  var el=document.getElementById('sv-'+agent+'-'+critId);
+  el.textContent=val;
+  el.className='score-val s'+val;
+}
+
+function applyTemplate(){
+  var t=TASK_TEMPLATES[selectedTask]||{};
+  AGENTS.forEach(function(a){
+    CRITERIA.forEach(function(c){
+      var adj=t[c.id]||3;
+      scores[a][c.id]=Math.min(10,Math.max(1,adj));
+    });
+  });
+  renderCriteria();
+}
+
+function resetScores(){
+  AGENTS.forEach(function(a){CRITERIA.forEach(function(c){scores[a][c.id]=3;});});
+  renderCriteria();
+  document.getElementById('resultsGrid').innerHTML='';
+  document.getElementById('breakdownBody').innerHTML='';
+  document.getElementById('recGrid').innerHTML='';
+}
+
+function recalc(){}
+
+function runBakeOff(){
+  var weights={};
+  AGENTS.forEach(function(a){weights[a]=Math.min(5,Math.max(1,parseInt(document.getElementById('w-'+a).value)||3));});
+
+  var totals={};
+  AGENTS.forEach(function(a){
+    var total=0,totalWt=0;
+    CRITERIA.forEach(function(c){
+      var w=weights[a];
+      total+=scores[a][c.id]*w;
+      totalWt+=10*w;
+    });
+    totals[a]=total;
+    totals[a+'_norm']=Math.round((total/totalWt)*1000)/10;
+    totals[a+'_raw']=total;
+    totals[a+'_wt']=weights[a];
+  });
+
+  var sorted=AGENTS.slice().sort(function(a,b){return totals[b+'_raw']-totals[a+'_raw'];});
+
+  renderResults(sorted,totals);
+  renderBreakdown(totals,weights);
+  renderRecommendation(sorted,totals);
+  saveEvaluation(selectedTask,sorted,totals);
+  showToast('Bake-off complete -- '+AGENT_LABELS[sorted[0]]+' wins for '+selectedTask.replace(/-/g,' ')+'!');
+}
+
+function renderResults(sorted,totals){
+  var grid=document.getElementById('resultsGrid');
+  grid.innerHTML='';
+  sorted.forEach(function(a,i){
+    var norm=totals[a+'_norm'];
+    var c=AGENT_COLORS[a];
+    var card=document.createElement('div');
+    card.className='result-card'+(i===0?' winner':'');
+    card.innerHTML=
+      '<div class="rank">#'+(i+1)+'</div>'+
+      '<div class="agent-icon">'+AGENT_ICONS[a]+'</div>'+
+      '<div class="agent-label" style="color:'+c+'">'+AGENT_LABELS[a]+'</div>'+
+      '<div class="score-detail">'+AGENT_TAGS[a]+'</div>'+
+      '<div class="total-score" style="color:'+(i===0?'var(--gold)':c)+'">'+norm+'<span style="font-size:16px">%</span></div>'+
+      '<div class="bar-bg"><div class="bar-fill" style="width:'+norm+'%;background:'+c+'"></div></div>'+
+      '<div class="raw">'+totals[a+'_raw']+' pts | wt x'+totals[a+'_wt']+'</div>';
+    grid.appendChild(card);
+  });
+}
+
+function renderBreakdown(totals,weights){
+  var tbody=document.getElementById('breakdownBody');
+  tbody.innerHTML='';
+  CRITERIA.forEach(function(c){
+    var maxVal=Math.max.apply(null,AGENTS.map(function(a){return scores[a][c.id];}));
+    var tr=document.createElement('tr');
+    var cells=AGENTS.map(function(a){
+      var val=scores[a][c.id];
+      var w=weights[a];
+      var wt=val*w;
+      var isBest=val===maxVal;
+      return '<td class="'+(isBest?'best-cell':'')+'">'+val+'x'+w+'='+wt+'</td>';
+    }).join('');
+    tr.innerHTML='<td><div class="crit-name" style="font-size:12px">'+c.name+'</div></td><td style="color:var(--muted);font-size:11px">x'+weights.openclaw+'</td>'+cells;
+    tbody.appendChild(tr);
+  });
+  var tr2=document.createElement('tr');
+  tr2.className='total-row';
+  tr2.innerHTML='<td><strong>Weighted Total</strong></td><td></td>'+
+    AGENTS.map(function(a){return '<td style="color:'+AGENT_COLORS[a]+'">'+totals[a+'_raw']+'</td>';}).join('');
+  tbody.appendChild(tr2);
+  var tr3=document.createElement('tr');
+  tr3.innerHTML='<td style="font-size:11px;color:var(--muted)">Normalized</td><td></td>'+
+    AGENTS.map(function(a){return '<td style="color:var(--gold)">'+totals[a+'_norm']+'%</td>';}).join('');
+  tbody.appendChild(tr3);
+}
+
+function renderRecommendation(sorted,totals){
+  var recGrid=document.getElementById('recGrid');
+  recGrid.innerHTML='';
+  var tiers=[
+    {agent:sorted[0],tier:'BEST FOR '+selectedTask.replace(/-/g,' ').toUpperCase(),pill:'BEST PICK',pillBg:'var(--gold)',pillColor:'#000',note:REC_AGENT_NOTES[sorted[0]]},
+    {agent:sorted[1],tier:'RUNNER UP',pill:'RUNNER UP',pillBg:'var(--bg3)',pillColor:'var(--muted)',note:REC_AGENT_NOTES[sorted[1]]},
+    {agent:sorted[2],tier:'SPECIALIST USE',pill:'SPECIALIST',pillBg:'rgba(0,212,255,.1)',pillColor:'var(--cyan)',note:REC_AGENT_NOTES[sorted[2]]},
+  ];
+  tiers.forEach(function(r){
+    var a=r.agent;
+    var c=AGENT_COLORS[a];
+    var card=document.createElement('div');
+    card.className='rec-card';
+    card.innerHTML=
+      '<div class="rec-tier" style="color:'+c+'">'+r.tier+'</div>'+
+      '<div class="rec-agent" style="color:'+c+'">'+AGENT_ICONS[a]+' '+AGENT_LABELS[a]+'</div>'+
+      '<div class="rec-for">Norm: '+totals[a+'_norm']+'% | '+totals[a+'_raw']+' raw pts</div>'+
+      '<div class="rec-note">'+r.note+'</div>'+
+      '<div class="rec-pill" style="background:'+r.pillBg+';color:'+r.pillColor+'">'+r.pill+'</div>';
+    recGrid.appendChild(card);
+  });
+}
+
+function saveEvaluation(task,sorted,totals){
+  var history=JSON.parse(localStorage.getItem('ogre_bakeoff_history')||'[]');
+  history.unshift({
+    date:new Date().toISOString(),
+    task:task,
+    winner:sorted[0],
+    scores:JSON.parse(JSON.stringify(scores)),
+    totals:totals
+  });
+  if(history.length>20)history=history.slice(0,20);
+  localStorage.setItem('ogre_bakeoff_history',JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory(){
+  var
+function renderHistory(){
+  var list=document.getElementById('historyList');
+  var empty=document.getElementById('historyEmpty');
+  var history=JSON.parse(localStorage.getItem('ogre_bakeoff_history')||'[]');
+  if(history.length===0){empty.style.display='block';list.innerHTML='';return;}
+  empty.style.display='none';
+  list.innerHTML='';
+  history.slice(0,10).forEach(function(h,i){
+    var item=document.createElement('div');
+    item.className='history-item';
+    var d=new Date(h.date);
+    var dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    item.innerHTML=
+      '<div class="date">'+dateStr+'</div>'+
+      '<div class="task-name">'+h.task.replace(/-/g,' ')+'</div>'+
+      '<div class="top-agent">'+AGENT_LABELS[h.winner]+'</div>'+
+      '<div class="score-chip">'+h.totals[h.winner+'_norm']+'%</div>'+
+      '<button class="del-btn" onclick="event.stopPropagation();deleteHistory('+i+')" title="Delete">&#215;</button>';
+    list.appendChild(item);
+  });
+}
+
+function deleteHistory(i){
+  var history=JSON.parse(localStorage.getItem('ogre_bakeoff_history')||'[]');
+  history.splice(i,1);
+  localStorage.setItem('ogre_bakeoff_history',JSON.stringify(history));
+  renderHistory();
+  showToast('Evaluation deleted');
+}
+
+function copyResults(){
+  var weights={};
+  AGENTS.forEach(function(a){weights[a]=Math.min(5,Math.max(1,parseInt(document.getElementById('w-'+a).value)||3));});
+  var totals={};
+  AGENTS.forEach(function(a){
+    var total=0,totalWt=0;
+    CRITERIA.forEach(function(c){var w=weights[a];total+=scores[a][c.id]*w;totalWt+=10*w;});
+    totals[a]=total;
+    totals[a+'_norm']=Math.round((total/totalWt)*1000)/10;
+  });
+  var sorted=AGENTS.slice().sort(function(a,b){return totals[b]-totals[a];});
+  var lines=['OGRE Agent Bake-Off Results -- '+selectedTask.replace(/-/g,' '),'=== Results ==='];
+  sorted.forEach(function(a,i){lines.push('#'+(i+1)+' '+AGENT_LABELS[a]+': '+totals[a+'_norm']+'% ('+totals[a]+' raw pts)');});
+  lines.push('','=== Criterion Breakdown ===');
+  CRITERIA.forEach(function(c){
+    var vals=AGENTS.map(function(a){return AGENT_LABELS[a]+':'+scores[a][c.id];}).join(' | ');
+    lines.push(c.name+': '+vals);
+  });
+  lines.push('','=== OGRE Recommendations ===');
+  sorted.slice(0,3).forEach(function(a,i){lines.push('#'+(i+1)+' '+AGENT_LABELS[a]+': '+REC_AGENT_NOTES[a]);});
+  var text=lines.join('\n');
+  var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+  document.execCommand('copy');document.body.removeChild(ta);
+  showToast('Results copied to clipboard');
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}

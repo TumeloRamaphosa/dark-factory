@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA Agent OS v4 — Studex Group</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --dark: #0A0A0A;
+    --slate: #111111;
+    --card: #1A1A1A;
+    --border: #2A2A2A;
+    --text: #F0EDE6;
+    --muted: #888;
+    --accent: #3D6B8A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .topbar-logo {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .topbar-badge {
+    background: var(--gold); color: var(--dark);
+    font-size: 11px; font-weight: 700; padding: 4px 12px;
+    border-radius: 20px; letter-spacing: 0.05em;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 40px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 600; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800; line-height: 1.05;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 18px; color: var(--muted); max-width: 600px;
+    margin-bottom: 36px; line-height: 1.7;
+  }
+  .hero-deal {
+    display: inline-flex; align-items: center; gap: 16px;
+    background: var(--card); border: 1px solid var(--gold);
+    border-radius: 12px; padding: 16px 24px;
+  }
+  .hero-deal .amount { font-size: 28px; font-weight: 800; color: var(--gold); }
+  .hero-deal .label { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .hero-deal .plus { font-size: 22px; color: var(--gold); font-weight: 700; }
+  .hero-deal .pm { font-size: 22px; font-weight: 700; color: var(--gold); }
+
+  /* SECTIONS */
+  .section {
+    max-width: 1100px; margin: 0 auto;
+    padding: 60px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-eyebrow {
+    font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 600; text-transform: uppercase; margin-bottom: 10px;
+  }
+  h2 {
+    font-size: 28px; font-weight: 700; margin-bottom: 8px;
+    color: var(--text);
+  }
+  h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .section-desc { color: var(--muted); font-size: 14px; margin-bottom: 32px; max-width: 600px; }
+
+  /* GRID */
+  .grid-3 {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .grid-2 {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--gold); }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .card-tag {
+    display: inline-block; margin-top: 10px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    background: rgba(201,168,76,0.15); color: var(--gold);
+    padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
+  }
+
+  /* PRICING */
+  .pricing-banner {
+    background: linear-gradient(135deg, #1A1200 0%, #0F1A0A 100%);
+    border: 1px solid var(--gold); border-radius: 16px;
+    padding: 40px; margin-bottom: 32px;
+  }
+  .pricing-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+    margin-bottom: 24px;
+  }
+  .pricing-box {
+    background: rgba(0,0,0,0.3); border-radius: 12px;
+    padding: 28px; border: 1px solid var(--border);
+  }
+  .pricing-box.build { border-color: var(--gold); }
+  .pricing-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .pricing-amount { font-size: 36px; font-weight: 800; color: var(--text); }
+  .pricing-amount span { font-size: 16px; font-weight: 400; color: var(--muted); }
+  .pricing-note { font-size: 12px; color: var(--gold); margin-top: 8px; }
+  .pricing-detail {
+    background: var(--card); border-radius: 12px; padding: 24px;
+    border: 1px solid var(--border);
+  }
+  .pricing-detail table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .pricing-detail th { text-align: left; color: var(--gold); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .pricing-detail td { padding: 8px 0; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .pricing-detail td:last-child { text-align: right; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .payment-grid {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center;
+    margin-top: 24px;
+  }
+  .payment-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; text-align: center;
+  }
+  .payment-box .amt { font-size: 28px; font-weight: 800; color: var(--gold); }
+  .payment-box .when { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .payment-arrow { font-size: 24px; color: var(--gold); text-align: center; }
+  .payment-or { font-size: 11px; color: var(--muted); text-align: center; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+    width: 1px; background: linear-gradient(to bottom, var(--gold), var(--border));
+  }
+  .timeline-item { position: relative; margin-bottom: 28px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -28px; top: 6px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold); border: 2px solid var(--dark);
+  }
+  .timeline-week { font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .timeline-item h3 { font-size: 15px; margin-bottom: 6px; }
+  .timeline-item p { font-size: 13px; color: var(--muted); }
+
+  /* CTA */
+  .cta-section {
+    background: linear-gradient(135deg, #0A0A0A 0%, #1A1200 100%);
+    border-top: 1px solid var(--border);
+    padding: 80px 40px; text-align: center;
+  }
+  .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+  .cta-section p { color: var(--muted); margin-bottom: 32px; font-size: 15px; }
+  .cta-btn {
+    display: inline-block; background: var(--gold); color: var(--dark);
+    font-weight: 700; font-size: 15px; padding: 16px 40px;
+    border-radius: 8px; text-decoration: none; margin: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+  .cta-btn-outline {
+    display: inline-block; background: transparent; color: var(--text);
+    font-weight: 600; font-size: 14px; padding: 15px 38px;
+    border-radius: 8px; border: 1px solid var(--border);
+    text-decoration: none; margin: 8px;
+  }
+  .footer { text-align: center; padding: 24px 40px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+
+  /* MONTH FLOW */
+  .flow-block {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 16px;
+  }
+  .flow-label { font-size: 10px; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .flow-items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .flow-item {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 12px; font-size: 12px;
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    .pricing-row, .payment-grid { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .hero, .section { padding: 40px 20px; }
+    .topbar { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">LAISA × Studex Group</div>
+  <div class="topbar-badge">Proposal v4.0 — June 2026</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">LAISA Agent OS — Version 4.0</div>
+  <h1>Your AI Operating<br>System for R350K</h1>
+  <p class="hero-sub">We build it. It runs forever. R55,000/month covers everything — the VM, every agent, your website, all your social media, and a licence that never expires. Half now. Half when it's done.</p>
+  <div class="hero-deal">
+    <div>
+      <div class="label">Build — once-off</div>
+      <div class="amount">R350,000</div>
+    </div>
+    <div class="plus">+</div>
+    <div>
+      <div class="label">Run — per month</div>
+      <div class="pm">R55,000<span>/mo</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET — PHASE 1 -->
+<section class="section">
+  <div class="section-eyebrow">Phase 1 — Build</div>
+  <h2>Everything we build for R350,000</h2>
+  <p class="section-desc">One project fee. Everything delivered. No hidden costs.</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">🖥️</div>
+      <h3>Your Dedicated VM</h3>
+      <p>A private cloud computer in the sky — yours alone, running 24/7. No sharing. No noise neighbours. Full root access.</p>
+      <span class="card-tag">Infrastructure</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>6 AI Agent Fleet</h3>
+      <p>Content agent. Email agent. Social agent. CRM agent. Analytics agent. Audit agent. Each one specialist, all one team.</p>
+      <span class="card-tag">Agents</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h3>Website Built & Hosted</h3>
+      <p>Your clinic website, built on the VM, managed forever. Updates included. Security patches applied automatically.</p>
+      <span class="card-tag">Website</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <h3>Social Media AI</h3>
+      <p>Content drafted, designed, scheduled, and posted to all platforms. Every month. Without you touching it.</p>
+      <span class="card-tag">Social</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>Client Dashboard</h3>
+      <p>Real-time metrics, weekly reports, and full controls in your browser. Know what's happening at any moment.</p>
+      <span class="card-tag">Reporting</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">💬</div>
+      <h3>WhatsApp Integration</h3>
+      <p>Clients message your clinic. Agents respond, book appointments, and send reminders — automatically.</p>
+      <span class="card-tag">WhatsApp</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📧</div>
+      <h3>Email Automation</h3>
+      <p>Auto-triage, priority flagging, and response drafting. Your inbox is managed before you open it.</p>
+      <span class="card-tag">Email</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h3>NotebookLM Integration</h3>
+      <p>Your clinic documents loaded into AI. Ask anything. Get source-grounded answers with citations. No hallucinations.</p>
+      <span class="card-tag">Knowledge</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h3>POPIA Compliance Layer</h3>
+      <p>South African data law built in from day one. Patient data handled correctly. Compliance never an afterthought.</p>
+      <span class="card-tag">Compliance</span>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT A MONTH LOOKS LIKE -->
+<section class="section" style="background: rgba(255,255,255,0.01);">
+  <div class="section-eyebrow">Phase 2 — Run</div>
+  <h2>What R55,000/month looks like</h2>
+  <p class="section-desc">Every morning. Every week. Every month. Automatic.</p>
+  <div class="grid-2">
+    <div class="flow-block">
+      <div class="flow-label">Every Morning — Automatic</div>
+      <div class="flow-items">
+        <div class="flow-item">✓ Patient WhatsApp reminders sent</div>
+        <div class="flow-item">✓ Yesterday's appointments reviewed</div>
+        <div class="flow-item">✓ Social media performance checked</div>
+        <div class="flow-item">✓ Dashboard updated with new numbers</div>
+      </div>
+    </div>
+    <div class="flow-block">
+      <div class="flow-label">Every Week — Automatic</div>
+      <div class="flow-items">
+        <div class="flow-item">✓ 5 new social posts drafted & scheduled</div>
+        <div class="flow-item">✓ Google Ads reviewed, bids adjusted</div>
+        <div class="flow-item">✓ Email inbox prioritised & triaged</div>
+        <div class="flow-item">✓ Monday report delivered to your phone</div>
+      </div>
+    </div>
+    <div class="flow-block">
+      <div class="flow-label">Every Month — Automatic</div>
+      <div class="flow-items">
+        <div class="flow-item">✓ Full performance review in dashboard</div>
+        <div class="flow-item">✓ New feature deployed to your VM</div>
+        <div class="flow-item">✓ Website updated with fresh content</div>
+        <div class="flow-item">✓ One invoice: R55,000</div>
+      </div>
+    </div>
+    <div class="flow-block">
+      <div class="flow-label">When You Ask — 24 Hours</div>
+      <div class="flow-items">
+        <div class="flow-item">→ Agent writes the spec</div>
+        <div class="flow-item">→ You approve before building</div>
+        <div class="flow-item">→ Built using YC sprint process</div>
+        <div class="flow-item">→ Done. Reported. Documented.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section">
+  <div class="section-eyebrow">Timeline</div>
+  <h2>4 weeks to full operations</h2>
+  <p class="section-desc">From signed contract to working agents. Every week mapped.</p>
+  <div class="timeline" style="max-width: 600px;">
+    <div class="timeline-item">
+      <div class="timeline-week">WEEK 1</div>
+      <h3>VM Deployed. Agents Provisioned.</h3>
+      <p>Cloud VM set up in your name. All 6 agents spun up and connected. Website audit complete. Social accounts linked.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-week">WEEK 2</div>
+      <h3>Agents Working. Website Rebuilt.</h3>
+      <p>Agents begin daily tasks. Website rebuild starts. WhatsApp integration connected. Email automation live.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-week">WEEK 3</div>
+      <h3>WhatsApp Active. Dashboard Live.</h3>
+      <p>Clients can message your clinic via WhatsApp. Dashboard deployed with live metrics. Social posting begins.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-week">WEEK 4</div>
+      <h3>Training. Handover. First Report.</h3>
+      <p>Full team training complete. Documentation handed over. First Monday report delivered. You're live.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT -->
+<section class="section">
+  <div class="section-eyebrow">Investment</div>
+  <h2>The numbers</h2>
+  <p class="section-desc">Transparent. All-inclusive. No surprises.</p>
+
+  <div class="pricing-banner">
+    <div class="pricing-row">
+      <div class="pricing-box build">
+        <div class="pricing-label">Development — once-off</div>
+        <div class="pricing-amount">R350,000 <span>ZAR</span></div>
+        <div class="pricing-note">50% on signing · 50% on completion</div>
+      </div>
+      <div class="pricing-box">
+        <div class="pricing-label">Operations — per month</div>
+        <div class="pricing-amount">R55,000 <span>ZAR/mo</span></div>
+        <div class="pricing-note">Cancel any month · 3-month minimum</div>
+      </div>
+    </div>
+
+    <div class="payment-grid">
+      <div class="payment-box">
+        <div class="amt">R175,000</div>
+        <div class="when">50% on signing</div>
+      </div>
+      <div>
+        <div class="payment-arrow">→</div>
+        <div class="payment-or">balance on<br>completion</div>
+      </div>
+      <div class="payment-box">
+        <div class="amt">R175,000</div>
+        <div class="when">50% on completion</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pricing-detail">
+    <h3 style="margin-bottom:16px;">What's inside R55,000/month</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Dedicated managed VM (cloud hosting)</td><td>R12,000</td></tr>
+        <tr><td>6 AI agents — all licences included</td><td>R15,000</td></tr>
+        <tr><td>Website hosting + maintenance</td><td>R5,000</td></tr>
+        <tr><td>Social media: 20 posts/month, all platforms</td><td>R8,000</td></tr>
+        <tr><td>Email automation + triage</td><td>R3,000</td></tr>
+        <tr><td>Weekly dashboards + reports</td><td>R2,000</td></tr>
+        <tr><td>24/7 monitoring + bug fixes</td><td>R5,000</td></tr>
+        <tr><td>One new feature built each month</td><td>R5,000</td></tr>
+        <tr><td><strong>Total real cost</strong></td><td><strong>R55,000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WHY WORTH IT -->
+<section class="section">
+  <div class="section-eyebrow">ROI</div>
+  <h2>Why this pays for itself</h2>
+  <p class="section-desc">Compare to the alternative.</p>
+  <div class="grid-2">
+    <div class="card" style="border-color: #C04040;">
+      <h3 style="color: #ff8080;">❌ Digital Agency</h3>
+      <p style="margin-bottom:12px;">What you get when you hire a traditional agency:</p>
+      <ul style="font-size:13px; color:var(--muted); list-style:none; line-height:2;">
+        <li>👤 One overloaded account manager</li>
+        <li>⏱️ 3–5 day response times</li>
+        <li>📧 Email chains instead of action</li>
+        <li>📊 Black-box reporting</li>
+        <li>💰 R40,000–R80,000/month</li>
+        <li>❌ No memory between weeks</li>
+        <li>❌ No specialists — one generalist</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color: var(--gold);">
+      <h3 style="color: var(--gold);">✅ LAISA Agent OS</h3>
+      <p style="margin-bottom:12px;">What you get with LAISA Agent OS:</p>
+      <ul style="font-size:13px; color:var(--muted); list-style:none; line-height:2;">
+        <li>🤖 6 specialist agents (never sleeps)</li>
+        <li>⚡ Same-day response, 24/7</li>
+        <li>💬 WhatsApp, email, dashboard</li>
+        <li>📊 Real-time transparent reporting</li>
+        <li>💰 R55,000/month all-inclusive</li>
+        <li>✅ Perfect institutional memory</li>
+        <li>✅ Remembers everything, every day</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px; border-color: var(--gold); background: rgba(201,168,76,0.08);">
+    <h3 style="color: var(--gold);">💡 The math</h3>
+    <p style="font-size:14px; margin-top:8px;">If LAISA saves your clinic <strong>20 hours/month</strong> of admin work, at R1,000–R2,000/hour market rate — that's <strong>R20,000–R40,000/month</strong> in reclaimed time. The R55,000/month subscription pays for itself before the month ends. The R350,000 build pays for itself in under 12 months.</p>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="section">
+  <div class="section-eyebrow">What we've built</div>
+  <h2>OGRE Computer track record</h2>
+  <p class="section-desc">Real products. Live today. Built by the same team.</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">🖥️</div>
+      <h3>OGRE Command Centre</h3>
+      <p>9-country AI intelligence dashboard. 4 cron jobs. Fully autonomous — running every night while you sleep.</p>
+      <span class="card-tag">Live</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏭</div>
+      <h3>Dark Factory v3</h3>
+      <p>Build Me A Dashboard. R0 upfront + R29/month. Next.js + Prisma + Tailwind. Built for SA SMMEs.</p>
+      <span class="card-tag">Live</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <h3>SafeSight LAISA Demo</h3>
+      <p>12-page agent OS demo for SafeSight Aesthetic Clinic. Full agent fleet, WhatsApp integration, CRM.</p>
+      <span class="card-tag">Live</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to run your clinic on AI?</h2>
+  <p>Studio 4, Hyde Park · info@studexmeat.com<br>Demo: <strong>84thy6fah7cg.space.minimax.io</strong></p>
+  <div>
+    <a href="mailto:info@studexmeat.com?subject=LAISA%20Agent%20OS%20v4%20—%20Let's%20Start" class="cta-btn">Start the Conversation →</a>
+    <a href="https://84thy6fah7cg.space.minimax.io" class="cta-btn-outline" target="_blank">See Live Demo</a>
+  </div>
+  <p style="margin-top:24px; font-size:12px; color:#555;">Valid for 30 days · Prices in ZAR inclusive of VAT · 3-month minimum commitment on subscriptions</p>
+</section>
+
+<div class="footer">
+  LAISA Agent OS v4.0 · Studex Group × LAISA Aesthetic Clinic · June 2026<br>
+  Built by OGRE Computer — Studex Group AI Infrastructure Division · ogre-computer.space.minimax.io
+</div>
+
+</body>
+</html>

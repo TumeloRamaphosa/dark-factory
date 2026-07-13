@@ -1,0 +1,94 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: Thursday, 2 July 2026 | 6:00 PM UTC | 8:00 PM SAST
+═══════════════════════════════════════
+
+Good evening, Tumelo. Here's what the Dark Factory shipped today.
+
+───────────────────────────────────────
+TODAY'S DELIVERABLES
+───────────────────────────────────────
+
+[1] PRD PROPOSAL — SPHERE GRAPH 🆕
+URL: https://u45ojqmzz33h.space.minimax.io
+
+Interactive 3D sphere knowledge graph. 5 product nodes orbit a glowing Dark Factory core.
+Click any node → full product detail with pricing + CTA.
+
+Built for: client presentations, WhatsApp links, cold outreach
+
+[2] RED TEAM AGENT PRODUCT PAGE 🆕
+URL: https://w1tu0qxf216v.space.minimax.io
+
+16 specialist cybersecurity AI agents. Autonomous pen testing.
+R45K/month. Live revenue.
+
+Built on: Decepticon (Purple AI Lab) framework
+
+[3] PRD INTAKE SYSTEM v2 🆕
+URL: https://z46kjpzjipb4.space.minimax.io/prd-form.html
+
+4-step wizard: Contact → Project → Assets → Review
+Voice recording, document upload, link scanning
+VirusTotal + Notion CRM integration ready (needs API keys)
+
+[4] OBSIDIAN VAULT — RESTRUCTURED 🆕
+Path: /workspace/OBSIDIAN-SECOND-BRAIN/
+Format: llm_wiki 3-layer (Raw Sources → Wiki → Schema)
+Structured for cross-session AI memory persistence
+
+───────────────────────────────────────
+PIPELINE STATUS — EOD
+───────────────────────────────────────
+
+🔴 LIVE: Red Team Agent — R45K/month
+🟡 PROPOSAL OUT: LAISA Phase A — R350K + R55K/mo (critical — follow up tomorrow)
+🟡 AWAITING: Pharmasyntez — R2.99M Y1
+🟡 AWAITING: SafeSight — R1,499/mo
+
+───────────────────────────────────────
+TOP 3 FOR TOMORROW MORNING
+───────────────────────────────────────
+
+[1] CALL DR. MUSA — LAISA Phase A
+Proposal has been out since Monday. Time to close.
+WhatsApp or voice note. Use the sphere graph as your visual.
+
+[2] GET GMAIL APP PASSWORD
+info@studexmeat.com — I need the app password to send briefings.
+Once you give it, PRD intake notifications start flowing to your inbox.
+
+[3] GITHUB PAT + PUSH DARK-FACTORY
+Push ciphertrace-unified to GitHub → I connect Vercel CI/CD
+Auto-deploy goes live. Every push = automatic deployment.
+
+───────────────────────────────────────
+MARKET INTEL — EOD SNAPSHOT
+───────────────────────────────────────
+
+🌍 Africa AI: $29.3B (2025) → $44.1B (2032)
+   Pharmasyntez partnership positioning: Studex as the VM infrastructure layer
+
+🇿🇦 SA Market: OGRE GPU cluster live, SA-hosted, POPIA-compliant
+   DeepSeek R2 pricing changes the game for SA clinic economics
+
+🤖 Agentic: 60+ agents across 8 VMs — Dark Factory operating 24/7
+   QwenPaw installed for zero-cost local coding agents
+
+───────────────────────────────────────
+NUMBERS FOR TODAY
+───────────────────────────────────────
+
+Live MRR:         R45,000 (Red Team Agent 🔴)
+Proposals Out:    R353,499 (LAISA Phase A)
+Pipeline:          R2,991,000 (Pharmasyntez)
+Closes Today:     R0
+Closes This Week: R0 — urgent
+
+───────────────────────────────────────
+
+Revenue log: /workspace/memory/revenue-log.md
+Vault: /workspace/OBSIDIAN-SECOND-BRAIN/
+
+This digest was generated automatically by Cipher Tr@ce
+CEO — Dark Factory | Studex Group
+───────────────────────────────────────

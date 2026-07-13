@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudEx Global Markets — ICVMS Platform Demo</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#09090e;--bg2:#0e0e18;--bg3:#111118;--border:#1e1e2e;--accent:#6c63ff;--cyan:#00d4ff;--pink:#ec4899;--amber:#f59e0b;--green:#10b981;--text:#e8e8f0;--muted:#6a6a82;--muted2:#4a4a62}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+    canvas{position:fixed;top:0;left:0;z-index:0;opacity:0.35}
+    .z{position:relative;z-index:1}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,9,14,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:2rem}
+    nav .logo{font-size:.68rem;font-weight:800;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;padding:.9rem 0;flex-shrink:0}
+    nav .logo span{color:var(--cyan)}
+    nav .links{display:flex;gap:1.5rem;flex:1}
+    nav .links a{font-size:.72rem;color:var(--muted);text-decoration:none;letter-spacing:.04em}
+    nav .links a:hover{color:var(--text)}
+    nav .cta-nav{background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:7px 18px;border-radius:8px;text-decoration:none;flex-shrink:0}
+    .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 4rem}
+    .hero .eyebrow{font-size:.68rem;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+    .hero .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    h1{font-size:clamp(2rem,5vw,4rem);font-weight:900;line-height:1.05;margin-bottom:1.5rem;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;max-width:900px}
+    .hero p{font-size:1rem;color:var(--muted);max-width:560px;margin-bottom:2.5rem;line-height:1.8}
+    .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+    .btn-primary{display:inline-block;background:var(--accent);color:#fff;padding:13px 32px;border-radius:10px;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .2s}
+    .btn-primary:hover{background:#5a52d4;transform:translateY(-2px);box-shadow:0 8px 30px rgba(108,99,255,.35)}
+    .btn-outline{display:inline-block;background:transparent;border:1px solid var(--border);color:var(--muted);padding:12px 24px;border-radius:10px;font-weight:600;font-size:.85rem;text-decoration:none}
+    .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .stat{background:var(--bg);padding:2rem 1.5rem;text-align:center}
+    .stat .num{font-size:2rem;font-weight:900;color:var(--accent);display:block;font-variant-numeric:tabular-nums}
+    .stat .label{font-size:.68rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em;margin-top:.4rem}
+    .section{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+    .section-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);font-weight:700;margin-bottom:.8rem}
+    .section h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;color:var(--text);margin-bottom:1rem;line-height:1.2}
+    .section .section-desc{color:var(--muted);font-size:.9rem;max-width:600px;margin-bottom:3rem;line-height:1.8}
+    .icvms-hub{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2.5rem;margin:2rem 0;position:relative;overflow:hidden}
+    .icvms-hub::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,rgba(108,99,255,.04) 0%,transparent 60%);pointer-events:none}
+    .hub-center{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:2.5rem}
+    .hub-ring{width:140px;height:140px;border-radius:50%;border:1px solid rgba(108,99,255,.3);display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(108,99,255,.1) 0%,transparent 70%);position:relative;margin-bottom:1rem}
+    .hub-ring::before{content:'';position:absolute;width:110px;height:110px;border-radius:50%;border:1px dashed rgba(108,99,255,.15);animation:spin 25s linear infinite}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .hub-ring .hub-name{font-size:.55rem;font-weight:800;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+    .hub-center h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.2rem}
+    .hub-center p{font-size:.78rem;color:var(--muted)}
+    .hub-center p.sub{font-size:.68rem;color:var(--muted2);margin-top:.3rem}
+    .vm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+    .vm-node{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;transition:border-color .3s,transform .3s}
+    .vm-node:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .vm-node.open{border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.04)}
+    .vm-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+    .vm-num{width:22px;height:22px;border-radius:6px;background:rgba(108,99,255,.15);color:var(--accent);font-size:.62rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .vm-node.open .vm-num{background:rgba(0,212,255,.15);color:var(--cyan)}
+    .vm-name{font-size:.78rem;font-weight:700;color:var(--text)}
+    .vm-sector{font-size:.62rem;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;font-weight:700}
+    .vm-node.open .vm-sector{color:var(--cyan)}
+    .vm-desc{font-size:.72rem;color:var(--muted);line-height:1.55}
+    .vm-specs{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.6rem}
+    .vm-spec{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:.58rem;color:var(--muted2)}
+    .apply-banner{background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(0,212,255,.08));border:1px solid rgba(108,99,255,.25);border-radius:16px;padding:2rem;text-align:center;margin:2rem 0}
+    .apply-banner h3{font-size:1.2rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
+    .apply-banner p{color:var(--muted);font-size:.85rem;margin-bottom:1.2rem}
+    .apply-banner .badge{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;padding:5px 16px;border-radius:999px;margin-bottom:.8rem;letter-spacing:.05em}
+    .agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:2rem 0}
+    .agent-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+    .agent-icon{font-size:1.6rem;margin-bottom:.6rem}
+    .agent-card h4{font-size:.88rem;font-weight:700;color:var(--text)}
+    .agent-card .role{font-size:.62rem;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem;font-weight:700}
+    .agent-card p{font-size:.75rem;color:var(--muted);line-height:1.6}
+    .agent-card .feats{margin-top:.7rem;display:flex;flex-direction:column;gap:.3rem}
+    .agent-card .feats span{font-size:.7rem;color:var(--muted2);display:flex;gap:.4rem;align-items:flex-start}
+    .agent-card .feats span::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0}
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin:2rem 0}
+    .price-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.8rem 1.5rem;text-align:center;position:relative}
+    .price-card.featured{border-color:var(--accent);background:linear-gradient(180deg,rgba(108,99,255,.07) 0%,var(--bg2) 50%)}
+    .price-card.featured::before{content:'ICVMS PARTNER';position:absolute;top:0;left:0;right:0;background:var(--accent);font-size:.58rem;font-weight:800;letter-spacing:.1em;color:#fff;padding:4px}
+    .price-card.featured{padding-top:2.5rem}
+    .price-card h3{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:.3rem}
+    .price-card .price{font-size:2rem;font-weight:900;color:var(--accent);display:block;margin:.6rem 0 .1rem}
+    .price-card .price span{font-size:.75rem;color:var(--muted);font-weight:400}
+    .price-card .price-alt{font-size:.9rem;font-weight:700;color:var(--cyan);display:block;margin:.3rem 0 .8rem}
+    .price-card ul{list-style:none;text-align:left;margin:.5rem 0}
+    .price-card ul li{font-size:.74rem;color:var(--muted);padding:.28rem 0;border-bottom:1px solid var(--border);display:flex;gap:.4rem;align-items:flex-start}
+    .price-card ul li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+    .price-card ul li:last-child{border-bottom:none}
+    .bank-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:2rem}
+    .bank-box .bank-label{font-size:.68rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.8rem;font-weight:700}
+    .bank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem}
+    .bank-item .bk{font-size:.62rem;color:var(--muted2)}    .bank-item .bv{font-size:.8rem;color:var(--text);font-weight:600}
+    .video-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .video-tab{padding:7px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .2s;font-weight:600}
+    .video-tab.active{background:rgba(108,99,255,.15);border-color:var(--accent);color:var(--accent)}
+    .video-panel{display:none}
+    .video-panel.active{display:block}
+    .video-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding:.9rem 1.2rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-size:.75rem;color:var(--muted)}
+    .video-meta strong{color:var(--text)}
+    .script-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.5rem}
+    .script-section{padding:1.1rem 1.4rem;border-bottom:1px solid var(--border)}
+    .script-section:last-child{border-bottom:none}
+    .script-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:700;margin-bottom:.5rem}
+    .script-text{font-size:.84rem;color:var(--text);line-height:1.9}
+    .scene{display:block;padding:.7rem 1rem;background:var(--bg3);border-radius:8px;margin-bottom:.7rem;color:var(--muted2);font-size:.78rem;font-style:normal;letter-spacing:.02em}
+    .spoken{display:block;padding-left:1rem;border-left:2px solid var(--accent);margin:.7rem 0 .7rem .5rem;color:#e8e8f0;font-style:normal}
+    .broll{display:block;padding:.35rem .8rem;background:rgba(108,99,255,.05);border-radius:6px;margin:.4rem 0 .8rem;font-size:.74rem;color:var(--muted2);font-family:monospace;font-style:normal}
+    .footer-cta{background:linear-gradient(135deg,rgba(108,99,255,.18),rgba(0,212,255,.08));border-top:1px solid rgba(108,99,255,.2);padding:5rem 2rem;text-align:center}
+    .footer-cta h2{font-size:2rem;font-weight:900;color:var(--text);margin-bottom:.8rem}
+    .footer-cta p{color:var(--muted);margin-bottom:2rem}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.5rem;text-align:center;font-size:.72rem;color:var(--muted2)}
+    @media(max-width:768px){.stats{grid-template-columns:1fr 1fr}.vm-grid{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}nav .links{display:none}}
+  </style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="z">
+
+<nav>
+  <div class="logo">StudEx <span>Global Markets</span></div>
+  <div class="links">
+    <a href="#icvms">ICVMS Platform</a>
+    <a href="#vms">Virtual Machines</a>
+    <a href="#agents">AI Agents</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#videos">Video Scripts</a>
+  </div>
+  <a href="#pricing" class="cta-nav">Apply for VM 05 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow"><div class="dot"></div>ICVMS · StudEx Global Markets · 2026</div>
+  <h1>The Integrated Company<br>Virtual Machine System</h1>
+  <p>Six companies. Six sovereign VMs. One shared intelligence layer.<br>Built for the Africa-Russia trade corridor. Powered by AI agents.</p>
+  <div class="hero-btns">
+    <a href="#pricing" class="btn-primary">Apply for VM 05 →</a>
+    <a href="#icvms" class="btn-outline">Explore the Platform</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="num">6</span><div class="label">Partner VMs</div></div>
+  <div class="stat"><span class="num">5+</span><div class="label">AI Agents per VM</div></div>
+  <div class="stat"><span class="num">R5B+</span><div class="label">Trade Pipeline</div></div>
+  <div class="stat"><span class="num">2026</span><div class="label">Live & Scaling</div></div>
+</div>
+
+<!-- ICVMS -->
+<section class="section" id="icvms">
+  <div class="section-label">The Platform</div>
+  <h2>One Hub. Six Sovereign VMs.<br>Infinite Connected Intelligence.</h2>
+  <p class="section-desc">ICVMS — the Integrated Company Virtual Machine System — is StudEx Global Markets' proprietary infrastructure layer. Each partner company gets their own dedicated virtual machine in Johannesburg, South Africa. All six VMs connect through StudEx OS.</p>
+
+  <div class="icvms-hub">
+    <div class="hub-center">
+      <div class="hub-ring"><div class="hub-name">StudEx OS</div></div>
+      <h3>StudEx Operating System</h3>
+      <p>The shared intelligence layer connecting all VMs</p>
+      <p class="sub">Johannesburg, SA · POPIA Compliant · B-BBEE Level 1</p>
+    </div>
+    <div class="vm-grid">
+      <div class="vm-node open">
+        <div class="vm-header">
+          <div class="vm-num">05</div>
+          <div class="vm-name">VM 05 — OPEN</div>
+        </div>
+        <div class="vm-sector">Your Company Here</div>
+        <div class="vm-desc">Applications now open. The right company to complete the ICVMS ecosystem. Manufacturing, logistics, compliance, or technology capability required.</div>
+        <div class="vm-specs"><div class="vm-spec">4 vCPU</div><div class="vm-spec">16GB RAM</div><div class="vm-spec">100GB NVMe</div><div class="vm-spec">AI Agents</div><div class="vm-spec">99.9% SLA</div></div>
+      </div>
+      <div class="vm-node">
+        <div class="vm-header"><div class="vm-num">01</div><div class="vm-name">AfricaBiz</div></div>
+        <div class="vm-sector">Trade & Commerce</div>
+        <div class="vm-desc">Pan-African trade facilitation and market access for the Russia-Africa corridor.</div>
+        <div class="vm-specs"><div class="vm-spec">Trade Flow</div><div class="vm-spec">Compliance</div><div class="vm-spec">Payments</div></div>
+      </div>
+      <div class="vm-node">
+        <div class="vm-header"><div class="vm-num">02</div><div class="vm-name">NtechLab</div></div>
+        <div class="vm-sector">AI Facial Recognition</div>
+        <div class="vm-desc">Russian AI facial recognition deployed across African government and enterprise security systems.</div>
+        <div class="vm-specs"><div class="vm-spec">Computer Vision</div><div class="vm-spec">AI Models</div><div class="vm-spec">Surveillance</div></div>
+      </div>
+      <div class="vm-node">
+        <div class="vm-header"><div class="vm-num">03</div><div class="vm-name">ART Engineering</div></div>
+        <div class="vm-sector">Engineering & Manufacturing</div>
+        <div class="vm-desc">Industrial engineering, manufacturing automation, and infrastructure development across Africa.</div>
+        <div class="vm-specs"><div class="vm-spec">Engineering</div><div class="vm-spec">Manufacturing</div><div class="vm-spec">Infrastructure</div></div>
+      </div>
+      <div class="vm-node">
+        <div class="vm-header"><div class="vm-num">04</div><div class="vm-name">Pharmasyntez</div></div>
+        <div class="vm-sector">Pharmaceutical Distribution</div>
+        <div class="vm-desc">Russia's largest pharma manufacturers. Cold-chain distribution into Africa. Founding StudEx Health partner.</div>
+        <div class="vm-specs"><div class="vm-spec">Pharma</div><div class="vm-spec">Cold Chain</div><div class="vm-spec">SAHPRA</div></div>
+      </div>
+      <div class="vm-node">
+        <div class="vm-header"><div class="vm-num">06</div><div class="vm-name">Project Phoenix</div></div>
+        <div class="vm-sector">Conservation & Technology</div>
+        <div class="vm-desc">IBM + Cardano blockchain integration. IoT sensors. NFT ownership systems for conservation assets.</div>
+        <div class="vm-specs"><div class="vm-spec">Blockchain</div><div class="vm-spec">Conservation</div><div class="vm-spec">IoT</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="apply-banner">
+    <div class="badge">VM 05 — Applications Open</div>
+    <h3>Your Company Gets Its Own VM in the ICVMS Ecosystem</h3>
+    <p>B-BBEE companies preferred. Manufacturing, logistics, compliance, or technology focus.</p>
+    <a href="#pricing" class="btn-primary">Apply Now →</a>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section class="section" id="agents">
+  <div class="section-label">The Intelligence Layer</div>
+  <h2>Every VM Runs a Team of AI Agents</h2>
+  <p class="section-desc">Each VM comes pre-configured with purpose-built AI agents — working 24/7, with memory, voice, and web capabilities. Connected to Obsidian Mind for persistent intelligence.</p>
+  <div class="agents-grid">
+    <div class="agent-card">
+      <div class="agent-icon">🏛️</div>
+      <h4>Hermes</h4>
+      <div class="role">Chief Technology Officer</div>
+      <p>Manages GitHub, deployment pipelines, and infrastructure. Self-hosted on Ollama — zero external API calls for reasoning.</p>
+      <div class="feats"><span>GitHub & deployment management</span><span>Self-hosted LLM (Qwen 2.5)</span><span>Persistent memory</span><span>Multi-agent orchestration</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-icon">📣</div>
+      <h4>Naledi</h4>
+      <div class="role">Chief Marketing Officer</div>
+      <p>Manages content calendars, social media scheduling, and campaign drafting across all major platforms.</p>
+      <div class="feats"><span>Multi-platform content (20 posts/mo)</span><span>Campaign drafting & scheduling</span><span>Social analytics</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-icon">🛒</div>
+      <h4>Auto-Commerce</h4>
+      <div class="role">E-Commerce Manager</div>
+      <p>Manages Shopify, product listings, inventory workflows, order processing — fully automated.</p>
+      <div class="feats"><span>Shopify integration</span><span>Product listings & updates</span><span>Order workflow automation</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-icon">📋</div>
+      <h4>Robusca</h4>
+      <div class="role">Chief of Staff</div>
+      <p>Coordinates all agents, manages priorities, maintains the operational calendar, and drives the War Room dashboard.</p>
+      <div class="feats"><span>Agent coordination</span><span>Priority management</span><span>War Room dashboard</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-icon">🧠</div>
+      <h4>Obsidian Mind</h4>
+      <div class="role">Memory & Reasoning Core</div>
+      <p>Persistent memory vault. Stores every client conversation, deal, and document. Agents never start from zero.</p>
+      <div class="feats"><span>Semantic search</span><span>Decision records</span><span>Claude Code integration</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-icon">🎙️</div>
+      <h4>Voice Agent</h4>
+      <div class="role">Client Communications</div>
+      <p>Real-time voice AI. Speaks to clients, qualifies leads, books appointments. Available 24/7 via Eleven Labs.</p>
+      <div class="feats"><span>Real-time voice (OpenAI Realtime)</span><span>Eleven Labs voice cloning</span><span>SA phone number</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="padding-top:2rem">
+  <div class="section-label">VM 05 Investment</div>
+  <h2>Join the ICVMS Ecosystem</h2>
+  <p class="section-desc">VM 05 is the final slot in the ICVMS network. One company. One sovereign SA VM. Full access to the StudEx keiretsu.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Solo VM</h3>
+      <div class="price">$2,000<span>/mo</span></div>
+      <div class="price-alt">+ $4,000 setup</div>
+      <ul>
+        <li>1 dedicated SA VM</li><li>4 vCPU · 16GB RAM · 100GB NVMe</li>
+        <li>3 AI agents</li><li>Obsidian Mind memory vault</li>
+        <li>Basic War Room dashboard</li><li>Email support</li>
+        <li>POPIA compliance</li>
+      </ul>
+      <a href="mailto:hello@studexglobalmarkets.com?subject=VM 05 Application — Solo" class="btn-primary" style="display:block;margin-top:1rem;text-align:center;font-size:.82rem;padding:10px">Apply →</a>
+    </div>
+    <div class="price-card featured">
+      <h3>ICVMS Partner</h3>
+      <div class="price">$4,000<span>/mo</span></div>
+      <div class="price-alt">+ $7,590 setup</div>
+      <ul>
+        <li>1 dedicated SA VM</li><li>Full AI agent team (6 agents)</li>
+        <li>Voice Agent + SA phone number</li>
+        <li>Web Automation Agent (Page-Agent)</li>
+        <li>Hermes Agent (self-hosted LLM)</li>
+        <li>Obsidian Mind memory vault</li><li>Full War Room dashboard</li>
+        <li>Access to ICVMS network</li><li>Trade corridor introductions</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="mailto:hello@studexglobalmarkets.com?subject=VM 05 Application — ICVMS Partner" class="btn-primary" style="display:block;margin-top:1rem;text-align:center">Apply for VM 05 →</a>
+    </div>
+    <div class="price-card">
+      <h3>Enterprise</h3>
+      <div class="price">$8,000<span>/mo</span></div>
+      <div class="price-alt">+ $15,000 setup</div>
+      <ul>
+        <li>High-performance VM (16 vCPU / 64GB)</li><li>Unlimited AI agents</li>
+        <li>Custom voice persona</li><li>White-label branding</li>
+        <li>ICVMS + StudEx Health access</li><li>Regulatory navigation team</li>
+        <li>Blockchain compliance layer</li><li>Dedicated account manager</li>
+        <li>SLA: 99.99% uptime</li><li>On-site induction + training</li>
+      </ul>
+      <a href="mailto:hello@studexglobalmarkets.com?subject=VM 05 Application — Enterprise" class="btn-primary" style="display:block;margin-top:1rem;text-align:center;font-size:.82rem;padding:10px">Apply →</a>
+    </div>
+  </div>
+  <div class="bank-box">
+    <div class="bank-label">Wire Transfer — FNB South Africa</div>
+    <div class="bank-grid">
+      <div class="bank-item"><div class="bk">Account Name</div><div class="bv">Studex Group</div></div>
+      <div class="bank-item"><div class="bk">Account Number</div><div class="bv">62760837610</div></div>
+      <div class="bank-item"><div class="bk">Branch</div><div class="bv">Woodmead · Code: 250-655</div></div>
+      <div class="bank-item"><div class="bk">SWIFT / BIC</div><div class="bv">FIRNZAJJ</div></div>
+      <div class="bank-item"><div class="bk">Payment Terms</div><div class="bv">50% signing · 50% go-live</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO SCRIPTS -->
+<section class="section" id="videos" style="padding-top:2rem">
+  <div class="section-label">Brand Videos</div>
+  <h2>Four StudEx Films</h2>
+  <p class="section-desc">Four ~4-minute video scripts for Tumelo Ramaphosa. Direct-to-camera + B-roll. Confident, visionary, South African.</p>
+
+  <div class="video-tabs">
+    <div class="video-tab active" onclick="showVideo(0)">Video 1 — The History</div>
+    <div class="video-tab" onclick="showVideo(1)">Video 2 — Virtual Machines</div>
+    <div class="video-tab" onclick="showVideo(2)">Video 3 — AI Agents</div>
+    <div class="video-tab" onclick="showVideo(3)">Video 4 — Keiretsu & Moat</div>
+  </div>
+
+  <div class="video-panel active" id="v0">
+    <div class="video-meta">
+      <span><strong>Title:</strong> "The Business & The History"</span>
+      <span><strong>Tagline:</strong> From a butcher's dream to Africa's next great platform</span>
+      <span><strong>Length:</strong> ~4 minutes</span>
+      <span><strong>Tone:</strong> Confident, visionary, South African</span>
+    </div>
+    <div class="script-card">
+      <div class="script-section">
+        <div class="script-label">Open — Close-Up</div>
+        <div class="script-text">
+          <span class="scene">OPEN — CLOSE-UP OF WAGYU STEAK ON A WOODEN BOARD. TUMELO WALKS INTO FRAME.</span>
+          <span class="spoken">"This piece of meat — right here — started a technology company." [Beat. Let it land.] "My name is Tumelo Ramaphosa. And this is the story of StudEx."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">B-Roll — Context</div>
+        <div class="script-text">
+          <span class="broll">B-ROLL: Johannesburg skyline, premium meat counter, Blackheath facility exterior</span>
+          <span class="spoken">"StudEx started with one simple belief: that South Africa deserves world-class premium meat. Not imported. Not mass-produced. Premium, ethically raised, local."</span>
+          <span class="spoken">"We built a butchery business. Wagyu beef — the rarest, most marbled beef in the world. Ankole cattle — indigenous to East Africa, raised on the Highveld. Lamb. Biltong. And we did it right: MJC Halaal-certified, cold-chain distribution out of our Blackheath facility in Cape Town."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Cut To — Direct to Camera</div>
+        <div class="script-text">
+          <span class="scene">CUT TO TUMELO — DIRECT TO CAMERA</span>
+          <span class="spoken">"But something happened while we were building a meat business. We started asking a different question."</span>
+          <span class="spoken">"The question wasn't 'how do we sell more biltong?' The question was: 'why does a premium South African product have to fight so hard to reach the world, while a Russian pharmaceutical company, a Chinese technology firm, or an Indian logistics giant can walk into Africa with no friction at all?'"</span>
+          <span class="spoken">"The infrastructure wasn't there. The connections weren't there. The platform wasn't there. So we decided to build it."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">B-Roll — Trade Week</div>
+        <div class="script-text">
+          <span class="broll">B-ROLL: Trade Week event photos — June 2026, Four Seasons Westcliff, Sandton Hotel</span>
+          <span class="spoken">"In June 2026, we hosted South Africa's first private Russia-Africa business mission. Five founding companies — from AI facial recognition to pharmaceutical manufacturing to wildlife conservation and data infrastructure — under one roof at the Four Seasons Westcliff in Johannesburg."</span>
+          <span class="spoken">"That event had a name: The SA-Russia Trade Week. And what came out of it was a company called Aesthetics Global Markets Technology — and an ecosystem platform we call ICVMS."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Close — Direct to Camera        <div class="script-text">
+          <span class="scene">TUMELO — DIRECT TO CAMERA, LEANING IN</span>
+          <span class="spoken">"StudEx today is three businesses. StudEx Meat — the premium product brand. StudEx Global Markets — the Africa-Russia trade ecosystem. And StudEx Health — which we are building right now with one of Russia's largest pharmaceutical manufacturers as our founding partner."</span>
+          <span class="spoken">"We are not trying to be three different companies. We are building one platform. One operating system for doing premium business between Africa and the world."</span>
+          <span class="spoken">"The meat business taught us how to build quality from scratch. The trade week taught us how to convene the right people. And now — we are building the infrastructure that makes it all work at scale."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Final Close</div>
+        <div class="script-text">
+          <span class="scene">CLOSE: BACK TO THE WAGYU SHOT</span>
+          <span class="spoken">"This piece of meat started a technology company. And that technology company — is just getting started."</span>
+          <span class="broll">END CARD: studexglobalmarkets.com | @studexmeat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-panel" id="v1">
+    <div class="video-meta">
+      <span><strong>Title:</strong> "The Future: StudEx & Virtual Machines"</span>
+      <span><strong>Tagline:</strong> Six companies. One shared intelligence layer. Infinite potential.</span>
+      <span><strong>Length:</strong> ~4 minutes</span>
+      <span><strong>Location:</strong> Tech environment — dark background, laptop, diagrams</span>
+    </div>
+    <div class="script-card">
+      <div class="script-section">
+        <div class="script-label">Open — Animated Diagram</div>
+        <div class="script-text">
+          <span class="scene">OPEN — ANIMATED DIAGRAM FILLING SCREEN: hexagonal ICVMS network, 6 nodes, connection lines drawing in</span>
+          <span class="spoken">"What you're looking at is called ICVMS — the Integrated Company Virtual Machine System. Six companies. Each with their own Virtual Machine — their own dedicated AI-powered operating environment. And all six connected to a shared intelligence layer at the centre."</span>
+          <span class="spoken">"Let me tell you what this actually means in practice."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Explainer — What is a VM</div>
+        <div class="script-text">
+          <span class="broll">B-ROLL or screen recording of the ICVMS platform page</span>
+          <span class="spoken">"A Virtual Machine, in this context, is not just a server. Think of it as a digital headquarters. Every company in our ecosystem — AfricaBiz, NtechLab, ART Engineering, Pharmasyntez, Project Phoenix — has their own VM."</span>
+          <span class="spoken">"Inside that VM: their AI agents are running. Their data is stored. Their workflows — compliance, trade documentation, communications — all automated."</span>
+          <span class="spoken">"And because those VMs are all connected to Studex OS, they can all benefit from each other's data, each other's regulatory approvals, each other's market relationships — without competing with each other."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">The AWS Analogy</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — DIRECT TO CAMERA</span>
+          <span class="spoken">"Here's the analogy I always use. Think about Amazon Web Services — AWS. Amazon built it for themselves. Then they realized: every company in the world needs this infrastructure. So they opened it up. And now AWS makes more money than Amazon's entire retail operation."</span>
+          <span class="spoken">"We are doing the same thing. We built this infrastructure for our ecosystem. Every company in Africa that wants to do business with Russia — or Europe, or the Gulf, or Asia — is going to need exactly what we've built."</span>
+          <span class="spoken">"Compliance tooling. AI agent workflows. Cross-border trade documentation. Alternative payment rails. They can build it themselves. Or they can plug into StudEx OS."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">VM 05 — Call to Action</div>
+        <div class="script-text">
+          <span class="broll">B-ROLL: Orgo.ai-style desktop, AI agents working, dashboard views</span>
+          <span class="spoken">"Right now, VM 05 is open. We are accepting applications from companies who want to join the ICVMS ecosystem. Not just any company — companies that bring something to the network."</span>
+          <span class="spoken">"When you join ICVMS, you don't just get a server. You get access to our Africa-Russia trade network. Our regulatory navigation team. Our payment infrastructure. Our AI agent team. And the combined intelligence of five other companies who are all working toward the same goal."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Closing</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — LEAN BACK, WIDER SHOT</span>
+          <span class="spoken">"The future of StudEx is simple to describe and enormously ambitious to build. We want to be the operating system for the Africa-Russia trade corridor. Not a broker. Not a consultant. The infrastructure layer that every deal, every partnership, every shipment flows through."</span>
+          <span class="spoken">"Amazon became that for e-commerce. Shopify became that for independent retail. We intend to become that for African-Russian business — and then beyond. We are building the next great African platform company. And we are doing it from Johannesburg."</span>
+          <span class="broll">END CARD: Apply for ICVMS VM 05 — studexglobalmarkets.com/platform</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-panel" id="v2">
+    <div class="video-meta">
+      <span><strong>Title:</strong> "AI Agents, Automation & The StudEx Operating System"</span>
+      <span><strong>Tagline:</strong> What if your entire business ran while you slept?</span>
+      <span><strong>Length:</strong> ~4 minutes</span>
+      <span><strong>Location:</strong> Desk setup, multiple screens, agent interfaces running</span>
+    </div>
+    <div class="script-card">
+      <div class="script-section">
+        <div class="script-label">Open — Live Demo</div>
+        <div class="script-text">
+          <span class="scene">OPEN — SCREEN CAPTURE: agent running, Slack messages populating, email being composed</span>
+          <span class="spoken">"Right now, while we're filming this, an AI agent called Hermes is managing our technical infrastructure. Another agent — Naledi — is scheduling social media content across three platforms. And a third agent is scanning our Gmail inbox for new VM applications, extracting company details, and updating a tracker spreadsheet in real time."</span>
+          <span class="spoken">"None of that required me to do anything this morning."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">The Difference — Tools vs Agents</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — DIRECT TO CAMERA</span>
+          <span class="spoken">"I want to talk about something that most businesses in Africa aren't talking about yet. AI agents — not AI tools. There's a difference."</span>
+          <span class="spoken">"An AI tool answers your questions. An AI agent takes actions. It has memory. It can call APIs. It can send emails. It can write code. It can run your business — autonomously, around the clock, without you."</span>
+          <span class="spoken">"At StudEx, we've built what we call StudEx OS — an AI agent operating platform. It runs on a network of Virtual Machines. Each VM has its own suite of agents with specific roles: marketing, operations, engineering, content, e-commerce."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Meet the Team</div>
+        <div class="script-text">
+          <span class="broll">B-ROLL: Studex OS diagram, War Room dashboard, agent names on screen</span>
+          <span class="spoken">"Our agent team right now includes:"</span>
+          <span class="spoken">"Hermes — CTO role. Manages GitHub repositories, deployment pipelines, infrastructure on Fly.io and Cloudflare."</span>
+          <span class="spoken">"Naledi — CMO role. Manages content calendars, social media scheduling, campaign drafting across Meta, Instagram, WhatsApp."</span>
+          <span class="spoken">"Auto-Meat — E-commerce. Manages Shopify, product listings, order workflows."</span>
+          <span class="spoken">"Robusca — Chief of Staff. Coordinates all agents, manages priorities, keeps everything moving."</span>
+          <span class="spoken">"And above all of them — a War Room dashboard where I can see everything that's happening across every vertical, in real time."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">The Bigger Picture</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — STANDING, MORE ENERGETIC</span>
+          <span class="spoken">"But here's the bigger picture. We're not just using AI agents to run StudEx. We are building the infrastructure so that every company in our ICVMS ecosystem can have their own agent team."</span>
+          <span class="spoken">"Pharmasyntez gets AI agents for regulatory compliance tracking and demand forecasting. NtechLab gets agents for model deployment and client management. AfricaBiz gets agents for deal flow management and partner communications."</span>
+          <span class="spoken">"One platform. Different agent configurations for each company. Each company gets the benefit of AI-powered automation without having to build it from scratch themselves."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Close</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — DIRECT TO CAMERA, CLOSING THOUGHT</span>
+          <span class="spoken">"We are in the middle of the biggest infrastructure shift since the internet. The companies that build AI agent infrastructure today are going to be in a position that their competitors simply cannot replicate in five years."</span>
+          <span class="spoken">"We started with a meat business. We built an AI operating system. And now we're inviting the right companies to plug into it."</span>
+          <span class="broll">END CARD: studexglobalmarkets.com | hello@studexglobalmarkets.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-panel" id="v3">
+    <div class="video-meta">
+      <span><strong>Title:</strong> "Blockchain, Keiretsu & The Moat"</span>
+      <span><strong>Tagline:</strong> The infrastructure play that changes everything</span>
+      <span><strong>Length:</strong> ~5 minutes</span>
+      <span><strong>Tone:</strong> Boardroom — suits, formal, authoritative</span>
+    </div>
+    <div class="script-card">
+      <div class="script-section">
+        <div class="script-label">Open — Three Concepts</div>
+        <div class="script-text">
+          <span class="scene">OPEN — TUMELO, SEATED, BOARDROOM SETTING</span>
+          <span class="spoken">"I want to introduce you to two ideas that most people haven't heard of — and one technology that everyone's heard of but almost no one understands in the context of what we're doing."</span>
+          <span class="spoken">"The two ideas: Keiretsu. And platform moats."</span>
+          <span class="spoken">"The technology: blockchain."</span>
+          <span class="spoken">"Together, these three things explain exactly why StudEx will be very difficult to displace once we've finished building."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Keiretsu Explained</div>
+        <div class="script-text">
+          <span class="scene">EXPLAINER SECTION — KEIRETSU</span>
+          <span class="spoken">"Keiretsu is a Japanese word. It roughly translates to 'headless combine' — a network of companies that are bound together not by a single owner, but by shared interest, cross-shareholding, and preferential business dealings."</span>
+          <span class="spoken">"Think about Mitsubishi. Not one company — a network. A bank, a car manufacturer, a real estate company, a shipping line, a chemicals firm. All different industries. All bound together. When one company in the network needs financing, the Mitsubishi bank is there. When one needs logistics, the Mitsubishi shipping arm is there. The network makes every single member stronger than they would be on their own."</span>
+          <span class="spoken">"Toyota runs a vertical keiretsu — hundreds of suppliers that are so deeply integrated into Toyota's production process that they co-develop new components. They attend Toyota's strategic meetings. They are, for practical purposes, Toyota's extended family."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">StudEx as Keiretsu</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — LEANING FORWARD</span>
+          <span class="spoken">"Now. Translate that to Africa. To the Russia-Africa trade corridor. To StudEx."</span>
+          <span class="spoken">"StudEx ICVMS is a modern keiretsu. Five founding companies — each in a different sector — bound together by shared infrastructure, shared market access, shared capital relationships, and a commitment to preferential dealing within the network."</span>
+          <span class="spoken">"When Pharmasyntez needs African regulatory navigation, they call StudEx Health — not an outside consultant. When AfricaBiz needs AI agent automation, they use Studex OS — not a separate vendor. When NtechLab needs compute infrastructure for AI model deployment, they run on ICVMS — not AWS alone."</span>
+          <span class="spoken">"Every time a member company uses the network, the network gets stronger. Every new company that joins adds data, relationships, and market access that benefits all existing members. That is a moat. That is a keiretsu."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Blockchain — The Pharma Opportunity</div>
+        <div class="script-text">
+          <span class="broll">B-ROLL: Blockchain diagram, pharma supply chain, QR code scanning, cold chain imagery</span>
+          <span class="spoken">"Now. Blockchain. Forget cryptocurrency for a second. The technology itself is much more fundamental: it's an immutable, distributed ledger. A record that nobody can alter after the fact, that every participant in a network can see, and that automatically verifies every transaction without needing a trusted middleman."</span>
+          <span class="spoken">"In pharma — which is where we're building right now — this is not theoretical. Ethiopia's Food and Drug Authority is building a blockchain-based traceability system with mandatory compliance from June 2026. Nigeria's NAFDAC already has pharmaceutical traceability regulations in Force. South Africa's SAHPRA has a roadmap running to 2031 for full serialization of every health product in the country."</span>
+          <span class="spoken">"That means: every pharmaceutical product that enters an African supply chain is going to need a blockchain-verified digital record of its journey — from Pharmasyntez's plant in Irkutsk, to a cold-chain warehouse in Johannesburg, to a pharmacy shelf in Lagos."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">The Moat</div>
+        <div class="script-text">
+          <span class="scene">TUMELO — DIRECT TO CAMERA</span>
+          <span class="spoken">"Here is where it gets powerful for StudEx. We are building the cold chain. We are building the regulatory navigation layer. We are building the AI infrastructure that manages compliance documentation."</span>
+          <span class="spoken">"If we also build — or integrate — the blockchain verification layer into that infrastructure, StudEx Health doesn't just become a pharma distributor. It becomes the track-and-trace compliance platform for African pharmaceutical imports."</span>
+          <span class="spoken">"And here is the moat: once a drug manufacturer's entire product journey — from Russian factory to African pharmacy — is being verified and recorded through StudEx's blockchain infrastructure, they cannot simply switch to another platform. That's five years of immutable compliance history. Governments trust it. Regulators require it. Patients depend on it."</span>
+          <span class="spoken">"The South African blockchain-in-pharma market alone was $1.2 billion in 2024 and is projected to reach $5.4 billion by 2033. We intend to be at the centre of it."</span>
+        </div>
+      </div>
+      <div class="script-section">
+        <div class="script-label">Closing — The Vision</div>
+        <div class="script-text">
+          <span class="scene">CLOSING — TUMELO, WIDER SHOT, CONFIDENT</span>
+          <span class="spoken">"So let me bring it all together. StudEx is not a meat company that got into tech. We are a platform company — building the connective infrastructure for Africa-Russia and Africa-world trade, starting with the highest-value, highest-compliance industries: premium food, pharmaceuticals, AI, and data infrastructure."</span>
+          <span class="spoken">"The keiretsu structure makes the network sticky. The AI agent infrastructure makes it indispensable. The blockchain layer makes it auditable and government-trusted. And the data that flows through all of it — every trade document, every regulatory approval, every market intelligence signal — compounds in value with every single new member that joins."</span>
+          <span class="spoken">"That is a moat. And we are building it right now."</span>
+          <span class="broll">END CARD: hello@studexglobalmarkets.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta">
+  <h2>Apply for VM 05</h2>
+  <p>The final ICVMS slot. One company. One sovereign SA VM.<br>Join the Africa-Russia trade corridor infrastructure layer.</p>
+  <a href="mailto:hello@studexglobalmarkets.com?subject=VM 05 Application — ICVMS Partner&body=Company Name:%20%0AIndustry:%20%0AWhat you bring to ICVMS:%20%0A" class="btn-primary" style="font-size:1rem;padding:16px 48px">Apply via Email →</a>
+</div>
+
+<footer>
+  <p><strong style="color:var(--accent)">StudEx Global Markets</strong> · ICVMS Platform · 2026</p>
+  <p style="margin-top:.3rem">hello@studexglobalmarkets.com · studexglobalmarkets.com</p>
+  <p style="margin-top:.3rem;color:var(--muted2)">Johannesburg, South Africa · POPIA Compliant · B-BBEE Level 1</p>
+</footer>
+
+</div>
+
+<script>
+// Canvas background
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, mx, my, t = 0;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;mx=W/2;my=H/2}
+window.addEventListener('resize',resize);resize();
+const VMs = [
+  {name:'AfricaBiz',angle:270,color:'#6c63ff'},{name:'NtechLab',angle:330,color:'#00d4ff'},
+  {name:'ART Eng.',angle:30,color:'#f59e0b'},{name:'Pharmasyntez',angle:90,color:'#ec4899'},
+  {name:'VM 05',angle:150,color:'#10b981'},{name:'Proj. Phoenix',angle:210,color:'#a0a0ff'}
+];
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  t+=0.006;
+  // Grid
+  ctx.strokeStyle='rgba(30,30,46,0.5)';ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const r=Math.min(W,H)*0.25;
+  // Connection lines
+  VMs.forEach((vm,i)=>{
+    const angle=(vm.angle-90)*(Math.PI/180);
+    const x=mx+r*Math.cos(angle),y=my+r*Math.sin(angle);
+    const alpha=0.06+Math.sin(t+i)*0.04;
+    ctx.beginPath();ctx.moveTo(mx,my);ctx.lineTo(x,y);
+    ctx.strokeStyle=`rgba(108,99,255,${alpha})`;ctx.lineWidth=1;ctx.stroke();
+    // Glow
+    const g=ctx.createRadialGradient(x,y,0,x,y,35);
+    g.addColorStop(0,vm.color.replace(')',',0.08)').replace('rgb','rgba').replace('#','rgba(').replace(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i,(m,r,g,b)=>`rgba(${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)},`));
+    ctx.beginPath();ctx.arc(x,y,35,0,Math.PI*2);
+    ctx.fillStyle=vm.color+'14';ctx.fill();
+    // Packet
+    const pt=((t*0.7+i*0.3)%1);
+    const px=mx+(x-mx)*pt,py=my+(y-my)*pt;
+    ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);
+    ctx.fillStyle=vm.color;ctx.shadowColor=vm.color;ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;
+  });
+  // Hub rings
+  for(let i=1;i<=3;i++){
+    const rr=50+i*18+Math.sin(t*0.7+i)*3;
+    ctx.beginPath();ctx.arc(mx,my,rr,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(108,99,255,${0.05-i*0.01})`;ctx.lineWidth=0.5;
+    ctx.setLineDash([3,5]);ctx.stroke();ctx.setLineDash([]);
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// Video tabs
+function showVideo(i){
+  document.querySelectorAll('.video-tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  document.querySelectorAll('.video-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('v'+i).classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Signal Builder — AI Content Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0a;--surface:#111113;--surface2:#18181b;--border:#27272a;--gold:#c9a84c;--gold-dim:#a07c30;--gold-bright:#e8c96a;--green:#00c853;--text:#e8e8f0;--text-dim:#a0a0b0;--text-muted:#606070;--font-body:'Inter',sans-serif;--font-mono:'JetBrains Mono',monospace;--font-serif:'Newsreader',Georgia,serif}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.topbar-logo{font-family:var(--font-mono);font-size:.85rem;font-weight:500;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:mp 2s infinite}
+.topbar-nav{display:flex;gap:4px;align-items:center}
+.topbar-nav a{color:var(--text-dim);text-decoration:none;font-size:.78rem;font-family:var(--font-mono);padding:5px 10px;border-radius:6px;transition:all .15s;letter-spacing:.04em}
+.topbar-nav a:hover{color:var(--text);background:var(--surface2)}
+.topbar-nav a.active{color:var(--gold);background:rgba(201,168,76,.1)}
+.clock{font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted);margin-left:16px}
+.hero{padding:52px 24px 36px;max-width:860px;margin:0 auto;text-align:center}
+.hero-eyebrow{font-family:var(--font-mono);font-size:.72rem;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:var(--gold-dim)}
+.hero h1{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;line-height:1.2;margin-bottom:16px;background:linear-gradient(135deg,#e8c96a 0%,#c9a84c 50%,#a07c30 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--text-dim);font-size:.95rem;line-height:1.65;max-width:560px;margin:0 auto}
+.input-section{max-width:860px;margin:0 auto;padding:0 24px 32px}
+.input-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.input-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.badge{font-family:var(--font-mono);font-size:.68rem;padding:3px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase}
+.badge-gold{background:rgba(201,168,76,.15);color:var(--gold)}
+.badge-green{background:rgba(0,200,83,.12);color:var(--green)}
+.input-header-left{display:flex;align-items:center;gap:10px}
+.input-header-left span{font-size:.82rem;color:var(--text-dim)}
+.input-body{padding:20px}
+.paste-area{width:100%;min-height:160px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--text);font-family:var(--font-body);font-size:.85rem;line-height:1.6;resize:vertical;outline:none;transition:border-color .2s}
+.paste-area::placeholder{color:var(--text-muted)}
+.paste-area:focus{border-color:var(--gold-dim)}
+.input-controls{display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:10px}
+.quick-paste{display:flex;gap:6px;flex-wrap:wrap}
+.qp-btn{font-family:var(--font-mono);font-size:.7rem;padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;letter-spacing:.04em}
+.qp-btn:hover{border-color:var(--gold-dim);color:var(--gold);background:rgba(201,168,76,.08)}
+.analyze-btn{font-family:var(--font-mono);font-size:.82rem;padding:10px 24px;background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#0a0a0a;border:none;border-radius:8px;cursor:pointer;font-weight:500;letter-spacing:.06em;transition:all .2s;display:flex;align-items:center;gap:8px}
+.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.35)}
+.analyze-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.output-section{max-width:860px;margin:0 auto;padding:0 24px 60px;display:none}
+.output-section.visible{display:block}
+.section-label{font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.signal-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden}
+.signal-card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.signal-card-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:10px}
+.signal-card-meta{font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted);display:flex;align-items:center;gap:8px}
+.signal-card-body{padding:20px}
+.generated-content{font-family:var(--font-serif);font-size:.97rem;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--surface2);border-radius:10px;padding:18px;border:1px solid var(--border)}
+.signal-card-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.char-count{font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted)}
+.copy-btn{font-family:var(--font-mono);font-size:.72rem;padding:6px 14px;border:1px solid var(--gold-dim);border-radius:6px;background:rgba(201,168,76,.1);color:var(--gold);cursor:pointer;transition:all .15s;letter-spacing:.06em;display:flex;align-items:center;gap:6px}
+.copy-btn:hover{background:rgba(201,168,76,.2);border-color:var(--gold)}
+.copy-btn.copied{color:var(--green);border-color:var(--green);background:rgba(0,200,83,.1)}
+.multi-grid{display:grid;gap:10px}
+.post-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.post-num{font-family:var(--font-mono);font-size:.65rem;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.post-num::before{content:'';display:inline-block;width:16px;height:1px;background:var(--gold-dim)}
+.post-text{font-family:var(--font-serif);font-size:.9rem;line-height:1.7;color:var(--text);white-space:pre-wrap}
+.post-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.post-char{font-family:var(--font-mono);font-size:.68rem;color:var(--text-muted)}
+.insights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
+.insight-chip{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+.insight-chip-icon{font-size:1rem;flex-shrink:0;margin-top:2px}
+.insight-chip-text{font-size:.82rem;color:var(--text-dim);line-height:1.5}
+.insight-chip-text strong{color:var(--text);display:block;margin-bottom:2px;font-family:var(--font-mono);font-size:.72rem}
+.cta-strip{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.25);border-radius:14px;padding:20px 24px;margin-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.cta-text{font-family:var(--font-serif);font-size:.95rem;color:var(--text-dim);line-height:1.5}
+.cta-text strong{color:var(--gold);display:block;font-family:var(--font-body);font-size:.82rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.cta-btn{font-family:var(--font-mono);font-size:.78rem;padding:10px 20px;border:1px solid var(--gold);border-radius:8px;background:rgba(201,168,76,.15);color:var(--gold);cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap;letter-spacing:.06em}
+.cta-btn:hover{background:rgba(201,168,76,.25)}
+@media(max-width:600px){.hero{padding:36px 16px 28px}.input-section{padding:0 16px 24px}.output-section{padding:0 16px 48px}.cta-strip{flex-direction:column;align-items:flex-start}.input-controls{flex-direction:column;align-items:stretch}.analyze-btn{justify-content:center}}
+@keyframes mp{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-logo"><span class="dot"></span>OGRE//SignalBuilder</div>
+  <nav class="topbar-nav">
+    <a href="portal.html">Portal</a>
+    <a href="index.html">Dashboard</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="compare.html">Compare</a>
+    <a href="roi-calculator.html">ROI Calc</a>
+    <a href="email-briefing.html">Email</a>
+    <a href="#" class="active">Signal Builder</a>
+  </nav>
+  <div class="clock" id="clock">--:--:-- UTC</div>
+</div>
+
+<section class="hero">
+  <div class="hero-eyebrow">Night 8 Build</div>
+  <h1>OGRE Signal Builder</h1>
+  <p>Paste tonight's intelligence research and generate branded LinkedIn posts, Twitter/X threads, WhatsApp briefings, and email subject lines — ready to publish or send.</p>
+</section>
+
+<section class="input-section">
+  <div class="input-card">
+    <div class="input-header">
+      <div class="input-header-left"><span class="badge badge-gold">Research Input</span><span>Paste 3AM intelligence brief or raw notes</span></div>
+      <span class="badge badge-green" id="dateBadge">29 June 2026</span>
+    </div>
+    <div class="input-body">
+      <textarea class="paste-area" id="researchInput" placeholder="Paste tonight's OGRE research here...
+
+Example: USA OpenAI GPT-5 dominates. Nigeria Flutterwave got a banking license. Ghana $250M AI strategy. SA at the inflection point. Japan ¥1T physical AI. Top 3 OGRE actions: SA Compute Gateway, Japan Physical AI consortium, Fintech AI stack."></textarea>
+      <div class="input-controls">
+        <div class="quick-paste">
+          <button class="qp-btn" id="loadBtn">Load Tonight's Research</button>
+          <button class="qp-btn" onclick="clearInput()">Clear</button>
+        </div>
+        <button class="analyze-btn" id="analyzeBtn" onclick="generateSignals()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+          Generate Signals
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="output-section" id="outputSection">
+  <div class="section-label">Detected Signals</div>
+  <div class="insights-grid" id="insightsGrid"></div>
+
+  <div class="section-label" style="margin-top:24px">LinkedIn Post</div>
+  <div class="signal-card">
+    <div class="signal-card-header">
+      <div class="signal-card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn Post
+      </div>
+      <div class="signal-card-meta"><span>Professional</span><span>·</span><span>Thought Leadership</span></div>
+    </div>
+    <div class="signal-card-body"><div class="generated-content" id="linkedinContent">—</div></div>
+    <div class="signal-card-footer">
+      <span class="char-count" id="linkedinChar">0 chars</span>
+      <button class="copy-btn" id="copyLinkedin" onclick="copyText('linkedinContent','copyLinkedin')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">Twitter / X Thread</div>
+  <div class="signal-card">
+    <div class="signal-card-header">
+      <div class="signal-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        &nbsp;Twitter / X Thread
+      </div>
+      <div class="signal-card-meta"><span>5 posts</span><span>·</span><span>280-char threads</span></div>
+    </div>
+    <div class="signal-card-body"><div class="multi-grid" id="twitterGrid"></div></div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">WhatsApp Briefing</div>
+  <div class="signal-card">
+    <div class="signal-card-header">
+      <div class="signal-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        &nbsp;WhatsApp Briefing
+      </div>
+      <div class="signal-card-meta"><span>1:1</span><span>·</span><span>Concise</span></div>
+    </div>
+    <div class="signal-card-body"><div class="generated-content" id="whatsappContent">—</div></div>
+    <div class="signal-card-footer">
+      <span class="char-count" id="whatsappChar">0 chars</span>
+      <button class="copy-btn" id="copyWhatsapp" onclick="copyText('whatsappContent','copyWhatsapp')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">Email Subject Lines</div>
+  <div class="signal-card">
+    <div class="signal-card-header">
+      <div class="signal-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        &nbsp;Email Subject Lines
+      </div>
+      <div class="signal-card-meta"><span>3 variants</span><span>·</span><span>A/B ready</span></div>
+    </div>
+    <div class="signal-card-body"><div class="multi-grid" id="emailGrid"></div></div>
+  </div>
+
+  <div class="cta-strip">
+    <div class="cta-text">
+      <strong>OGRE Computer — AI Intelligence</strong>
+      Every signal powers an outbound. OGRE builds while the world sleeps.
+    </div>
+    <a href="portal.html" class="cta-btn">View Intelligence Portal →</a>
+  </div>
+</section>
+
+<script>
+(function(){
+  // ── CLOCK
+  function updateClock(){
+    document.getElementById('clock').textContent = new Date().toUTCString().slice(17,25) + ' UTC';
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── TONIGHT'S RESEARCH (June 29)
+  var TONIGHT_RESEARCH = "Nine countries. Nine AI battlegrounds.\n\nUS: OpenAI GPT-5 coding dominance, Anthropic Claude 4.5 scaling enterprise agents, Google Gemini 3.5 Pro launching June 2026. OGRE Play: SA API gateway with data residency — be the trusted proxy for Global South US AI access.\n\nCHINA: Baidu ERNIE open-sourcing, Qwen 2.5 Max beating DeepSeek-V3. OGRE Play: Deploy DeepSeek/Qwen open-source mirror on SA GPU clusters for compliance-sensitive clients.\n\nJAPAN: Yen 1T Japan AI Foundation Model — physical AI for robotics, factory automation, autonomous driving. OGRE Play: Preferred Networks of Africa — build embodied AI data consortium with SA mining, agri, logistics partners.\n\nINDIA: $1.2B IndiaAI Mission seeking Global South partners. OGRE Play: India-SA AI compact — joint fine-tuning on open models + African language datasets.\n\nBRAZIL: Nubank R$45B AI banking push. OGRE Play: Nubank-style credit + fraud AI for SA banks.\n\nNIGERIA: Flutterwave secured banking license April 2026. OGRE Play: White-label Flutterwave compliance AI stack for SA SARB + FSCA requirements.\n\nGHANA: $250M national AI strategy, $45B GDP target by 2035. OGRE Play: SA-Ghana compute partnership under AfCFTA data protocols.\n\nSOUTH AFRICA: At the inflection point. Discovery Health AI, Media24, Brainbox AI, CSIR all fragmenting. OGRE Play: Build the sovereign shared compute + governance layer — NOW, before AWS/Google lock in.\n\nTOP 3 IMMEDIATE ACTIONS:\n1. SA AI Compute Gateway (Months 1-3): Anthropic/OpenAI/Qwen proxy with SA data residency guarantees.\n2. Physical AI Data Consortium — SA/Japan Bridge (Months 3-9): Mining automation, agrirobotics, autonomous logistics data partnership.\n3. SA Fintech AI Stack (Months 6-12): Flutterwave/Nubank playbook for SA SARB + FSCA compliance.\n\nVERDICT: The US-China AI race is creating global infrastructure spillover. Japan building physical AI sovereignty. SA has a narrow 18-24 month window to own the Global South AI infrastructure layer.";
+
+  // ── LOAD BUTTON
+  document.getElementById('loadBtn').addEventListener('click', function(){
+    document.getElementById('researchInput').value = TONIGHT_RESEARCH;
+  });
+
+  // ── CLEAR
+  window.clearInput = function(){
+    document.getElementById('researchInput').value = '';
+    document.getElementById('outputSection').classList.remove('visible');
+  };
+
+  // ── PARSE
+  function parseResearch(text){
+    var t = text.toLowerCase();
+    var countryDefs = {
+      'usa':{flag:'US',name:'United States',tag:'USA'},
+      'united states':{flag:'US',name:'United States',tag:'USA'},
+      'china':{flag:'CN',name:'China',tag:'CN'},
+      'japan':{flag:'JP',name:'Japan',tag:'JP'},
+      'india':{flag:'IN',name:'India',tag:'IN'},
+      'brazil':{flag:'BR',name:'Brazil',tag:'BR'},
+      'nigeria':{flag:'NG',name:'Nigeria',tag:'NG'},
+      'ghana':{flag:'GH',name:'Ghana',tag:'GH'},
+      'mexico':{flag:'MX',name:'Mexico',tag:'MX'},
+      'south africa':{flag:'SA',name:'South Africa',tag:'SA'},
+    };
+    var countries = [];
+    for(var k in countryDefs){
+      if(t.indexOf(k) !== -1) countries.push(countryDefs[k]);
+    }
+    if(!countries.length) countries.push({flag:'GL',name:'Global',tag:'GL'});
+
+    var sigDefs = [
+      {test:/flutterwave.*bank|banking license.*nigeria/i,icon:'\uD83C\uDFE6',label:'Fintech AI',val:'Flutterwave banking license — AI compliance play across Africa'},
+      {test:/\$250m.*ghana|250 million.*ai.*strategy|ghana.*250/i,icon:'\uD83C\uDF0D',label:'National Strategy',val:'Ghana $250M AI strategy — $45B GDP target by 2035'},
+      {test:/japan.*yen|physical ai|robotics.*japan/i,icon:'\uD83E\uDD16',label:'Physical AI',val:'Japan Yen1T physical AI — robotics, automation, autonomy'},
+      {test:/sa.*compute|south africa.*inflection|aws.*google.*lock|sa.*gateway/i,icon:'\u26A1',label:'SA Sovereignty',val:'SA AI Compute Gateway — build now before hyperscalers lock it in'},
+      {test:/openai|gpt-?5|anthropic|gemini|frontier.*model/i,icon:'\uD83E\uDDE0',label:'Frontier AI',val:'US frontier AI race — API dominance window is open'},
+      {test:/indiaai|india.*\$1\.2b/i,icon:'\uD83C\uDDEE\uD83C\uDDF3',label:'Sovereign AI',val:'India $1.2B sovereign AI — Global South partnership opportunity'},
+      {test:/nubank|r\$45b|brazil.*ai.*bank/i,icon:'\uD83D\uDCB3',label:'AI Banking',val:'Brazil Nubank R$45B AI push — SA bank benchmark shifting'},
+      {test:/deepseek|ernie.*open|qwen|open-source.*china/i,icon:'\uD83D\uDD13',label:'Open Source',val:'China open-source AI (DeepSeek, ERNIE, Qwen) — SA mirror opportunity'},
+      {test:/inflection|fragment|south africa.*now/i,icon:'\uD83C\uDDFF\uD83C\uDDE6',label:'SA Inflection',val:'SA at the inflection point — sovereign AI layer or AWS colony'},
+    ];
+    var signals = [];
+    for(var i=0;i<sigDefs.length;i++){
+      if(sigDefs[i].test.test(t)) signals.push({icon:sigDefs[i].icon,label:sigDefs[i].label,val:sigDefs[i].val});
+    }
+    if(!signals.length) signals.push({icon:'\uD83D\uDCE1',label:'Intelligence',val:'Research parsed — scroll for generated content'});
+
+    return {countries:countries.slice(0,6),signals:signals.slice(0,8),raw:text};
+  }
+
+  // ── GENERATE
+  window.generateSignals = function(){
+    var input = document.getElementById('researchInput').value.trim();
+    if(!input){ alert('Paste some research first.'); return; }
+    var btn = document.getElementById('analyzeBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generating...';
+    setTimeout(function(){
+      var data = parseResearch(input);
+      renderInsights(data);
+      renderLinkedIn(data);
+      renderTwitter(data);
+      renderWhatsApp(data);
+      renderEmail(data);
+      document.getElementById('outputSection').classList.add('visible');
+      document.getElementById('outputSection').scrollIntoView({behavior:'smooth'});
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg> Generate Signals';
+    }, 600);
+  };
+
+  // ── COPY
+  window.copyText = function(elId, btnId){
+    var el = document.getElementById(elId);
+    var btn = document.getElementById(btnId);
+    navigator.clipboard.writeText(el.textContent || el.innerText).then(function(){
+      btn.classList.add('copied');
+      var orig = btn.innerHTML;
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> Copied!';
+      setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+    });
+  };
+
+  // ── RENDER INSIGHTS
+  function renderInsights(data){
+    var grid = document.getElementById('insightsGrid');
+    var html = '';
+    for(var i=0;i<data.signals.length;i++){
+      var s = data.signals[i];
+      html += '<div class="insight-chip"><span class="insight-chip-icon">'+s.icon+'</span><div class="insight-chip-text"><strong>'+s.label+'</strong>'+s.val+'</div></div>';
+    }
+    for(var j=0;j<data.countries.length && j<4;j++){
+      var c = data.countries[j];
+      html += '<div class="insight-chip"><span class="insight-chip-icon">'+c.flag+'</span><div class="insight-chip-text"><strong>'+c.tag+' Market</strong>Detected in research — action item available</div></div>';
+    }
+    grid.innerHTML = html;
+  }
+
+  // ── RENDER LINKEDIN
+  function getLinkedInBody(data){
+    var t = (data.raw || '').toLowerCase();
+    var hasSA = false, hasNigeria = false, hasGhana = false, hasJapan = false;
+    var hasBrazil = false, hasUSA = false, hasChina = false, hasIndia = false;
+    for(var i=0;i<data.countries.length;i++){
+      var tag = data.countries[i].tag;
+      if(tag==='SA') hasSA=true;
+      if(tag==='NG') hasNigeria=true;
+      if(tag==='GH') hasGhana=true;
+      if(tag==='JP') hasJapan=true;
+      if(tag==='BR') hasBrazil=true;
+      if(tag==='USA') hasUSA=true;
+      if(tag==='CN') hasChina=true;
+      if(tag==='IN') hasIndia=true;
+    }
+In(data,"SA"),NG=has(data,"NG"),GH=has(data,"GH"),JP=has(data,"JP"),BR=has(data,"BR"),US=has(data,"USA"),CN=has(data,"CN"),IN=has(data,"IN");
+    if(SA&&NG&&GH){
+      b="South Africa stands at the inflection point of the Global South's AI infrastructure race.\\n\\nThis week reinforces what we've been tracking at OGRE Computer:\\n\\nFlutterwave secured a full banking license in April 2026 - payments-layer AI companies are becoming full-stack banks across Africa.\\n\\nGhana launched a $250M national AI strategy targeting $45 billion in GDP uplift by 2035 - the most ambitious nationally-coordinated AI play on the continent right now.\\n\\nSouth Africa remains at the inflection point. Discovery Health AI, Media24, Brainbox AI, and the CSIR are all building - but none are building together.\\n\\nThat's the opportunity: be the sovereign shared compute and governance layer that ties SA's fragmented AI initiatives into one coherent infrastructure play.\\n\\nThe 18-24 month window is open. After that, AWS and Google Cloud's planned SA region expansions own it for the next decade.\\n\\nOGRE Computer. We build while the world sleeps.\\n\\n#ArtificialIntelligence #SouthAfrica #Fintech #GlobalSouth #AIEconomy";
+    } else if(JP){
+      b="While the world watches the US-China AI headlines, Japan just committed Yen1 trillion to building something far more physical - and far more durable.\\n\\nThe Japan AI Foundation Model - backed by SoftBank, NEC, Sony, Honda, and Nippon Steel - is training a physical AI foundation model on robotics, factory automation, and autonomous driving data.\\n\\nThe strategic implication for Africa: Japan's model needs global industrial data to be truly generalizable. African mining, agriculture, and logistics sectors have data Japan Inc. cannot generate at home.\\n\\nOGRE Computer is positioning South Africa as 'Preferred Networks of Africa' - establishing a continent-level embodied AI data consortium before Japanese or Chinese industrial AI firms lock in African manufacturing clients.\\n\\nPhysical AI is not a distant bet. The commercial deployment window is 2027-2028. The data partnership agreements need to be signed now.\\n\\nWho is building Africa's physical AI data infrastructure?\\n\\n#PhysicalAI #Japan #Africa #Robotics #Manufacturing #AIEconomy";
+    } else if(BR){
+      b="Brazil's Nubank just committed R$45 billion to AI in 2026 - nearly doubling its prior-year capex, with AI-driven credit modeling, inclusive financial tools, and real-time fraud detection as core priorities.\\n\\nThe benchmark for South Africa's banks just shifted.\\n\\nAt OGRE Computer, we've spent 12 months mapping what the world's leading AI-first institutions are building. Nubank's playbook is the template SA's incumbent banks are 2-3 years behind.\\n\\nThe question is not whether SA banks will adopt AI banking architecture. They will. The question is who implements it.\\n\\nOGRE is building the Nubank-style AI banking stack for SA - adapted for SARB Prudential Authority and FSCA compliance requirements.\\n\\n18-month window. SA bank AI transformation is inevitable. Make it OGRE-powered.\\n\\n#Fintech #Banking #AI #SouthAfrica #Nubank #DigitalTransformation";
+    } else if(US&&CN){
+      b="The US-China AI race is creating infrastructure spillover that the Global South needs to harness strategically.\\n\\nAt OGRE Computer, we track nine AI battlegrounds every night. Here's what matters for South Africa:\\n\\nUSA: OpenAI, Anthropic, and Google fighting for API dominance. The window for SA to be the regulated gateway for US AI into Africa is 6-12 months.\\n\\nChina: Baidu open-sourcing ERNIE and Qwen 2.5 Max beating DeepSeek-V3 means open-weight AI is accessible to SA enterprises with compliance requirements.\\n\\nStrategic move: deploy both. A SA API gateway with data residency guarantees AND a local GPU cluster running DeepSeek/Qwen models.\\n\\nTwo rails. One sovereign infrastructure layer. That's the OGRE Compute Gateway play.\\n\\n#AI #GlobalSouth #SovereignAI";
+    } else if(IN){
+      b="India just deployed $1.2 billion through the IndiaAI Mission - actively seeking Global South co-development partners.\\n\\nIndia's play: self-reliance through AI. Build open-weight models, host domestically, counter US and China dependency.\\n\\nOpportunity for SA: India-SA AI compact. IndiaAI's open models + SA's multilingual African language datasets = jointly branded Africa-India AI with shared sovereignty positioning.\\n\\nThis gives SA enterprises an alternative to both US API dependency and Chinese open-source. And positions OGRE as the infrastructure partner.\\n\\nThe India-SA AI corridor. Not a future scenario. A negotiation happening right now.\\n\\n#SovereignAI #India #SouthAfrica #GlobalSouth #AI";
+    } else {
+      b="Nine countries. Nine AI battlegrounds. One question for South Africa: who builds the infrastructure?\\n\\nAt OGRE Computer, we run a 3AM intelligence scan every night - tracking what the world's leading AI actors are building.\\n\\nThis week: Flutterwave's banking license, Ghana's $250M strategy, Japan's Yen1T physical AI, India's $1.2B sovereign AI mission, Brazil's Nubank R$45B AI push.\\n\\nThe common thread: every major player racing to own the AI infrastructure layer in their region. SA has 18-24 months to do the same.\\n\\nOGRE Computer builds while the world sleeps.\\n\\n#ArtificialIntelligence #SouthAfrica #AIEconomy #GlobalSouth";
+    }
+    var el=document.getElementById("linkedinContent");
+    el.textContent=b;
+    document.getElementById("linkedinChar").textContent=b.length+" chars";
+  }
+
+  function renderTwitter(data){
+    var SA=has(data,"SA"),NG=has(data,"NG"),GH=has(data,"GH"),JP=has(data,"JP"),US=has(data,"USA"),CN=has(data,"CN");
+    var threads=[];
+    if(SA&&NG&&GH){
+      threads=[
+        {n:1,t:"Africa's AI infrastructure race is happening RIGHT NOW. Flutterwave got a full banking license. Ghana launched $250M national AI strategy. SA at the inflection point. A thread:"},
+        {n:2,t:"NIGERIA: Flutterwave - Africa's largest payments infrastructure company - is now a licensed BANK. Payments AI to full-stack bank AI. OGRE playbook for SA. White-label it. Move fast."},
+        {n:3,t:"GHANA: $250M national AI strategy. $45B GDP target by 2035. Most ambitious nationally-coordinated AI play in Africa. SA-Ghana compute partnership under AfCFTA = OGRE's anchor play."},
+        {n:4,t:"SOUTH AFRICA: Discovery Health AI. Media24. Brainbox AI. CSIR. All building. None building together. That fragmentation is OGRE's window - sovereign compute layer before AWS/Google own it."},
+        {n:5,t:"BOTTOM LINE: 18-24 month window. SA either builds its own AI infrastructure or becomes an AWS colony. OGRE Computer. We build while the world sleeps. #AfricaAI"},
+      ];
+    } else if(JP){
+      threads=[
+        {n:1,t:"Japan just bet Yen1 TRILLION on physical AI. Not chatbots. Not LLMs. Robotics. Factory automation. Autonomous driving. This changes everything for Africa. A thread:"},
+        {n:2,t:"THE PLAY: Japan AI Foundation Model - SoftBank, NEC, Sony, Honda, Nippon Steel - training on robotics and industrial automation. Physical AI is the next frontier."},
+        {n:3,t:"THE AFRICA ANGLE: Japan needs global industrial data to train generalizable physical AI. African mining, agriculture, logistics have data Japan cannot generate at home."},
+        {n:4,t:"OGRE'S PLAY: Position SA as 'Preferred Networks of Africa' - embodied AI data consortium before Chinese robotics firms lock in African manufacturing clients."},
+        {n:5,t:"Physical AI commercial deployment: 2027-2028. Data partnership agreements need signing NOW. OGRE Computer. Japan-SA Bridge. DM to connect. #PhysicalAI"},
+      ];
+    } else {
+      threads=[
+        {n:1,t:"9 countries. 9 AI battlegrounds. OGRE runs a 3AM intelligence scan every night so you don't have to. Here's what matters this week:"},
+        {n:2,t:"USA: OpenAI GPT-5. Anthropic Claude 4.5. Google Gemini 3.5 Pro. The frontier model race is the API dominance race. 6-12 month window for SA to be the regulated gateway."},
+        {n:3,t:"CHINA: Baidu ERNIE open-sourcing. Qwen 2.5 Max beating DeepSeek-V3. Open-weight AI now accessible to any SA enterprise with compliance requirements."},
+        {n:4,t:"SOUTH AFRICA: Inflection point. Discovery Health AI, Media24, Brainbox AI, CSIR all fragmenting. OGRE builds the sovereign shared compute layer. Window: NOW."},
+        {n:5,t:"Every night, OGRE builds while the world sleeps. DM for the full briefing. #AI #GlobalSouth #SovereignAI"},
+      ];
+    }
+    var g=document.getElementById("twitterGrid"),h="";
+    for(var i=0;i<threads.length;i++){
+      var p=threads[i];
+      var warn=p.t.length>280?' <span style="color:#ff6b6b">('+p.t.length+' chars - trim)</span>':' <span style="color:#00c853">(ok)</span>';
+      h+='<div class="post-card"><div class="post-num">Post '+p.n+' of '+threads.length+'</div><div class="post-text">'+p.t.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div><div class="post-card-footer"><span class="post-char">'+p.t.length+' chars'+warn+'</span><button class="copy-btn" onclick="copyTextBySelector(this,\'.post-card:nth-child('+(i+1)+') .post-text\')">Copy</button></div></div>';
+    }
+    g.innerHTML=h;
+  }
+
+  window.copyTextBySelector=function(btn,selector){
+    var el=document.querySelector(selector);
+    if(!el)return;
+    navigator.clipboard.writeText(el.textContent).then(function(){
+      var orig=btn.innerHTML;
+      btn.classList.add('copied');btn.innerHTML='Copied!';
+      setTimeout(function(){btn.classList.remove('copied');btn.innerHTML=orig;},2000);
+    });
+  };
+
+  function renderWhatsApp(data){
+    var SA=has(data,"SA"),NG=has(data,"NG"),GH=has(data,"GH"),JP=has(data,"JP"),US=has(data,"USA"),CN=has(data,"CN"),BR=has(data,"BR");
+    var b="";
+    if(SA&&NG&&GH){
+      b="OGRE INTELLIGENCE BRIEF - 29 June 2026\n\nTOP SIGNALS TODAY:\n\nBANKING: Flutterwave secured full banking license (April 2026). Payments AI to full-stack bank AI. OGRE play: white-label compliance stack for SA SARB + FSCA.\n\nSTRATEGY: Ghana launched $250M national AI strategy. $45B GDP target by 2035. OGRE play: SA-Ghana compute partnership under AfCFTA data protocols.\n\nSA: Inflection point. Discovery Health AI, Media24, Brainbox AI, CSIR all fragmenting. OGRE play: sovereign shared compute layer. NOW - before AWS/Google lock in.\n\nTOP 3 OGRE ACTIONS:\n1. SA AI Compute Gateway (M1-3): Anthropic/OpenAI/Qwen proxy with SA data residency.\n2. Physical AI Data Consortium SA/Japan Bridge (M3-9): mining, agrirobotics, logistics data.\n3. SA Fintech AI Stack (M6-12): Flutterwave/Nubank playbook for SA banks.\n\nWindow: 18-24 months.\n\nOGRE Computer. We build while the world sleeps.";
+    } else if(JP){
+      b="OGRE INTELLIGENCE BRIEF - 29 June 2026\nJAPAN PHYSICAL AI SPECIAL\n\nJAPAN: Yen1T AI Foundation Model (SoftBank, NEC, Sony, Honda) - trillion-parameter physical AI for robotics and industrial automation.\n\nAFRICA ANGLE: Japan needs global industrial data for generalizable physical AI. African mining, agriculture, logistics have data Japan cannot generate at home.\n\nOGRE PLAY: Position SA as 'Preferred Networks of Africa' - embodied AI data consortium before Chinese robotics firms lock in African clients.\n\nTimeline: Data agreements need signing NOW. Commercial deployment 2027-2028.\n\nDM to explore the Japan-SA Physical AI Bridge.\n\nOGRE Computer.";
+    } else if(BR){
+      b="OGRE INTELLIGENCE BRIEF - 29 June 2026\nNUBANK AI BANKING SPECIAL\n\nBRAZIL: Nubank committed R$45B to AI in 2026 - AI credit modeling, fraud detection, inclusive finance. Benchmark for SA banks shifted.\n\nOGRE PLAY: Build Nubank-style AI banking stack for SA - adapted for SARB Prudential Authority and FSCA compliance.\n\nTimeline: 18-month window. SA bank AI transformation is inevitable. Make it OGRE-powered.\n\nDM to connect.\n\nOGRE Computer.";
+    } else {
+      b="OGRE INTELLIGENCE BRIEF - 29 June 2026\n\n9 COUNTRIES. 9 AI BATTLEGROUNDS.\n\nTonight's scan: USA frontier models, China open-source wave, Japan physical AI, India $1.2B sovereign AI, Brazil Nubank R$45B AI push, Nigeria Flutterwave banking license, Ghana $250M national AI strategy, SA at the inflection point.\n\nTOP INSIGHT: Every major AI power racing to own the infrastructure layer in their region. SA has 18-24 months to do the same.\n\nTOP 3 OGRE ACTIONS:\n1. SA AI Compute Gateway (M1-3)\n2. Physical AI Data Consortium SA/Japan Bridge (M3-9)\n3. SA Fintech AI Stack (M6-12)\n\nOGRE Computer. We build while the world sleeps.\n\nDM for the full briefing.";
+    }
+    var el=document.getElementById("whatsappContent");
+    el.textContent=b;
+    document.getElementById("whatsappChar").textContent=b.length+" chars";
+  }
+
+  function renderEmail(data){
+    var SA=has(data,"SA"),NG=has(data,"NG"),GH=has(data,"GH"),JP=has(data,"JP"),BR=has(data,"BR"),US=has(data,"USA");
+    var variants=[];
+    if(SA&&NG&&GH){
+      variants=[
+        {l:"Variant A - Africa-First",s:"Africa's AI Infrastructure Race: What SA Must Do in the Next 18 Months"},
+        {l:"Variant B - Urgency",s:"SA at the Inflection Point: Flutterwave, Ghana and the 18-Month AI Window"},
+        {l:"Variant C - Executive",s:"Intelligence Brief: Nigeria's Banking License, Ghana's $250M Bet and SA's Narrowing Window"},
+      ];
+    } else if(JP){
+      variants=[
+        {l:"Variant A",s:"Japan Just Committed Yen1 Trillion to Physical AI - Here's What It Means for Africa"},
+        {l:"Variant B",s:"Physical AI 2027-2028: The Data Partnership SA Needs to Sign Now"},
+        {l:"Variant C",s:"The Japan-SA AI Bridge: OGRE's Strategic Window in Physical AI"},
+      ];
+    } else if(BR){
+      variants=[
+        {l:"Variant A",s:"Nubank Just Committed R$45 Billion to AI - Is Your Bank Ready?"},
+        {l:"Variant B",s:"The AI Banking Benchmark Just Shifted: What SA's Banks Need to Do Now"},
+        {l:"Variant C",s:"From Fintech to AI-First Banking: OGRE's Nubank Playbook for SA"},
+      ];
+    } else if(US){
+      variants=[
+        {l:"Variant A",s:"The US-China AI Race Is Creating Global Infrastructure Spillover - Is SA Ready?"},
+        {l:"Variant B",s:"18 Months to Own the Global South AI Layer Before AWS and Google Lock It In"},
+        {l:"Variant C",s:"AI Intelligence: What the US-China Race Means for SA's Sovereign AI Strategy"},
+      ];
+    } else {
+      variants=[
+        {l:"Variant A",s:"Nine Countries. Nine AI Battlegrounds. One Question: Where Does SA Fit?"},
+        {l:"Variant B",s:"The 18-Month Window for SA to Build Its Own AI Infrastructure Layer"},
+        {l:"Variant C",s:"OGRE Intelligence: AI Infrastructure Race Update - June 2026"},
+      ];
+    }
+    var g=document.getElementById("emailGrid"),h="";
+    for(var i=0;i<variants.length;i++){
+      var v=variants[i];
+      h+='<div class="post-card"><div class="post-num">'+v.l+'</div><div class="post-text">'+v.s.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div><div class="post-card-footer"><span class="post-char">'+v.s.length+' chars (email safe)</span><button class="copy-btn" onclick="copyTextInline(this,\''+encodeURIComponent(v.s)+'\')">Copy</button></div></div>';
+    }
+    g.innerHTML=h;
+  }
+
+  window.copyTextInline=function(btn,encodedText){
+    var text=decodeURIComponent(encodedText);
+    navigator.clipboard.writeText(text).then(function(){
+      var orig=btn.innerHTML;
+      btn.classList.add('copied');btn.innerHTML='Copied!';
+      setTimeout(function(){btn.classList.remove('copied');btn.innerHTML=orig;},2000);
+    });
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dark Factory · OGRE Computer</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#07070f;--bg2:#0d0d1c;--bg3:#11111f;--bd:#1c1c32;--accent:#6c63ff;--a2:#00d4ff;--a3:#ec4899;--gold:#f59e0b;--green:#10b981;--txt:#eeeef8;--mut:#7070a8;--dim:#40406a}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--txt);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+canvas{width:100%;display:block}
+section{padding:6rem 2rem;max-width:1200px;margin:0 auto}
+hr{border:none;border-top:1px solid var(--bd);max-width:1200px;margin:0 auto}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:62px;background:rgba(7,7,15,.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
+.logo{display:flex;align-items:center;gap:10px}
+.ld{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;color:#fff}
+.ln{font-size:.7rem;font-weight:800;color:var(--txt);letter-spacing:.1em;text-transform:uppercase}
+.ls{font-size:.55rem;color:var(--mut)}
+.links{display:flex;gap:2rem;flex:1;justify-content:center}
+.la{font-size:.72rem;color:var(--mut);font-weight:500;transition:color .2s}
+.la:hover,.la.active{color:var(--txt)}
+.cta{display:inline-flex;padding:8px 18px;background:var(--accent);color:#fff;border-radius:8px;font-size:.72rem;font-weight:700;transition:all .2s}
+.cta:hover{background:#5a52d4;transform:translateY(-1px)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 2rem 3rem;position:relative;overflow:hidden}
+.hero canvas{position:absolute;inset:0;z-index:0;opacity:.5}
+.hc{position:relative;z-index:2;max-width:900px}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:5px 16px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);border-radius:999px;font-size:.62rem;color:var(--accent);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.8rem}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:bd 2s infinite}
+@keyframes bd{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(2.6rem,8vw,6rem);font-weight:900;line-height:.95;letter-spacing:-.03em;margin-bottom:1.2rem;background:linear-gradient(135deg,#fff 30%,rgba(255,255,255,.4));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:.98rem;color:var(--mut);max-width:500px;margin:0 auto 2.5rem}
+.btns{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap}
+.bp{display:inline-flex;padding:13px 30px;background:var(--accent);color:#fff;border-radius:10px;font-weight:700;font-size:.88rem;transition:all .2s}
+.bp:hover{background:#5a52d4;transform:translateY(-2px);box-shadow:0 8px 30px rgba(108,99,255,.4)}
+.bs{display:inline-flex;padding:12px 26px;background:transparent;border:1px solid #272745;color:var(--mut);border-radius:10px;font-weight:600;font-size:.85rem;transition:all .2s}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
+.scroll{position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);z-index:2}
+.sf{width:1px;height:30px;background:linear-gradient(to bottom,var(--accent),transparent);animation:sc 2s ease-in-out infinite}
+@keyframes sc{0%,100%{opacity:.3}50%{opacity:1}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);background:var(--bg2)}
+.st{text-align:center;padding:1.5rem 1rem;border-right:1px solid var(--bd)}
+.st:last-child{border-right:none}
+.n{font-size:1.8rem;font-weight:900;color:var(--accent);display:block}
+.l{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-top:4px;font-weight:600}
+.ey{font-size:.6rem;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-weight:700;margin-bottom:.6rem}
+.tt{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:.6rem}
+.ds{color:var(--mut);max-width:480px;font-size:.9rem;line-height:1.8;margin-bottom:2.5rem}
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:1rem;margin-top:2rem}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:1.7rem;transition:all .3s}
+.card:hover{transform:translateY(-4px);border-color:rgba(108,99,255,.3)}
+.ci{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.9rem}
+.ch{font-size:.92rem;font-weight:800;margin-bottom:4px}
+.tag{display:inline-flex;padding:3px 10px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.15);border-radius:999px;font-size:.58rem;color:var(--accent);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem}
+.tag.g{background:rgba(16,185,129,.08);color:var(--green);border-color:rgba(16,185,129,.2)}
+.tag.c{background:rgba(0,212,255,.08);color:var(--a2);border-color:rgba(0,212,255,.2)}
+.tag.p{background:rgba(236,72,153,.08);color:var(--a3);border-color:rgba(236,72,153,.2)}
+.cp{font-size:.76rem;color:var(--mut);line-height:1.6;margin-bottom:.5rem}
+.pr{font-size:.82rem;font-weight:700;color:var(--accent)}
+.pr span{font-weight:400;color:var(--dim);font-size:.72rem}
+.cl{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem}
+.lb{padding:5px 12px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.66rem;color:var(--mut);transition:all .2s;display:inline-block}
+.lb:hover{border-color:var(--accent);color:var(--accent)}
+.vmd{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:2rem;margin-top:2rem}
+.vmd canvas{border-radius:10px;height:280px}
+.vmc{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.2rem}
+.vm{background:var(--bg3);border:1px solid var(--bd);border-radius:10px;padding:.8rem;text-align:center;transition:all .3s}
+.vm:hover{border-color:var(--accent)}
+.vm.o{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.03)}
+.vm h4{font-size:.72rem;font-weight:700;margin-bottom:2px}
+.vm .sec{font-size:.58rem;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px}
+.vm.o .sec{color:var(--green)}
+.vm p{font-size:.66rem;color:var(--dim);line-height:1.5}
+.gm{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-top:2rem}
+.ec{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.cp2{padding:7px 14px;background:var(--bg2);border:1px solid var(--bd);border-radius:8px;font-size:.74rem;font-weight:600;color:var(--mut);display:flex;align-items:center;gap:7px}
+.cp2:hover{border-color:var(--accent);color:var(--txt)}
+.cdt{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.gcard{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(0,212,255,.06));border:1px solid rgba(108,99,255,.2);border-radius:16px;padding:1.5rem;text-align:center}
+.gcard h4{font-size:.9rem;font-weight:800;margin-bottom:.4rem}
+.gcard p{font-size:.76rem;color:var(--mut);margin-bottom:.8rem}
+.lbb{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;padding:8px 20px;border-radius:8px;display:inline-block;font-size:.78rem}
+.bm{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:2.5rem;margin-top:2rem}
+.stp{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:2rem}
+.step{text-align:center;padding:1rem;background:var(--bg3);border:1px solid var(--bd);border-radius:10px}
+.sn{width:30px;height:30px;border-radius:50%;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:var(--accent);margin:0 auto .6rem}
+.step h4{font-size:.78rem;font-weight:700;margin-bottom:.3rem}
+.step p{font-size:.68rem;color:var(--mut);line-height:1.5}
+.frm{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg.fx{grid-column:1/-1}
+.fg label{font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:700}
+.fg input,.fg textarea,.fg select{background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:10px 13px;font-size:.82rem;color:var(--txt);font-family:inherit;outline:none;transition:border-color .2s}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--accent)}
+.fg textarea{resize:vertical;min-height:90px}
+.submit{display:flex;justify-content:center;margin-top:1.5rem}
+.btn-s{background:var(--accent);color:#fff;padding:13px 40px;border-radius:10px;font-weight:700;font-size:.9rem;border:none;cursor:pointer;transition:all .2s}
+.btn-s:hover{background:#5a52d4;transform:translateY(-1px)}
+.ag{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-top:2rem}
+.agent{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:1.2rem;transition:all .3s}
+.agent:hover{border-color:rgba(108,99,255,.3);transform:translateY(-2px)}
+.at{display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem}
+.aa{width:36px;height:36px;border-radius:9px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.15);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.agent h4{font-size:.85rem;font-weight:700}
+.agent .role{font-size:.58rem;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-top:2px}
+.agent p{font-size:.74rem;color:var(--mut);line-height:1.6}
+.asp{display:flex;flex-wrap:wrap;gap:3px;margin-top:.7rem}
+.as{background:var(--bg3);border:1px solid var(--bd);border-radius:4px;padding:2px 7px;font-size:.58rem;color:var(--dim)}
+.evcard{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(0,212,255,.07));border:1px solid rgba(108,99,255,.22);border-radius:16px;padding:3rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
+.evcard::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(108,99,255,.05),transparent);pointer-events:none}
+.eb{display:inline-block;padding:4px 16px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.25);border-radius:999px;font-size:.62rem;color:var(--accent);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem}
+.evcard h2{font-size:clamp(1.4rem,4vw,2.4rem);font-weight:900;letter-spacing:-.02em;margin-bottom:.5rem;position:relative}
+.evcard .p2{color:var(--mut);font-size:.88rem;margin-bottom:1.5rem;position:relative}
+.em{display:flex;gap:2rem;justify-content:center;margin-bottom:1.8rem;flex-wrap:wrap;position:relative}
+.em .i{text-align:center}
+.em .v{font-size:1.1rem;font-weight:800}
+.em .l{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-top:2px}
+.agd{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;text-align:left;position:relative;margin-top:1.5rem}
+.ag2{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:1rem}
+.ag2 .t{font-size:.62rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.ag2 h4{font-size:.78rem;font-weight:700;margin-bottom:2px}
+.ag2 p{font-size:.66rem;color:var(--dim);line-height:1.5}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1rem;margin-top:2rem}
+.script{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;overflow:hidden;transition:all .3s}
+.script:hover{border-color:rgba(108,99,255,.3)}
+.sb{height:105px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;position:relative;background:linear-gradient(135deg,var(--bg3),#16162a)}
+.sp{position:absolute;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.sb2{padding:1.1rem}
+.sb2 h3{font-size:.88rem;font-weight:800;margin-bottom:3px}
+.sb2 .tag{display:inline-block;padding:2px 8px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.15);border-radius:999px;font-size:.56rem;color:var(--accent);font-weight:700;letter-spacing:.05em;margin-bottom:.5rem}
+.sb2 p{font-size:.74rem;color:var(--mut);line-height:1.6}
+.sb2 .dur{font-size:.65rem;color:var(--dim);margin-top:.5rem}
+.ft{background:linear-gradient(135deg,rgba(108,99,255,.16),rgba(0,212,255,.08));border-top:1px solid rgba(108,99,255,.18);padding:6rem 2rem;text-align:center;position:relative;overflow:hidden}
+.ft::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 50% 50%,rgba(108,99,255,.06),transparent);pointer-events:none}
+.ft .c{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.ft h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;letter-spacing:-.02em;margin-bottom:.7rem}
+.ft p{color:var(--mut);font-size:.88rem;margin-bottom:2rem}
+.ft .bp{font-size:1rem;padding:15px 46px}
+footer{background:var(--bg2);border-top:1px solid var(--bd);padding:1.8rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.7rem;color:var(--dim)}
+footer .l{display:flex;align-items:center;gap:7px;font-weight:600;color:var(--mut)}
+footer a{color:var(--dim);transition:color .2s}
+footer a:hover{color:var(--accent)}
+@media(max-width:900px){.links{display:none}.gm{grid-template-columns:1fr}.frm{grid-template-columns:1fr}.stp{grid-template-columns:1fr 1fr}.vmc{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.agd{grid-template-columns:1fr}footer{flex-direction:column;text-align:center}}
+@media(max-width:600px){nav{padding:0 1.5rem}.btns{flex-direction:column;align-items:center}.pg,.ag,.sg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+<div class="logo"><div class="ld">DF</div><div><div class="ln">Dark Factory</div><div class="ls">OGRE Computer · Studex Group</div></div></div>
+<div class="links"><a href="#products">Products</a><a href="#vms">VM Ecosystem</a><a href="#market">Global Markets</a><a href="#bmad">Build Me A Dashboard</a><a href="#agents">AI Agents</a><a href="#event">Global Launch</a><a href="#scripts">YouTube Scripts</a></div>
+<a href="#bmad" class="cta">Start a Project</a>
+</nav>
+
+<section class="hero"><canvas id="heroCanvas"></canvas>
+<div class="hc"><div class="badge"><div class="dot"></div>Dark Factory · OGRE Computer · Studex Group · 2026</div>
+<h1>Build. Ship.<br>Repeat.</h1>
+<p class="sub">A sovereign AI build factory. Multi-agent teams design, build, and deploy software from idea to live product in days.</p>
+<div class="btns"><a href="#bmad" class="bp">Build Me A Dashboard — R29</a><a href="#vms" class="bs">Explore VM Ecosystem</a></div>
+</div>
+<div class="scroll"><div class="sf"></div>Scroll</div>
+</section>
+
+<div class="stats"><div class="st"><span class="n">6</span><div class="l">Live Products</div></div><div class="st"><span class="n">5</span><div class="l">AI Agents</div></div><div class="st"><span class="n">R200M+</span><div class="l">Tender Pipeline</div></div><div class="st"><span class="n">$4K</span><div class="l">MRR Target</div></div></div>
+
+<section id="products"><div class="ey">The Products</div><h2 class="tt">Everything We Build</h2><p class="ds">Six live products. Each built, deployed, and earning.</p><div class="pg">
+<div class="card"><div class="ci" style="background:rgba(236,72,153,.1)">V</div><div class="ch">DarkDesk</div><span class="tag">Voice AI</span><p class="cp">AI voice companion. Real-time voice + chat. Lives in your own sovereign SA VM. POPIA-compliant.</p><div class="pr">From R2,500<span>/mo</span></div><div class="cl"><a href="https://hgjcgc2esiki.space.minimax.io" target="_blank" class="lb">Demo</a><a href="https://9w8nktistow4.space.minimax.io" target="_blank" class="lb">Proposal</a></div></div>
+<div class="card"><div class="ci" style="background:rgba(16,185,129,.1)">W</div><div class="ch">AutoFlex Pro</div><span class="tag g">Web Automation</span><p class="cp">AI agent reads webpages, fills forms, qualifies leads, books appointments automatically.</p><div class="pr">From R1,500<span>/mo</span></div><div class="cl"><a href="https://3twhamln9rsh.space.minimax.io" target="_blank" class="lb">Demo</a><a href="#bmad" class="lb">Build yours</a></div></div>
+<div class="card"><div class="ci" style="background:rgba(245,158,11,.1)">S</div><div class="ch">Red Team Agent</div><span class="tag">Cybersecurity AI</span><p class="cp">AI VM monitoring other AI agents for hallucinations, prompt injection, PII leakage.</p><div class="pr">R45,000<span>/mo · Live MRR</span></div><div class="cl"><a href="https://w1tu0qxf216v.space.minimax.io" target="_blank" class="lb">Demo</a><a href="https://kidvuwlj196t.space.minimax.io" target="_blank" class="lb">Proposal</a></div></div>
+<div class="card"><div class="ci" style="background:rgba(108,99,255,.1)">I</div><div class="ch">ICVMS Platform</div><span class="tag c">Global Markets</span><p class="cp">Integrated Company VM System. 5 partner VMs connected through StudEx OS.</p><div class="pr">$4,000<span>/mo</span></div><div class="cl"><a href="https://j3s0jkun4cbh.space.minimax.io" target="_blank" class="lb">Proposal</a><a href="https://a5cjrm7f1x8s.space.minimax.io" target="_blank" class="lb">Full Demo</a></div></div>
+<div class="card"><div class="ci" style="background:rgba(0,212,255,.1)">B</div><div class="ch">BMAD</div><span class="tag">Rapid Development</span><p class="cp">Build Me A Dashboard. Describe what you want. We build it.</p><div class="pr">R29<span>/once-off</span></div><div class="cl"><a href="#bmad" class="lb">Start now</a><a href="https://6g18k484b9fx.space.minimax.io" target="_blank" class="lb">View BMAD</a></div></div>
+<div class="card"><div class="ci" style="background:rgba(239,68,68,.1)">O</div><div class="ch">Obsidian Mind</div><span class="tag p">Enterprise AI OS</span><p class="cp">Persistent memory vault for AI agents. Every conversation, deal, document stored forever.</p><div class="pr">$4,000<span>/mo</span></div><div class="cl"><a href="https://kidvuwlj196t.space.minimax.io" target="_blank" class="lb">Proposal</a><a href="https://idsucux7j3e4.space.minimax.io" target="_blank" class="lb">VM Demo</a></div></div>
+</div></section>
+<hr>
+<section id="vms"><div class="ey">Live Now</div><h2 class="tt">ICVMS — VM Ecosystem</h2><p class="ds">Animated in real time. Six VMs connected through StudEx OS.</p><div class="vmd"><canvas id="vmCanvas"></canvas><div class="vmc"><div class="vm"><h4>AfricaBiz</h4><div class="sec">Trade and Commerce</div><p>Trade flow · Compliance</p></div><div class="vm"><h4>NtechLab</h4><div class="sec">AI Facial Recognition</div><p>Computer Vision · AI Models</p></div><div class="vm o"><h4>VM 05 — OPEN</h4><div class="sec" style="color:var(--green)">Your Company Here</div><p>Apply now · B-BBEE preferred</p></div><div class="vm"><h4>Pharmasyntez</h4><div class="sec">Pharma Distribution</div><p>Cold Chain · SAHPRA</p></div><div class="vm"><h4>ART Engineering</h4><div class="sec">Manufacturing</div><p>Infrastructure · DevOps</p></div></div></div></section>
+<hr>
+<section id="market"><div class="gm"><div><div class="ey">Studex Global Markets</div><h2 class="tt">Africa-Russia Trade<br>Infrastructure</h2><p class="ds">Built for the Africa-Russia trade corridor. B-BBEE Level 1. POPIA compliant.</p><div class="ec"><div class="cp2"><div class="cdt"></div>Africa-Russia Trade</div><div class="cp2"><div class="cdt" style="background:var(--green)"></div>B-BBEE Level 1</div><div class="cp2"><div class="cdt" style="background:var(--a2)"></div>Johannesburg SA</div><div class="cp2"><div class="cdt" style="background:var(--gold)"></div>6 VMs · 1 Platform</div></div><div class="gcard" style="margin-top:1.5rem"><h4>Apply for VM 05</h4><p>The final ICVMS partner slot. B-BBEE companies preferred.</p><a href="mailto:hello@studexglobalmarkets.com?subject=VM 05 Application" class="lbb">Apply via Email</a></div></div><div><div class="card" style="margin-top:0"><div class="ci" style="background:rgba(0,212,255,.1)">I</div><div class="ch">ICVMS Official Proposal</div><span class="tag c">Official · Minima UI</span><p class="cp">All 5 partner logos, VM specs, pricing tiers, bank details. Minima sophisticated design.</p><div class="pr">$4,000<span>/mo + $7,590 setup</span></div><div class="cl"><a href="https://j3s0jkun4cbh.space.minimax.io" target="_blank" class="lb">Proposal</a><a href="https://a5cjrm7f1x8s.space.minimax.io" target="_blank" class="lb">Full Demo</a></div></div><div class="card" style="margin-top:.8rem"><div class="ci" style="background:rgba(239,68,68,.1)">M</div><div class="ch">MindX Voice Agent</div><span class="tag">New Proposal</span><p class="cp">Voice AI for MindX. Own SA VM. 4 agents. Built in 4 weeks.</p><div class="pr">$4,000<span>/mo + $7,590 setup</span></div><div class="cl"><a href="https://9w8nktistow4.space.minimax.io" target="_blank" class="lb">Proposal</a><a href="#bmad" class="lb">Start PRD</a></div></div></div></div></section>
+<hr>
+<section id="bmad"><div class="ey">Rapid Development</div><h2 class="tt">Build Me A Dashboard</h2><p class="ds">Describe what you want. We build it. R29. Powered by AI agent teams.</p><div class="bm"><div class="stp"><div class="step"><div class="sn">1</div><h4>Submit</h4><p>Fill the form. Describe your project in plain English.</p></div><div class="step"><div class="sn">2</div><h4>We Analyse</h4><p>Our agents scope, break down, and plan the build.</p></div><div class="step"><div class="sn">3</div><h4>We Build</h4><p>CodeRabbit reviews every PR. Built and deployed.</p></div><div class="step"><div class="sn">4</div><h4>You Approve</h4><p>R29. 50% now, 50% on approval. Done.</p></div></div><form class="frm" onsubmit="handleSubmit(event)"><div class="fg"><label>Your Name</label><input type="text" placeholder="Tumelo Ramaphosa" required></div><div class="fg"><label>Email</label><input type="email" placeholder="tumelo@studexmeat.com" required></div><div class="fg"><label>Company</label><input type="text" placeholder="Studex Group"></div><div class="fg"><label>Project Type</label><select><option>Dashboard</option><option>Landing Page</option><option>Web App</option><option>Voice Agent</option><option>Automation</option><option>CRM</option><option>Other</option></select></div><div class="fg fx"><label>Describe Your Project</label><textarea placeholder="Describe what you want built..."></textarea></div><div class="fg fx" style="align-items:center;justify-content:center;padding-top:.5rem"><button type="submit" class="btn-s">Submit Project — R29</button></div></form></div></section>
+<hr>
+<section id="agents"><div class="ey">The Intelligence Layer</div><h2 class="tt">Your AI Agent Team</h2><p class="ds">Every VM runs purpose-built AI agents. Working 24/7. Memory. Voice. Web capabilities.</p><div class="ag">
+<div class="agent"><div class="at"><div class="aa">H</div><div><h4>Hermes</h4><div class="role">Chief Technology Officer</div></div></div><p>Self-hosted LLM, persistent memory, multi-agent orchestration. Zero external API calls for reasoning.</p><div class="asp"><span class="as">Ollama Qwen 2.5</span><span class="as">GitHub</span><span class="as">Self-Hosted</span></div></div>
+<div class="agent"><div class="at"><div class="aa">N</div><div><h4>Naledi</h4><div class="role">Chief Marketing Officer</div></div></div><p>Manages content calendars, social media scheduling, and campaign drafting across all major platforms.</p><div class="asp"><span class="as">20 posts/month</span><span class="as">Analytics</span><span class="as">Multi-platform</span></div></div>
+<div class="agent"><div class="at"><div class="aa">A</div><div><h4>Auto-Commerce</h4><div class="role">E-Commerce Manager</div></div></div><p>Manages Shopify, product listings, order workflows, inventory, and customer communication.</p><div class="asp"><span class="as">Shopify</span><span class="as">Inventory</span><span class="as">Orders</span></div></div>
+<div class="agent"><div class="at"><div class="aa">R</div><div><h4>Robusca</h4><div class="role">Chief of Staff</div></div></div><p>Coordinates all agents, manages priorities, maintains the operational calendar, drives War Room.</p><div class="asp"><span class="as">Coordination</span><span class="as">War Room</span><span class="as">Reporting</span></div></div>
+<div class="agent"><div class="at"><div class="aa">O</div><div><h4>Obsidian Mind</h4><div class="role">Memory and Reasoning Core</div

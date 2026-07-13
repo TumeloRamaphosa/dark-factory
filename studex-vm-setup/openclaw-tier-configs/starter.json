@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.openclaw.ai/config-schema.json",
+  "gateway": {
+    "port": 18789,
+    "host": "0.0.0.0",
+    "auth": {
+      "enabled": true,
+      "tokenExpiry": "24h"
+    }
+  },
+  "agents": [
+    {
+      "id": "openclaw-basic",
+      "name": "StudEx Basic Agent",
+      "model": "minimax/auto",
+      "systemPrompt": "You are the StudEx Basic AI assistant. You help clients with general inquiries, FAQ responses, and basic support tasks.",
+      "maxTokens": 2048,
+      "temperature": 0.7,
+      "channels": ["webchat"],
+      "capabilities": ["search", "basic-responses"]
+    }
+  ],
+  "limits": {
+    "ram": "2GB",
+    "storage": "20GB",
+    "n8n_flows": 5,
+    "email_limit": 100,
+    "rate_limit": {
+      "requests_per_minute": 30,
+      "requests_per_hour": 500
+    }
+  },
+  "features": {
+    "whatsapp": true,
+    "analytics": false,
+    "crm": false
+  },
+  "openclaw": {
+    "version": "1.x"
+  }
+}

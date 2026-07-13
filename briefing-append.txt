@@ -1,0 +1,93 @@
+
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Global AI Landscape &mdash; 8 Markets</h2>
+    <span class="section-tag">COUNTRY INTELLIGENCE</span>
+  </div>
+  <div class="country-grid">
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127482;&#127480;</span><span class="country-name">United States</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>OpenAI</strong> (GPT-5 autonomous agents) &middot; <strong>Anthropic</strong> (Claude Corps, $65B round) &middot; <strong>xAI</strong> (Grok Build) &middot; <strong>Google</strong> (Gemini 2.5 Ultra)</div>
+      <div class="country-ogre">License DeepSeek R2 open-weight models for OGRE&apos;s sovereign AI stack. Build multilingual agentic workflow layer (English, Zulu, Afrikaans, Xhosa) &mdash; no Western lab currently serves this. Anthropic&apos;s June 2026 geo-restriction creates a once-in-a-decade opening for African enterprise adoption.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127464;&#127475;</span><span class="country-name">China</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>DeepSeek V4-Pro</strong> &middot; <strong>MiniMax M3</strong> (near-zero API cost) &middot; <strong>Qwen3-235B</strong> (most deployed open-weight in Asia/Africa) &middot; <strong>ByteDance Doubao</strong> (500M+ endpoints)</div>
+      <div class="country-ogre">Stand up DeepSeek/Qwen sovereign AI cloud for African governments with data residency guarantees &mdash; no US provider can offer this. Position OGRE as trusted African gateway to Chinese frontier models. If not us, Chinese cloud providers own African enterprise AI in 24 months.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127471;&#127477;</span><span class="country-name">Japan</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>SoftBank</strong> AI GPU cloud (May 2026) &middot; <strong>Preferred Networks</strong> (&frac12; OpenAI cost) &middot; <strong>Sony-Honda</strong> consortium &middot; &yen;300B NEDO consortium</div>
+      <div class="country-ogre">Partner with PFN or SoftBank to co-develop Southern Hemisphere AI sovereign cloud using Japan&apos;s proven public-private consortium model. Attract SA government backing for local data centre qualifying for SA&apos;s IP &amp; Innovation Incentive tax credits. Open through Q4 2026.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127475;</span><span class="country-name">India</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>Krutrim</strong> (profitable &pound;300Cr, Indic-language AI) &middot; <strong>Infosys.ai</strong> ($500M GCC deal) &middot; <strong>IndiaAI mission</strong> (18 regional language datasets)</div>
+      <div class="country-ogre">Replicate India&apos;s GCC-to-AI-services pipeline: OGRE as AI delivery arm for African multinationals, 40% below Accenture/IBM. Use Krutrim&apos;s Indic-language playbook to launch African-language AI product (isiZulu, Setswana, Sesotho). 3&ndash;5 year window before India replicates GCC model into Africa.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127479;</span><span class="country-name">Brazil</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>Nubank</strong> (R$45B AI investment 2026, credit models open-sourced) &middot; <strong>WildLife Studios</strong> (AI game content) &middot; <strong>SuperFX</strong> (AI FX risk) &middot; <strong>ICLR 2026 Rio</strong></div>
+      <div class="country-ogre">License Nubank&apos;s open-sourced credit model architecture for a SA digital lending spin-off under OGRE umbrella. Africa&apos;s credit underwriting gap (80% unbanked + thin credit files) is structurally identical to Brazil&apos;s 2015 fintech moment. Implementation advantage is highest right now.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127469;</span><span class="country-name">Mexico</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>ODAIA</strong> ($47M pharma AI) &middot; <strong>Bitso</strong> (AI crypto rails, $20B+) &middot; <strong>Kavak</strong> AI &middot; <strong>AI Finance Summit 2026</strong> (12,000 attendees)</div>
+      <div class="country-ogre">Build OGRE AI Remittance Intelligence targeting SA&apos;s R25B annual diaspora remittance corridor &mdash; zero AI optimization exists there today. Bitso&apos;s cross-border AI model as reference. 6&ndash;9 months to adapt for SA SARB regulatory framework.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127475;&#127472;</span><span class="country-name">Nigeria</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>Flutterwave</strong> ($40B/yr txns, 1B transactions, banking licence) &middot; <strong>Jasiri AI</strong> (micro-lending) &middot; <strong>Touchless.ai</strong> (Africa-first KYC/AML platform)</div>
+      <div class="country-ogre">Integrate Flutterwave API into OGRE payment infrastructure for Pan-African payment AI gateway. SA businesses processing from Nigeria, Ghana, Kenya plug into single OGRE-hosted API for FX, compliance, settlement. Flutterwave&apos;s banking licence makes SA-Nigeria AI corridor commercially viable RIGHT NOW.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127469;</span><span class="country-name">Ghana</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>Ghana AI Authority (RAI)</strong> &middot; <strong>Cropin AI</strong> (200K+ smallholder farmers) &middot; <strong>mNotify</strong> (48 ministry AI comms) &middot; <strong>3 new AI bootcamps</strong> H1 2026</div>
+      <div class="country-ogre">Position OGRE as implementation partner for Ghana&apos;s National AI Strategy cross-border components &mdash; agricultural AI and digital ID integration. First South African partner gets a strategic relationship that compounds over the 10-year strategy lifecycle. RAI Authority actively seeking implementation partners in 2026.</div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Priority Matrix &mdash; All 5 Moves</h2>
+    <span class="section-tag">STRATEGIC PLAN</span>
+  </div>
+  <table class="matrix-table">
+    <thead><tr><th class="col-rank">#</th><th>Initiative</th><th>Market Size</th><th>Timeline</th><th class="col-urgency">Urgency</th><th>Key Partner / Model</th></tr></thead>
+    <tbody>
+      <tr><td class="col-rank">01</td><td style="color:var(--red);font-weight:600;">Pan-African Payment AI Gateway</td><td class="col-size">$12B/yr</td><td class="col-timeline">90 days to MVP</td><td><span class="priority-badge badge-red">CRITICAL</span></td><td>Flutterwave (Nigeria)</td></tr>
+      <tr><td class="col-rank">02</td><td style="color:var(--orange);font-weight:600;">African Sovereign Health AI Layer</td><td class="col-size">$3.2B AU Fund</td><td class="col-timeline">120 days to pilot</td><td><span class="priority-badge badge-orange">HIGH</span></td><td>Discovery Health, CSIR, SA DoH</td></tr>
+      <tr><td class="col-rank">03</td><td style="color:var(--yellow);font-weight:600;">DeepSeek / Qwen Sovereign Cloud</td><td class="col-size">$800M</td><td class="col-timeline">180 days to market</td><td><span class="priority-badge badge-yellow">MEDIUM</span></td><td>DeepSeek, Teraco (SA data centre)</td></tr>
+      <tr><td class="col-rank">04</td><td style="color:var(--green);font-weight:600;">African-Language AI Product Line</td><td class="col-size">$400M</td><td class="col-timeline">12 months</td><td><span class="priority-badge badge-green">STANDARD</span></td><td>Krutrim (India), Wits AI Dept</td></tr>
+      <tr><td class="col-rank">05</td><td style="color:var(--cyan);font-weight:600;">SA Government AI Services Contract Vehicle</td><td class="col-size">$250M / 3yr</td><td class="col-timeline">60 days to proposal</td><td><span class="priority-badge badge-cyan">CONTRACT</span></td><td>Ghana RAI, SA GPW</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="section">
+  <div class="section-header"><h2 class="section-title">The 3AM Verdict</h2><span class="section-tag">SYNTHESIS</span></div>
+  <div class="verdict-block">
+    <div class="verdict-watermark">&#9670;</div>
+    <div class="verdict-eyebrow">OGRE MIDNIGHT BUILD &mdash; 2026-06-24</div>
+    <div class="verdict-text">The world&apos;s AI buildout has shifted permanently south. Not because Silicon Valley failed &mdash; because the problems are African now. Load-shedding prediction, crop insurance for 200M smallholders, KYC for 800M people with no credit file, vernacular content at scale, cross-border remittances at $40B+ &mdash; these are not edge cases. They are the main event. And every single one of them is being solved right now in Lagos, Sao Paulo, Accra, and Bangalore. OGRE&apos;s mandate is to be the layer that connects those solutions to South African and Global South clients &mdash; sovereign, fast, and trusted.</div>
+    <div class="verdict-tags">
+      <span class="priority-badge badge-red">9 Countries Scanned</span>
+      <span class="priority-badge badge-orange">21 Action Items</span>
+      <span class="priority-badge badge-yellow">$16.5B Total Addressable Market</span>
+      <span class="priority-badge badge-green">5 Priority Moves</span>
+      <span class="priority-badge badge-cyan">18&ndash;24 Month Window</span>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div>
+    <div class="footer-brand">&#9670; OGRE COMPUTER &mdash; Studex Group</div>
+    <div class="footer-meta">Report ID: OGRE-MIDNIGHT-2026-06-24<br>Compiled: 2026-06-24 03:00 AM SAST &middot; Next cycle: 2026-06-25 03:00 AM SAST<br>Delivered to: Studex Group AI Strategy Team &middot; OGRE Computer Executive</div>
+  </div>
+  <div class="footer-sources"><strong>Sources:</strong> Verified public announcements across all featured companies and government bodies, June 2026. Research window: 2026-05-25 to 2026-06-24. "What OGRE can implement" items are OGRE strategic analysis &mdash; internal only, not for external distribution.</div>
+</div>
+</div>
+<script>
+function updateClock(){var n=new Date(),h=String(n.getUTCHours()).padStart(2,'0'),m=String(n.getUTCMinutes()).padStart(2,'0'),s=String(n.getUTCSeconds()).padStart(2,'0');document.getElementById('clock-time').textContent=h+':'+m+':'+s;}updateClock();setInterval(updateClock,1000);
+</script>
+</body>
+</html>

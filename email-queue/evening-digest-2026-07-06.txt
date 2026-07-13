@@ -1,0 +1,194 @@
+════════════════════════════════════════════════════════════
+OGRE COMPUTER — EVENING DIGEST
+Monday 6 July 2026 | 18:00 UTC | 19:00 SAST
+════════════════════════════════════════════════════════════
+LAUNCH WEEK · DAY 1 OF 5 UNTIL GLOBAL MARKETS EVENT
+════════════════════════════════════════════════════════════
+
+📅 TODAY'S THEME: "Launch Week — Day 1"
+Friday 10 July: Global Markets Launch Event (18:00 SA)
+────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════
+🏭 PRODUCTS DEPLOYED TODAY
+════════════════════════════════════════════════════════════
+
+[1] CipherTrace Portfolio Redesign (NEW ⭐)
+    URL: https://z7i13xkn22zb.space.minimax.io
+    - Interactive force-directed NODE GRAPH with all 11 nodes
+    - Click any node → product detail panel with demo/proposal links
+    - 4-nav: Portfolio / Graph / BMAD / Agents
+    - Beautiful minimal dark UI (#07070f background)
+    - ACCENT: #6c63ff (indigo) + #00d4ff (cyan)
+
+[2] Dark Factory Unified Site (NEW ⭐)
+    URL: https://z0bb2ty8nz04.space.minimax.io
+    - Everything: Products + VM Ecosystem + Global Markets
+    - BMAD form + AI Agents + Footer
+    - Animated hero canvas + VM ecosystem canvas
+
+[3] Official ICVMS Proposal (live since Sunday)
+    URL: https://j3s0jkun4cbh.space.minimax.io
+    - Minima sophisticated UI
+    - All 5 partner logos + VM 05 open slot
+    - $4,000/mo + $7,590 setup · FNB bank details
+
+[4] ICVMS Full Demo (live since Sunday)
+    URL: https://a5cjrm7f1x8s.space.minimax.io
+    - All 4 video scripts + 6 agent cards
+    - VM showcase + ecosystem grid + CTA
+
+[5] MindX VM Proposal (live since Sunday)
+    URL: https://9w8nktistow4.space.minimax.io
+    - MindX × OGRE · Full VM story · $4K/mo
+
+[6] Obsidian Mind / Bre Ferrari Proposal (live since Sunday)
+    URL: https://kidvuwlj196t.space.minimax.io
+    - $4,000/mo · $7,590 setup · 4 agents
+
+[7] Global Markets Event Page (live since Sunday)
+    URL: https://of3yiqp2h80w.space.minimax.io
+    - Friday 10 July · 18:00 SA · 90-minute virtual event
+
+[8] re:motion VM Display (live since Sunday)
+    URL: https://idsucux7j3e4.space.minimax.io
+    - Animated node graph · 5 VMs + D@RK F@C#ORY hub
+
+[9] DarkDesk™ (live)
+    URL: https://hgjcgc2esiki.space.minimax.io
+    - Voice AI companion · R2,500/mo
+
+[10] AutoFlex Pro™ (live)
+    URL: https://3twhamln9rsh.space.minimax.io
+    - Web automation · R1,500/mo
+
+[11] Red Team Agent (live MRR)
+    URL: https://w1tu0qxf216v.space.minimax.io
+    - Cybersecurity AI · R45,000/mo · ONLY LIVE REVENUE
+
+[12] BMAD Tool (live)
+    URL: https://6g18k484b9fx.space.minimax.io
+    - Build Me A Dashboard · R29/product
+
+════════════════════════════════════════════════════════════
+🤖 YOUTUBE CHANNEL — SETUP COMPLETE
+════════════════════════════════════════════════════════════
+
+✅ OBS Studio setup guide: /workspace/OGRE-YOUTUBE-CHANNEL-SETUP.md
+✅ 3 video scripts written: /workspace/OGRE-YOUTUBE-CHANNEL-SCRIPTS.md
+   → "How to Launch a Business in SA 2026" (~12 min)
+   → "The AI Opportunity for African Entrepreneurs" (~12 min)
+   → "Build a Global Business from Africa" (~16 min)
+✅ YouTube API guide: /workspace/OGRE-YOUTUBE-API-SETUP.md
+✅ Desktop agent setup: /workspace/ogre-desktop-agent/setup.sh
+   → OpenJarvis + Ollama + Eleven Labs + Cursor API
+
+════════════════════════════════════════════════════════════
+📊 REVENUE STATUS — MONDAY 6 JULY 2026
+════════════════════════════════════════════════════════════
+
+LIVE MRR: R45,000 ✅ (Red Team Agent — only live revenue)
+
+PROPOSALS OUT:
+  🔴 MindX ICVMS: Day 6 — follow up this week
+  🔴 LAISA Phase A: Day 6 — Dr. Musa follow-up needed
+  🔴 Obsidian Mind (Bre Ferrari): Awaiting response
+
+PIPELINE:
+  ⚡ SA DoH EMR (NDoH-11): 7 DAYS LEFT — closes Mon 13 July
+  ⚡ Ghana AI Ministry: 18 days left — closes Fri 24 July
+  💰 Pharmasyntez: R2.99M Y1 — awaiting response
+  💰 SafeSight: R1,499/mo — proposal pending
+
+WEEK CLOSE TARGET: R0 — Monday critical actions needed
+
+════════════════════════════════════════════════════════════
+⚠️ BLOCKERS — NEEDS ATTENTION
+════════════════════════════════════════════════════════════
+
+1. GMAIL_APP_PASSWORD — NOT SET
+   → Cannot send briefings or evening digests via email
+   → Action: Tumelo must provide Gmail app password
+
+2. ORGO API KEY — INVALID
+   → sk_live_1557ce... returned "Invalid API key"
+   → VMs cannot be provisioned programmatically
+   → Action: Generate new key at orgo.ai → Settings → API Keys
+
+3. NOTION_API_KEY — NOT SET
+   → PRD intake form not routing to Notion pipeline
+   → Action: Provide Notion API key + database ID
+
+════════════════════════════════════════════════════════════
+🎯 TOMORROW: TUESDAY 7 JULY 2026
+════════════════════════════════════════════════════════════
+
+[1] ⭐ DOWNLOAD SA DoH EMR TENDER DOCS FIRST THING
+   → health.gov.za → tenders → search "NDoH-11" or "EMR"
+   → 6 DAYS LEFT until close (Mon 13 July)
+   → R200M+ contract · OGRE qualifies as B-BBEE + AI + cloud
+
+[2] SEND PARTNERSHIP EMAILS
+   → NVIDIA Inception: inceptionprogram@nvidia.com
+   → Tencent Cloud: cloudpartner@tencent.com
+   → MiniMax: contact form at minimax.io
+
+[3] FOLLOW UP MINDFX + BRE FERRARI
+   → WhatsApp Dr. Musa (LAISA Phase A) — R350K + R55K/mo
+   → Email MindX decision-maker
+   → WhatsApp Bre Ferrari re: Obsidian Mind proposal
+
+[4] CONFIRM FRIDAY EVENT LOGISTICS
+   → Zoom or LinkedIn Live setup
+   → Guest list confirmed?
+   → Send calendar invites to guests
+
+════════════════════════════════════════════════════════════
+💡 DEEP INSIGHT — LAUNCH WEEK
+════════════════════════════════════════════════════════════
+
+"Week 1: Get proposals in front of decision-makers.
+Week 2: Follow up. Follow up. Follow up.
+Week 3: Negotiate. Close.
+Week 4: Deliver. Get testimonials.
+Week 5: Referrals."
+
+Key stat: Africa AI market growing at 31.2% CAGR.
+Key differentiator: POPIA + B-BBEE + Johannesburg SA VMs.
+
+════════════════════════════════════════════════════════════
+📁 FILES CREATED TODAY
+════════════════════════════════════════════════════════════
+
+/workspace/df-site/df-unified-site/src/App.tsx (CipherTrace redesign)
+/workspace/df-site/src/App.tsx (Dark Factory unified)
+/workspace/df-site/df-unified-site/dist/ (deployed)
+/workspace/OGRE-YOUTUBE-CHANNEL-SCRIPTS.md (3 video scripts)
+/workspace/OGRE-YOUTUBE-CHANNEL-SETUP.md (OBS setup)
+/workspace/OGRE-YOUTUBE-API-SETUP.md (YouTube API)
+/workspace/ogre-desktop-agent/setup.sh (desktop agent)
+/workspace/email-queue/evening-digest-2026-07-06.txt (this digest)
+/workspace/memory/2026-07-06.md (session log)
+
+════════════════════════════════════════════════════════════
+🔗 ALL LIVE URLS (as of 6 July 2026)
+════════════════════════════════════════════════════════════
+
+🏭 CipherTrace Portfolio (NEW):  z7i13xkn22zb.space.minimax.io
+🏭 Dark Factory Unified (NEW):    z0bb2ty8nz04.space.minimax.io
+📋 ICVMS Official Proposal:     j3s0jkun4cbh.space.minimax.io
+📋 ICVMS Full Demo:              a5cjrm7f1x8s.space.minimax.io
+📋 MindX VM Proposal:            9w8nktistow4.space.minimax.io
+📋 Obsidian Mind Proposal:        kidvuwlj196t.space.minimax.io
+🌐 Global Markets Event:          of3yiqp2h80w.space.minimax.io
+🔬 re:motion VM Display:         idsucux7j3e4.space.minimax.io
+💰 Red Team Agent:               w1tu0qxf216v.space.minimax.io
+🔊 DarkDesk Demo:                hgjcgc2esiki.space.minimax.io
+🌐 AutoFlex Pro Demo:            3twhamln9rsh.space.minimax.io
+🛠️ BMAD Tool:                   6g18k484b9fx.space.minimax.io
+
+════════════════════════════════════════════════════════════
+OGRE Computer · Dark Factory · Studex Group · 2026
+cto@studex-group.com · Johannesburg, South Africa
+B-BBEE Level 1 · POPIA Compliant · UTC+2
+════════════════════════════════════════════════════════════

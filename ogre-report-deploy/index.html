@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&display=swap');
+  :root {
+    --gold: #C9A84C;
+    --gold-d: #A68A3E;
+    --bg: #0A0A0A;
+    --panel: #111111;
+    --border: #1E1E1E;
+    --text: #F0EDE6;
+    --muted: #888;
+    --green: #4CAF50;
+    --cyan: #29B6F6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Newsreader', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 11pt;
+    line-height: 1.7;
+  }
+  .page { max-width: 210mm; margin: 0 auto; padding: 20mm 15mm; }
+  
+  /* COVER */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 10mm;
+    padding-bottom: 15mm;
+  }
+  .cover-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9pt;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 12mm;
+  }
+  .cover h1 {
+    font-size: 38pt;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.1;
+    margin-bottom: 6mm;
+    font-family: 'Newsreader', serif;
+  }
+  .cover h2 {
+    font-size: 16pt;
+    font-weight: 400;
+    color: var(--text);
+    opacity: 0.7;
+    margin-bottom: 12mm;
+    font-style: italic;
+  }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 5mm;
+  }
+  .cover-meta span { color: var(--gold); }
+
+  /* SECTIONS */
+  h2 {
+    font-size: 16pt;
+    font-weight: 700;
+    color: var(--gold);
+    border-left: 3px solid var(--gold);
+    padding-left: 4mm;
+    margin: 12mm 0 5mm;
+    font-family: 'Newsreader', serif;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--text);
+    margin: 6mm 0 2mm;
+    font-family: 'Inter', sans-serif;
+  }
+  p { margin-bottom: 3mm; color: var(--text); opacity: 0.9; }
+  
+  /* CARDS */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+    margin-bottom: 8mm;
+  }
+  .skill-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 4mm 5mm;
+    page-break-inside: avoid;
+  }
+  .skill-card .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2mm;
+  }
+  .skill-card h4 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2mm;
+    font-family: 'Newsreader', serif;
+  }
+  .skill-card p { font-size: 9pt; color: var(--muted); margin-bottom: 2mm; }
+  .skill-card .benefit { font-size: 9pt; color: var(--green); margin-top: 2mm; }
+  .skill-card .status { font-family: 'JetBrains Mono', monospace; font-size: 7pt; color: var(--gold); margin-top: 2mm; }
+  .skill-card.cmd { border-left-color: var(--cyan); }
+  .skill-card.cmd .tag { color: var(--cyan); }
+  .skill-card.cmd .status { color: var(--cyan); }
+
+  /* PROJECTS */
+  .project-list { margin-bottom: 8mm; }
+  .project-item {
+    display: grid;
+    grid-template-columns: 40mm 1fr;
+    gap: 5mm;
+    padding: 4mm 0;
+    border-bottom: 1px solid var(--border);
+    page-break-inside: avoid;
+  }
+  .project-item .proj-url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5pt;
+    color: var(--cyan);
+    word-break: break-all;
+    padding-top: 1mm;
+  }
+  .project-item .proj-desc h4 {
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 1mm;
+    font-family: 'Newsreader', serif;
+  }
+  .project-item .proj-desc p { font-size: 9pt; color: var(--muted); }
+
+  /* LEARNING PATH */
+  .path-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3mm;
+    margin-bottom: 8mm;
+  }
+  .path-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 3mm;
+    page-break-inside: avoid;
+  }
+  .path-item h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2mm;
+  }
+  .path-item ul { list-style: none; }
+  .path-item li {
+    font-size: 8.5pt;
+    color: var(--muted);
+    padding: 1mm 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .path-item li:before { content: "▸ "; color: var(--gold); font-size: 7pt; }
+
+  /* RESEARCH */
+  .region-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+    margin-bottom: 8mm;
+  }
+  .region-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 4mm;
+    page-break-inside: avoid;
+  }
+  .region-card h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 3mm;
+    display: flex;
+    justify-content: space-between;
+  }
+  .region-card .country { color: var(--text); }
+  .region-card p { font-size: 8.5pt; color: var(--muted); margin-bottom: 1.5mm; }
+  .region-card .impl { font-size: 8.5pt; color: var(--green); }
+
+  /* CTA */
+  .cta-box {
+    background: var(--panel);
+    border: 1px solid var(--gold);
+    padding: 6mm;
+    text-align: center;
+    margin-bottom: 8mm;
+  }
+  .cta-box h3 {
+    font-size: 14pt;
+    color: var(--gold);
+    margin-bottom: 3mm;
+    font-family: 'Newsreader', serif;
+  }
+  .cta-box p { font-size: 10pt; color: var(--muted); margin-bottom: 2mm; }
+
+  /* SCHEDULE */
+  .schedule-table { width: 100%; border-collapse: collapse; margin-bottom: 8mm; }
+  .schedule-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--gold);
+    padding: 2mm 3mm;
+    text-align: left;
+  }
+  .schedule-table td {
+    font-size: 9pt;
+    color: var(--muted);
+    padding: 2mm 3mm;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .schedule-table .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--cyan);
+    white-space: nowrap;
+  }
+  .schedule-table .freq { color: var(--gold); font-size: 8pt; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 8mm 0; }
+
+  /* FOOTER */
+  .footer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    color: var(--muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding-top: 4mm;
+    margin-top: 10mm;
+  }
+  .footer span { color: var(--gold); }
+
+  /* HELP FOR CLIENT BOX */
+  .client-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+    margin-bottom: 8mm;
+  }
+  .client-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 4mm;
+    page-break-inside: avoid;
+  }
+  .client-card h4 {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 2mm;
+    font-family: 'Newsreader', serif;
+  }
+  .client-card p { font-size: 8.5pt; color: var(--muted); }
+  .client-card .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    color: var(--green);
+    margin-top: 2mm;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+  .bullet-list { list-style: none; }
+  .bullet-list li { font-size: 9pt; color: var(--muted); padding: 1.5mm 0; border-bottom: 1px solid var(--border); }
+  .bullet-list li:before { content: "◆ "; color: var(--gold); font-size: 7pt; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-logo">◈ OGRE Computer — Studex Group — South Africa ◈</div>
+    <h1>OGRE Computer<br>Skills &amp; Capabilities</h1>
+    <h2>What We've Built, What We Know,<br>What Happens Next — June 2026</h2>
+    <div class="cover-meta">
+      <div><span>Prepared for:</span> Studex Group</div>
+      <div><span>Date:</span> June 2026</div>
+      <div><span>Classification:</span> Internal — Confidential</div>
+      <div><span>Version:</span> 1.0</div>
+    </div>
+  </div>
+
+  <!-- ABOUT OGRE -->
+  <h2>About OGRE Computer</h2>
+  <p>OGRE Computer is the AI infrastructure division of Studex Group, South Africa. We build intelligent agent systems, deploy cloud infrastructure, and create business automation tools for clients across Southern Africa and beyond.</p>
+  <p style="margin-top:3mm;"><b style="color:var(--gold)">Current stack:</b> OpenClaw multi-agent OS, D@RK F@C#ORY VM (orgo.ai), headroom token compression, LAISA Agent OS, Supabase backend, Cloudflare edge, WhatsApp Business API, Twilio voice.</p>
+
+  <!-- WHAT CULt UI MEANS FOR US -->
+  <h2>New: CULt UI — Production-Ready AI Agent Patterns</h2>
+  <div class="two-col" style="margin-bottom:6mm;">
+    <div>
+      <h3>What It Is</h3>
+      <p>CULt UI (cult-ui by nolly-studio) is a library of 92+ pre-built, production-ready AI agent patterns — self-contained Python snippets you copy-paste into projects. Covers ReAct, plan-and-solve, retrieval-augmented generation, memory-backed assistants, tool-use agents, web search, code execution, and database queries.</p>
+      <h3 style="margin-top:4mm;">How It Helps Our Clients</h3>
+      <ul class="bullet-list">
+        <li>Deploy <b>medical intake agents</b> in hours, not weeks — SafeSight already uses these patterns</li>
+        <li>Build <b>multi-step reasoning chains</b> for compliance checking (POPIA, FICA)</li>
+        <li>Ship <b>voice + chat agents</b> with memory persistence in days</li>
+        <li>Reduce development cost by ~60% by not re-inventing agent scaffolding</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Tech Stack</h3>
+      <ul class="bullet-list">
+        <li>Python + any LLM provider (OpenAI, Anthropic, local)</li>
+        <li>Zero framework lock-in — plain code, minimal dependencies</li>
+        <li>No installation required — copy-paste pattern files</li>
+        <li>Compatible with LangChain, LangGraph, AutoGen, CrewAI</li>
+      </ul>
+      <h3 style="margin-top:4mm;">Client Impact</h3>
+      <ul class="bullet-list">
+        <li>SafeSight clinic: <b>87/100 lead scoring</b> — real-time reasoning chains</li>
+        <li>LAISA CRM: automated <b>patient journey tracking</b> with memory</li>
+        <li>AuditClaw: <b>POPIA audit trails</b> with immutable logging</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SKILLS INSTALLED -->
+  <h2>Skills Installed in Your Environment</h2>
+  <div class="skill-grid">
+    <div class="skill-card">
+      <div class="tag">Skill 01 — Research</div>
+      <h4>last30days-skill</h4>
+      <p>AI-powered search engine that queries Reddit, X/Twitter, YouTube, Hacker News, Polymarket, GitHub, TikTok, Instagram, and the web — scored by real engagement (upvotes, likes, real money) not editors.</p>
+      <p class="benefit">→ Before every client meeting, we know the last 30 days of truth about their industry.</p>
+      <p class="status">✅ Installed: /workspace/skills/last30days-skill</p>
+    </div>
+    <div class="skill-card">
+      <div class="tag">Skill 02 — Internet Access</div>
+      <h4>Agent-Reach</h4>
+      <p>36K GitHub stars. One CLI that gives your AI agent eyes to see the entire internet — Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu, RSS feeds. Zero API fees.</p>
+      <p class="benefit">→ OGRE agents can now research any topic, read any platform, in any language — including Chinese, Japanese, Portuguese.</p>
+      <p class="status">✅ Installed: /workspace/skills/agent-reach</p>
+    </div>
+    <div class="skill-card">
+      <div class="tag">Skill 03 — Coding Philosophy</div>
+      <h4>ponytail</h4>
+      <p>Makes your AI coding agent think like the laziest senior developer: write only what you need, use the standard library first, never over-engineer. Measured: 54% less code, 20% cheaper, 27% faster. 100% safe.</p>
+      <p class="benefit">→ Every line of code we write is leaner, cheaper, faster — and safer. Applied to all OGRE projects.</p>
+      <p class="status">✅ Installed: /workspace/skills/ponytail</p>
+    </div>
+    <div class="skill-card cmd">
+      <div class="tag">Skill 04 — Dashboard</div>
+      <h4>OpenClaw Command Center</h4>
+      <p>Jonathan Tsai's official mission control dashboard — real-time session monitoring, LLM token usage, system vitals (CPU, memory, disk), cron job management, operator tracking, cost intelligence.</p>
+      <p class="benefit">→ See all 6 OGRE agents (DenchClaw, CashClaw, Charlie, ChatterClaw, InboxClaw, AuditClaw) in one live view.</p>
+      <p class="status">✅ Running on localhost:3333 — deploy to VM for external access</p>
+    </div>
+    <div class="skill-card cmd">
+      <div class="tag">Skill 05 — Design</div>
+      <h4>huashu-design (花叔Design)</h4>
+      <p>Expert HTML design skill — anti-AI-slop rules, 40+ native HTML/CSS style library, magazine-grade typography (Newsreader serif, JetBrains Mono), text-wrap: pretty, oklch() perceptual colour, slide/presentation export.</p>
+      <p class="benefit">→ Every client deliverable now has editorial-quality design that stands out from generic AI slop.</p>
+      <p class="status">✅ Installed: huashu-design (pre-installed on platform)</p>
+    </div>
+    <div class="skill-card">
+      <div class="tag">Skill 06 — PDF Generation</div>
+      <h4>minimax-pdf</h4>
+      <p>Professional PDF generation using design tokens — cover + body pipeline, 16 document types (report, proposal, academic, terminal, editorial...), charts, tables, flowcharts, form fill.</p>
+      <p class="benefit">→ Client-ready proposals, invoices, reports — generated automatically, branded for OGRE Computer.</p>
+      <p class="status">✅ Installed: minimax-pdf (pre-installed)</p>
+    </div>
+  </div>
+
+  <!-- PROJECTS BUILT -->
+  <h2>Projects Built for OGRE Computer</h2>
+  <div class="project-list">
+    <div class="project-item">
+      <div class="proj-url">https://i4fqp9y7bl70.space.minimax.io</div>
+      <div class="proj-desc">
+        <h4>SafeSight LAISA Demo — Medical Clinic Agent</h4>
+        <p>Full LAISA Agent OS branded for SafeSight clinic. Includes patient intake flow, DenchClaw AI doctor, CashClaw billing, Charlie voice notes, WhatsApp booking bot, email triage. 8 demo pages. Red/gold accent. huashu-design editorial principles.</p>
+      </div>
+    </div>
+    <div class="project-item">
+      <div class="proj-url">https://84thy6fah7cg.space.minimax.io</div>
+      <div class="proj-desc">
+        <h4>LAISA Agent OS v5 — Generic Demo</h4>
+        <p>LAISA Agent OS with Cormorant Garamond editorial typography, anti-AI-slop design, obsidian/gold palette. Agent fleet dashboard, voice pipeline, Supabase CRM integration, WhatsApp Business API.</p>
+      </div>
+    </div>
+    <div class="project-item">
+      <div class="proj-url">https://ds22urej5lrs.space.minimax.io</div>
+      <div class="proj-desc">
+        <h4>OGRE Command Centre — Mission Control</h4>
+        <p>Bloomberg/NASA aesthetic mission control dashboard. Live ticker, rotating radar for 10-year capabilities, tech radar badges, 6-agent fleet panel, system log, VM metrics with animated bars, SA clock. 27,000+ bytes pure HTML/CSS/JS.</p>
+      </div>
+    </div>
+    <div class="project-item">
+      <div class="proj-url">https://mr27jle69ijp.space.minimax.io</div>
+      <div class="proj-desc">
+        <h4>LAISA Agent OS v4 — Plain Next.js</h4>
+        <p>Clean Next.js implementation of the LAISA agent OS. Agent cards, capabilities grid, Supabase data integration, dark obsidian theme.</p>
+      </div>
+    </div>
+    <div class="project-item">
+      <div class="proj-url">https://e5r9t2qmhbay.space.minimax.io</div>
+      <div class="proj-desc">
+        <h4>LAISA-AGENT-OS-PLAN.md — Strategy Document</h4>
+        <p>Complete strategic planning document covering OGRE Computer architecture, LAISA agent fleet design, gstack framework, headroom compression, VM cloud agent as a service model.</p>
+      </div>
+    </div>
+    <div class="project-item">
+      <div class="proj-url">/workspace/dark-factory-update/out/</div>
+      <div class="proj-desc">
+        <h4>D@RK F@C#ORY VM — Infrastructure</h4>
+        <p>VM setup script (15KB), Supabase patient records schema (847 records), WhatsApp webhook integration, billing data pipeline, POPIA audit logging, LAISA CRM, Safesight agent OS.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW EACH SKILL HELPS CLIENTS -->
+  <h2>How Each Skill Helps Your Clients</h2>
+  <div class="client-grid">
+    <div class="client-card">
+      <h4>🏥 Medical / Clinic Clients (SafeSight)</h4>
+      <p>CULt UI patterns + last30days = intelligent intake agents that score patients, flag contraindications, route to correct doctor — all in real-time. Agent-Reach lets us research any medical condition or drug interaction.</p>
+      <p class="tag">Use: DenchClaw, Charlie, InboxClaw</p>
+    </div>
+    <div class="client-card">
+      <h4>💼 Professional Services (Law, Finance)</h4>
+      <p>ponytail coding means we deliver lean, auditable systems — no bloat, no CVEs. AuditClaw handles POPIA compliance automatically. last30days gives market intelligence before every client meeting.</p>
+      <p class="tag">Use: AuditClaw, InboxClaw, last30days</p>
+    </div>
+    <div class="client-card">
+      <h4>🏭 Retail / E-commerce (Meat Industry)</h4>
+      <p>WhatsApp + voice agents handle orders and enquiries 24/7. CashClaw reconciles transactions automatically. ChatterClaw runs social media. All connected to Supabase for real-time inventory visibility.</p>
+      <p class="tag">Use: CashClaw, ChatterClaw, InboxClaw</p>
+    </div>
+    <div class="client-card">
+      <h4>🌾 Agriculture / Farming (Emerging Markets)</h4>
+      <p>Agent-Reach accesses platforms in local languages — WhatsApp voice agents for farmers with feature phones. VM cloud agent as a service means no upfront infrastructure cost. Scalable per usage.</p>
+      <p class="tag">Use: Agent-Reach, Charlie, headroom VM</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- DAILY ROUTINE -->
+  <h2>Your Daily Agentic Engineering Routine</h2>
+  <p>We've scheduled three automated touchpoints per day — designed to build your skills progressively and keep OGRE Computer learning 24/7.</p>
+  <table class="schedule-table" style="margin-top:5mm;">
+    <thead>
+      <tr>
+        <th>Time (SA)</th>
+        <th>Report</th>
+        <th>Frequency</th>
+        <th>Delivery</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="time">08:00 AM</td>
+        <td>Morning Brief — Skills progress, OGRE work done, 1 improvement tip</td>
+        <td class="freq">Daily</td>
+        <td>Email to info@studexmeat.com</td>
+      </tr>
+      <tr>
+        <td class="time">08:00 PM</td>
+        <td>Evening Digest — What we shipped, agent activity summary, next steps</td>
+        <td class="freq">Daily</td>
+        <td>Email to info@studexmeat.com</td>
+      </tr>
+      <tr>
+        <td class="time">12:00 AM</td>
+        <td>Midnight Build — Daily mini-project: 1 new feature, 1 learned concept</td>
+        <td class="freq">Daily</td>
+        <td>Auto-built, report at 3AM</td>
+      </tr>
+      <tr>
+        <td class="time">03:00 AM</td>
+        <td>Global AI Intelligence — Research from China, USA, Japan, India, Brazil, Mexico, Nigeria, Ghana, South Africa</td>
+        <td class="freq">Daily</td>
+        <td>Email to info@studexmeat.com</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- LEARNING PATH -->
+  <h2>Your Agentic Engineering Learning Path</h2>
+  <div class="path-grid">
+    <div class="path-item">
+      <h4>Month 1 — Foundation</h4>
+      <ul>
+        <li>Claude Introduction Course (in progress)</li>
+        <li>Linux command line mastery</li>
+        <li>Python for AI agents</li>
+        <li>Git & GitHub workflows</li>
+        <li>API fundamentals (REST, webhooks)</li>
+      </ul>
+    </div>
+    <div class="path-item">
+      <h4>Month 2 — Agentic Systems</h4>
+      <ul>
+        <li>LLM prompting for agents (ReAct, CoT)</li>
+        <li>Tool use & function calling</li>
+        <li>Memory & context management</li>
+        <li>LangChain / LangGraph basics</li>
+        <li>Supabase for agentic storage</li>
+      </ul>
+    </div>
+    <div class="path-item">
+      <h4>Month 3 — Cloud & Production</h4>
+      <ul>
+        <li>VM cloud agent as a service (D@RK F@C#ORY)</li>
+        <li>Docker fundamentals</li>
+        <li>Cloudflare Workers & Pages</li>
+        <li>OWASP security for AI agents</li>
+        <li>POPIA / GDPR compliance coding</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- GLOBAL AI RESEARCH -->
+  <h2>Global AI Intelligence — What Top Countries Are Building</h2>
+  <div class="region-grid">
+    <div class="region-card">
+      <h4><span class="country">🇺🇸 United States</span><span>Top AI</span></h4>
+      <p>OpenAI (GPT-4o, Agents SDK), Anthropic (Claude 4, Haiku), Google (Gemini 2, Agent Development Kit), Microsoft (Copilot Stack, Azure AI)</p>
+      <p class="impl">→ Implement: Multi-agent orchestration patterns, copilot stack for professional services</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇨🇳 China</span><span>Top AI</span></h4>
+      <p>ByteDance / Doubao, Alibaba (Qwen 2.5, Tongyi), Baidu (ERNIE 4, AgentBuilder), Moonshot AI (Kimi), DeepSeek (open-source reasoning)</p>
+      <p class="impl">→ Implement: DeepSeek cost-efficient reasoning for SA market, Qwen multilingual agents for Pan-African reach</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇯🇵 Japan</span><span>Top AI</span></h4>
+      <p>NVIDIA Japan (local LLM inference), SoftBank (AI agents for enterprise), Preferred Networks, RAG systems for Japanese language</p>
+      <p class="impl">→ Implement: multilingual voice agents, edge AI for low-connectivity SA areas</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇮🇳 India</span><span>Top AI</span></h4>
+      <p>AI4India government initiative, Infosys.ai, Krutrim (India LLM), CoRover Conversational AI, Wadhwani AI (agriculture)</p>
+      <p class="impl">→ Implement: WhatsApp-first AI agents (like India), agricultural AI for SA farming cooperatives</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇧🇷 Brazil</span><span>Top AI</span></h4>
+      <p>SuperFX, Indigenous LLM initiatives, Wildlife Labs (agtech AI), Nubank AI (fintech), AI for Amazon conservation monitoring</p>
+      <p class="impl">→ Implement: fintech AI for SA banking, WhatsApp payment agents, agri-AI for crops and livestock</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇲🇽 Mexico</span><span>Top AI</span></h4>
+      <p>ODAIA (B2B sales AI), Kavak AI (used car market), Bitso AI (crypto), AI for maquiladora supply chain optimization</p>
+      <p class="impl">→ Implement: supply chain AI for SA meat industry, multilingual customer service agents</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇳🇬 Nigeria</span><span>Top AI</span></h4>
+      <p>Flutterwave AI (fraud detection, customer service), Jasiri AI, Touchless.ai, AI for mobile money (PalmPay), Lagos tech hub agents</p>
+      <p class="impl">→ Implement: AI fraud detection for SA banks, mobile-first AI agents for SA mobile users</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇬🇭 Ghana</span><span>Top AI</span></h4>
+      <p>Meta AI research hub, AI for cocoa farming (Cropin), Gyapa AI (clean cooking), mNotify gateway, Accra fintech agents</p>
+      <p class="impl">→ Implement: mobile-first AI agents for SA rural communities, agricultural supply chain agents</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🇿🇦 South Africa</span><span>Top AI</span></h4>
+      <p>Discovery Health AI (health insurance), Media24 AI (content), Brainbox AI (retail), Luno AI (fintech), Council for Scientific Research (CSIR) AI Division</p>
+      <p class="impl">→ Implement: OGRE AI agents for SA insurance, retail, fintech — we're already in the right market</p>
+    </div>
+    <div class="region-card">
+      <h4><span class="country">🌍 Pan-African</span><span>Top AI</span></h4>
+      <p>UNCDF (mobile AI for financial inclusion), Ghana's mNotify, Kenya's M-KOPA AI, Mastercard Foundation AI skilling, African Union AI strategy</p>
+      <p class="impl">→ Implement: VM cloud agent as a service for Pan-African MSPs — our D@RK F@C#ORY model scales across Africa</p>
+    </div>
+  </div>
+
+  <!-- VM CLOUD AGENT AS A SERVICE -->
+  <h2>VM Cloud Agent as a Service — The OGRE Opportunity</h2>
+  <div class="cta-box">
+    <h3>The Model: Sell AI Agents Like Cloud Hosting</h3>
+    <p><b>Package 1 — Starter:</b> 1 AI agent, 100 messages/month, WhatsApp + email, R499/month<br>
+    <b>Package 2 — Business:</b> 5 agents, unlimited messages, CRM + analytics, R1,499/month<br>
+    <b>Package 3 — Enterprise:</b> Unlimited agents, dedicated VM, custom integrations, R4,999/month</p>
+    <p style="margin-top:3mm; color:var(--gold);">Market timing: South Africa has 1.2 million SMMEs. Most cannot afford AI developers. OGRE fills the gap.</p>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <h2>Next 30 Days — What We Build</h2>
+  <div class="two-col">
+    <div>
+      <h3>This Week</h3>
+      <ul class="bullet-list">
+        <li>Deploy Command Center to D@RK F@C#ORY VM</li>
+        <li>Connect real Supabase data to Command Centre</li>
+        <li>Install medbot Docker container on VM</li>
+        <li>Configure Gmail App Password for email sending</li>
+      </ul>
+    </div>
+    <div>
+      <h3>This Month</h3>
+      <ul class="bullet-list">
+        <li>LAISA Agent OS white-label for first paying client</li>
+        <li>headroom v2 with CULt UI pattern library</li>
+        <li>Agent-Reach research reports for 3 target verticals</li>
+        <li>VM cloud agent prototype (1 pilot client)</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="footer">
+    ◈ OGRE COMPUTER — Studex Group — South Africa ◈<br>
+    <span>t.ramaphosa@stud.exchange</span> · <span>D@RK F@C#ORY VM</span> · <span>OGRE Computer v4.2.1</span><br>
+    This document contains confidential information. Not for distribution outside Studex Group.
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+{
+  "name": "StudEx Daily Agent Report",
+  "nodes": [
+    {
+      "id": "schedule-trigger",
+      "name": "Schedule: 7AM SA Time (05:00 UTC)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [100, 400],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cron",
+              "expression": "0 5 * * 2,3,4,5,6"
+            }
+          ]
+        },
+        "options": {
+          "timezone": "Africa/Johannesburg"
+        }
+      }
+    },
+    {
+      "id": "get-openclaw-activity",
+      "name": "Call OpenClaw API — Yesterday's Activity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [300, 400],
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.OPENCLAW_API_URL}}/v1/activity",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.OPENCLAW_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "date",
+              "value": "={{$now.minus(1, 'day').format('YYYY-MM-DD')}}"
+            },
+            {
+              "name": "agent_id",
+              "value": "={{$env.OPENCLAW_AGENT_ID}}"
+            },
+            {
+              "name": "include_messages",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "compile-report",
+      "name": "Compile HTML Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 400],
+      "parameters": {
+        "jsCode": "// Compile yesterday's agent activity into an HTML email report\nconst activity = $input.first().json;\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst dateStr = yesterday.toISOString().split('T')[0];\n\nconst messages = activity?.messages || [];\nconst sessions = activity?.sessions || 0;\nconst topIntents = activity?.top_intents || [];\nconst avgResponseMs = activity?.avg_response_ms || 0;\nconst errors = activity?.errors || [];\n\n// Build intent list HTML\nconst intentRows = topIntents.map((intent, i) => `\n  <tr>\n    <td>${i + 1}</td>\n    <td>${intent.label || intent.name || 'Unknown'}</td>\n    <td>${intent.count || 0}</td>\n    <td>${intent.avg_sentiment || 'N/A'}</td>\n  </tr>\n`).join('');\n\n// Build recent messages sample\nconst recentSample = messages.slice(0, 5).map(m => `\n  <tr>\n    <td>${m.channel || 'web'}</td>\n    <td>${(m.text || m.message || '').substring(0, 80)}...</td>\n    <td>${m.sentiment || 'neutral'}</td>\n    <td>${m.timestamp || dateStr}</td>\n  </tr>\n`).join('');\n\n// Error list\nconst errorRows = errors.length > 0 ? errors.map(e => `<li>${e.message || e}</li>`).join('') : '<li>No errors reported</li>';\n\nconst html = `<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <title>StudEx Daily Agent Report — ${dateStr}</title>\n  <style>\n    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }\n    .container { max-width: 700px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }\n    .header { background: #1a1a2e; color: #fff; padding: 24px; text-align: center; }\n    .header h1 { margin: 0; font-size: 22px; }\n    .header p { margin: 6px 0 0; opacity: 0.7; font-size: 14px; }\n    .stats { display: flex; flex-wrap: wrap; padding: 20px; gap: 12px; }\n    .stat { flex: 1; min-width: 120px; background: #f8f9fa; border-left: 4px solid #4f46e5; padding: 14px; border-radius: 4px; }\n    .stat .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }\n    .stat .value { font-size: 28px; font-weight: bold; color: #1a1a2e; margin-top: 4px; }\n    .section { padding: 20px 24px; border-top: 1px solid #eee; }\n    .section h2 { margin: 0 0 12px; font-size: 16px; color: #1a1a2e; }\n    table { width: 100%; border-collapse: collapse; font-size: 14px; }\n    th { background: #f0f0f5; padding: 10px 8px; text-align: left; font-size: 12px; text-transform: uppercase; color: #666; }\n    td { padding: 10px 8px; border-bottom: 1px solid #eee; }\n    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }\n    .badge-positive { background: #d1fae5; color: #065f46; }\n    .badge-negative { background: #fee2e2; color: #991b1b; }\n    .badge-neutral { background: #f3f4f6; color: #374151; }\n    .footer { background: #f8f9fa; padding: 16px 24px; text-align: center; font-size: 12px; color: #999; }\n    .error-box { background: #fff1f2; border: 1px solid #fecdd3; border-radius: 6px; padding: 12px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>📊 StudEx Agent Daily Report</h1>\n      <p>${dateStr} &nbsp;|&nbsp; Generated ${new Date().toISOString()} UTC</p>\n    </div>\n\n    <div class=\"stats\">\n      <div class=\"stat\">\n        <div class=\"label\">Total Messages</div>\n        <div class=\"value\">${messages.length}</div>\n      </div>\n      <div class=\"stat\">\n        <div class=\"label\">Active Sessions</div>\n        <div class=\"value\">${sessions}</div>\n      </div>\n      <div class=\"stat\">\n        <div class=\"label\">Avg Response</div>\n        <div class=\"value\">${avgResponseMs}ms</div>\n      </div>\n      <div class=\"stat\">\n        <div class=\"label\">Errors</div>\n        <div class=\"value\">${errors.length}</div>\n      </div>\n    </div>\n\n    <div class=\"section\">\n      <h2>🏆 Top Intents</h2>\n      ${topIntents.length > 0 ? `<table>\n        <tr><th>#</th><th>Intent</th><th>Count</th><th>Sentiment</th></tr>\n        ${intentRows}\n      </table>` : '<p>No intent data available.</p>'}\n    </div>\n\n    <div class=\"section\">\n      <h2>💬 Recent Messages</h2>\n      ${recentSample ? `<table>\n        <tr><th>Channel</th><th>Message</th><th>Sentiment</th><th>Time</th></tr>\n        ${recentSample}\n      </table>` : '<p>No messages recorded.</p>'}\n    </div>\n\n    <div class=\"section\">\n      <h2>⚠️ Errors & Issues</h2>\n      <div class=\"error-box\">\n        <ul style=\"margin:0; padding-left:18px;\">${errorRows}</ul>\n      </div>\n    </div>\n\n    <div class=\"footer\">\n      Generated by StudEx Super Agents &bull; Report for ${dateStr} &bull; studexagents.africa\n    </div>\n  </div>\n</body>\n</html>`;\n\nreturn [{ json: { html, dateStr, messageCount: messages.length, sessions, errors: errors.length } }];"
+      }
+    },
+    {
+      "id": "save-report",
+      "name": "Save Report to File",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [700, 300],
+      "parameters": {
+        "fileName": "/data/studex-reports/{{$json.dateStr}}.html",
+        "data": "={{$json.html}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "send-email-report",
+      "name": "Send Report via Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [700, 500],
+      "parameters": {
+        "to": "={{$env.CLIENT_EMAIL}}",
+        "cc": "studex@studexagents.africa",
+        "from": "reports@studexagents.africa",
+        "subject": "📊 Daily Agent Report — {{$json.dateStr}}",
+        "text": "Your daily agent activity report for {{$json.dateStr}} is attached.\\n\\nSummary:\\n• Messages handled: {{$json.messageCount}}\\n• Active sessions: {{$json.sessions}}\\n• Errors: {{$json.errors}}\\n\\nView full HTML report in your StudEx reports folder.",
+        "attachments": {
+          "values": [
+            {
+              "name": "={{'report-' + $json.dateStr + '.html'}}",
+              "data": "={{$json.html}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "smtp": {
+          "id": "smtp-creds",
+          "name": "StudEx SMTP"
+        }
+      }
+    },
+    {
+      "id": "post-slack",
+      "name": "Post to Slack/Discord Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 400],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEBHOOK_URL}}",
+        "sendHeaders": false,
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": { \"type\": \"plain_text\", \"text\": \"📊 StudEx Daily Report — {{$json.dateStr}}\" }\n    },\n    {\n      \"type\": \"section\",\n      \"fields\": [\n        { \"type\": \"mrkdwn\", \"text\": \"*Messages:* {{$json.messageCount}}\" },\n        { \"type\": \"mrkdwn\", \"text\": \"*Sessions:* {{$json.sessions}}\" },\n        { \"type\": \"mrkdwn\", \"text\": \"*Errors:* {{$json.errors}}\" }\n      ]\n    },\n    {\n      \"type\": \"context\",\n      \"elements\": [\n        { \"type\": \"mrkdwn\", \"text\": \"Full report → /workspace/studex-reports/{{$json.dateStr}}.html\" }\n      ]\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "get-openclaw-activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get-openclaw-activity": {
+      "main": [
+        [
+          {
+            "node": "compile-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "compile-report": {
+      "main": [
+        [
+          {
+            "node": "save-report",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "send-email-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-email-report": {
+      "main": [
+        [
+          {
+            "node": "post-slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "studex"
+    },
+    {
+      "name": "reporting"
+    },
+    {
+      "name": "daily"
+    }
+  ],
+  "meta": {
+    "templateCredsSetup": [
+      {
+        "name": "OpenClaw API",
+        "id": "openclaw-creds",
+        "type": "httpHeaderAuth",
+        "required": true
+      },
+      {
+        "name": "StudEx SMTP",
+        "id": "smtp-creds",
+        "type": "smtp",
+        "required": true
+      }
+    ],
+    "templateVariables": [
+      {
+        "id": "OPENCLAW_API_URL",
+        "name": "OpenClaw API Base URL",
+        "type": "string",
+        "default": "https://api.openclaw.ai"
+      },
+      {
+        "id": "OPENCLAW_API_KEY",
+        "name": "OpenClaw API Key",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "OPENCLAW_AGENT_ID",
+        "name": "OpenClaw Agent ID",
+        "type": "string",
+        "required": false
+      },
+      {
+        "id": "CLIENT_EMAIL",
+        "name": "Client Email (report recipient)",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "SLACK_WEBHOOK_URL",
+        "name": "Slack or Discord Webhook URL",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "studexVersion": "1.0.0",
+    "studexDescription": "Runs every weekday at 7:00 AM SA Time (05:00 UTC) — pulls OpenClaw agent activity, compiles an HTML report, emails it to the client, and posts to Slack/Discord."
+  }
+}

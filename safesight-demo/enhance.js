@@ -1,0 +1,463 @@
+/**
+ * SafeSight LAISA Demo — Build Script
+ * Creates SafeSight-branded LAISA Agent OS demo
+ */
+const fs = require('fs');
+const path = require('path');
+
+const OUT   = '/workspace/safesight-demo/out';
+const SRC   = '/workspace/laisa-demo-deploy';
+
+// ── SafeSight Brand ──────────────────────────────────────────────────────────
+const BRAND = {
+  name:     'SafeSight Aesthetic Clinic',
+  short:    'SafeSight',
+  tagline:  'The AI-Powered Clinic OS',
+  sub:      '6 specialist AI agents, real-time WhatsApp booking, patient CRM, voice notes, and social media automation — all running on your private VM.',
+  accent:   '#E8533A',   // SafeSight red
+  accent2:  '#1A1A2E',   // Deep navy
+  cta:      'Book Your Free Demo',
+  email:    'info@safesight.co.za',
+  phone:    '+27 21 123 4567',
+  address:  'Cape Town, South Africa',
+  agents: [
+    { name: 'DenchClaw',  role: 'AI Doctor',         desc: 'Reads intake forms, flags contra-indications, suggests treatment protocols.' },
+    { name: 'CashClaw',   role: 'Billing Agent',     desc: 'Invoices, payment reminders, medical aid claims, receipting.' },
+    { name: 'Charlie',    role: 'Voice Agent',        desc: 'Transcribes voice notes, updates CRM, books appointments.' },
+    { name: 'ChatterClaw',role: 'Social Media',       desc: 'Generates captions, schedules posts, replies to DMs.' },
+    { name: 'InboxClaw',  role: 'Email Manager',     desc: 'Triages patient emails, drafts replies, escalates urgent cases.' },
+    { name: 'AuditClaw',  role: 'Compliance',         desc: 'POPIA audit trail, data retention, consent management.' },
+  ]
+};
+
+// ── Copy demo pages ──────────────────────────────────────────────────────────
+const pages = [
+  'charlie.html','dashboard-demo.html','email-triage-demo.html',
+  'whatsapp-bot-demo.html','social-sdk.html','laisa-crm.html',
+  'contact.html','CTO-STUDY-PATH.html',
+];
+pages.forEach(p => {
+  const s = path.join(SRC, p), d = path.join(OUT, p);
+  if (fs.existsSync(s)) { fs.copyFileSync(s, d); console.log('✅', p); }
+  else console.log('⚠️ missing:', p);
+});
+
+// ── CSS ─────────────────────────────────────────────────────────────────────
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --red:     #E8533A;
+  --red-dim: #B83D28;
+  --red-pale:#FAE8E5;
+  --navy:    #1A1A2E;
+  --ink:     #0F0F1A;
+  --card:    #16162A;
+  --border:  rgba(232,83,58,0.15);
+  --cream:   #F5F0E8;
+  --silver:  #9A9AAA;
+  --white:   #FFFFFF;
+  --green:   #00D4A4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--cream);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:1rem;line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Cormorant Garamond','Georgia',serif;font-weight:400;line-height:1.1}
+h1{font-size:clamp(3rem,7vw,5.5rem);font-weight:300}
+h2{font-size:clamp(2rem,4vw,3rem)}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--red)}
+
+/* ─ Navigation ─ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(15,15,26,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);padding:0 40px;
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;height:72px;
+}
+.nav-brand{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;
+  letter-spacing:0.05em;color:var(--white);
+}
+.nav-brand span{color:var(--red)}
+.nav-links{display:flex;gap:36px}
+.nav-links a{
+  font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--silver);transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--white)}
+
+/* ─ Hero ─ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 40px 80px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 40%,rgba(232,83,58,0.08) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 10% 80%,rgba(232,83,58,0.04) 0%,transparent 60%);
+}
+.hero-content{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:1}
+.hero-eyebrow{
+  font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--red);margin-bottom:24px;font-weight:500;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::before{content:'';width:40px;height:1px;background:var(--red)}
+.hero h1{color:var(--white);margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--red)}
+.hero-sub{
+  font-size:1.2rem;color:var(--silver);max-width:52ch;
+  line-height:1.8;margin-bottom:48px;
+}
+.hero-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+
+/* ─ Buttons ─ */
+.btn-primary{
+  font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;
+  background:var(--red);color:var(--white);padding:16px 36px;
+  border:none;cursor:pointer;display:inline-block;transition:all 0.25s;
+  font-family:'Inter',sans-serif;
+}
+.btn-primary:hover{background:var(--red-dim);color:var(--white);transform:translateY(-2px);box-shadow:0 12px 40px rgba(232,83,58,0.3)}
+.btn-ghost{
+  font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--silver);border:1px solid var(--border);
+  padding:16px 32px;display:inline-block;transition:all 0.25s;
+}
+.btn-ghost:hover{border-color:var(--red);color:var(--red)}
+
+/* ─ Stats Bar ─ */
+.stats-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 0;background:var(--card)}
+.stats-grid{max-width:1200px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat-item{padding:0 40px 0 0;border-right:1px solid var(--border);text-align:left}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;color:var(--red);line-height:1;display:block}
+.stat-lbl{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--silver);margin-top:8px}
+
+/* ─ Sections ─ */
+.section{padding:100px 0;border-top:1px solid var(--border)}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+.section-label{
+  font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--red);margin-bottom:16px;font-weight:500;
+  display:block;
+}
+.section-head{margin-bottom:60px}
+.section-head h2{margin-bottom:12px}
+.section-head p{color:var(--silver);font-size:1.05rem}
+
+/* ─ Demo Grid ─ */
+.demos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.demo-card{
+  background:var(--card);padding:44px 40px;
+  transition:background 0.25s;display:block;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.demo-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;
+}
+.demo-card:hover{background:#1c1c38}
+.demo-card:hover::before{transform:scaleX(1)}
+.demo-card:hover .demo-arrow{color:var(--red);transform:translateX(4px)}
+.demo-num{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--red);letter-spacing:0.15em;margin-bottom:20px;display:block;opacity:0.7}
+.demo-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:500;color:var(--white);margin-bottom:12px;line-height:1.2}
+.demo-desc{color:var(--silver);font-size:0.95rem;line-height:1.7;margin-bottom:24px}
+.demo-link{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--silver);display:flex;align-items:center;gap:8px;font-weight:500}
+.demo-arrow{transition:all 0.2s;color:var(--silver)}
+
+/* ─ Agent Grid ─ */
+.agents-section{background:var(--card);padding:100px 0;border-top:1px solid var(--border)}
+.agents-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:60px}
+.agent-card{background:var(--card);padding:36px 40px;transition:all 0.25s}
+.agent-card:hover{background:#1c1c38}
+.agent-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.agent-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--white)}
+.agent-role{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);font-weight:600}
+.agent-desc{color:var(--silver);font-size:0.9rem;line-height:1.6}
+.agent-num{font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--border);font-weight:700}
+
+/* ─ VM Stack ─ */
+.vm-section{padding:80px 0;border-top:1px solid var(--border)}
+.vm-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+.vm-pill{
+  font-family:'JetBrains Mono',monospace;font-size:0.75rem;
+  letter-spacing:0.08em;color:var(--silver);
+  border:1px solid var(--border);padding:10px 20px;
+  transition:all 0.2s;
+}
+.vm-pill:hover{border-color:var(--red);color:var(--red)}
+.vm-status{font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--silver);margin-left:auto;align-self:center}
+.vm-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:8px;box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* ─ Pricing ─ */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:48px 36px;transition:all 0.3s}
+.price-card:hover{border-color:rgba(232,83,58,0.4);transform:translateY(-4px)}
+.price-card.featured{border-color:var(--red);background:linear-gradient(135deg,rgba(232,83,58,0.08),rgba(232,83,58,0.02))}
+.price-tier{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--silver);margin-bottom:12px;font-weight:600}
+.price-amt{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:var(--red);line-height:1;margin-bottom:4px}
+.price-amt span{font-size:1.2rem;color:var(--silver);font-family:'Inter',sans-serif}
+.price-per{font-size:0.85rem;color:var(--silver);margin-bottom:32px}
+.price-fs{list-style:none;margin-bottom:36px}
+.price-fs li{font-size:0.9rem;color:var(--silver);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.price-fs li::before{content:'—';color:var(--red);font-size:0.8rem}
+.price-btn{display:block;text-align:center;font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;padding:14px;border:1px solid var(--border);color:var(--silver);transition:all 0.25s}
+.price-btn:hover{border-color:var(--red);color:var(--red)}
+.price-card.featured .price-btn{background:var(--red);color:var(--white);border-color:var(--red)}
+.price-card.featured .price-btn:hover{background:var(--red-dim);color:var(--white)}
+
+/* ─ CTA ─ */
+.cta-section{padding:140px 0;text-align:center;background:var(--card);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(232,83,58,0.08) 0%,transparent 70%);pointer-events:none}
+.cta-section h2{margin-bottom:16px;position:relative}
+.cta-section p{color:var(--silver);margin:0 auto 48px;position:relative;font-size:1.05rem}
+.cta-email{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-style:italic;color:var(--red);border-bottom:1px solid var(--red-dim);padding-bottom:6px}
+
+/* ─ Footer ─ */
+footer{border-top:1px solid var(--border);padding:48px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;background:var(--navy)}
+footer p{font-size:0.85rem;color:var(--silver)}
+.footer-brand{color:var(--red)}
+
+/* ─ ROI Banner ─ */
+.roi-banner{background:linear-gradient(135deg,rgba(232,83,58,0.1),rgba(232,83,58,0.03));border:1px solid var(--border);border-radius:4px;padding:36px 48px;margin-top:64px;display:flex;align-items:center;gap:48px;flex-wrap:wrap}
+.roi-stat{flex:1;min-width:180px}
+.roi-stat strong{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--red);display:block}
+.roi-stat span{font-size:0.85rem;color:var(--silver)}
+.roi-note{font-size:0.9rem;color:var(--silver);max-width:480px;border-left:1px solid var(--border);padding-left:48px;line-height:1.7}
+
+/* Responsive */
+@media(max-width:768px){
+  nav,.container,.stats-grid,.hero,.vm-pills{padding-left:24px;padding-right:24px}
+  .nav-links{display:none}
+  h1{font-size:2.8rem}
+  .demos-grid,.agents-grid,.pricing-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+  .stat-item{border-right:none;padding:0}
+  .roi-banner{flex-direction:column}
+  .roi-note{border-left:none;padding-left:0;border-top:1px solid var(--border);padding-top:24px;width:100%}
+  .btn-primary,.btn-ghost{padding:14px 24px;font-size:0.8rem}
+}
+`;
+
+// ── Homepage HTML ───────────────────────────────────────────────────────────
+const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeSight Aesthetic Clinic — LAISA Agent OS Demo</title>
+<meta name="description" content="6 AI agents for SafeSight Aesthetic Clinic — WhatsApp booking, patient CRM, voice notes, social media automation.">
+<style>${css}</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand"><span>Safe</span>Sight</span>
+    <div class="nav-links">
+      <a href="#demos">Demos</a>
+      <a href="#agents">Agents</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-eyebrow">SafeSight Aesthetic Clinic — Live Demo</span>
+    <h1>The AI-Powered<br><em>Clinic OS</em></h1>
+    <p class="hero-sub">
+      Six specialist AI agents, real-time WhatsApp booking, patient CRM,
+      voice notes, and social media automation — all running on your private VM.
+    </p>
+    <div class="hero-actions">
+      <a href="#demos" class="btn-primary">Explore Live Demos</a>
+      <a href="mailto:info@safesight.co.za" class="btn-ghost">Book a Demo</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item"><span class="stat-num">6</span><span class="stat-lbl">AI Agents</span></div>
+    <div class="stat-item"><span class="stat-num">24/7</span><span class="stat-lbl">Uptime</span></div>
+    <div class="stat-item"><span class="stat-num">R1,499</span><span class="stat-lbl">Per Month</span></div>
+    <div class="stat-item"><span class="stat-num">100%</span><span class="stat-lbl">POPIA Ready</span></div>
+  </div>
+</div>
+
+<section id="demos" class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">Live Demos</span>
+      <h2>Click any feature<br>to explore</h2>
+      <p>Real AI agents running on the SafeSight VM — not screenshots.</p>
+    </div>
+    <div class="demos-grid">
+      <a href="dashboard-demo.html" class="demo-card">
+        <span class="demo-num">01 — DASHBOARD</span>
+        <div class="demo-title">Unified Dashboard</div>
+        <p class="demo-desc">Real-time clinic overview — patients, revenue, agents, and tasks. Live POPIA audit trail.</p>
+        <span class="demo-link">View Live <span class="demo-arrow">→</span></span>
+      </a>
+      <a href="charlie.html" class="demo-card">
+        <span class="demo-num">02 — VOICE</span>
+        <div class="demo-title">Charlie — Voice Agent</div>
+        <p class="demo-desc">Transcribes voice notes, creates patient records, books appointments automatically.</p>
+        <span class="demo-link">Try It <span class="demo-arrow">→</span></span>
+      </a>
+      <a href="whatsapp-bot-demo.html" class="demo-card">
+        <span class="demo-num">03 — WHATSAPP</span>
+        <div class="demo-title">WhatsApp Booking Bot</div>
+        <p class="demo-desc">AI receptionist handles bookings, reminders, and FAQs 24/7 in SA languages.</p>
+        <span class="demo-link">Chat Now <span class="demo-arrow">→</span></span>
+      </a>
+      <a href="laisa-crm.html" class="demo-card">
+        <span class="demo-num">04 — CRM</span>
+        <div class="demo-title">Patient CRM</div>
+        <p class="demo-desc">Lead scoring, pipeline tracking, automated follow-ups, and treatment history.</p>
+        <span class="demo-link">Explore <span class="demo-arrow">→</span></span>
+      </a>
+      <a href="email-triage-demo.html" class="demo-card">
+        <span class="demo-num">05 — EMAIL</span>
+        <div class="demo-title">AI Email Triage</div>
+        <p class="demo-desc">Auto-categorises patient emails: urgent to doctor, billing to admin, spam to archive.</p>
+        <span class="demo-link">See It Work <span class="demo-arrow">→</span></span>
+      </a>
+      <a href="social-sdk.html" class="demo-card">
+        <span class="demo-num">06 — SOCIAL</span>
+        <div class="demo-title">Social Media SDK</div>
+        <p class="demo-desc">AI-generated captions, hashtag strategy, engagement analytics — composio-powered.</p>
+        <span class="demo-link">Preview <span class="demo-arrow">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="agents" class="agents-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">The Agent Fleet</span>
+      <h2>Six agents.<br>One mission.</h2>
+      <p>Each agent runs autonomously on the SafeSight VM. No humans needed for routine tasks.</p>
+    </div>
+    <div class="agents-grid">
+      ${['DenchClaw','CashClaw','Charlie','ChatterClaw','InboxClaw','AuditClaw'].map((n,i) => {
+        const a=BRAND.agents[i];
+        return `<div class="agent-card">
+          <div class="agent-top">
+            <span class="agent-name">${a.name}</span>
+            <span class="agent-num">A${i+1}</span>
+          </div>
+          <div class="agent-role">${a.role}</div>
+          <p class="agent-desc">${a.desc}</p>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+</section>
+
+<section class="vm-section">
+  <div class="container">
+    <span class="section-label">Infrastructure</span>
+    <h2 style="margin-top:12px;margin-bottom:0;">Running on Ogre VM</h2>
+    <p style="color:var(--silver);margin-top:12px;">Managed by Ogre Computer. You see the dashboard. We manage the machine.</p>
+    <div class="vm-pills">
+      <span class="vm-pill">gstack</span>
+      <span class="vm-pill">headroom</span>
+      <span class="vm-pill">last30days</span>
+      <span class="vm-pill">spec-kit</span>
+      <span class="vm-pill">skill-creator</span>
+      <span class="vm-pill">obsidian-skills</span>
+      <span class="vm-status"><span class="vm-dot"></span>All running</span>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">Pricing</span>
+      <h2>Simple. Transparent.<br>ROI-positive.</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Essential</div>
+        <div class="price-amt">R599<span>/mo</span></div>
+        <p class="price-per">per clinic, no setup fee</p>
+        <ul class="price-fs">
+          <li>1 VM (3 agents)</li><li>Patient CRM</li><li>AI Email triage</li>
+          <li>WhatsApp Lite</li><li>POPIA compliance</li>
+        </ul>
+        <a href="mailto:info@safesight.co.za" class="price-btn">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier" style="color:var(--red)">Intelligence — Popular</div>
+        <div class="price-amt">R1,499<span>/mo</span></div>
+        <p class="price-per">per clinic, no setup fee</p>
+        <ul class="price-fs">
+          <li>1 VM (all 6 agents)</li><li>Full WhatsApp Bot</li>
+          <li>Voice notes (Charlie)</li><li>Social media AI</li>
+          <li>API access</li><li>Priority support</li>
+        </ul>
+        <a href="mailto:info@safesight.co.za" class="price-btn">Get Started</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amt">R3,499<span>/mo</span></div>
+        <p class="price-per">3 VMs, white-label, multi-clinic</p>
+        <ul class="price-fs">
+          <li>3 VMs (all agents)</li><li>White-label option</li>
+          <li>Multi-clinic dashboard</li><li>Custom integrations</li>
+          <li>Dedicated account manager</li>
+        </ul>
+        <a href="mailto:info@safesight.co.za" class="price-btn">Contact Us</a>
+      </div>
+    </div>
+    <div class="roi-banner">
+      <div class="roi-stat"><strong>R4,000+</strong><span>saved monthly at R200/hr</span></div>
+      <div class="roi-stat"><strong>R1,499</strong><span>LAISA Intelligence per month</span></div>
+      <div class="roi-note">ROI-positive from day one. SafeSight saves 20+ admin hours/month with 6 AI agents handling bookings, billing, emails, and social media automatically.</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="cta-section">
+  <div class="container">
+    <span class="section-label" style="display:block;margin-bottom:24px;">Get Started</span>
+    <h2>Ready to power your<br>clinic with AI?</h2>
+    <p>Book a live demo. See the agents work in real-time.</p>
+    <a href="mailto:info@safesight.co.za" class="cta-email">info@safesight.co.za</a>
+    <p style="margin-top:24px;color:var(--silver);font-size:0.9rem;">
+      Or call us: <strong style="color:var(--white)">+27 21 123 4567</strong><br>
+      <span style="font-size:0.85rem">Cape Town, South Africa</span>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p><span class="footer-brand">Safe</span>Sight Aesthetic Clinic &mdash; LAISA Agent OS &copy; 2026</p>
+  <p>6 Agents &nbsp;&middot;&nbsp; Real-time &nbsp;&middot;&nbsp; POPIA Compliant &nbsp;&middot;&nbsp; South Africa</p>
+</footer>
+
+</body>
+</html>`;
+
+fs.mkdirSync(OUT, { recursive: true });
+fs.writeFileSync(path.join(OUT, 'index.html'), html);
+console.log('\n✅ SafeSight LAISA demo built');
+console.log('   Output:', OUT);

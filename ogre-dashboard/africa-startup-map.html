@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Africa AI Startup Landscape</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--surface:#111120;--card:#161628;--border:#1e1e38;--gold:#C9A84C;--cyan:#00d4ff;--pink:#ec4899;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--text:#e8e8f0;--muted:#8888aa}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.ogre-logo{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:2px}
+.ogre-logo span{color:var(--text)}
+.topbar-nav{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.topbar-nav::-webkit-scrollbar{display:none}
+.nav-btn{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:var(--muted);padding:5px 12px;border-radius:6px;border:none;background:transparent;cursor:pointer;white-space:nowrap;transition:all 0.15s;text-decoration:none}
+.nav-btn:hover,.nav-btn.active{background:var(--card);color:var(--text)}
+.nav-btn.active{color:var(--gold)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.live-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.signal-band{background:linear-gradient(90deg,var(--gold),#6c63ff,var(--cyan));padding:4px 24px}
+.signal-band span{font-family:'JetBrains Mono',monospace;font-size:10px;color:#000;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;display:block}
+.hero{padding:48px 24px 28px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.hero h1{font-family:'Newsreader',serif;font-size:clamp(24px,5vw,44px);font-weight:600;color:var(--text);line-height:1.15;margin-bottom:14px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-sub{font-size:14px;color:var(--muted);max-width:520px;margin:0 auto 28px;line-height:1.65}
+.stats-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 22px;text-align:center;min-width:120px}
+.stat-card .num{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gold)}
+.stat-card .lbl{font-size:9px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:1px}
+.filters{padding:20px 24px;max-width:1200px;margin:0 auto}
+.filter-section{margin-bottom:10px}
+.filter-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.filter-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;min-width:52px}
+.filter-btn{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.15s}
+.filter-btn:hover{border-color:var(--gold);color:var(--text)}
+.filter-btn.active{background:var(--gold);border-color:var(--gold);color:#000}
+.country-btn.active{background:var(--cyan);border-color:var(--cyan);color:#000}
+.sector-btn.active{background:var(--pink);border-color:var(--pink);color:#fff}
+.urgency-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+.search-row{display:flex;gap:12px;align-items:center;margin-top:12px}
+.result-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.search-wrap{position:relative;flex:1;min-width:180px}
+.search-input{width:100%;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.15s}
+.search-input:focus{border-color:var(--gold)}
+.search-input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none}
+.grid-wrap{padding:0 24px 48px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all 0.2s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.card-top{position:absolute;top:0;left:0;right:0;height:2px}
+.c-ai{background:linear-gradient(90deg,var(--cyan),transparent)}
+.c-fintech{background:linear-gradient(90deg,var(--gold),transparent)}
+.c-health{background:linear-gradient(90deg,var(--pink),transparent)}
+.c-agri{background:linear-gradient(90deg,var(--green),transparent)}
+.c-logistics{background:linear-gradient(90deg,var(--amber),transparent)}
+.c-edtech{background:linear-gradient(90deg,#a78bfa,transparent)}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;padding-top:10px;gap:8px}
+.card-name{font-family:'Newsreader',serif;font-size:15px;font-weight:600;color:var(--text);line-height:1.2}
+.card-flag{font-size:22px;flex-shrink:0}
+.badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px}
+.b-country{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)}
+.b-sector{color:#000}
+.b-sector.ai{background:var(--cyan)}
+.b-sector.fintech{background:var(--gold)}
+.b-sector.health{background:var(--pink)}
+.b-sector.agri{background:var(--green)}
+.b-sector.logistics{background:var(--amber)}
+.b-sector.edtech{background:#a78bfa}
+.b-hot{background:rgba(239,68,68,0.15);border:1px solid var(--red);color:var(--red)}
+.b-warm{background:rgba(245,158,11,0.15);border:1px solid var(--amber);color:var(--amber)}
+.b-tap{background:rgba(34,197,94,0.15);border:1px solid var(--green);color:var(--green)}
+.card-desc{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px}
+.card-why{font-size:11px;color:var(--text);background:rgba(201,168,76,0.07);border-left:2px solid var(--gold);padding:7px 10px;border-radius:0 6px 6px 0;margin-bottom:12px;line-height:1.5}
+.card-why strong{color:var(--gold)}
+.card-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.ogre-score{display:flex;align-items:center;gap:8px}
+.ogre-score .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.score-bar{width:52px;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px}
+.score-hi{background:var(--green)}
+.score-mid{background:var(--amber)}
+.score-lo{background:var(--red)}
+.score-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700}
+.score-val.hi{color:var(--green)}
+.score-val.mid{color:var(--amber)}
+.score-val.lo{color:var(--red)}
+.btn-copy{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:5px 10px;border-radius:6px;border:none;cursor:pointer;background:var(--gold);color:#000;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.15s}
+.btn-copy:hover{background:#fff}
+.empty{grid-column:1/-1;text-align:center;padding:80px 24px}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.3}
+.empty p{color:var(--muted);font-size:14px}
+.opp-section{padding:0 24px 64px;max-width:1200px;margin:0 auto}
+.section-title{font-family:'Newsreader',serif;font-size:20px;font-weight:600;color:var(--text);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.opp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.opp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.opp-card.urgent{border-color:rgba(239,68,68,0.3)}
+.opp-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.opp-flag{font-size:26px}
+.opp-country-name{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--text)}
+.opp-sub{font-size:11px;color:var(--muted);margin-bottom:12px}
+.opp-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px}
+.opp-row .lbl{color:var(--muted)}
+.opp-row .val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--gold)}
+.opp-cta{margin-top:12px;width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;text-align:center;text-decoration:none;display:block}
+.opp-cta:hover{background:var(--gold);color:#000;border-color:var(--gold)}
+footer{padding:28px 24px;text-align:center;border-top:1px solid var(--border)}
+footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--gold);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;border-radius:10px;z-index:999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:640px){.topbar-nav{display:none}.hero h1{font-size:24px}.stats-row{gap:10px}.stat-card{min-width:100px;padding:13px 16px}.stat-card .num{font-size:20px}.grid-wrap{grid-template-columns:1fr}.opp-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="ogre-logo">OGRE<span>///</span>AFRICA</div>
+    <nav class="topbar-nav">
+      <a class="nav-btn" href="portal.html">Portal</a>
+      <a class="nav-btn" href="tender-tracker.html">Tenders</a>
+      <a class="nav-btn" href="business-pulse.html">Pipeline</a>
+      <a class="nav-btn" href="proposal-generator.html">Proposals</a>
+      <a class="nav-btn" href="capability-statement.html">Capability</a>
+      <a class="nav-btn" href="email-sequence.html">Email Seq</a>
+    </nav>
+  </div>
+  <div class="topbar-right">
+    <div class="live-dot"></div>
+    <span class="clock" id="clock">--:--:-- UTC</span>
+  </div>
+</div>
+<div class="signal-band">
+  <span>🏭 NIGHT 22 — JULY 13 2026 &nbsp;|&nbsp; AFRICA AI STARTUP LANDSCAPE &nbsp;|&nbsp; 50+ STARTUPS ACROSS 9 COUNTRIES</span>
+</div>
+<div class="hero">
+  <div class="hero-eyebrow">OGRE COMPUTER — AFRICA INTELLIGENCE DIVISION</div>
+  <h1>Africa's AI <em>Startup Landscape</em></h1>
+  <p class="hero-sub">50+ AI startups mapped across 9 countries. Filter by country, sector, and OGRE opportunity score. One-click copy a personalised outreach message.</p>
+  <div class="stats-row">
+    <div class="stat-card"><div class="num" id="total-count">0</div><div class="lbl">Startups</div></div>
+    <div class="stat-card"><div class="num" id="hot-count">0</div><div class="lbl">Hot Targets</div></div>
+    <div class="stat-card"><div class="num" id="countries-count">0</div><div class="lbl">Countries</div></div>
+    <div class="stat-card"><div class="num" id="pipeline-val">R0M</div><div class="lbl">Pipeline Est.</div></div>
+  </div>
+</div>
+<div class="filters">
+  <div class="filter-section">
+    <div class="filter-row">
+      <span class="filter-label">Country</span>
+      <button class="filter-btn country-btn active" data-country="all">All</button>
+      <button class="filter-btn country-btn" data-country="ZA">🇿🇦 SA</button>
+      <button class="filter-btn country-btn" data-country="NG">🇳🇬 Nigeria</button>
+      <button class="filter-btn country-btn" data-country="KE">🇰🇪 Kenya</button>
+      <button class="filter-btn country-btn" data-country="EG">🇪🇬 Egypt</button>
+      <button class="filter-btn country-btn" data-country="GH">🇬🇭 Ghana</button>
+      <button class="filter-btn country-btn" data-country="RW">🇷🇼 Rwanda</button>
+      <button class="filter-btn country-btn" data-country="ET">🇪🇹 Ethiopia</button>
+      <button class="filter-btn country-btn" data-country="TZ">🇹🇿 TZ</button>
+    </div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-row">
+      <span class="filter-label">Sector</span>
+      <button class="filter-btn sector-btn active" data-sector="all">All</button>
+      <button class="filter-btn sector-btn" data-sector="ai">🤖 AI</button>
+      <button class="filter-btn sector-btn" data-sector="fintech">💰 Fintech</button>
+      <button class="filter-btn sector-btn" data-sector="health">🏥 Health</button>
+      <button class="filter-btn sector-btn" data-sector="agri">🌾 AgriTech</button>
+      <button class="filter-btn sector-btn" data-sector="logistics">🚚 Logistics</button>
+      <button class="filter-btn sector-btn" data-sector="edtech">📚 EdTech</button>
+    </div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-row">
+      <span class="filter-label">Priority</span>
+      <button class="filter-btn urgency-btn active" data-urgency="all">All</button>
+      <button class="filter-btn urgency-btn" data-urgency="hot">🔥 Hot</button>
+      <button class="filter-btn urgency-btn" data-urgency="warm">⚡ Warm</button>
+      <button class="filter-btn urgency-btn" data-urgency="tap">🌱 Tap</button>
+      <span class="result-count" id="result-count"></span>
+    </div>
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="search" type="text" placeholder="Search startups, sectors, countries…">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid-wrap" id="grid"></div>
+<div class="opp-section">
+  <div class="section-title">Country Opportunity Overview</div>
+  <div class="opp-grid" id="opp-grid"></div>
+</div>
+<footer>
+  <p>OGRE COMPUTER — DARK FACTORY | STUDENT GROUP | NIGHT 22 — JULY 13 2026 | DATA: RESEARCH-2026-07-13.MD §9</p>
+</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var DATA = [
+    {name:"Flutterwave",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"hot",score:96,desc:"Pan-African payment gateway processing $20B+ annually. Active government contracts. Building AI fraud detection and compliance layer.",why:"Government payment corridors + remittance. OGRE can integrate sovereign AI layer into their payment infrastructure.",pipeline:5},
+    {name:"Moniepoint",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"hot",score:88,desc:"Nigeria's largest POS and digital banking operator. 2M+ merchants, 50M+ users. Building AI credit scoring for underserved MSMEs.",why:"AI credit scoring for 2M+ merchants. OGRE's Qwen stack for sovereign model deployment.",pipeline:4},
+    {name:"Kobo360",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"logistics",type:"c-logistics",status:"hot",score:83,desc:"African freight and logistics platform. AI-powered route optimization across 7 countries.",why:"AI logistics optimization. OGRE's agent stack for automating procurement and freight workflows.",pipeline:3},
+    {name:"54gene",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"health",type:"c-health",status:"hot",score:90,desc:"African genomics and health AI startup. Building world's most diverse genomic database. AI drug discovery pipeline.",why:"Health AI + genomics. OGRE can propose sovereign AI infrastructure for their compute pipeline.",pipeline:4},
+    {name:"Helium Health",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"health",type:"c-health",status:"hot",score:85,desc:"EMR and hospital management across 5 African countries. 400K+ patients. AI clinical decision support in development.",why:"EMR + AI. OGRE's Qwen stack for on-premise hospital AI deployment (POPIA/GDPR compliant).",pipeline:4},
+    {name:"Andela",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"ai",type:"c-ai",status:"hot",score:87,desc:"Global engineering talent platform matching African engineers with tech companies. AI talent matching.",why:"Engineering talent + AI. OGRE can partner for agent development and client implementation services.",pipeline:3},
+    {name:"Kuda Bank",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"hot",score:83,desc:"Digital-only bank for Africans. AI-driven credit, savings, and investment features. 1M+ users.",why:"Digital bank AI features. OGRE partnership on agentic banking layer.",pipeline:3},
+    {name:"Jumo",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"warm",score:76,desc:"AI-driven credit and savings platform for Africa. Partnerships with mobile operators and banks.",why:"AI credit models. OGRE partnership on NLP for local languages.",pipeline:3},
+    {name:"Innocens",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"health",type:"c-health",status:"warm",score:78,desc:"AI-powered newborn jaundice detection using smartphone cameras. Point-of-care diagnostic tool.",why:"AI diagnostics at point of care. OGRE can help scale to government health facilities.",pipeline:3},
+    {name:"MdaaS Global",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"health",type:"c-health",status:"warm",score:75,desc:"Diagnostic-as-a-service. AI radiology interpretation. Increasing CT/MRI access in Africa.",why:"AI radiology. OGRE can build GPU compute infrastructure for their AI models.",pipeline:3},
+    {name:"Carbon",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"warm",score:71,desc:"Digital lending and financial services. AI underwriting models for personal loans.",why:"AI underwriting. OGRE can propose model deployment on Qwen.",pipeline:2},
+    {name:"Piggyvest",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"warm",score:74,desc:"Digital savings and investment platform with 4M+ users. AI financial coaching.",why:"AI coaching features. OGRE can provide agentic AI pipeline for personalization.",pipeline:2},
+    {name:"GoMyCode",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"edtech",type:"c-edtech",status:"warm",score:68,desc:"African coding bootcamp and EdTech platform. AI curriculum personalization.",why:"EdTech + AI. OGRE can co-develop curriculum using Cursor/Devin.",pipeline:2},
+    {name:"Ulesson",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"edtech",type:"c-edtech",status:"warm",score:65,desc:"African curriculum EdTech for K-12. AI adaptive learning paths. 2M+ students.",why:"EdTech at scale. OGRE can propose AI content generation pipeline.",pipeline:2},
+    {name:"Migo",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"warm",score:69,desc:"AI-powered lending and savings for underserved Africans using mobile data signals for credit scoring.",why:"Alternative credit scoring. OGRE sovereign AI infrastructure.",pipeline:2},
+    {name:"Interswitch",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"tap",score:68,desc:"Nigerian fintech unicorn. Digital payments processing billions. AI fraud detection in development.",why:"AI fraud detection. OGRE can propose Qwen-based sovereign AI module.",pipeline:2},
+    {name:"Max.ng",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"logistics",type:"c-logistics",status:"warm",score:70,desc:"Nigerian motorcycle and EV ride-hailing. AI driver scoring, predictive fleet maintenance.",why:"EV fleet AI maintenance. OGRE sensor + AI pipeline.",pipeline:2},
+    {name:"Discovery Vitality AI",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"hot",score:92,desc:"Africa's most advanced health AI platform. Behavioral change through AI. Vitality rewards + AI health coaching.",why:"Health AI at scale. OGRE can propose compute infrastructure + agent pipeline.",pipeline:5},
+    {name:"DataProphet",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"hot",score:89,desc:"AI for manufacturing defect detection and quality control. Automotive, mining, food & bev factories.",why:"Industrial AI. OGRE can propose edge AI compute stack + Qwen vision model.",pipeline:4},
+    {name:"Aerobotics",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"agri",type:"c-agri",status:"hot",score:84,desc:"Drone + AI for crop health monitoring. Commercial agriculture across Africa. AI pest detection.",why:"AgriTech AI. OGRE can integrate drone vision AI pipeline.",pipeline:4},
+    {name:"Yoco",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"fintech",type:"c-fintech",status:"hot",score:86,desc:"South African payment gateway and POS. 100K+ merchants. AI fraud detection and business analytics.",why:"SME payment AI. OGRE can integrate Qwen for merchant insights.",pipeline:4},
+    {name:"TymeAI",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"hot",score:88,desc:"AI division of TymeBank. Developing AI financial advisor, fraud detection, credit underwriting models.",why:"AI banking division. OGRE can provide agentic AI infrastructure and consulting.",pipeline:4},
+    {name:"TymeBank",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"fintech",type:"c-fintech",status:"hot",score:80,desc:"South Africa's largest digital bank. 5M+ customers. AI financial advisory in development.",why:"Digital bank AI. OGRE can propose embedded AI agent layer.",pipeline:3},
+    {name:"RecoMed",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"health",type:"c-health",status:"warm",score:74,desc:"African health marketplace + telemedicine. AI symptom checker and doctor matching.",why:"Health AI marketplace. OGRE can integrate Qwen for AI triage agent.",pipeline:3},
+    {name:"Akiba Digital",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"warm",score:68,desc:"SME financial AI platform. Cash flow forecasting and credit scoring for underserved businesses.",why:"SME AI credit. OGRE partnership for compute + model deployment.",pipeline:2},
+    {name:"Plear",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"fintech",type:"c-fintech",status:"tap",score:61,desc:"AI-powered micro-lending for South African informal sector. Alternative credit scoring.",why:"Micro-lending AI. OGRE opportunity in government SMME support.",pipeline:2},
+    {name:"Agrimotion",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"agri",type:"c-agri",status:"warm",score:67,desc:"AI-powered precision agriculture for African farmers. Soil sensing + AI crop recommendations.",why:"Precision agriculture AI. OGRE edge compute opportunity.",pipeline:2},
+    {name:"Sibyl",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"health",type:"c-health",status:"warm",score:71,desc:"AI mental health support platform. Chatbot therapy and crisis support. Building local language models.",why:"Mental health AI. OGRE can provide local language model deployment.",pipeline:2},
+    {name:"Lumi AI",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"warm",score:72,desc:"Business intelligence AI for African enterprises. Natural language querying of business data.",why:"BI AI. OGRE can bundle with OGRE Intelligence Portal.",pipeline:3},
+    {name:"Cortex Logic",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"warm",score:70,desc:"AI-powered IoT analytics platform. Industrial IoT + AI for SA factories and mines.",why:"IoT AI. OGRE can provide edge AI compute infrastructure.",pipeline:3},
+    {name:"Synthos",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"tap",score:65,desc:"AI content generation platform for African media and marketing. Local language content.",why:"Content AI. OGRE can propose MiniMax video + text pipeline.",pipeline:2},
+    {name:"Apex AI",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"warm",score:76,desc:"South African autonomous AI agent platform. Multi-agent orchestration for enterprise workflows.",why:"Agent platform. OGRE can partner or position as enterprise alternative.",pipeline:3},
+    {name:"M-Pesa",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"fintech",type:"c-fintech",status:"hot",score:93,desc:"Africa's largest mobile money platform. 50M+ users. Safaricom AI for fraud, credit, and agent management.",why:"50M user AI. OGRE opportunity to provide sovereign AI layer on M-Pesa infrastructure.",pipeline:5},
+    {name:"M-KOPA",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"fintech",type:"c-fintech",status:"hot",score:87,desc:"Pay-as-you-go solar + fintech. 2M+ customers. AI credit scoring for energy access financing.",why:"AI credit scoring for energy access. OGRE can propose AI infrastructure layer.",pipeline:4},
+    {name:"Sendy",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"logistics",type:"c-logistics",status:"warm",score:72,desc:"East Africa's delivery and logistics platform. Last-mile delivery, B2B freight. AI driver matching.",why:"Route AI. OGRE can integrate vision AI for delivery verification.",pipeline:2},
+    {name:"Bamboo",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"fintech",type:"c-fintech",status:"warm",score:69,desc:"AI-powered investment platform for Africans. Portfolio management and robo-advisory.",why:"Robo-advisory AI. OGRE partnership for Qwen model deployment.",pipeline:2},
+    {name:"Hisa",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"fintech",type:"c-fintech",status:"tap",score:63,desc:"Kenyan stock trading app. AI portfolio recommendations for retail investors.",why:"AI portfolio tools. OGRE can provide model infrastructure.",pipeline:1},
+    {name:"Pezesha",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"fintech",type:"c-fintech",status:"warm",score:67,desc:"AI-powered B2B marketplace for SMEs. Credit scoring for informal businesses.",why:"SME credit AI. OGRE partnership opportunity.",pipeline:2},
+    {name:"Flare",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"ai",type:"c-ai",status:"warm",score:74,desc:"Emergency response and ambulance dispatch AI. Real-time GPS routing for medical emergencies.",why:"Emergency AI. OGRE can propose government emergency AI infrastructure.",pipeline:3},
+    {name:"Zipline",country:"RW",flag:"\uD83C\uDDF7\uD83C\uDDFC",sector:"logistics",type:"c-logistics",status:"hot",score:91,desc:"Medical drone delivery. Blood, vaccines, medications to remote health facilities. AI route optimization.",why:"Global health logistics AI. OGRE can position for Africa HQ expansion.",pipeline:4},
+    {name:"GoMyCode RW",country:"RW",flag:"\uD83C\uDDF7\uD83C\uDDFC",sector:"edtech",type:"c-edtech",status:"warm",score:66,desc:"African coding bootcamp expanding into Rwanda. AI-powered learning paths.",why:"EdTech + AI in Rwanda. OGRE can propose curriculum development.",pipeline:2},
+    {name:"mTek",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"health",type:"c-health",status:"warm",score:73,desc:"Kenyan InsurTech startup. AI-powered micro-insurance products for informal sector.",why:"Micro-insurance AI. OGRE can build agentic onboarding pipeline.",pipeline:3},
+    {name:"Wave",country:"GH",flag:"\uD83C\uDDEC\uD83C\uDDED",sector:"fintech",type:"c-fintech",status:"hot",score:84,desc:"West Africa's largest mobile money operator. 15M+ users. AI agent management and fraud detection.",why:"Mobile money AI at scale. OGRE sovereign AI layer opportunity.",pipeline:4},
+    {name:"Mimo GH",country:"GH",flag:"\uD83C\uDDEC\uD83C\uDDED",sector:"fintech",type:"c-fintech",status:"warm",score:66,desc:"Ghanaian mobile lending app. AI credit scoring for underbanked consumers and micro-SMEs.",why:"Micro-lending AI. OGRE sovereign infrastructure partnership.",pipeline:2},
+    {name:"Agriwebb",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"agri",type:"c-agri",status:"tap",score:64,desc:"Livestock management platform with AI analytics for commercial farms in South Africa.",why:"AgriTech AI. OGRE edge compute opportunity for farm analytics.",pipeline:2},
+    {name:"Fresh in the Box",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"logistics",type:"c-logistics",status:"tap",score:58,desc:"Cold chain logistics for fresh produce. AI route and temperature optimization.",why:"Cold chain AI. OGRE IoT analytics opportunity.",pipeline:1},
+    {name:"GoMyCode GH",country:"GH",flag:"\uD83C\uDDEC\uD83C\uDDED",sector:"edtech",type:"c-edtech",status:"warm",score:67,desc:"African coding bootcamp expanding into Ghana. AI-powered learning and student assessment.",why:"EdTech AI. OGRE can partner on curriculum development.",pipeline:2},
+    {name:"Fincra",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"fintech",type:"c-fintech",status:"warm",score:72,desc:"African payments infrastructure API. B2B payments across 30+ African countries. AI reconciliation.",why:"Payments infrastructure AI. OGRE can propose sovereign payment AI layer.",pipeline:3},
+    {name:"FlutterStore",country:"TZ",flag:"\uD83C\uDDF9\uD83C\uDDFF",sector:"fintech",type:"c-fintech",status:"tap",score:60,desc:"Tanzanian mobile money and agent banking platform. AI agent network optimization.",why:"Mobile money AI in Tanzania. OGRE can propose regional expansion.",pipeline:2},
+    {name:"AgriEdge ET",country:"ET",flag:"\uD83C\uDDEA\uD83C\uDDF9",sector:"agri",type:"c-agri",status:"tap",score:58,desc:"Ethiopian agritech startup. AI crop yield prediction for smallholder farmers using satellite data.",why:"Agri AI in Ethiopia. OGRE edge AI + satellite imagery pipeline.",pipeline:1},
+    {name:"Norebase",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"ai",type:"c-ai",status:"warm",score:71,desc:"Pan-African business incorporation and compliance platform. AI for regulatory compliance.",why:"AI compliance. OGRE can propose Qwen for document processing.",pipeline:3},
+    {name:"Chekkit",country:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",sector:"ai",type:"c-ai",status:"tap",score:65,desc:"AI-powered product authentication and consumer engagement platform. Anti-counterfeiting tech.",why:"AI product authentication. OGRE vision AI pipeline opportunity.",pipeline:2},
+    {name:"Kladots",country:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",sector:"logistics",type:"c-logistics",status:"warm",score:69,desc:"Last-mile delivery platform for African e-commerce. AI dispatch and tracking.",why:"E-commerce logistics AI. OGRE can propose API integration.",pipeline:2},
+    {name:"Wazoku",country:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",sector:"ai",type:"c-ai",status:"warm",score:70,desc:"Innovation management SaaS with AI-powered idea scoring and trend analysis.",why:"AI innovation platform. OGRE can propose enterprise tier partnership.",pipeline:2}
+  ];
+
+  var COUNTRY_OPPS = [
+    {code:"NG",flag:"\uD83C\uDDF3\uD83C\uDDEC",name:"Nigeria",urgent:true,startups:18,hot:7,desc:"Africa's largest economy. Fintech dominance. Active AI policy draft.",actions:3},
+    {code:"ZA",flag:"\uD83C\uDDFF\uD83C\uDDE6",name:"South Africa",urgent:true,startups:15,hot:6,desc:"Most mature AI ecosystem. Government procurement active. POPIA compliance needed.",actions:3},
+    {code:"KE",flag:"\uD83C\uDDF0\uD83C\uDDEA",name:"Kenya",urgent:true,startups:9,hot:2,desc:"Mature startup ecosystem. 42% of AI startups in growth phase. M-Pesa dominance.",actions:2},
+    {code:"GH",flag:"\uD83C\uDDEC\uD83C\uDDED",name:"Ghana",urgent:false,startups:3,hot:1,desc:"Fast-growing fintech scene. Wave mobile money leading. Q3 2026 entry.",actions:1},
+    {code:"RW",flag:"\uD83C\uDDF7\uD83C\uDDFC",name:"Rwanda",urgent:false,startups:2,hot:1,desc:"Government-led AI push. Zipline as flagship. Policy-friendly environment.",actions:1},
+    {code:"EG",flag:"\uD83C\uDDEA\uD83C\uDDEC",name:"Egypt",urgent:false,startups:2,hot:0,desc:"Fastest recent AI growth. Government AI strategy draft. Arabic NLP opportunity.",actions:1},
+    {code:"TZ",flag:"\uD83C\uDDF9\uD83C\uDDFF",name:"Tanzania",urgent:false,startups:1,hot:0,desc:"Emerging market. Mobile money penetration growing. East Africa integration play.",actions:0},
+    {code:"ET",flag:"\uD83C\uDDEA\uD83C\uDDF9",name:"Ethiopia",urgent:false,startups:1,hot:0,desc:"Agriculture-first AI strategy. Smallholder farmer focus. Satellite data opportunity.",actions:0}
+  ];
+
+  var countryFilter = 'all', sectorFilter = 'all', urgencyFilter = 'all', searchQ = '';
+  var grid = document.getElementById('grid');
+  var toastEl = document.getElementById('toast');
+  var clockEl = document.getElementById('clock');
+
+  function updateClock(){var d=new Date();clockEl.textContent=d.toUTCString().slice(17,25)+' UTC';}
+  setInterval(updateClock,1000);updateClock();
+
+  function showToast(msg){toastEl.textContent=msg;toastEl.classList.add('show');setTimeout(function(){toastEl.classList.remove('show');},2000);}
+
+  function scoreClass(s){if(s>=80)return'hi';if(s>=65)return'mid';return'lo';}
+  function scoreFill(s){if(s>=80)return'score-hi';if(s>=65)return'score-mid';return'score-lo';}
+
+  function buildMsg(s){
+    return"Hi " + s.name.split(' ')[0] + ",\n\nI've been following " + s.name + "'s work \u2014 the " + s.desc.slice(0,60) + "...\n\nOGRE Computer builds AI infrastructure for African businesses. We'd love to explore how we can support " + s.name.split(' ')[0] + "'s next phase of growth.\n\nOpen to a 20-min call this week?\n\nBest,\nTumelo | OGRE Computer";
+  }
+
+  function render(){
+    var filtered = DATA.filter(function(s){
+      if(countryFilter!=='all'&&s.country!==countryFilter)return false;
+      if(sectorFilter!=='all'&&s.sector!==sectorFilter)return false;
+      if(urgencyFilter!=='all'&&s.status!==urgencyFilter)return false;
+      if(searchQ){
+        var q=searchQ.toLowerCase();
+        if(!(s.name.toLowerCase().indexOf(q)>-1||s.sector.toLowerCase().indexOf(q)>-1||s.country.toLowerCase().indexOf(q)>-1||s.desc.toLowerCase().indexOf(q)>-1))return false;
+      }
+      return true;
+    });
+
+    document.getElementById('result-count').textContent = filtered.length + ' of ' + DATA.length + ' startups';
+    document.getElementById('total-count').textContent = DATA.length;
+    document.getElementById('hot-count').textContent = DATA.filter(function(s){return s.status==='hot';}).length;
+    var countries = new Set(DATA.map(function(s){return s.country;}));
+    document.getElementById('countries-count').textContent = countries.size;
+    var pipeline = DATA.reduce(function(a,s){return a+s.pipeline;},0);
+    document.getElementById('pipeline-val').textContent = 'R' + (pipeline*100000/1000000).toFixed(1)+'M';
+
+    if(filtered.length===0){
+      grid.innerHTML='<div class="empty"><div class="empty-icon">\uD83C\uDFF4</div><p>No startups match your filters. Try adjusting the search.</p></div>';
+      return;
+    }
+
+    var html='';
+    filtered.forEach(function(s){
+      var sc = scoreClass(s.score);
+      var sf = scoreFill(s.score);
+      var statusBadge = s.status==='hot'?'b-hot':'hot'?'b-warm':'b-tap';
+      html+='<div class="card">';
+      html+='<div class="card-top '+s.type+'"></div>';
+      html+='<div class="card-header"><div class="card-name">'+s.name+'</div><div class="card-flag">'+s.flag+'</div></div>';
+      html+='<div class="badges">';
+      html+='<span class="badge b-country">'+s.country+'</span>';
+      html+='<span class="badge b-sector '+s.sector+'">'+s.sector+'</span>';
+      html+='<span class="badge '+statusBadge+'">'+s.status+'</span>';
+      html+='</div>';
+      html+='<div class="card-desc">'+s.desc+'</div>';
+      html+='<div class="card-why"><strong>OGRE angle:</strong> '+s.why+'</div>';
+      html+='<div class="card-footer">';
+      html+='<div class="ogre-score"><span class="lbl">OGRE fit</span><div class="score-bar"><div class="score-fill '+sf+'" style="width:'+s.score+'%"></div></div><span class="score-val '+sc+'">'+s.score+'</span></div>';
+      html+='<button class="btn-copy" onclick="copyMsg(\''+s.name.replace(/'/g,"\\'")+'\')">Copy intro</button>';
+      html+='</div></div>';
+    });
+    grid.innerHTML=html;
+
+    // Country opp cards
+    var oppHtml='';
+    COUNTRY_OPPS.forEach(function(c){
+      oppHtml+='<div class="opp-card'+(c.urgent?' urgent':'')+'">';
+      oppHtml+='<div class="opp-top"><div class="opp-flag">'+c.flag+'</div><div class="opp-country-name">'+c.name+'</div></div>';
+      oppHtml+='<div class="opp-sub">'+c.desc+'</div>';
+      oppHtml+='<div class="opp-row"><span class="lbl">AI Startups</span><span class="val">'+c.startups+'</span></div>';
+      oppHtml+='<div class="opp-row"><span class="lbl">Hot Targets</span><span class="val">'+c.hot+'</span></div>';
+      oppHtml+='<div class="opp-row"><span class="lbl">Priority Actions</span><span class="val">'+c.actions+'</span></div>';
+      if(c.actions>0) oppHtml+='<a class="opp-cta" href="#" onclick="filterCountry(\''+c.code+'\')">View '+c.name+' startups \u2192</a>';
+      oppHtml+='</div>';
+    });
+    document.getElementById('opp-grid').innerHTML=oppHtml;
+  }
+
+  window.copyMsg = function(name){
+    var s = DATA.filter(function(d){return d.name===name;})[0];
+    if(!s)return;
+    var msg = buildMsg(s);
+    var btn = event.target;
+    if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){showToast('Copied: '+s.name+' intro!');});}
+    else{showToast(msg.slice(0,50)+'...');}
+  };
+
+  window.filterCountry = function(code){
+    countryFilter = code;
+    document.querySelectorAll('.country-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelector('.country-btn[data-country="'+code+'"]').classList.add('active');
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+
+  document.querySelectorAll('.country-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      countryFilter = this.dataset.country;
+      document.querySelectorAll('.country-btn').forEach(function(b){b.classList.remove('active');});
+      this.classList.add('active');
+      render();
+    });
+  });
+
+  document.querySelectorAll('.sector-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      sectorFilter = this.dataset.sector;
+      document.querySelectorAll('.sector-btn').forEach(function(b){b.classList.remove('active');});
+      this.classList.add('active');
+      render();
+    });
+  });
+
+  document.querySelectorAll('.urgency-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      urgencyFilter = this.dataset.urgency;
+      document.querySelectorAll('.urgency-btn').forEach(function(b){b.classList.remove('active');});
+      this.classList.add('active');
+      render();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input',function(){
+    searchQ = this.value;
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

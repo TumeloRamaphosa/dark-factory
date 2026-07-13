@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Studex Group — Dark Factory · Africa-Russia Trade Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--a:#6c63ff;--c:#00d4ff;--g:#00ff88;--p:#ec4899;--y:#f59e0b;--bg:#07070f;--bg2:#0d0d1c;--bg3:#11111f;--bd:#1c1c32;--text:#eeeef8;--muted:#7070a0;--dim:#2e2e50}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{border:none;cursor:pointer;font-family:inherit}
+.c{max-width:1200px;margin:0 auto;padding:0 24px}
+.n{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(7,7,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
+.nl{display:flex;align-items:center;gap:10px}
+.ni{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--a),var(--c));display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;color:#fff}
+.nt{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.ns{font-size:.5rem;color:var(--dim)}
+.nb{display:flex;gap:4px}
+.nb button{padding:5px 12px;border-radius:7px;font-size:.68rem;font-weight:500;background:transparent;color:var(--muted);transition:all .2s;border:none}
+.nb button.h{color:var(--a);background:rgba(108,99,255,.08)}
+.nb button:hover{color:var(--text);background:rgba(108,99,255,.08)}
+.nc{padding:7px 16px;background:var(--a);color:#fff;border-radius:7px;font-size:.7rem;font-weight:700}
+section{padding:80px 24px}
+.tag{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--a);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.title{font-size:clamp(1.7rem,4vw,2.8rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+.sub{color:var(--muted);max-width:500px;font-size:.86rem;line-height:1.8;margin-bottom:36px}
+.hr{border:none;border-top:1px solid var(--bd);max-width:1200px;margin:0 auto}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;position:relative;overflow:hidden}
+.hrb{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(108,99,255,.09) 0%,transparent 65%);pointer-events:none}
+canvas{position:absolute;inset:0;z-index:0;opacity:.4}
+.hi{position:relative;z-index:1;max-width:860px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);border-radius:999px;font-size:.58rem;font-weight:700;color:var(--a);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+.h1{font-size:clamp(2.6rem,8vw,6rem);font-weight:900;letter-spacing:-.03em;line-height:.95;margin-bottom:14px;background:linear-gradient(135deg,#fff 38%,rgba(108,99,255,.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sp{font-size:1rem;color:var(--muted);max-width:480px;margin:0 auto 28px;line-height:1.8}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ba{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:var(--a);color:#fff;border-radius:10px;font-weight:700;font-size:.84rem;box-shadow:0 8px 28px rgba(108,99,255,.4);transition:all .2s}
+.ba:hover{transform:translateY(-1px);box-shadow:0 14px 40px rgba(108,99,255,.5)}
+.bs{display:inline-flex;align-items:center;padding:12px 24px;background:transparent;border:1px solid var(--bd);color:var(--muted);border-radius:10px;font-weight:600;font-size:.82rem;transition:all .2s}
+.bs:hover{border-color:rgba(108,99,255,.4);color:var(--text)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);background:var(--bg2)}
+.si{text-align:center;padding:22px 12px;border-right:1px solid var(--bd)}
+.si:last-child{border-right:none}
+.sv{font-size:1.7rem;font-weight:900;color:var(--a);display:block}
+.sl{font-size:.54rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-top:4px;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:24px;transition:all .3s}
+.card:hover{border-color:rgba(108,99,255,.3);transform:translateY(-2px)}
+.ci{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:14px}
+.pn{font-size:.88rem;font-weight:800;margin-bottom:4px}
+.ptag{display:inline-flex;padding:2px 9px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.15);border-radius:999px;font-size:.54rem;color:var(--a);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.pd{font-size:.72rem;color:var(--muted);line-height:1.65;margin-bottom:6px}
+.pp{font-size:.78rem;font-weight:700;color:var(--a);margin-bottom:6px}
+.pl{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pl a{padding:4px 10px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.62rem;color:var(--muted);transition:all .2s}
+.pl a:hover{border-color:rgba(108,99,255,.4);color:var(--text)}
+.vm-canvas-wrap{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:24px}
+canvas{border-radius:10px;display:block;width:100%}
+.vm-g{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+.vm-n{background:var(--bg3);border:1px solid var(--bd);border-radius:10px;padding:14px 10px;text-align:center}
+.vm-n.open{border-color:rgba(0,255,136,.38);background:rgba(0,255,136,.03)}
+.vn{font-size:.68rem;font-weight:700;margin-bottom:2px}
+.vs{font-size:.54rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.vs.live{color:var(--a)}
+.vs.open{color:var(--g)}
+.vd{font-size:.58rem;color:var(--dim);line-height:1.5}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.bdg{display:flex;align-items:center;gap:7px;padding:6px 12px;background:var(--bg2);border:1px solid var(--bd);border-radius:8px;font-size:.7rem;font-weight:600;color:var(--muted)}
+.bdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.cta-box{background:linear-gradient(135deg,rgba(108,99,255,.09),rgba(0,212,255,.05));border:1px solid rgba(108,99,255,.2);border-radius:16px;padding:20px;text-align:center}
+.ct{font-size:.86rem;font-weight:800;margin-bottom:4px}
+.cs{font-size:.72rem;color:var(--muted);margin-bottom:10px}
+.prop-card{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:10px}
+.pi{display:flex;align-items:center;gap:12px}
+.ii{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.it{font-size:.82rem;font-weight:800;margin-bottom:2px}
+.ip{font-size:.68rem;color:var(--a);margin-bottom:4px}
+.step{text-align:center;padding:16px 10px;background:var(--bg2);border:1px solid var(--bd);border-radius:12px}
+.sn{width:28px;height:28px;border-radius:50%;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:.7rem;font-weight:800;color:var(--a)}
+.st{font-size:.74rem;font-weight:700;margin-bottom:2px}
+.sd{font-size:.62rem;color:var(--dim);line-height:1.5}
+.fcard{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:28px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.ff{display:flex;flex-direction:column}
+.ff.f{grid-column:1/-1}
+.fl{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:6px}
+.fi,.fs,.ft{background:var(--bg3);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;font-size:.82rem;color:var(--text);width:100%;transition:border-color .2s}
+.fi::placeholder,.ft::placeholder{color:#2e2e4a}
+.fi:focus,.fs:focus,.ft:focus{border-color:rgba(108,99,255,.5)}
+.fs{appearance:none;cursor:pointer}
+.ft{resize:vertical;min-height:100px}
+.fsub{width:100%;padding:14px;background:var(--a);color:#fff;border-radius:10px;font-size:.92rem;font-weight:700;box-shadow:0 8px 28px rgba(108,99,255,.36);transition:all .2s;cursor:pointer;border:none}
+.fsub:hover{transform:translateY(-1px);box-shadow:0 12px 40px rgba(108,99,255,.46)}
+.acard{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:20px}
+.ai{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:12px;background:rgba(108,99,255,.1);color:var(--a)}
+.an{font-size:.82rem;font-weight:800;margin-bottom:2px}
+.ar{font-size:.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--a);margin-bottom:6px}
+.ad{font-size:.7rem;color:var(--muted);line-height:1.65;margin-bottom:8px}
+.ast{display:flex;flex-wrap:wrap;gap:5px}
+.as{padding:3px 9px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.6rem;font-weight:600;color:var(--muted)}
+.pipe-card{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px}
+.ft{background:var(--bg);border-top:1px solid var(--bd)}
+.fti{max-width:1200px;margin:0 auto;padding:40px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.fb{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fk{font-size:.66rem;color:var(--dim);line-height:2}
+.live-tag{font-size:.5rem;background:rgba(0,255,136,.1);color:var(--g);padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px}
+footer{padding-top:0}
+@media(max-width:768px){.nb{display:none}.split,.fg{grid-template-columns:1fr}.vm-g{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<nav class="n">
+<div class="nl">
+<div class="ni">DF</div>
+<div><div class="nt">Studex Group</div><div class="ns">Dark Factory · OGRE Computer · 2026</div></div>
+</div>
+<div class="nb">
+<button onclick="scrollTo('products')">Products</button>
+<button onclick="scrollTo('vms')">VMs</button>
+<button onclick="scrollTo('market')">Market</button>
+<button onclick="scrollTo('bmad')">BMAD</button>
+<button onclick="scrollTo('agents')">Agents</button>
+<button onclick="scrollTo('pipeline')">Pipeline</button>
+</div>
+<a href="#bmad" class="nc">Start a Project</a>
+</nav>
+
+<section class="hero">
+<canvas id="hc"></canvas>
+<div class="hrb"></div>
+<div class="hi">
+<div class="badge">Dark Factory · OGRE Computer · Studex Group · July 2026</div>
+<h1 class="h1">Build.<br/>Ship.<br/>Repeat.</h1>
+<p class="sp">A sovereign AI build factory. Multi-agent teams design, build, and deploy software from idea to live product in days.</p>
+<div class="btns">
+<a href="#bmad" class="ba">Build Me A Dashboard — R29</a>
+<a href="#products" class="bs">Explore Products</a>
+</div>
+</div>
+</section>
+
+<div class="stats">
+<div class="si"><span class="sv">8</span><span class="sl">Live Products</span></div>
+<div class="si"><span class="sv">6</span><span class="sl">AI Agents</span></div>
+<div class="si"><span class="sv">R203M+</span><span class="sl">Pipeline Value</span></div>
+<div class="si"><span class="sv">R45K</span><span class="sl">Live MRR</span></div>
+</div>
+
+<section id="products">
+<div class="c">
+<div class="tag">// THE PRODUCTS</div>
+<h2 class="title">Everything We Build</h2>
+<p class="sub">Eight live products. Voice AI, cybersecurity, global trade infrastructure, computer vision, autonomous workers.</p>
+<div class="cards">
+
+<div class="card">
+<div class="ci" style="background:rgba(236,72,153,.12);color:#ec4899">🔊</div>
+<div class="pn">DarkDesk™ <span class="live-tag">LIVE</span></div>
+<div class="ptag">Voice AI</div>
+<p class="pd">AI voice companion. Real-time voice + chat. Lives in your own sovereign SA VM. POPIA-compliant.</p>
+<div class="pp">From R2,500/mo</div>
+<div class="pl"><a href="https://hgjcgc2esiki.space.minimax.io" target="_blank">Demo</a><a href="https://9w8nktistow4.space.minimax.io" target="_blank">Proposal</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(0,255,136,.12);color:#00ff88">🌐</div>
+<div class="pn">AutoFlex Pro™</div>
+<div class="ptag">Web Automation</div>
+<p class="pd">AI agent reads webpages, fills forms, qualifies leads, books appointments automatically.</p>
+<div class="pp">From R1,500/mo</div>
+<div class="pl"><a href="https://3twhamln9rsh.space.minimax.io" target="_blank">Demo</a><a href="#bmad">Build yours</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(245,158,11,.12);color:#f59e0b">🛡️</div>
+<div class="pn">Red Team Agent <span class="live-tag">LIVE</span></div>
+<div class="ptag">Cybersecurity AI</div>
+<p class="pd">AI VM monitoring other AI agents for hallucinations, prompt injection, and PII leakage.</p>
+<div class="pp">R45,000/mo</div>
+<div class="pl"><a href="https://w1tu0qxf216v.space.minimax.io" target="_blank">Demo</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(0,212,255,.12);color:#00d4ff">🖥️</div>
+<div class="pn">ICVMS Platform</div>
+<div class="ptag">Global Markets</div>
+<p class="pd">6 VMs connected through StudEx OS. Africa-Russia trade corridor. B-BBEE Level 1.</p>
+<div class="pp">$4,000/mo</div>
+<div class="pl"><a href="https://j3s0jkun4cbh.space.minimax.io" target="_blank">Proposal</a><a href="https://a5cjrm7f1x8s.space.minimax.io" target="_blank">Full Demo</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(108,99,255,.12);color:#6c63ff">🔧</div>
+<div class="pn">BMAD</div>
+<div class="ptag">Rapid Development</div>
+<p class="pd">Build Me A Dashboard. Describe what you want. We build it. Powered by AI agent teams.</p>
+<div class="pp">R29/once-off</div>
+<div class="pl"><a href="#bmad">Start now</a><a href="https://6g18k484b9fx.space.minimax.io" target="_blank">View Tool</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(236,72,153,.12);color:#ec4899">🧠</div>
+<div class="pn">Obsidian Mind</div>
+<div class="ptag">Enterprise AI OS</div>
+<p class="pd">Persistent memory vault for AI agents. Every conversation, deal, document stored forever.</p>
+<div class="pp">$4,000/mo</div>
+<div class="pl"><a href="https://kidvuwlj196t.space.minimax.io" target="_blank">Proposal</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(0,212,255,.12);color:#00d4ff">👁️</div>
+<div class="pn">Computer Vision</div>
+<div class="ptag">Ntech Lab × Studex</div>
+<p class="pd">AI-powered facial recognition, safety compliance, fraud detection, transport AI. 8 verticals.</p>
+<div class="pp">From R8,500/mo</div>
+<div class="pl"><a href="https://nhvo1j0675qd.space.minimax.io" target="_blank">Partnership Page</a></div>
+</div>
+
+<div class="card">
+<div class="ci" style="background:rgba(245,158,11,.12);color:#f59e0b">🎬</div>
+<div class="pn">CashClaw</div>
+<div class="ptag">Autonomous AI Worker</div>
+<p class="pd">AI agent that finds work, does the work, gets paid in ETH. Runs 24/7. Own your autonomous company.</p>
+<div class="pp">R200/mo</div>
+<div class="pl"><a href="https://d60ti0jcvuvw.space.minimax.io" target="_blank">Learn More</a></div>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="vms">
+<div class="c">
+<div class="tag">// LIVE NOW · ANIMATED</div>
+<h2 class="title">ICVMS — VM Ecosystem</h2>
+<p class="sub">Six VMs connected through StudEx OS. B-BBEE Level 1 · POPIA Compliant · Johannesburg SA</p>
+<div class="vm-canvas-wrap">
+<canvas id="vmc"></canvas>
+<div class="vm-g">
+<div class="vm-n"><div class="vn">AfricaBiz</div><div class="vs live">Trade & Commerce</div><div class="vd">B-BBEE Level 1<br/>POPIA Compliant</div></div>
+<div class="vm-n"><div class="vn">NtechLab</div><div class="vs live">AI Vision</div><div class="vd">Facial recognition<br/>Computer vision AI</div></div>
+<div class="vm-n open"><div class="vn">VM 05</div><div class="vs open">OPEN SLOT</div><div class="vd">Apply now<br/>B-BBEE preferred</div></div>
+<div class="vm-n"><div class="vn">Pharmasyntez</div><div class="vs live">Pharma Distribution</div><div class="vd">Cold chain<br/>SAHPRA licensed</div></div>
+<div class="vm-n"><div class="vn">ART Engineering</div><div class="vs live">Manufacturing</div><div class="vd">DevOps · CI/CD<br/>Infrastructure</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="market">
+<div class="c">
+<div class="split">
+<div>
+<div class="tag">// NEW PARTNERSHIP</div>
+<h2 class="title">Computer Vision<br/>Ntech Lab × Studex</h2>
+<p style="color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:16px;">Ntech Lab builds the AI. Studex deploys it across the Africa-Russia corridor. B-BBEE Level 1. POPIA compliant.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Healthcare AI</div>
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Anti-Fraud KYC</div>
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Transport AI</div>
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Safety Monitoring</div>
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Retail Loss Prev</div>
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Event Analytics</div>
+</div>
+<a href="https://nhvo1j0675qd.space.minimax.io" target="_blank" class="ba" style="font-size:.8rem;padding:10px 24px">View Computer Vision Page →</a>
+</div>
+<div>
+<div class="tag">// STUDex GLOBAL MARKETS</div>
+<h2 class="title">Africa-Russia<br/>Trade Infrastructure</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0">
+<div class="bdg"><div class="bdot" style="background:#6c63ff"></div>Africa-Russia Trade</div>
+<div class="bdg"><div class="bdot" style="background:#00ff88"></div>B-BBEE Level 1</div>
+<div class="bdg"><div class="bdot" style="background:#00d4ff"></div>Johannesburg SA</div>
+<div class="bdg"><div class="bdot" style="background:#f59e0b"></div>6 VMs · 1 Platform</div>
+</div>
+<div class="cta-box" style="margin-bottom:14px">
+<div class="ct">Apply for ICVMS VM 05</div>
+<div class="cs">Final open partner slot. B-BBEE companies preferred.</div>
+<a href="mailto:hello@studexglobalmarkets.com?subject=VM 05 Application" class="ba" style="font-size:.78rem;padding:9px 22px">Apply via Email →</a>
+</div>
+<div class="prop-card">
+<div class="pi">
+<div class="ii" style="background:rgba(0,212,255,.12);color:#00d4ff">📋</div>
+<div>
+<div class="it">ICVMS Official Proposal</div>
+<div class="ip">$4K/mo · $7.59K setup</div>
+<a href="https://j3s0jkun4cbh.space.minimax.io" target="_blank" style="padding:3px 9px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.6rem;color:var(--muted)">View Proposal</a>
+</div>
+</div>
+</div>
+<div class="prop-card">
+<div class="pi">
+<div class="ii" style="background:rgba(236,72,153,.12);color:#ec4899">📋</div>
+<div>
+<div class="it">MindX Voice Agent</div>
+<div class="ip">$4K/mo · $7.59K setup</div>
+<a href="https://9w8nktistow4.space.minimax.io" target="_blank" style="padding:3px 9px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.6rem;color:var(--muted)">View Proposal</a>
+</div>
+</div>
+</div>
+<div class="prop-card">
+<div class="pi">
+<div class="ii" style="background:rgba(108,99,255,.12);color:#6c63ff">📋</div>
+<div>
+<div class="it">Obsidian Mind / Bre Ferrari</div>
+<div class="ip">$4K/mo · $7.59K setup</div>
+<a href="https://kidvuwlj196t.space.minimax.io" target="_blank" style="padding:3px 9px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.6rem;color:var(--muted)">View Proposal</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="bmad" style="background:var(--bg2)">
+<div class="c" style="max-width:860px">
+<div class="tag">// RAPID DEVELOPMENT</div>
+<h2 class="title">Build Me A Dashboard</h2>
+<p class="sub">R29/once-off · B-BBEE Level 1 · POPIA Compliant · Johannesburg SA</p>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px">
+<div class="step"><div class="sn">1</div><div class="st">Submit</div><div class="sd">Fill the brief</div></div>
+<div class="step"><div class="sn">2</div><div class="st">We Analyse</div><div class="sd">Scope in 24h</div></div>
+<div class="step"><div class="sn">3</div><div class="st">We Build</div><div class="sd">Deploy live</div></div>
+<div class="step"><div class="sn">4</div><div class="st">You Approve</div><div class="sd">R29</div></div>
+</div>
+<div class="fcard">
+<form id="bmadF" onsubmit="subBmad(event)">
+<div class="fg">
+<div class="ff"><label class="fl">Name</label><input class="fi" type="text" name="name" placeholder="Tumelo Ramaphosa" required/></div>
+<div class="ff"><label class="fl">Email</label><input class="fi" type="email" name="email" placeholder="tumelo@studexmeat.com" required/></div>
+<div class="ff"><label class="fl">Company</label><input class="fi" type="text" name="company" placeholder="Studex Group"/></div>
+<div class="ff"><label class="fl">Type</label><select class="fs" name="type"><option>Dashboard</option><option>Landing Page</option><option>Web App</option><option>Voice Agent</option><option>Automation</option><option>CRM</option><option>Other</option></select></div>
+<div class="ff f"><label class="fl">Project Description</label><textarea class="ft" name="desc" rows="4" placeholder="Describe what you want built. Be specific about features, integrations, users..."></textarea></div>
+</div>
+<button type="submit" class="fsub">Submit Project — R29 →</button>
+</form>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="agents">
+<div class="c">
+<div class="tag">// INTELLIGENCE LAYER</div>
+<h2 class="title">The AI Agent Team</h2>
+<p class="sub">Six specialist agents. Each running 24/7. OpenJarvis + Ollama + Eleven Labs + Cursor.</p>
+<div class="cards">
+
+<div class="acard"><div class="ai">🤖</div><div class="an">Hermes</div><div class="ar">Chief Technology Officer</div><p class="ad">Self-hosted LLM. Ollama Qwen 2.5. Persistent memory. Multi-agent orchestration.</p><div class="ast"><span class="as">Ollama Qwen 2.5</span><span class="as">GitHub</span><span class="as">Self-Hosted</span></div></div>
+
+<div class="acard"><div class="ai">📣</div><div class="an">Naledi</div><div class="ar">Chief Marketing Officer</div><p class="ad">Content calendars, social media, multi-platform campaign drafting 24/7.</p><div class="ast"><span class="as">20 posts/month</span><span class="as">Analytics</span><span class="as">Multi-platform</span></div></div>
+
+<div class="acard"><div class="ai">🛒</div><div class="an">Auto-Commerce</div><div class="ar">E-Commerce Manager</div><p class="ad">Shopify, listings, orders, inventory, customer comms.</p><div class="ast"><span class="as">Shopify</span><span class="as">Inventory</span><span class="as">Orders</span></div></div>
+
+<div class="acard"><div class="ai">📋</div><div class="an">Robusca</div><div class="ar">Chief of Staff</div><p class="ad">Coordinates all agents, manages priorities, calendar, war room.</p><div class="ast"><span class="as">Coordination</span><span class="as">War Room</span><span class="as">Reporting</span></div></div>
+
+<div class="acard"><div class="ai">🧠</div><div class="an">Obsidian Mind</div><div class="ar">Memory & Reasoning Core</div><p class="ad">Persistent vault. Semantic search. Every decision stored forever.</p><div class="ast"><span class="as">Vault</span><span class="as">Semantic Search</span><span class="as">Memory</span></div></div>
+
+<div class="acard"><div class="ai">🎙️</div><div class="an">Voice Agent</div><div class="ar">Client Communications</div><p class="ad">Real-time voice AI. Speaks to clients 24/7. OpenAI Realtime + Eleven Labs.</p><div class="ast"><span class="as">OpenAI Realtime</span><span class="as">Eleven Labs</span><span class="as">SA Phone</span></div></div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="pipeline" style="background:var(--bg2)">
+<div class="c">
+<div class="tag">// REVENUE PIPELINE</div>
+<h2 class="title">Live Opportunity Board</h2>
+<p class="sub">Every proposal, tender, and partnership in motion.</p>
+<div class="cards">
+
+<div class
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">SA DoH EMR Tender <span style="font-size:.5rem;background:rgba(245,158,11,.1);color:#f59e0b;padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">TENDER</span></div><div class="pd" style="color:var(--a)">Proposal out</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:var(--a)">R200M+</div></div></div>
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">LAISA Phase A <span style="font-size:.5rem;background:rgba(108,99,255,.1);color:var(--a);padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">PROPOSAL OUT</span></div><div class="pd" style="color:var(--a)">Day 7 follow-up needed</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:var(--a)">R350K + R55K/mo</div></div></div>
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">MindX Voice Agent <span style="font-size:.5rem;background:rgba(108,99,255,.1);color:var(--a);padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">PROPOSAL OUT</span></div><div class="pd" style="color:var(--a)">Awaiting response</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:var(--a)">R2.5K–25K/mo</div></div></div>
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">Obsidian Mind / Bre Ferrari <span style="font-size:.5rem;background:rgba(108,99,255,.1);color:var(--a);padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">PROPOSAL OUT</span></div><div class="pd" style="color:var(--a)">Awaiting response</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:var(--a)">$4K/mo</div></div></div>
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">Pharmasyntez Partnership</div><div class="pd" style="color:#ec4899">Awaiting Russia response</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:var(--a)">R2.99M Y1</div></div></div>
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">Ghana AI Ministry <span style="font-size:.5rem;background:rgba(245,158,11,.1);color:#f59e0b;padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">TENDER</span></div><div class="pd" style="color:#f59e0b">17 days to close</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:var(--a)">$250M</div></div></div>
+
+<div class="pipe-card"><div style="flex:1"><div class="pn">Red Team Agent MRR <span class="live-tag">LIVE</span></div><div class="pd" style="color:#00ff88">Active recurring revenue</div></div><div style="text-align:right"><div style="font-size:.9rem;font-weight:800;color:#00ff88">R45K/mo</div></div></div>
+
+</div></div></section>
+
+<footer class="ft">
+<div class="fti">
+<div>
+<div class="fb">
+<div class="ni">DF</div>
+<div class="nt" style="color:var(--text)">Studex Group</div>
+</div>
+<p class="fk">
+Dark Factory · OGRE Computer<br/>
+B-BBEE Level 1 · POPIA Compliant<br/>
+Johannesburg, South Africa<br/>
+<a href="mailto:cto@studex-group.com" style="color:var(--a)">cto@studex-group.com</a>
+</p>
+</div>
+<div style="text-align:right">
+<div class="fk">
+<strong style="color:var(--muted)">FNB Banking Details</strong><br/>
+Studex Group<br/>
+Account: 62760837610<br/>
+Branch: Woodmead<br/>
+Code: 250-655 · SWIFT: FIRNZAJJ
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+// Animated hero canvas
+(function(){
+  var c=document.getElementById("hc");
+  if(!c)return;
+  var x=c.getContext("2d"),t=0;
+  var pts=[{a:0,c:"#6c63ff"},{a:72,c:"#00d4ff"},{a:144,c:"#ec4899"},{a:216,c:"#f59e0b"},{a:288,c:"#00ff88"}];
+  function rz(){c.width=c.offsetWidth||1200;c.height=c.offsetHeight||600;}
+  function dw(){
+    if(!x)return;
+    var W=c.width,H=c.height;t+=0.006;
+    var cx=W/2,cy=H/2,d=Math.min(W,H)*0.3;
+    x.clearRect(0,0,W,H);
+    pts.forEach(function(p,i){
+      var r=(p.a+t*20)*Math.PI/180;
+      var rx=cx+d*Math.cos(r),ry=cy+d*Math.sin(r);
+      x.beginPath();x.arc(rx,ry,4+Math.sin(t+i)*2,0,Math.PI*2);
+      x.fillStyle=p.c;x.shadowColor=p.c;x.shadowBlur=12;x.fill();x.shadowBlur=0;
+      x.beginPath();x.arc(rx,ry,16+Math.sin(t+i)*4,0,Math.PI*2);
+      x.strokeStyle=p.c+"22";x.lineWidth=1;x.stroke();
+    });
+    x.beginPath();x.arc(cx,cy,8,0,Math.PI*2);
+    x.fillStyle="#6c63ff";x.shadowColor="#6c63ff";x.shadowBlur=16;x.fill();x.shadowBlur=0;
+    for(var i=1;i<=3;i++){
+      x.beginPath();x.arc(cx,cy,30*i+Math.sin(t*0.5)*4,0,Math.PI*2);
+      x.strokeStyle="rgba(108,99,255,"+(0.08/i)+")";x.lineWidth=0.5;x.stroke();
+    }
+    requestAnimationFrame(dw);
+  }
+  var ro=new ResizeObserver(rz);ro.observe(c);rz();dw();
+})();
+
+// VM canvas
+(function(){
+  var c=document.getElementById("vmc");
+  if(!c)return;
+  var x=c.getContext("2d"),t=0;
+  var vms=[{a:270,c:"#6c63ff"},{a:330,c:"#00d4ff"},{a:30,c:"#00ff88"},{a:90,c:"#ec4899"},{a:150,c:"#f59e0b"}];
+  function rz(){c.width=c.offsetWidth||900;c.height=240;}
+  function dw(){
+    if(!x)return;
+    var W=c.width,H=240;t+=0.008;
+    var cx=W/2,cy=H/2,rr=Math.min(W,H)*0.32;
+    x.clearRect(0,0,W,H);
+    vms.forEach(function(v,i){
+      var ra=(v.a-90)*Math.PI/180;
+      var px=cx+rr*Math.cos(ra),py=cy+rr*Math.sin(ra);
+      x.beginPath();x.moveTo(cx,cy);x.lineTo(px,py);
+      x.strokeStyle=v.c+"22";x.lineWidth=1;x.stroke();
+      var g=x.createRadialGradient(px,py,0,px,py,30);
+      g.addColorStop(0,v.c+"18");g.addColorStop(1,"transparent");
+      x.beginPath();x.arc(px,py,30,0,Math.PI*2);x.fillStyle=g;x.fill();
+      var pt=(t*0.8+i*0.3)%1;
+      var dx=cx+(px-cx)*pt,dy=cy+(py-cy)*pt;
+      x.beginPath();x.arc(dx,dy,3,0,Math.PI*2);
+      x.fillStyle=v.c;x.shadowColor=v.c;x.shadowBlur=6;x.fill();x.shadowBlur=0;
+    });
+    for(var i=1;i<=3;i++){
+      x.beginPath();x.arc(cx,cy,40+i*18+Math.sin(t*0.7+i)*3,0,Math.PI*2);
+      x.strokeStyle="rgba(108,99,255,"+(0.06/i)+")";x.setLineDash([4,6]);x.lineWidth=0.5;x.stroke();x.setLineDash([]);
+    }
+    requestAnimationFrame(dw);
+  }
+  var ro=new ResizeObserver(rz);ro.observe(c);rz();dw();
+})();
+
+function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+
+function subBmad(e){
+  e.preventDefault();
+  var f=e.target;
+  var m="BMAD Submission\n\nName: "+f.name.value+"\nEmail: "+f.email.value+"\nCompany: "+(f.company.value||"—")+"\nType: "+f.type.value+"\n\n"+f.desc.value;
+  window.location.href="mailto:cto@studex-group.com?subject=BMAD Submission — "+f.name.value+"&body="+encodeURIComponent(m);
+  alert("Submission sent!\n\nWe'll scope your project and respond within 24 hours.");
+}
+</script>
+</body>
+</html>

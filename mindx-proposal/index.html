@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindX × Dark Factory — Voice Agent Proposal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: #09090e;
+      color: #e8e8f0;
+      line-height: 1.7;
+    }
+    .container { max-width: 780px; margin: 0 auto; padding: 4rem 2rem; }
+    header { text-align: center; margin-bottom: 4rem; padding-bottom: 2rem; border-bottom: 1px solid #1e1e2e; }
+    .badge { display: inline-block; background: rgba(108,99,255,0.15); color: #6c63ff; border: 1px solid rgba(108,99,255,0.3); padding: 4px 14px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    h1 { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg, #6c63ff, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; line-height: 1.2; }
+    .subtitle { font-size: 1.1rem; color: #8888a0; font-weight: 400; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, #6c63ff55, transparent); margin: 3rem 0; }
+    h2 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    h2 .icon { font-size: 1.2rem; }
+    h3 { font-size: 1rem; font-weight: 700; color: #a0a0c0; margin-bottom: 0.8rem; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; }
+    p { color: #9090a8; margin-bottom: 1rem; }
+    ul { list-style: none; margin-bottom: 1.5rem; }
+    ul li { padding: 0.5rem 0; color: #9090a8; display: flex; gap: 0.75rem; }
+    ul li::before { content: "→"; color: #6c63ff; font-weight: 700; flex-shrink: 0; }
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+    .feature-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 1.2rem; }
+    .feature-card h4 { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+    .feature-card p { font-size: 0.82rem; color: #6a6a82; margin: 0; }
+    .pricing { background: #111118; border: 1px solid #1e1e2e; border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; }
+    .pricing-row { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid #1a1a24; }
+    .pricing-row:last-child { border-bottom: none; }
+    .pricing-tier { font-weight: 700; color: #fff; }
+    .pricing-desc { font-size: 0.8rem; color: #6a6a82; }
+    .pricing-price { font-weight: 800; font-size: 1.1rem; color: #6c63ff; }
+    .cta-section { background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,255,0.1)); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 2.5rem; text-align: center; margin-bottom: 2.5rem; }
+    .cta-section h2 { justify-content: center; font-size: 1.5rem; margin-bottom: 0.8rem; }
+    .cta-section p { text-align: center; margin-bottom: 1.5rem; }
+    .btn { display: inline-block; background: #6c63ff; color: #fff; padding: 14px 32px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; }
+    .btn:hover { background: #5a52d4; transform: translateY(-1px); }
+    .btn-outline { background: transparent; border: 1px solid #6c63ff55; color: #9090c0; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; text-decoration: none; display: inline-block; margin-top: 0.8rem; }
+    .btn-outline:hover { border-color: #6c63ff; color: #a0a0d0; }
+    .steps { counter-reset: steps; margin-bottom: 2.5rem; }
+    .step { display: flex; gap: 1.2rem; margin-bottom: 1.2rem; }
+    .step-num { counter-increment: steps; flex-shrink: 0; width: 36px; height: 36px; background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; color: #6c63ff; }
+    .step-num::before { content: counter(steps); }
+    .step-content h4 { font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
+    .step-content p { font-size: 0.85rem; margin: 0; }
+    .timeline { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .timeline-row { display: flex; gap: 1rem; padding: 0.5rem 0; font-size: 0.88rem; }
+    .timeline-label { color: #6a6a82; width: 120px; flex-shrink: 0; }
+    .timeline-value { color: #e8e8f0; font-weight: 600; }
+    footer { text-align: center; padding-top: 2rem; border-top: 1px solid #1e1e2e; color: #4a4a62; font-size: 0.8rem; }
+    @media (max-width: 600px) { .features { grid-template-columns: 1fr; } h1 { font-size: 1.8rem; } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge">🏭 Dark Factory × MindX</div>
+    <h1>Your Voice Agent.<br>Always On. Never Tiring.</h1>
+    <p class="subtitle">A sovereign South African AI voice companion — built for MindX,<br>deployed on OGRE Cloud, powered by the Dark Factory.</p>
+  </header>
+
+  <section>
+    <h2><span class="icon">💬</span> What We Are Building</h2>
+    <p>A custom Voice Agent for MindX — an AI-powered conversational system that speaks to your clients via voice in real time. It lives in a sovereign South African VM. It never sleeps. It handles inquiries, qualifies leads, books appointments, and routes the best ones directly to your team.</p>
+    <p>Built on the RileyJarvis architecture — battle-tested, MIT-licensed, voice-first design — customized entirely for MindX's brand, clients, and workflows.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <h2><span class="icon">⚡</span> What It Does</h2>
+    <div class="features">
+      <div class="feature-card">
+        <h4>🎙 Voice Chat</h4>
+        <p>Real-time voice dialogue. Client speaks, agent responds instantly.</p>
+      </div>
+      <div class="feature-card">
+        <h4>💬 Text Chat</h4>
+        <p>Web chat widget. Same AI brain as the voice agent.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🎯 Lead Qualification</h4>
+        <p>Asks the right questions, scores leads, routes them to your team.</p>
+      </div>
+      <div class="feature-card">
+        <h4>📅 Appointment Booking</h4>
+        <p>Connects to your calendar. Books, confirms, sends reminders.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🧠 Persistent Memory</h4>
+        <p>Remembers context across all conversations — no repetition.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🇿🇦 POPIA Compliant</h4>
+        <p>All data stays in South Africa. No overseas data transfer.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="icon">💰</span> Pricing</h2>
+    <div class="pricing">
+      <div class="pricing-row">
+        <div><div class="pricing-tier">Solo</div><div class="pricing-desc">1 voice agent · 100 calls/month · Web chat</div></div>
+        <div class="pricing-price">R2,500/mo</div>
+      </div>
+      <div class="pricing-row">
+        <div><div class="pricing-tier">Professional</div><div class="pricing-desc">2 agents · 500 calls/month · WhatsApp + Phone</div></div>
+        <div class="pricing-price">R7,500/mo</div>
+      </div>
+      <div class="pricing-row">
+        <div><div class="pricing-tier">Enterprise</div><div class="pricing-desc">Unlimited agents · Unlimited calls · Full integrations</div></div>
+        <div class="pricing-price">R25,000/mo</div>
+      </div>
+      <div class="pricing-row" style="padding-top: 1.2rem; border-top: 1px solid #1a1a24;">
+        <div><div class="pricing-tier">One-time Setup</div><div class="pricing-desc">Custom training, integrations, branding, UAT</div></div>
+        <div class="pricing-price">R15,000 – R35,000</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="icon">🗺️</span> How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>PRD Form</h4>
+          <p>Complete the PRD intake form. Tell us everything about MindX — clients, workflows, integrations, voice preferences.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>We Break It Down</h4>
+          <p>Our team reviews your PRD in Notion within 24 hours. We scope, prioritize, and confirm deliverables.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>VM Provisioning</h4>
+          <p>We spin up a dedicated Orgo cloud desktop in South Africa. Sovereign SA compute — your data never leaves the country.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>Build + Customize</h4>
+          <p>We train the agent on MindX knowledge, configure voice personality, wire up integrations (calendar, WhatsApp, CRM).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h4>UAT + Go Live</h4>
+          <p>1 week of testing. Your team tries it, breaks it, we fix it. Then it's live. Real clients, real conversations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <h3 style="margin-bottom: 1rem;">Timeline</h3>
+      <div class="timeline-row"><span class="timeline-label">Week 1</span><span class="timeline-value">PRD review + VM provisioning + API setup</span></div>
+      <div class="timeline-row"><span class="timeline-label">Week 2</span><span class="timeline-value">Core agent build + voice training</span></div>
+      <div class="timeline-row"><span class="timeline-label">Week 3</span><span class="timeline-value">Integrations + UI customization</span></div>
+      <div class="timeline-row"><span class="timeline-label">Week 4</span><span class="timeline-value">UAT + Fixes + Go Live</span></div>
+    </div>
+  </section>
+
+  <div class="cta-section">
+    <h2>Ready to build MindX's Voice Agent?</h2>
+    <p>Start with the PRD intake form. It takes 5 minutes.<br>We'll have a full build plan in Notion within 24 hours.</p>
+    <a href="https://75glowowaxdq.space.minimax.io" class="btn">📋 Fill in the PRD Form →</a><br>
+    <a href="#" class="btn-outline">Need a call first? cto@studex-group.com</a>
+  </div>
+
+  <section>
+    <h2><span class="icon">🔧</span> Technology Stack</h2>
+    <ul>
+      <li>Electron + React + Vite + TypeScript — modern, fast, maintainable</li>
+      <li>OpenAI Realtime API — voice-to-voice, sub-second response</li>
+      <li>Orgo Cloud VM — South African sovereign compute</li>
+      <li>Node.js + Express — robust backend, scalable</li>
+      <li>Persistent memory — agent learns from every conversation</li>
+      <li>WhatsApp / web / phone — client reaches you however they prefer</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Dark Factory — OGRE Computer Intelligence Division · Studex Group</p>
+    <p>cto@studex-group.com · Built by Cipher Tr@ce</p>
+  </footer>
+
+</div>
+</body>
+</html>

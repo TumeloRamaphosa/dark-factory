@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OGRE COMPUTE — Global Markets Command</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #09090e;
+      color: #e8e8f0;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+    canvas { position: absolute; top: 0; left: 0; }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .header {
+      position: absolute;
+      top: 24px; left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .header-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #6c63ff;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .header-sub {
+      font-size: 0.55rem;
+      color: #4a4a62;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .header-line {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #6c63ff55, transparent);
+      margin: 8px auto 0;
+    }
+    .center-hub {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 20;
+    }
+    .hub-ring {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+      border: 1px solid rgba(108,99,255,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto;
+      box-shadow: 0 0 40px rgba(108,99,255,0.2), 0 0 80px rgba(108,99,255,0.1);
+      animation: hub-pulse 3s ease-in-out infinite;
+    }
+    .hub-ring-inner {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,99,255,0.3) 0%, rgba(108,99,255,0.05) 100%);
+      border: 1px solid rgba(108,99,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      animation: hub-spin 20s linear infinite;
+    }
+    .hub-text {
+      font-size: 0.5rem;
+      letter-spacing: 0.25em;
+      color: #6c63ff;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+    .hub-status {
+      font-size: 0.45rem;
+      color: #00d4ff;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+    @keyframes hub-pulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(108,99,255,0.2), 0 0 80px rgba(108,99,255,0.1); }
+      50% { box-shadow: 0 0 60px rgba(108,99,255,0.4), 0 0 120px rgba(108,99,255,0.2); }
+    }
+    @keyframes hub-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .vm-card {
+      position: absolute;
+      background: rgba(11,11,18,0.95);
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 160px;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .vm-card.online {
+      border-color: rgba(0,212,255,0.3);
+      box-shadow: 0 0 20px rgba(0,212,255,0.1);
+    }
+    .vm-dot {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #2a2a3a;
+      flex-shrink: 0;
+    }
+    .dot.online { background: #00d4ff; box-shadow: 0 0 6px #00d4ff; animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .vm-name {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #e8e8f0;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .vm-type {
+      font-size: 0.48rem;
+      color: #6c63ff;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .vm-specs {
+      font-size: 0.45rem;
+      color: #4a4a62;
+      line-height: 1.6;
+      border-top: 1px solid #1a1a28;
+      padding-top: 6px;
+    }
+    .vm-specs span { color: #00d4ff; }
+    .footer {
+      position: absolute;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 0.5rem;
+      color: #3a3a52;
+      letter-spacing: 0.1em;
+    }
+    .footer span { color: #6c63ff; }
+    .countdown {
+      position: absolute;
+      top: 20px; right: 24px;
+      text-align: right;
+    }
+    .countdown-label {
+      font-size: 0.45rem;
+      color: #4a4a62;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .countdown-time {
+      font-size: 0.8rem;
+      color: #6c63ff;
+      font-weight: 700;
+      margin-top: 2px;
+      letter-spacing: 0.05em;
+    }
+    .total-vms {
+      position: absolute;
+      top: 20px; left: 24px;
+      font-size: 0.5rem;
+      color: #4a4a62;
+    }
+    .total-vms span { color: #00d4ff; font-weight: 700; }
+    .event-badge {
+      position: absolute;
+      bottom: 20px; left: 24px;
+      font-size: 0.45rem;
+      color: #3a3a52;
+      letter-spacing: 0.08em;
+    }
+    .event-badge strong { color: #6c63ff; }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="overlay">
+  <div class="header">
+    <div class="header-title">🏭 Dark Factory · OGRE COMPUTE</div>
+    <div class="header-sub">Global Markets Command — Live Network Visualization</div>
+    <div class="header-line"></div>
+  </div>
+
+  <div class="total-vms">
+    <span id="vm-count">0</span> Virtual Machines Online
+  </div>
+
+  <div class="countdown">
+    <div class="countdown-label">Event starts in</div>
+    <div class="countdown-time" id="countdown">— — : — — : — —</div>
+  </div>
+
+  <!-- Central Hub -->
+  <div class="center-hub">
+    <div class="hub-ring">
+      <div class="hub-ring-inner">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="3" fill="#6c63ff"/>
+          <circle cx="20" cy="20" r="8" stroke="#6c63ff" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <circle cx="20" cy="20" r="14" stroke="#6c63ff" stroke-width="0.3" stroke-dasharray="3 3"/>
+          <line x1="20" y1="4" x2="20" y2="8" stroke="#6c63ff" stroke-width="0.5"/>
+          <line x1="20" y1="32" x2="20" y2="36" stroke="#6c63ff" stroke-width="0.5"/>
+          <line x1="4" y1="20" x2="8" y2="20" stroke="#6c63ff" stroke-width="0.5"/>
+          <line x1="32" y1="20" x2="36" y2="20" stroke="#6c63ff" stroke-width="0.5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="hub-text">D@RK F@C#ORY</div>
+    <div class="hub-status">● SOVEREIGN SA VM — ACTIVE</div>
+  </div>
+
+  <!-- VM Cards will be positioned by JS -->
+
+  <div class="event-badge">
+    <strong>Global Markets Launch</strong> · 10 July 2026 · 18:00 SA
+  </div>
+
+  <div class="footer">
+    <span>OGRE COMPUTE</span> · Powered by Orgo AI · Cloud Computers for AI Agents
+  </div>
+</div>
+
+<script>
+// ── VM Configuration ──────────────────────────────────────────────────────
+const CENTER_X = window.innerWidth / 2;
+const CENTER_Y = window.innerHeight / 2;
+const HUB_RADIUS = Math.min(window.innerWidth, window.innerHeight) * 0.28;
+
+const vms = [
+  {
+    id: 'pharmacenters',
+    name: 'PharmaCenters',
+    type: 'Enterprise CRM',
+    specs: 'OS: Ubuntu 24.04\nvCPU: 8 · RAM: 32GB\nGPU: A100 · PII-SECURE',
+    angle: 270, // top
+    color: '#00d4ff',
+    online: true
+  },
+  {
+    id: 'enteclabs',
+    name: 'Enteclabs',
+    type: 'AI Research VM',
+    specs: 'OS: Ubuntu 24.04\nvCPU: 16 · RAM: 64GB\nGPU: H100 · SOVEREIGN',
+    angle: 342, // top-right
+    color: '#6c63ff',
+    online: true
+  },
+  {
+    id: 'grm',
+    name: 'GRM',
+    type: 'Data Analytics',
+    specs: 'OS: Ubuntu 24.04\nvCPU: 8 · RAM: 32GB\nSSD: 2TB · COMPLIANT',
+    angle: 54, // bottom-right
+    color: '#f59e0b',
+    online: true
+  },
+  {
+    id: 'africa-beers',
+    name: 'Africa Beers',
+    type: 'ERP / Finance',
+    specs: 'OS: Ubuntu 24.04\nvCPU: 4 · RAM: 16GB\nGPU: T4 · SECURE-ZONE',
+    angle: 126, // bottom-left
+    color: '#ec4899',
+    online: true
+  },
+  {
+    id: 'art-engineering',
+    name: 'Art Engineering',
+    type: 'DevOps / Build',
+    specs: 'OS: Ubuntu 24.04\nvCPU: 8 · RAM: 32GB\nGPU: A100 · CI/CD-READY',
+    angle: 198, // left
+    color: '#10b981',
+    online: true
+  }
+];
+
+// ── Canvas Node Graph ──────────────────────────────────────────────────────
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let width, height, mx, my;
+let time = 0;
+let animFrame;
+
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  mx = width / 2;
+  my = height / 2;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function getNodePos(vm) {
+  const angle = (vm.angle - 90) * (Math.PI / 180);
+  return {
+    x: mx + HUB_RADIUS * Math.cos(angle),
+    y: my + HUB_RADIUS * Math.sin(angle)
+  };
+}
+
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+  time += 0.008;
+
+  // Background grid
+  ctx.strokeStyle = 'rgba(30,30,46,0.6)';
+  ctx.lineWidth = 0.5;
+  const gridSize = 40;
+  for (let x = 0; x < width; x += gridSize) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+  }
+  for (let y = 0; y < height; y += gridSize) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+  }
+
+  // Animated bezier curves from hub to each VM
+  vms.forEach((vm, i) => {
+    const pos = getNodePos(vm);
+    const delay = i * 0.6;
+    const phase = time + delay;
+    const waveAmp = 4 + Math.sin(phase) * 2;
+
+    // Draw flow lines
+    for (let lane = -1; lane <= 1; lane++) {
+      const offset = lane * 8;
+      const cp1x = mx + (pos.x - mx) * 0.3;
+      const cp1y = my + offset;
+      const cp2x = mx + (pos.x - mx) * 0.7;
+      const cp2y = pos.y + offset;
+
+      ctx.beginPath();
+      ctx.moveTo(mx, my + offset * 0.3);
+      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, pos.x, pos.y);
+      ctx.strokeStyle = `rgba(${hexToRgb(vm.color)}, ${0.08 + Math.sin(phase) * 0.05})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Animated data packet along line
+    const packetT = ((time * 0.8 + i * 0.3) % 1);
+    const packetX = cubicBezier(mx, my, pos.x, pos.y, packetT);
+    const packetY = cubicBezierY(mx, my, pos.x, pos.y, packetT);
+
+    ctx.beginPath();
+    ctx.arc(packetX, packetY, 3, 0, Math.PI * 2);
+    ctx.fillStyle = vm.color;
+    ctx.shadowColor = vm.color;
+    ctx.shadowBlur = 8;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Outer glow ring at VM
+    const glowAlpha = 0.1 + Math.sin(time * 2 + i) * 0.06;
+    const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 40);
+    gradient.addColorStop(0, `rgba(${hexToRgb(vm.color)}, ${glowAlpha})`);
+    gradient.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 40, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+  });
+
+  // Hub outer rings
+  for (let r = 1; r <= 3; r++) {
+    const radius = 60 + r * 20 + Math.sin(time * 0.8 + r) * 3;
+    ctx.beginPath();
+    ctx.arc(mx, my, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(108,99,255, ${0.04 - r * 0.01})`;
+    ctx.lineWidth = 0.5;
+    ctx.setLineDash([4, 6]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  animFrame = requestAnimationFrame(draw);
+}
+
+function cubicBezier(x0, y0, x1, y1, t) {
+  return (1-t)*(1-t)*(1-t)*x0 + 3*(1-t)*(1-t)*t*(mx+(x1-mx)*0.5) + 3*(1-t)*t*t*(mx+(x1-mx)*0.5) + t*t*t*x1;
+}
+function cubicBezierY(x0, y0, x1, y1, t) {
+  return (1-t)*(1-t)*(1-t)*y0 + 3*(1-t)*(1-t)*t*(my+(y1-my)*0.5) + 3*(1-t)*t*t*(my+(y1-my)*0.5) + t*t*t*y1;
+}
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `${r},${g},${b}`;
+}
+
+// ── Position VM Cards ─────────────────────────────────────────────────────
+const CARD_W = 160, CARD_H = 110;
+vms.forEach(vm => {
+  const pos = {
+    x: mx + (HUB_RADIUS + 80) * Math.cos((vm.angle - 90) * Math.PI/180) - CARD_W/2,
+    y: my + (HUB_RADIUS + 80) * Math.sin((vm.angle - 90) * Math.PI/180) - CARD_H/2
+  };
+  const div = document.createElement('div');
+  div.className = `vm-card ${vm.online ? 'online' : ''}`;
+  div.style.left = pos.x + 'px';
+  div.style.top = pos.y + 'px';
+  div.innerHTML = `
+    <div class="vm-dot">
+      <div class="dot ${vm.online ? 'online' : ''}"></div>
+      <div style="font-size:0.45rem;color:#4a4a62;letter-spacing:0.05em;">${vm.online ? 'ONLINE' : 'OFFLINE'}</div>
+    </div>
+    <div class="vm-name">${vm.name}</div>
+    <div class="vm-type">${vm.type}</div>
+    <div class="vm-specs">${vm.specs.replace(/\n/g, '<br>').replace(/(\d+)(GB|TB|vCPU)/g, '<span>$1$2</span>')}</div>
+  `;
+  document.querySelector('.overlay').appendChild(div);
+  vm.el = div;
+});
+
+document.getElementById('vm-count').textContent = vms.filter(v=>v.online).length;
+
+// ── Countdown ─────────────────────────────────────────────────────────────
+function updateCountdown() {
+  const target = new Date('2026-07-10T16:00:00Z').getTime();
+  const now = Date.now();
+  const diff = Math.max(0, target - now);
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const s = Math.floor((diff%60000)/1000);
+  document.getElementById('countdown').textContent =
+    `${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m`;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ── Start Animation ─────────────────────────────────────────────────────────
+draw();
+</script>
+</body>
+</html>

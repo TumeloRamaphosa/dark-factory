@@ -1,0 +1,10 @@
+/* App-level overrides only — design system is in index.css */
+
+/* Override Lucide SVG stroke consistency */
+svg { display: inline-block; vertical-align: middle; }
+
+/* Ensure framer-motion components are visible */
+[data-framer-portal] { position: relative; z-index: 9999; }
+
+/* Section transitions */
+section { transition: opacity 0.3s ease; }

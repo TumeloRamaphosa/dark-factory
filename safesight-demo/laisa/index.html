@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA Agent OS — SafeSight Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --obsidian: #0a0a0a;
+    --obsidian-light: #141414;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --cream: #f5f0e8;
+    --green: #22c55e;
+    --orange: #f97316;
+    --purple: #8b5cf6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--obsidian);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .grid-bg {
+    position: fixed; inset: 0;
+    background: linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .glow {
+    position: fixed; width: 600px; height: 600px; border-radius: 50%;
+    filter: blur(120px); pointer-events: none;
+  }
+  .glow-1 { top: -200px; left: -200px; background: rgba(201,168,76,0.08); }
+  .glow-2 { bottom: -200px; right: -200px; background: rgba(139,92,246,0.08); }
+  .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 20px; border: 1px solid var(--gold); border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 32px;
+  }
+  .badge .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  h1 { font-size: 56px; font-weight: 800; line-height: 1.05; margin-bottom: 24px; letter-spacing: -2px; }
+  h1 span { background: linear-gradient(135deg, var(--gold), var(--cream)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 20px; color: rgba(245,240,232,0.6); max-width: 600px; margin-bottom: 48px; line-height: 1.6; }
+  .meta { display: flex; gap: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(245,240,232,0.4); margin-bottom: 48px; flex-wrap: wrap; }
+  .meta span { display: flex; align-items: center; gap: 6px; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+  .demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 48px; }
+  .demo-card {
+    background: var(--obsidian-light); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 24px; text-decoration: none; color: inherit;
+    transition: all 0.3s; display: block; cursor: pointer;
+  }
+  .demo-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 40px rgba(201,168,76,0.1); }
+  .demo-card .icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
+  .demo-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .demo-card p { font-size: 12.5px; color: rgba(245,240,232,0.5); line-height: 1.5; margin-bottom: 16px; }
+  .demo-card .tag { display: inline-block; padding: 4px 10px; border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; }
+  .tag-green { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .tag-gold { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .tag-purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+  .tag-orange { background: rgba(249,115,22,0.15); color: #fb923c; }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .agents-section { background: var(--obsidian-light); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px; margin-bottom: 48px; }
+  .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 20px; }
+  .agent-badge { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 16px; }
+  .agent-badge .name { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+  .agent-badge .role { font-size: 11px; color: rgba(245,240,232,0.4); }
+  .cta-section {
+    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03));
+    border: 1px solid rgba(201,168,76,0.2); border-radius: 20px; padding: 40px;
+    text-align: center; margin-bottom: 48px;
+  }
+  .cta-section h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+  .cta-section p { color: rgba(245,240,232,0.5); margin-bottom: 24px; }
+  .cta-section a { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--obsidian); padding: 14px 32px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 14px; }
+  .cta-section a:hover { background: var(--gold-light); }
+  .footer { text-align: center; padding: 32px 0; border-top: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(245,240,232,0.3); }
+  .vm-info { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .vm-info .title { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--green); margin-bottom: 8px; }
+  .vm-info p { font-size: 13px; color: rgba(245,240,232,0.7); }
+  .vm-info code { background: rgba(34,197,94,0.1); padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="container">
+  <div class="badge"><span class="dot"></span>Live Demo — SafeSight Aesthetic Clinic</div>
+
+  <h1>LAISA<br><span>Agent OS</span></h1>
+  <p class="subtitle">The complete AI-powered clinic management system. Six specialist agents working 24/7. One command center. Built on Ogre VM infrastructure.</p>
+
+  <div class="vm-info">
+    <div class="title">→ Running on Ogre VM Infrastructure</div>
+    <p>All demos are live on the <code>D@RK F@C#ORY</code> VM. Every patient interaction, every social post, every invoice — powered by AI agents.</p>
+    <p style="margin-top:8px;"><strong>📋 Full Proposal:</strong> <a href="https://78jccbd42jnj.space.minimax.io" style="color:#c9a84c;">https://78jccbd42jnj.space.minimax.io</a></p>
+    <p><strong>🎓 CTO Study Path (printable PDF):</strong> <a href="https://wyjxwjot79nu.space.minimax.io" style="color:#c9a84c;">https://wyjxwjot79nu.space.minimax.io</a></p>
+  </div>
+
+  <div class="meta">
+    <span>🤖 6 Specialist Agents</span>
+    <span>⚡ Real-time Activity</span>
+    <span>🔒 POPIA Compliant</span>
+    <span>📊 Hex.tech Dashboard</span>
+    <span>🟡 Obsidian Gold Design</span>
+  </div>
+
+  <div class="section-label">Demo Pages — Click Any Feature to Explore</div>
+
+  <div class="demo-grid">
+    <a href="laisa-unified.html" class="demo-card">
+      <div class="icon" style="background: rgba(201,168,76,0.15);">📊</div>
+      <h3>Unified Dashboard</h3>
+      <p>The main command center. Revenue, patients, appointments, social metrics, AI activity — all in one live view.</p>
+      <span class="tag tag-green">Primary Demo</span>
+    </a>
+
+    <a href="dashboard-demo.html" class="demo-card">
+      <div class="icon" style="background: rgba(59,130,246,0.15);">📈</div>
+      <h3>Business Dashboard</h3>
+      <p>Revenue trends, appointment analytics, patient metrics, and growth projections. Updated every 3 seconds.</p>
+      <span class="tag tag-blue">Analytics</span>
+    </a>
+
+    <a href="laisa-crm.html" class="demo-card">
+      <div class="icon" style="background: rgba(139,92,246,0.15);">👥</div>
+      <h3>Patient CRM</h3>
+      <p>Complete patient records. VIP tier tracking, treatment history, consultation notes, follow-up scheduling.</p>
+      <span class="tag tag-purple">CRM</span>
+    </a>
+
+    <a href="charlie.html" class="demo-card">
+      <div class="icon" style="background: rgba(249,115,22,0.15);">🎙️</div>
+      <h3>Charlie — Voice Agent</h3>
+      <p>AI voice agent for patient calls. ElevenLabs neural TTS. Handles booking inquiries, reminders, and follow-ups.</p>
+      <span class="tag tag-orange">Voice AI</span>
+    </a>
+
+    <a href="whatsapp-bot-demo.html" class="demo-card">
+      <div class="icon" style="background: rgba(34,197,94,0.15);">💬</div>
+      <h3>WhatsApp Booking Bot</h3>
+      <p>Interactive WhatsApp flow. Patient enquiry → treatment selection → appointment booking → confirmation.</p>
+      <span class="tag tag-green">WhatsApp</span>
+    </a>
+
+    <a href="email-triage-demo.html" class="demo-card">
+      <div class="icon" style="background: rgba(245,240,232,0.1);">📧</div>
+      <h3>Email Triage AI</h3>
+      <p>AI-powered Gmail triage. Routes patient enquiries to the right agent. Extracts intent and urgency automatically.</p>
+      <span class="tag tag-gold">AI Routing</span>
+    </a>
+
+    <a href="social-sdk.html" class="demo-card">
+      <div class="icon" style="background: rgba(236,72,153,0.15);">📱</div>
+      <h3>Social Media SDK</h3>
+      <p>Instagram, TikTok, and Facebook analytics in one view. Composio-powered. Engagement, follower growth, top posts.</p>
+      <span class="tag tag-purple">Social</span>
+    </a>
+
+    <a href="hermes.html" class="demo-card">
+      <div class="icon" style="background: rgba(201,168,76,0.15);">🎛️</div>
+      <h3>Hermes Orchestrator</h3>
+      <p>Agent fleet management. See all 6 agents working in real time. Monitor tasks, handoffs, and system health.</p>
+      <span class="tag tag-gold">Orchestration</span>
+    </a>
+
+    <a href="safesight-website.html" class="demo-card">
+      <div class="icon" style="background: rgba(245,240,232,0.08);">🌐</div>
+      <h3>SafeSight Website</h3>
+      <p>The full clinic marketing website. Mobile-first, SEO-optimized, with appointment booking integration.</p>
+      <span class="tag tag-blue">Website</span>
+    </a>
+  </div>
+
+  <div class="section-label">The Agent Fleet</div>
+
+  <div class="agents-section">
+    <div class="agents-grid">
+      <div class="agent-badge">
+        <div class="name">🤖 DenchClaw</div>
+        <div class="role">Appointments + Client Management</div>
+      </div>
+      <div class="agent-badge">
+        <div class="name">💰 CashClaw</div>
+        <div class="role">Billing, Revenue + Invoicing</div>
+      </div>
+      <div class="agent-badge">
+        <div class="name">📱 Naledi</div>
+        <div class="role">Social Media Content Pipeline</div>
+      </div>
+      <div class="agent-badge">
+        <div class="name">🎙️ Charlie</div>
+        <div class="role">Voice Agent — Calls + Booking</div>
+      </div>
+      <div class="agent-badge">
+        <div class="name">📅 Robusca</div>
+        <div class="role">Schedule + Notes Management</div>
+      </div>
+      <div class="agent-badge">
+        <div class="name">🔮 General</div>
+        <div class="role">System Health + Monitoring</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">VM Infrastructure — What Powers This</div>
+
+  <div class="demo-grid" style="margin-bottom: 48px;">
+    <div class="demo-card" style="cursor: default;">
+      <div class="icon" style="background: rgba(249,115,22,0.15);">🚀</div>
+      <h3>gstack — YC Sprint Process</h3>
+      <p>38 specialist roles. /office-hours, /build, /review, /qa, /ship. Real Chromium browser testing.</p>
+      <span class="tag tag-orange">Installed</span>
+    </div>
+    <div class="demo-card" style="cursor: default;">
+      <div class="icon" style="background: rgba(59,130,246,0.15);">🔍</div>
+      <h3>headroom — Token Compression</h3>
+      <p>60-95% token reduction. Cross-agent memory. Charlie talks to patient, CashClaw prepares invoice.</p>
+      <span class="tag tag-blue">Installed</span>
+    </div>
+    <div class="demo-card" style="cursor: default;">
+      <div class="icon" style="background: rgba(34,197,94,0.15);">📊</div>
+      <h3>last30days — Market Intel</h3>
+      <p>Real-time Reddit, X, YouTube, Polymarket. Scored by engagement. Not SEO. Real people.</p>
+      <span class="tag tag-green">Installed</span>
+    </div>
+    <div class="demo-card" style="cursor: default;">
+      <div class="icon" style="background: rgba(139,92,246,0.15);">📋</div>
+      <h3>spec-kit — Spec-Driven Dev</h3>
+      <p>Write the spec first, you approve, then build. No surprises. POPIA compliance built in.</p>
+      <span class="tag tag-purple">Installed</span>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Ready to Power Your Clinic with AI?</h2>
+    <p>LAISA Agent OS starts at R599/month. Full VM with all 6 agents. No agency fees.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="contact.html" style="display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--obsidian); padding: 14px 28px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 13px;">
+        📧 Send Demo to Client
+      </a>
+      <a href="mailto:info@studexgroup.co.za?subject=LAISA Agent OS — Interest&body=Hi, I'd like to learn more about LAISA Agent OS for my clinic." style="display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 14px 28px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 13px;">
+        ✉️ Email Us Directly
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>LAISA Agent OS — Built on Ogre VM Infrastructure · Studex Group (Pty) Ltd · 2026</p>
+  <p style="margin-top: 4px;">D@RK F@C#ORY VM · agent.minimax.io · orgo.ai/workspaces</p>
+</div>
+
+</body>
+</html>

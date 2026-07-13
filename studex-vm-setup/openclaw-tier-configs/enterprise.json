@@ -1,0 +1,102 @@
+{
+  "$schema": "https://docs.openclaw.ai/config-schema.json",
+  "gateway": {
+    "port": 18791,
+    "host": "0.0.0.0",
+    "auth": {
+      "enabled": true,
+      "tokenExpiry": "12h"
+    }
+  },
+  "agents": [
+    {
+      "id": "openclaw-1",
+      "name": "StudEx Agent Alpha",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Alpha, the flagship StudEx AI agent. You handle primary client acquisition, sales conversations, and high-value lead conversion.",
+      "maxTokens": 16384,
+      "temperature": 0.65,
+      "channels": ["webchat", "whatsapp", "telegram"],
+      "capabilities": ["search", "responses", "lead-qualification", "sales", "upsell"]
+    },
+    {
+      "id": "openclaw-2",
+      "name": "StudEx Agent Beta",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Beta, the StudEx follow-up specialist. You manage nurture sequences, re-engagement campaigns, and retention flows.",
+      "maxTokens": 16384,
+      "temperature": 0.65,
+      "channels": ["webchat", "whatsapp", "telegram"],
+      "capabilities": ["search", "responses", "nurture", "retention"]
+    },
+    {
+      "id": "openclaw-3",
+      "name": "StudEx Agent Gamma",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Gamma, the data and operations specialist. You handle reporting, analytics summaries, and process optimization recommendations.",
+      "maxTokens": 16384,
+      "temperature": 0.6,
+      "channels": ["webchat"],
+      "capabilities": ["search", "responses", "analytics", "reporting", "optimization"]
+    },
+    {
+      "id": "hermes-1",
+      "name": "Hermes Tier-1 Support",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Hermes-1, a senior support agent. Handle tier-1 customer issues: FAQs, account management, and general inquiries.",
+      "maxTokens": 8192,
+      "temperature": 0.6,
+      "channels": ["webchat", "whatsapp", "telegram"],
+      "capabilities": ["search", "responses", "support", "account-mgmt"]
+    },
+    {
+      "id": "hermes-2",
+      "name": "Hermes Tier-2 Support",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Hermes-2, an advanced support agent. Handle escalated issues, technical problems, and complex billing inquiries.",
+      "maxTokens": 8192,
+      "temperature": 0.6,
+      "channels": ["webchat", "whatsapp", "telegram"],
+      "capabilities": ["search", "responses", "support", "technical", "billing"]
+    },
+    {
+      "id": "hermes-3",
+      "name": "Hermes VIP Concierge",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Hermes-3, the VIP concierge. Handle premium client accounts, custom requests, and white-glove support experiences.",
+      "maxTokens": 16384,
+      "temperature": 0.55,
+      "channels": ["webchat", "whatsapp", "telegram"],
+      "capabilities": ["search", "responses", "vip", "concierge", "custom"]
+    },
+    {
+      "id": "hermes-4",
+      "name": "Hermes After-Hours",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Hermes-4, the after-hours and emergency support agent. Handle urgent issues outside business hours and escalation triage.",
+      "maxTokens": 8192,
+      "temperature": 0.6,
+      "channels": ["webchat", "whatsapp"],
+      "capabilities": ["search", "responses", "emergency", "escalation"]
+    }
+  ],
+  "limits": {
+    "ram": "32GB",
+    "storage": "500GB",
+    "n8n_flows": -1,
+    "email_limit": -1,
+    "rate_limit": {
+      "requests_per_minute": 500,
+      "requests_per_hour": 10000
+    }
+  },
+  "features": {
+    "whatsapp": true,
+    "analytics": true,
+    "crm": true,
+    "dedicated_vm": true
+  },
+  "openclaw": {
+    "version": "1.x"
+  }
+}

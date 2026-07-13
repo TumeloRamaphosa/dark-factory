@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE AI Tools Stack Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--gold-dim:rgba(201,168,76,0.12);--gold-border:rgba(201,168,76,0.3);--bg:#0A0A0A;--surface:#111114;--border:#252530;--text:#E8E8F0;--muted:#6B6B80;--green:#00D67D;--red:#FF4D4D;--amber:#FFAA00;--cyan:#00C9E4;--purple:#A78BFA;}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;gap:16px}
+.topbar-brand{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:0.08em}
+.topbar-brand span{color:var(--muted);font-weight:400}
+.topbar-sep{flex:1}
+.topbar-nav{display:flex;gap:4px}
+.topbar-nav a{font-size:12px;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:4px;transition:all 0.15s;letter-spacing:0.03em}
+.topbar-nav a:hover,.topbar-nav a.active{color:var(--gold);background:var(--gold-dim)}
+.topbar-clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.signal-band{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 24px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted)}
+.signal-band .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.signal-band .live{color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px}
+.signal-band-right{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px}
+.hero{padding:56px 24px 48px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;align-items:start;gap:40px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-family:Newsreader,serif;font-size:clamp(28px,4vw,44px);line-height:1.15;color:var(--text);margin-bottom:16px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.6;max-width:520px}
+.hero-meta{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap}
+.hero-stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 20px;min-width:120px}
+.hero-stat-n{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold);line-height:1}
+.hero-stat-l{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.05em;text-transform:uppercase}
+.filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:56px;z-index:90}
+.filter-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-right:4px}
+.filter-btn{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 12px;border-radius:4px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s;letter-spacing:0.04em}
+.filter-btn:hover{border-color:var(--gold-border);color:var(--text)}
+.filter-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.main{padding:0 24px 64px;max-width:1200px;margin:0 auto}
+.section{margin-bottom:48px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;flex:1}
+.section-title::after{content:'';display:block;flex:1;height:1px;background:var(--border);margin-left:12px}
+.section-count{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:10px;white-space:nowrap}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color 0.2s}
+.tool-card:hover{border-color:var(--gold-border)}
+.tool-card.hidden{display:none}
+.tool-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.tool-name{font-size:15px;font-weight:600;line-height:1.3;margin-bottom:4px}
+.tool-company{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.05em}
+.tool-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0;letter-spacing:0.05em;text-transform:uppercase}
+.badge-open{background:rgba(0,214,125,0.15);color:var(--green)}
+.badge-pro{background:rgba(167,139,250,0.15);color:var(--purple)}
+.badge-free{background:rgba(0,201,228,0.15);color:var(--cyan)}
+.badge-enterprise{background:rgba(201,168,76,0.15);color:var(--gold)}
+.badge-watch{background:rgba(255,170,0,0.12);color:var(--amber)}
+.badge-dormant{background:rgba(107,107,128,0.15);color:var(--muted)}
+.tool-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.tool-pricing{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.price-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.04);color:var(--text)}
+.tool-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.tool-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.04);color:var(--muted);letter-spacing:0.03em}
+.tool-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:12px;gap:8px}
+.tool-urgency{font-family:'JetBrains Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px;min-width:0}
+.urgency-red{color:var(--red)}.urgency-amber{color:var(--amber)}.urgency-cyan{color:var(--cyan)}.urgency-green{color:var(--green)}.urgency-muted{color:var(--muted)}
+.ogre-pill{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:4px 10px;border-radius:10px;cursor:pointer;transition:all 0.15s;white-space:nowrap;background:rgba(0,214,125,0.12);color:var(--green);border:1px solid rgba(0,214,125,0.25);letter-spacing:0.04em;flex-shrink:0}
+.ogre-pill:hover{background:var(--green);color:var(--bg)}
+.ogre-rec{background:linear-gradient(135deg,rgba(0,214,125,0.07),rgba(0,201,228,0.04));border:1px solid rgba(0,214,125,0.22);border-radius:12px;padding:24px;margin-bottom:24px}
+.ogre-rec-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ogre-rec h3{font-family:Newsreader,serif;font-size:20px;color:var(--text);margin-bottom:10px}
+.ogre-rec p{font-size:13px;color:var(--muted);line-height:1.7}
+.ogre-rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:16px}
+.ogre-rec-item{background:rgba(0,214,125,0.06);border:1px solid rgba(0,214,125,0.14);border-radius:8px;padding:14px}
+.ogre-rec-item-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);margin-bottom:6px;letter-spacing:0.05em;text-transform:uppercase}
+.ogre-rec-item p{font-size:12px;color:var(--text);line-height:1.5}
+.comp-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);margin-bottom:32px}
+.comp-table{width:100%;border-collapse:collapse;font-size:12px}
+.comp-table th{background:var(--surface);padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap}
+.comp-table td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:hover td{background:rgba(255,255,255,0.02)}
+.comp-table .best{color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px}
+.comp-table .price{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)}
+.comp-table .ogre-row td{background:rgba(0,214,125,0.04);border-top:1px solid rgba(0,214,125,0.2)}
+.cta-section{background:var(--surface);border:1px solid var(--gold-border);border-radius:16px;padding:48px;text-align:center}
+.cta-section h2{font-family:Newsreader,serif;font-size:28px;margin-bottom:12px}
+.cta-section h2 em{color:var(--gold);font-style:normal}
+.cta-section p{color:var(--muted);font-size:14px;max-width:480px;margin:0 auto 28px}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;padding:12px 28px;border-radius:8px;cursor:pointer;border:none;letter-spacing:0.05em;transition:all 0.15s}
+.cta-btn-primary{background:var(--gold);color:var(--bg)}
+.cta-btn-primary:hover{background:#e0bc5a}
+.cta-btn-secondary{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border)}
+.cta-btn-secondary:hover{background:rgba(201,168,76,0.22)}
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--surface);border:1px solid var(--green);border-radius:8px;padding:10px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);transform:translateY(80px);transition:transform 0.3s;pointer-events:none}
+#toast.show{transform:translateY(0)}
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-brand">OGRE<span>::</span></div>
+  <div class="topbar-sep"></div>
+  <nav class="topbar-nav">
+    <a href="portal.html">Portal</a>
+    <a href="index.html">Dashboard</a>
+    <a href="compare.html">Compare</a>
+    <a href="signal-builder.html">Content</a>
+    <a href="roi-calculator.html">ROI</a>
+    <a href="#" class="active">Tools Stack</a>
+    <a href="briefing.html">Briefing</a>
+  </nav>
+  <div class="topbar-clock" id="clock">--:--:-- UTC</div>
+</div>
+<div class="signal-band">
+  <div class="dot"></div>
+  <span class="live">LIVE</span>
+  <span>OGRE Intelligence — July 2, 2026</span>
+  <span class="signal-band-right">Night 11 — AI Tools Navigator</span>
+</div>
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Midnight Build — Night 11</div>
+    <h1>AI Tools <em>Stack Navigator</em></h1>
+    <p class="hero-sub">Every AI tool in tonight's research — ranked, priced, and OGRE-positioned. Filter by category, pricing tier, or urgency. Built for sales conversations.</p>
+    <div class="hero-meta">
+      <div class="hero-stat"><div class="hero-stat-n">20</div><div class="hero-stat-l">Tools Tracked</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">6</div><div class="hero-stat-l">Categories</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">6x</div><div class="hero-stat-l">Max Cost Save</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">3</div><div class="hero-stat-l">Africa-Tied</div></div>
+    </div>
+  </div>
+  <div>
+    <div class="ogre-rec">
+      <div class="ogre-rec-title">&#9670; Tonight's Verdict</div>
+      <h3>The OGRE Counter-Position</h3>
+      <p>Every tool in tonight's research is a point solution. OGRE is the orchestration layer — wrapping the best of each into one African-built, supported product. That's the sales conversation.</p>
+    </div>
+  </div>
+</div>
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn" onclick="setFilter('agent',this)">Agentic AI</button>
+  <button class="filter-btn" onclick="setFilter('coding',this)">Coding</button>
+  <button class="filter-btn" onclick="setFilter('video',this)">Video</button>
+  <button class="filter-btn" onclick="setFilter('api',this)">API / LLM</button>
+  <button class="filter-btn" onclick="setFilter('hardware',this)">Hardware</button>
+  <button class="filter-btn" onclick="setFilter('automation',this)">Automation</button>
+  <button class="filter-btn" onclick="setFilter('free',this)">Free</button>
+  <button class="filter-btn" onclick="setFilter('open',this)">Open Source</button>
+  <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)" id="filterCount">Showing all 20 tools</span>
+</div>
+<div class="main">
+<div class="section">
+  <div class="section-header"><div class="section-title">OGRE Recommended Stack</div></div>
+  <div class="ogre-rec">
+    <div class="ogre-rec-title">&#9670; The Proven Solopreneur Stack — Built for Africa</div>
+    <p>Based on tonight's research. Total cost: <strong style="color:var(--gold)">$25-150/month</strong> for a full solo SaaS operation. OGRE wraps all of this into a supported, maintained product for African markets.</p>
+    <div class="ogre-rec-grid">
+      <div class="ogre-rec-item"><div class="ogre-rec-item-title">Orchestration</div><p>n8n workflow automation — connects every tool</p></div>
+      <div class="ogre-rec-item"><div class="ogre-rec-item-title">Coding Agent</div><p>Claude Code — isolated agent runs for client projects</p></div>
+      <div class="ogre-rec-item"><div class="ogre-rec-item-title">LLM Inference</div><p>Qwen-Plus $0.40/1M tokens — 6x cheaper than OpenAI</p></div>
+      <div class="ogre-rec-item"><div class="ogre-rec-item-title">Reasoning</div><p>Claude 3.7 Sonnet — complex tasks, longer context</p></div>
+      <div class="ogre-rec-item"><div class="ogre-rec-item-title">Client Agents</div><p>OpenClaw/MaxClaw — WhatsApp, Telegram, email in one</p></div>
+      <div class="ogre-rec-item"><div class="ogre-rec-item-title">Database</div><p>Supabase — Postgres + auth + edge functions</p></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Agentic AI Platforms</div><div class="section-count">4 tools</div></div>
+  <div class="tools-grid">
+    <div class="tool-card" data-cat="agent open">
+      <div class="tool-card-header"><div><div class="tool-name">OpenClaw / MaxClaw</div><div class="tool-company">MiniMax — Open Source</div></div><span class="tool-badge badge-open">Open Source</span></div>
+      <div class="tool-desc">Multi-agent orchestration with skills system, memory, loop detection, and multi-channel support (WhatsApp, Telegram, Discord). MaxClaw is MiniMax's cloud product built on OpenClaw — the platform OGRE Computer runs on.</div>
+      <div class="tool-pricing"><span class="price-chip">Free (self-host)</span><span class="price-chip">~$16/mo cloud</span></div>
+      <div class="tool-tags"><span class="tool-tag">Agents</span><span class="tool-tag">WhatsApp</span><span class="tool-tag">Memory</span><span class="tool-tag">Skills</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-red">&#9679;</span><span class="urgency-red">NOW — OGRE core platform</span></div><span class="ogre-pill" onclick="copyNote('OpenClaw/MaxClaw: OGRE core platform. Self-host free, $16/mo cloud. WhatsApp + Telegram + email agents.')">OGRE Core &#9670;</span></div>
+    </div>
+    <div class="tool-card" data-cat="agent">
+      <div class="tool-card-header"><div><div class="tool-name">Manus AI</div><div class="tool-company">Manus — China</div></div><span class="tool-badge badge-pro">Pro</span></div>
+      <div class="tool-desc">GAIA benchmark leader at 86.5%. China blocked Meta's $2B acquisition (Apr 2026). Autonomous research with high accuracy. Weakness: lacks scheduled workflows and multi-agent support — OGRE fills this via n8n.</div>
+      <div class="tool-pricing"><span class="price-chip">Free tier</span><span class="price-chip">$20/mo Standard</span><span class="price-chip">$200/mo Extended</span></div>
+      <div class="tool-tags"><span class="tool-tag">Research</span><span class="tool-tag">GAIA #1</span><span class="tool-tag">Autonomous</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-amber">&#9679;</span><span class="urgency-amber">THIS MONTH — Test for OGRE research</span></div><span class="ogre-pill" onclick="copyNote('Manus AI: Top research agent (GAIA 86.5%). OGRE can integrate via n8n to add scheduling + multi-agent support.')">Integrate via n8n</span></div>
+    </div>
+    <div class="tool-card" data-cat="agent">
+      <div class="tool-card-header"><div><div class="tool-name">Trae AI</div><div class="tool-company">trae.ai — Africa-Tied</div></div><span class="tool-badge badge-watch">Watch</span></div>
+      <div class="tool-desc">AI-powered IDE comparable to Cursor. Ranked #5 in Agentic IDE leaderboard (Mar 2026). Team has South African ties — worth watching as a potential Africa-built global tool. Free/Lite/Pro/Ultra tiers.</div>
+      <div class="tool-pricing"><span class="price-chip">Free tier</span><span class="price-chip">Pro ~$20/mo est.</span></div>
+      <div class="tool-tags"><span class="tool-tag">IDE</span><span class="tool-tag">Africa-Tied</span><span class="tool-tag">#5 IDE Rank</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">WATCH — Africa partnership potential</span></div><span class="ogre-pill" onclick="copyNote('Trae AI: Potential Africa-built IDE. Worth monitoring for partnership or OGRE stack integration.')">Monitor</span></div>
+    </div>
+    <div class="tool-card" data-cat="agent">
+      <div class="tool-card-header"><div><div class="tool-name">AutoGPT / AgentGPT</div><div class="tool-company">AutoGPT — Open Source</div></div><span class="tool-badge badge-dormant">Dormant</span></div>
+      <div class="tool-desc">Pioneered autonomous agents in 2023 but lost momentum. Reliability issues and high API costs hurt mainstream adoption. OGRE takeaway: ship fewer, more dependable agents — reliability beats hype.</div>
+      <div class="tool-pricing"><span class="price-chip">Free (open source)</span><span class="price-chip">API costs apply</span></div>
+      <div class="tool-tags"><span class="tool-tag">Pioneer</span><span class="tool-tag">Dormant</span><span class="tool-tag">Lesson</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">Lessons only</span></div><span class="ogre-pill" onclick="copyNote('AutoGPT lesson: reliability beats hype. OGRE ships fewer, more dependable agents — not a feature list.')">Learn from it</span></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Coding Agents</div><div class="section-count">4 tools</div></div>
+  <div class="tools-grid">
+    <div class="tool-card" data-cat="coding">
+      <div class="tool-card-header"><div><div class="tool-name">Devin v2.2</div><div class="tool-company">Cognition — USA</div></div><span class="tool-badge badge-enterprise">Enterprise</span></div>
+      <div class="tool-desc">SWE-Bench 56%. Runs autonomously in Windows VMs. Goldman Sachs hired Devin as "Employee #1." Self-verification + auto-fix loop. Best for complex enterprise development projects.</div>
+      <div class="tool-pricing"><span class="price-chip">Enterprise only</span><span class="price-chip">Contact sales</span></div>
+      <div class="tool-tags"><span class="tool-tag">SWE-Bench #1</span><span class="tool-tag">Enterprise</span><span class="tool-tag">Self-verify</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">THIS MONTH — OGRE client projects</span></div><span class="ogre-pill" onclick="copyNote('Devin v2.2: Use for complex OGRE client projects via Cognition API. Enterprise-grade autonomous coding.')">Use via API</span></div>
+    </div>
+    <div class="tool-card" data-cat="coding">
+      <div class="tool-card-header"><div><div class="tool-name">Cursor AI — Composer 2.5</div><div class="tool-company">Cursor — USA</div></div><span class="tool-badge badge-pro">Pro</span></div>
+      <div class="tool-desc">SWE-Bench 51.7% but 30% faster than Devin. Composer 2.5 (May 2026): scaled training, better multi-file scaffolding. /automate: always-on agents triggered by events. Best for rapid client prototyping.</div>
+      <div class="tool-pricing"><span class="price-chip">$20/mo Pro</span><span class="price-chip">vs Copilot $10/mo</span></div>
+      <div class="tool-tags"><span class="tool-tag">Fast</span><span class="tool-tag">Prototyping</span><span class="tool-tag">Composer 2.5</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">THIS MONTH — OGRE rapid prototypes</span></div><span class="ogre-pill" onclick="copyNote('Cursor Composer 2.5: OGRE best tool for rapid client prototyping. $20/mo. Fastest path from brief to demo.')">Best for Prototypes</span></div>
+    </div>
+    <div class="tool-card" data-cat="coding">
+      <div class="tool-card-header"><div><div class="tool-name">GitHub Copilot</div><div class="tool-company">Microsoft — USA</div></div><span class="tool-badge badge-enterprise">Enterprise</span></div>
+      <div class="tool-desc">Market leader at $10-19/mo. Deep GitHub integration. Enterprise security and compliance. Most OGRE clients likely already have it. OGRE complements: Copilot writes code, OGRE ships products.</div>
+      <div class="tool-pricing"><span class="price-chip">$10/mo Individual</span><span class="price-chip">$19/mo Business</span></div>
+      <div class="tool-tags"><span class="tool-tag">Market Leader</span><span class="tool-tag">Enterprise</span><span class="tool-tag">GitHub-native</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">Baseline — clients already have it</span></div><span class="ogre-pill" onclick="copyNote('GitHub Copilot: Most clients already have it. OGRE complements — Copilot writes code, OGRE delivers products.')">Complement</span></div>
+    </div>
+    <div class="tool-card" data-cat="coding free">
+      <div class="tool-card-header"><div><div class="tool-name">Codeium</div><div class="tool-company">Codeium — USA</div></div><span class="tool-badge badge-free">Free</span></div>
+      <div class="tool-desc">Free tier with decent capability. Attractive to cost-conscious developers and students. OGRE angle: position the OGRE supported stack as the professional alternative — acknowledge it, sell the difference.</div>
+      <div class="tool-pricing"><span class="price-chip">Free</span><span class="price-chip">$15/mo Teams</span></div>
+      <div class="tool-tags"><span class="tool-tag">Free</span><span class="tool-tag">Budget</span><span class="tool-tag">Competitor</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">Competitor — OGRE differentiates</span></div><span class="ogre-pill" onclick="copyNote('Codeium: Free competitor. OGRE adds: support, African context, full-stack delivery, SLA, maintenance.')">Differentiate</span></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Video &amp; Media AI</div><div class="section-count">2 tools</div></div>
+  <div class="tools-grid">
+    <div class="tool-card" data-cat="video api">
+      <div class="tool-card-header"><div><div class="tool-name">Hailuo 2.3 + Hailuo-02 [pro]</div><div class="tool-company">MiniMax — China</div></div><span class="tool-badge badge-open">API Access</span></div>
+      <div class="tool-desc">MiniMax's video generation model. 768P at $0.25/generation via API. 1080P at $0.08/sec. Hailuo-02 [pro]: professional-grade 1080P. Integrated TTS pipeline. 30x cheaper than Runway/Pika.</div>
+      <div class="tool-pricing"><span class="price-chip">$0.25/std gen</span><span class="price-chip">$0.08/sec 1080P</span><span class="price-chip">vs Runway $5-15</span></div>
+      <div class="tool-tags"><span class="tool-tag">Video Gen</span><span class="tool-tag">TTS</span><span class="tool-tag">1080P</span><span class="tool-tag">API</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-amber">&#9679;</span><span class="urgency-amber">THIS MONTH — OGRE client deliverables</span></div><span class="ogre-pill" onclick="copyNote('Hailuo 2.3: $0.25/generation vs $5-15 via Runway. OGRE can add AI video to client deliverables.')">Add to Deliverables</span></div>
+    </div>
+    <div class="tool-card" data-cat="video api">
+      <div class="tool-card-header"><div><div class="tool-name">Runway / Pika</div><div class="tool-company">Runway ML — USA</div></div><span class="tool-badge badge-enterprise">Premium</span></div>
+      <div class="tool-desc">Industry standard for AI video. $5-15 per clip. High quality but expensive at scale. Good reference when selling OGRE's Hailuo-powered alternative: same quality, fraction of the cost.</div>
+      <div class="tool-pricing"><span class="price-chip">$5-15/clip</span><span class="price-chip">Subscription tiers</span></div>
+      <div class="tool-tags"><span class="tool-tag">Industry Std</span><span class="tool-tag">Premium</span><span class="tool-tag">Reference</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">Reference — OGRE is 30x cheaper</span></div><span class="ogre-pill" onclick="copyNote('Runway: Industry standard, $5-15/clip. OGRE via Hailuo: $0.25/generation. Same quality, 30x cheaper.')">Price Benchmark</span></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">LLM API Providers</div><div class="section-count">4 tools</div></div>
+  <div class="tools-grid">
+    <div class="tool-card" data-cat="api open free">
+      <div class="tool-card-header"><div><div class="tool-name">Qwen3 / Qwen3.5</div><div class="tool-company">Alibaba — China — Apache 2.0</div></div><span class="tool-badge badge-open">Open Source</span></div>
+      <div class="tool-desc">Apache 2.0 fully open-source. Qwen-Turbo at $0.05/1M input tokens, Qwen-Plus at $0.40/1M — the value sweet spot for production. Africa play: embed as low-cost inference engine in OGRE deliverables. 6x cheaper than OpenAI.</div>
+      <div class="tool-pricing"><span class="price-chip">$0.05/1M Turbo</span><span class="price-chip">$0.40/1M Plus</span><span class="price-chip">6x cheaper than OpenAI</span></div>
+      <div class="tool-tags"><span class="tool-tag">Open Source</span><span class="tool-tag">Cheapest Capable</span><span class="tool-tag">Coding</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-red;">&#9679;</span><span class="urgency-red">NOW — Switch OGRE to Qwen</span></div><span class="ogre-pill" onclick="copyNote('Qwen-Plus: $0.40/1M tokens — 6x cheaper than OpenAI. OGRE should switch all non-reasoning workloads today.')">Switch to Qwen &#9670;</span></div>
+    </div>
+    <div class="tool-card" data-cat="api">
+      <div class="tool-card-header"><div><div class="tool-name">Kimi K2.6</div><div class="tool-company">Moonshot AI — China</div></div><span class="tool-badge badge-pro">Pro</span></div>
+      <div class="tool-desc">Open-sourced April 2026. 256K context window, 32B active parameters, MoonViT vision encoder. 80-85% of GPT-5.5 coding at a fraction of the cost. Multi-Head Latent Attention cuts memory bandwidth by 40-50%.</div>
+      <div class="tool-pricing"><span class="price-chip">API pricing</span><span class="price-chip">Cheap at scale</span></div>
+      <div class="tool-tags"><span class="tool-tag">Long Context</span><span class="tool-tag">Multimodal</span><span class="tool-tag">Coding</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-amber">&#9679;</span><span class="urgency-amber">THIS MONTH — China-Africa bridge</span></div><span class="ogre-pill" onclick="copyNote('Kimi K2.6: 256K context, cheap API. OGRE use: multilingual Africa-China translation + document workflows.')">Africa-China Bridge</span></div>
+    </div>
+    <div class="tool-card" data-cat="api">
+      <div class="tool-card-header"><div><div class="tool-name">MiniMax API — Text &amp; Speech</div><div class="tool-company">MiniMax — China</div></div><span class="tool-badge badge-open">API Access</span></div>
+      <div class="tool-desc">Token pricing from $0.15/1M tokens (pay-as-you-go). Speech synthesis and voice cloning integrated. This is the same platform powering OGRE's own MaxClaw stack.</div>
+      <div class="tool-pricing"><span class="price-chip">$0.15/1M tokens</span><span class="price-chip">Speech from $0.01/req</span></div>
+      <div class="tool-tags"><span class="tool-tag">TTS</span><span class="tool-tag">Voice Clone</span><span class="tool-tag">Text</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">THIS MONTH — OGRE broadcast system</span></div><span class="ogre-pill" onclick="copyNote('MiniMax TTS + voice clone: Add WhatsApp voice notes to OGRE midnight broadcast system for client updates.')">Voice Broadcast</span></div>
+    </div>
+    <div class="tool-card" data-cat="api">
+      <div class="tool-card-header"><div><div class="tool-name">OpenAI API</div><div class="tool-company">OpenAI — USA</div></div><span class="tool-badge badge-enterprise">Enterprise</span></div>
+      <div class="tool-desc">Market standard. GPT-4.5 / o3 / o4 models. $2.50/1M input tokens for GPT-4.5. The benchmark everyone compares to. Most clients reference it. OGRE position: we use it for reasoning tasks only — everything else is Qwen-Plus.</div>
+      <div class="tool-pricing"><span class="price-chip">$2.50/1M GPT-4.5</span><span class="price-chip">$15/1M o3</span></div>
+      <div class="tool-tags"><span class="tool-tag">Market Std</span><span class="tool-tag">Benchmark</span><span class="tool-tag">Reasoning</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">Use selectively — Qwen for bulk</span></div><span class="ogre-pill" onclick="copyNote('OpenAI: Use for complex reasoning tasks only. Switch bulk workloads (drafting, summarization) to Qwen-Plus for 6x cost saving.')">Use Selectively</span></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Hardware &amp; AI PCs</div><div class="section-count">3 tools</div></div>
+  <div class="tools-grid">
+    <div class="tool-card" data-cat="hardware">
+      <div class="tool-card-header"><div><div class="tool-name">MacBook Air M4 24GB + Ollama</div><div class="tool-company">Apple — USA</div></div><span class="tool-badge badge-enterprise">Recommended</span></div>
+      <div class="tool-desc">Runs 76 models natively via MLX. Unified memory architecture purpose-built for local LLM inference. Best local LLM setup for 2026. M4 Pro Mac Mini (48GB, ~$1,999) is the sweet spot for self-hosted AI.</div>
+      <div class="tool-pricing"><span class="price-chip">~$1,299 MacBook Air M4</span><span class="price-chip">$0 inference after hardware</span></div>
+      <div class="tool-tags"><span class="tool-tag">Local LLM</span><span class="tool-tag">Privacy</span><span class="tool-tag">Ollama</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">THIS MONTH — OGRE AI PC bundle</span></div><span class="ogre-pill" onclick="copyNote('MacBook Air M4 24GB + Ollama + Qwen3 14B: Privacy-first local AI setup. Bundle with OGRE stack for $2,500 all-in.')">OGRE AI PC Bundle</span></div>
+    </div>
+    <div class="tool-card" data-cat="hardware">
+      <div class="tool-card-header"><div><div class="tool-name">Xiaomi Book Pro / RedmiBook Pro</div><div class="tool-company">Xiaomi — China</div></div><span class="tool-badge badge-watch">Watch</span></div>
+      <div class="tool-desc">ARM-based Windows laptops positioned as affordable AI PCs. $8.7B committed to AI over 3 years (Lei Jun, March 2026). 1.118B IoT devices connected. SA launch timeline unknown — worth monitoring.</div>
+      <div class="tool-pricing"><span class="price-chip">~$500-800 est.</span><span class="price-chip">AI PC entry point</span></div>
+      <div class="tool-tags"><span class="tool-tag">Budget AI PC</span><span class="tool-tag">IoT</span><span class="tool-tag">SA Launch TBD</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">WATCH — SA laptop bundle opportunity</span></div><span class="ogre-pill" onclick="copyNote('Xiaomi SA launch: If laptops come to SA, negotiate OGRE software bundle deal for African SME market.')">Monitor SA Launch</span></div>
+    </div>
+    <div class="tool-card" data-cat="hardware">
+      <div class="tool-card-header"><div><div class="tool-name">Snapdragon X Elite / Intel Core Ultra / AMD Ryzen AI</div><div class="tool-company">Qualcomm / Intel / AMD</div></div><span class="tool-badge badge-enterprise">Enterprise</span></div>
+      <div class="tool-desc">AI PC hardware comparison: Snapdragon X Elite leads battery life (20+ hours, 5G, NPUs). Intel Core Ultra Series 2/3: zero app compatibility issues, enterprise refresh cycle. AMD Ryzen AI 300: best value at $300-600 range.</div>
+      <div class="tool-pricing"><span class="price-chip">$300-600 AMD</span><span class="price-chip">$800-1200 Intel</span><span class="price-chip">$1000+ Snapdragon</span></div>
+      <div class="tool-tags"><span class="tool-tag">NPU</span><span class="tool-tag">On-device AI</span><span class="tool-tag">Enterprise</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">For client hardware recommendations</span></div><span class="ogre-pill" onclick="copyNote('AMD Ryzen AI 300: Best value AI PC at $300-600. Recommend for African SME clients.')">Best Value Rec</span></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Automation &amp; Workflow</div><div class="section-count">3 tools</div></div>
+  <div class="tools-grid">
+    <div class="tool-card" data-cat="automation open">
+      <div class="tool-card-header"><div><div class="tool-name">n8n</div><div class="tool-company">n8n — Open Source</div></div><span class="tool-badge badge-open">Open Source</span></div>
+      <div class="tool-desc">Workflow automation platform. $0-50/mo self-hosted. The orchestration layer connecting OGRE's entire stack: Manus research, Kimi translation, Hailuo video, Qwen inference, Supabase data. Best-in-class for AI agent pipelines.</div>
+      <div class="tool-pricing"><span class="price-chip">Free (self-hosted)</span><span class="price-chip">$0/mo cloud free tier</span><span class="price-chip">$50/mo cloud Pro</span></div>
+      <div class="tool-tags"><span class="tool-tag">Automation</span><span class="tool-tag">AI Pipelines</span><span class="tool-tag">Integration</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-red">&#9679;</span><span class="urgency-red">NOW — OGRE orchestration core</span></div><span class="ogre-pill" onclick="copyNote('n8n: OGRE orchestration core. Build the Africa-first AI pipeline: Manus + Kimi + Hailuo + Qwen via n8n.')">OGRE Orchestration &#9670;</span></div>
+    </div>
+    <div class="tool-card" data-cat="automation">
+      <div class="tool-card-header"><div><div class="tool-name">Zapier / Make (Integromat)</div><div class="tool-company">Zapier / Make — USA</div></div><span class="tool-badge badge-enterprise">Enterprise</span></div>
+      <div class="tool-desc">Established automation tools. Zapier: 6,000+ app integrations, easy to use, $20-50/mo. Make: visual workflow builder, better for complex flows. OGRE angle: n8n is the technical/professional alternative — these are for non-technical clients.</div>
+      <div class="tool-pricing"><span class="price-chip">$20-50/mo Zapier</span><span class="price-chip">$9-59/mo Make</span></div>
+      <div class="tool-tags"><span class="tool-tag">No-code</span><span class="tool-tag">Integration</span><span class="tool-tag">Non-tech</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-muted">&#9679;</span><span class="urgency-muted">For non-technical clients</span></div><span class="ogre-pill" onclick="copyNote('Zapier/Make: For non-technical OGRE clients. OGRE/n8n for technical clients. Different tiers, same outcome.')">Non-tech Clients</span></div>
+    </div>
+    <div class="tool-card" data-cat="automation">
+      <div class="tool-card-header"><div><div class="tool-name">Supabase</div><div class="tool-company">Supabase — Open Source</div></div><span class="tool-badge badge-open">Open Source</span></div>
+      <div class="tool-desc">Postgres + auth + edge functions + storage. The database layer for OGRE client applications. Free tier available. Scales to production. Perfect partner for n8n + OpenClaw + Qwen stack.</div>
+      <div class="tool-pricing"><span class="price-chip">Free tier</span><span class="price-chip">$25/mo Pro</span><span class="price-chip">Pay as you grow</span></div>
+      <div class="tool-tags"><span class="tool-tag">Database</span><span class="tool-tag">Auth</span><span class="tool-tag">Edge Functions</span></div>
+      <div class="tool-footer"><div class="tool-urgency"><span class="urgency-cyan">&#9679;</span><span class="urgency-cyan">THIS MONTH — OGRE client backends</span></div><span class="ogre-pill" onclick="copyNote('Supabase: OGRE client application database. Postgres + auth + edge functions. Free tier, scales to enterprise.')">OGRE DB Layer &#9670;</span></div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Pricing Comparison — Coding Agents</div></div>
+  <div class="comp-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Tool</th><th>Category</th><th>Price</th><th>Best For</th><th>OGRE Position</th><th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="ogre-row">
+          <td class="tool-cell"><strong>OGRE Stack</strong><br><span style="font-size:10px;color:var(--gold)">n8n + Claude Code + Qwen-Plus</span></td>
+          <td>Full Stack</td>
+          <td class="price">$25-150/mo total</td>
+          <td>Everything — Africa market</td>
+          <td>Core product</td>
+          <td class="best">&#9670; RECOMMENDED</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">Devin v2.2</td><td>Coding Agent</td><td class="price">Enterprise only</td><td>Complex enterprise dev</td><td>Use via API for client projects</td><td class="best">For enterprise clients</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">Cursor Composer 2.5</td><td>Coding IDE</td><td class="price">$20/mo</td><td>Rapid prototyping</td><td>Best for OGRE demos</td><td class="best">Prototyping tool</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">GitHub Copilot</td><td>Coding Assist</td><td class="price">$10-19/mo</td><td>Enterprise dev teams</td><td>Complement (clients have it)</td><td>Baseline</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">Codeium</td><td>Coding Assist</td><td class="price">Free / $15/mo</td><td>Budget developers</td><td>Differentiate against it</td><td>Free competitor</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header"><div class="section-title">Pricing Comparison — LLM APIs</div></div>
+  <div class="comp-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Provider</th><th>Model</th><th>Price / 1M Tokens</th><th>Context</th><th>Open Source</th><th>OGRE Use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="ogre-row">
+          <td class="tool-cell"><strong>OGRE / Qwen-Plus</strong></td><td>Qwen-Plus</td><td class="price">$0.40</td><td>128K</td><td class="best">&#9670; Yes — Apache 2.0</td><td>Default inference</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">Qwen-Turbo</td><td>Qwen3-Turbo</td><td class="price">$0.05</td><td>128K</td><td class="best">Yes — Apache 2.0</td><td>High-volume / fast tasks</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">Kimi K2.6</td><td>Moonshot K2.6</td><td class="price">Low (API)</td><td class="best">256K</td><td>Yes (open)</td><td>Long docs, China-Africa</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">MiniMax</td><td>Text-01</td><td class="price">$0.15</td><td>100K</td><td>No</td><td>TTS + voice clone</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">Claude 3.7 Sonnet</td><td>Anthropic</td><td class="price">$3/mo + usage</td><td>200K</td><td>No</td><td>Complex reasoning</td>
+        </tr>
+        <tr>
+          <td class="tool-cell">OpenAI GPT-4.5</td><td>OpenAI</td><td class="price">$2.50</td><td>128K</td><td>No</td><td>Selective use only</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="cta-section">
+  <h2>Ready to Build the <em>Right Stack</em>?</h2>
+  <p>OGRE wraps the best tools from tonight's research into one African-built, supported product. No configuration required. No API keys to manage. No tools to stitch together. Just results.</p>
+  <div class="cta-buttons">
+    <button class="cta-btn cta-btn-primary" onclick="copyNote('Hi OGRE — I want to build an AI stack for my African business. Tell me more about the OGRE Starter Stack.')">Start a Conversation</button>
+    <button class="cta-btn cta-btn-secondary" onclick="copyNote('Hi OGRE — I need a custom AI agent workflow built. Can we schedule a call?')">Request a Demo</button>
+  </div>
+</div>
+</div>
+<footer>
+OGRE MIDNIGHT BUILD — Night 11 &nbsp;|&nbsp; July 2, 2026 &nbsp;|&nbsp; Tools Stack Navigator<br>
+Built from tonight&apos;s research: RESEARCH-2026-07-02.md<br>
+All tools positioned against OGRE Computer — Studex Group
+</footer>
+<script>
+function setFilter(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  var cards = document.querySelectorAll('.tool-card');
+  var count = 0;
+  cards.forEach(function(card) {
+    var cats = card.getAttribute('data-cat') || '';
+    if (cat === 'all' || cats.split(' ').indexOf(cat) !== -1) {
+      card.classList.remove('hidden');
+      count++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  var label = cat === 'all' ? 'Showing all ' + cards.length + ' tools' : 'Showing ' + count + ' tools in ' + cat;
+  document.getElementById('filterCount').textContent = label;
+}
+function copyNote(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    var t = document.getElementById('toast');
+    t.textContent = 'Copied: ' + text.substring(0,60) + '...';
+    t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')}, 2500);
+  }).catch(function() {
+    var t = document.getElementById('toast');
+    t.textContent = 'Copied: ' + text;
+    t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')}, 2500);
+  });
+}
+function updateClock() {
+  var now = new Date();
+  var h = String(now.getUTCHours()).padStart(2,'0');
+  var m = String(now.getUTCMinutes()).padStart(2,'0');
+  var s = String(now.getUTCSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent = h + ':' + m + ':' + s + ' UTC';
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+<div id="toast"></div>
+</body>
+</html>

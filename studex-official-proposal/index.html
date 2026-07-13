@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICVMS Platform — Official Proposal · Studex Global Markets × MindX</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+    :root {
+      --bg: #070710;
+      --bg2: #0c0c18;
+      --bg3: #10101e;
+      --border: rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.1);
+      --accent: #6c63ff;
+      --accent2: #00d4ff;
+      --gold: #f59e0b;
+      --text: #ededf8;
+      --muted: #7070a0;
+      --dim: #40406a;
+      --white: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--accent); color: var(--white); }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4rem;
+      height: 68px;
+      background: rgba(7,7,16,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-brand { display: flex; align-items: center; gap: 12px; }
+    .header-brand img { height: 32px; width: auto; }
+    .header-brand .brand-text { display: flex; flex-direction: column; }
+    .header-brand .brand-name { font-size: 0.7rem; font-weight: 800; color: var(--text); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.2; }
+    .header-brand .brand-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+    .header-right { display: flex; align-items: center; gap: 2rem; }
+    .header-ref { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--dim); text-align: right; line-height: 1.5; }
+    .header-ref span { color: var(--accent); }
+    .header-status { display: flex; align-items: center; gap: 6px; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-green 2s infinite; }
+    @keyframes pulse-green { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    :root { --green: #10b981; }
+
+    /* ── COVER ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311324_04910e8a.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.25;
+    }
+    .cover-gradient {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 0%, var(--bg) 80%);
+    }
+    .cover-content { position: relative; z-index: 2; max-width: 860px; }
+    .cover-logos { display: flex; align-items: center; justify-content: center; gap: 2.5rem; margin-bottom: 3rem; }
+    .cover-logos img { height: 48px; width: auto; }
+    .cover-divider { width: 1px; height: 40px; background: var(--border2); }
+    .cover h1 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--white) 0%, rgba(255,255,255,0.6) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .cover-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 3rem;
+      font-weight: 400;
+      line-height: 1.8;
+    }
+    .cover-meta { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
+    .cover-meta-item { text-align: center; }
+    .cover-meta-item .label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); font-weight: 600; margin-bottom: 4px; }
+    .cover-meta-item .value { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text); font-weight: 500; }
+    .cover-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); z-index: 2; }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scroll-anim 2s ease-in-out infinite; }
+    @keyframes scroll-anim { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+
+    /* ── SECTIONS ── */
+    section { padding: 8rem 4rem; max-width: 1200px; margin: 0 auto; }
+    .section-eyebrow { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); font-weight: 700; margin-bottom: 1rem; }
+    .section-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .section-desc { font-size: 0.95rem; color: var(--muted); max-width: 520px; line-height: 1.8; margin-bottom: 4rem; }
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 0 4rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
+
+    /* ── MINDX HERO ── */
+    .mindx-section { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .mindx-visual { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+    .mindx-logo-big { width: 160px; height: auto; }
+    .mindx-tag { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--dim); font-weight: 600; text-align: center; }
+    .mindx-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 1rem; }
+    .mindx-stat { background: var(--bg2); padding: 1.2rem 1.4rem; }
+    .mindx-stat .num { font-size: 1.8rem; font-weight: 900; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .mindx-stat .lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); margin-top: 2px; }
+    .mindx-text .section-title { font-size: clamp(1.5rem, 3vw, 2.2rem); }
+    .mindx-features { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+    .mindx-feat { display: flex; gap: 0.8rem; align-items: flex-start; }
+    .mindx-feat-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px; }
+    .mindx-feat h4 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .mindx-feat p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── ECOSYSTEM ── */
+    .ecosystem { text-align: center; }
+    .ecosystem-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 3rem; position: relative; }
+    .eco-node { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; padding: 1.5rem 1rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; transition: all 0.3s; cursor: default; position: relative; }
+    .eco-node:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(108,99,255,0.15); }
+    .eco-node.center-node { border-color: var(--accent); background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(0,212,255,0.05)); grid-column: 3; grid-row: 1 / 3; justify-content: center; padding: 2rem 1.5rem; }
+    .eco-node.center-node:hover { border-color: var(--accent); }
+    .eco-logo { width: 52px; height: 52px; border-radius: 12px; object-fit: contain; background: var(--bg3); padding: 6px; }
+    .eco-logo.large { width: 80px; height: 80px; padding: 10px; }
+    .eco-name { font-size: 0.72rem; font-weight: 700; color: var(--text); text-align: center; letter-spacing: 0.03em; }
+    .eco-sector { font-size: 0.6rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-top: 2px; }
+    .eco-node.center-node .eco-name { font-size: 0.88rem; color: var(--accent); letter-spacing: 0.08em; }
+    .eco-node.center-node .eco-sector { color: var(--muted); font-size: 0.65rem; }
+    .eco-specs { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 6px; }
+    .eco-spec { font-size: 0.55rem; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; color: var(--dim); }
+    /* Connect center to nodes */
+    .eco-connector { position: absolute; top: 50%; left: 50%; width: 1px; height: 60px; background: linear-gradient(to bottom, var(--accent), transparent); pointer-events: none; }
+
+    /* ── PRICING ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .pricing-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: all 0.3s; }
+    .pricing-card:hover { border-color: rgba(108,99,255,0.3); transform: translateY(-3px); }
+    .pricing-card.primary { border-color: var(--accent); background: linear-gradient(160deg, rgba(108,99,255,0.08) 0%, var(--bg2) 50%); }
+    .pricing-card.primary::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .pricing-tier { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--dim); font-weight: 700; margin-bottom: 0.6rem; }
+    .pricing-card.primary .pricing-tier { color: var(--accent); }
+    .pricing-name { font-size: 1.2rem; font-weight: 800; color: var(--white); margin-bottom: 1rem; }
+    .pricing-amount { display: flex; align-items: baseline; gap: 4px; margin-bottom: 0.3rem; }
+    .pricing-amount .currency { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .pricing-amount .price { font-size: 2.4rem; font-weight: 900; color: var(--white); font-variant-numeric: tabular-nums; }
+    .pricing-amount .period { font-size: 0.75rem; color: var(--dim); font-weight: 500; }
+    .pricing-setup { font-size: 0.72rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .pricing-setup strong { color: var(--accent2); }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+    .pricing-features li { font-size: 0.82rem; color: var(--muted); display: flex; gap: 0.6rem; align-items: flex-start; line-height: 1.5; }
+    .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; font-size: 0.75rem; }
+    .pricing-features li.inactive { opacity: 0.4; }
+    .pricing-features li.inactive::before { content: '–'; color: var(--dim); }
+    .pricing-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 10px; font-size: 0.82rem; font-weight: 700; text-decoration: none; transition: all 0.2s; letter-spacing: 0.04em; }
+    .pricing-btn.primary { background: var(--accent); color: var(--white); }
+    .pricing-btn.primary:hover { background: #5a52d4; }
+    .pricing-btn.secondary { border: 1px solid var(--border2); color: var(--muted); }
+    .pricing-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── AGENTS ── */
+    .agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .agent-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; transition: all 0.3s; }
+    .agent-card:hover { border-color: rgba(108,99,255,0.3); transform: translateY(-2px); }
+    .agent-top { display: flex; align-items: center; gap: 0.8rem; }
+    .agent-avatar { width: 40px; height: 40px; border-radius: 10px; background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .agent-info h4 { font-size: 0.88rem; font-weight: 800; color: var(--white); }
+    .agent-info .role { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; margin-top: 2px; }
+    .agent-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+    .agent-specs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; }
+    .agent-spec { font-size: 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; color: var(--dim); }
+
+    /* ── SAFETY ── */
+    .safety-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .safety-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.8rem; display: flex; gap: 1rem; }
+    .safety-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .safety-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
+    .safety-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── BANK ── */
+    .bank-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; }
+    .bank-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .bank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+    .bank-item .bk-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); font-weight: 600; margin-bottom: 4px; }
+    .bank-item .bk-value { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text); font-weight: 500; }
+    .bank-item .bk-value.highlight { color: var(--accent2); }
+
+    /* ── FOOTER CTA ── */
+    .cta-section {
+      padding: 8rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(108,99,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .cta-content .section-title { margin-bottom: 1rem; }
+    .cta-content .section-desc { margin: 0 auto 3rem; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; text-decoration: none; transition: all 0.2s; }
+    .cta-btn.primary { background: var(--accent); color: var(--white); }
+    .cta-btn.primary:hover { background: #5a52d4; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(108,99,255,0.35); }
+    .cta-btn.secondary { border: 1px solid var(--border2); color: var(--muted); }
+    .cta-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .cta-contact { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--dim); }
+    .cta-contact a { color: var(--accent); text-decoration: none; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--dim); flex-wrap: wrap; gap: 1rem; }
+    footer .left { display: flex; align-items: center; gap: 0.5rem; }
+    footer .left img { height: 20px; }
+    footer a { color: var(--dim); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 900px) {
+      header { padding: 0 1.5rem; }
+      header .header-right .header-ref { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .mindx-section { grid-template-columns: 1fr; gap: 3rem; }
+      .ecosystem-grid { grid-template-columns: 1fr 1fr; }
+      .eco-node.center-node { grid-column: auto; grid-row: auto; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .agents-grid { grid-template-columns: 1fr 1fr; }
+      .safety-grid { grid-template-columns: 1fr; }
+      footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .agents-grid { grid-template-columns: 1fr; }
+      .cover { padding: 7rem 1.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-brand">
+    <img src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311227_902b8a9b.png" alt="Studex Global Markets" />
+    <div class="brand-text">
+      <div class="brand-name">Studex Global Markets</div>
+      <div class="brand-sub">ICVMS Platform · Official Proposal</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-ref">
+      <span>OGRE-2026-0706</span><br>Rev 1.0 · July 2026
+    </div>
+    <div class="header-status">
+      <div class="status-dot"></div>
+      Confidential
+    </div>
+  </div>
+</header>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-gradient"></div>
+  <div class="cover-content">
+    <div class="cover-logos">
+      <img src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311207_0fc96f51.png" alt="MindX" />
+      <div class="cover-divider"></div>
+      <img src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311227_902b8a9b.png" alt="Studex Global Markets" />
+    </div>
+    <h1>The Integrated Company<br>Virtual Machine System</h1>
+    <p class="cover-sub">A sovereign AI infrastructure platform for the Africa-Russia trade corridor. Six companies. Six dedicated VMs. One shared intelligence layer. Built in Johannesburg, South Africa.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="label">Prepared For</div>
+        <div class="value">MindX / Tumelo Ramaphosa</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Proposal No</div>
+        <div class="value">OGRE-2026-0706</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Date</div>
+        <div class="value">July 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Status</div>
+        <div class="value" style="color: var(--accent)">Active</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MINDX -->
+<section>
+  <div class="mindx-section">
+    <div class="mindx-visual">
+      <img class="mindx-logo-big" src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311207_0fc96f51.png" alt="MindX Logo" />
+      <div class="mindx-tag">MindX × OGRE Computer</div>
+      <div class="mindx-stats">
+        <div class="mindx-stat"><div class="num">$4K</div><div class="lbl">Monthly</div></div>
+        <div class="mindx-stat"><div class="num">$7.5K</div><div class="lbl">One-Time Setup</div></div>
+        <div class="mindx-stat"><div class="num">4</div><div class="lbl">AI Agents</div></div>
+        <div class="mindx-stat"><div class="num">4</div><div class="lbl">Weeks to Live</div></div>
+      </div>
+    </div>
+    <div class="mindx-text">
+      <div class="section-eyebrow">The Engagement</div>
+      <h2 class="section-title">MindX joins the<br>ICVMS Ecosystem</h2>
+      <p class="section-desc">MindX becomes a full ICVMS ecosystem member. A dedicated sovereign VM in Johannesburg. A team of AI agents. Access to the Studex keiretsu. And the full backing of five existing platform companies.</p>
+      <div class="mindx-features">
+        <div class="mindx-feat">
+          <div class="mindx-feat-icon">🧠</div>
+          <div>
+            <h4>Obsidian Mind Core</h4>
+            <p>Persistent memory vault — every client, every conversation, every decision stored forever. Agents never start from zero.</p>
+          </div>
+        </div>
+        <div class="mindx-feat">
+          <div class="mindx-feat-icon">🎙️</div>
+          <div>
+            <h4>Voice Agent — RileyJarvis</h4>
+            <p>Real-time voice AI. Speaks to clients 24/7. Built with OpenAI Realtime API + Eleven Labs voice cloning.</p>
+          </div>
+        </div>
+        <div class="mindx-feat">
+          <div class="mindx-feat-icon">🌐</div>
+          <div>
+            <h4>Web Automation — Page-Agent</h4>
+            <p>Reads webpages, fills forms, qualifies leads, books appointments. Fully automated. Logs everything to Obsidian Mind.</p>
+          </div>
+        </div>
+        <div class="mindx-feat">
+          <div class="mindx-feat-icon">🏛️</div>
+          <div>
+            <h4>Hermes Agent</h4>
+            <p>Self-hosted strategic reasoning. Zero external API calls for thinking. Runs entirely on Ollama in your SA VM.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ECOSYSTEM -->
+<section class="ecosystem">
+  <div class="section-eyebrow">The ICVMS Ecosystem</div>
+  <h2 class="section-title">Six Companies.<br>One Connected Platform.</h2>
+  <p class="section-desc" style="margin: 0 auto 0;">Five confirmed partners. One slot remaining — VM 05. Each company brings a distinct capability to the network. Together, they form a modern keiretsu.</p>
+
+  <div class="ecosystem-grid">
+    <!-- Row 1 -->
+    <div class="eco-node">
+      <img class="eco-logo" src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311278_166a065e.png" alt="AfricaBiz" />
+      <div class="eco-name">AfricaBiz</div>
+      <div class="eco-sector">Trade & Commerce</div>
+      <div class="eco-specs">
+        <div class="eco-spec">Trade Flow</div><div class="eco-spec">Payments</div>
+      </div>
+    </div>
+
+    <div class="eco-node">
+      <img class="eco-logo" src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311260_7a5d362d.png" alt="NtechLab" />
+      <div class="eco-name">NtechLab</div>
+      <div class="eco-sector">AI Facial Recognition</div>
+      <div class="eco-specs">
+        <div class="eco-spec">Computer Vision</div><div class="eco-spec">AI Models</div>
+      </div>
+    </div>
+
+    <div class="eco-node center-node">
+      <img class="eco-logo large" src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311227_902b8a9b.png" alt="Studex OS" />
+      <div class="eco-name">StudEx OS</div>
+      <div class="eco-sector">Shared Intelligence Layer</div>
+      <div class="eco-specs" style="margin-top: 0.5rem;">
+        <div class="eco-spec">Johannesburg</div><div class="eco-spec">B-BBEE L1</div>
+      </div>
+    </div>
+
+    <div class="eco-node">
+      <img class="eco-logo" src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311244_51d95a0e.png" alt="Pharmasyntez" />
+      <div class="eco-name">Pharmasyntez</div>
+      <div class="eco-sector">Pharma Distribution</div>
+      <div class="eco-specs">
+        <div class="eco-spec">Cold Chain</div><div class="eco-spec">SAHPRA</div>
+      </div>
+    </div>
+
+    <div class="eco-node">
+      <img class="eco-logo" src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311297_0b7f7546.png" alt="ART Engineering" />
+      <div class="eco-name">ART Engineering</div>
+      <div class="eco-sector">Manufacturing</div>
+      <div class="eco-specs">
+        <div class="eco-spec">Infrastructure</div><div class="eco-spec">DevOps</div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div></div>
+    <div></div>
+    <div class="eco-node" style="border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.04);">
+      <div style="width:52px;height:52px;border-radius:12px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:0.5rem
+      <div style="font-size:0.72rem;font-weight:800;color:#10b981;text-align:center">VM 05 — OPEN</div>
+      <div class="eco-sector" style="color:#10b981">Your Company Here</div>
+      <div class="eco-specs">
+        <div class="eco-spec">Applying Now</div>
+      </div>
+    </div>
+    <div></div>
+    <div></div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- AI AGENTS -->
+<section>
+  <div class="section-eyebrow">The Intelligence Layer</div>
+  <h2 class="section-title">Your AI Agent Team</h2>
+  <p class="section-desc">Every VM runs a suite of purpose-built AI agents. Working 24/7. With memory. With voice. With web capabilities. Connected to Obsidian Mind.</p>
+
+  <div class="agents-grid">
+    <div class="agent-card">
+      <div class="agent-top">
+        <div class="agent-avatar">🏛️</div>
+        <div class="agent-info">
+          <h4>Hermes</h4>
+          <div class="role">Chief Technology Officer</div>
+        </div>
+      </div>
+      <p class="agent-desc">Self-hosted LLM, persistent memory, multi-agent orchestration. Zero external API calls for reasoning. Built by Nous Research.</p>
+      <div class="agent-specs">
+        <div class="agent-spec">Ollama + Qwen 2.5</div><div class="agent-spec">GitHub</div><div class="agent-spec">Self-Hosted</div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-top">
+        <div class="agent-avatar">📣</div>
+        <div class="agent-info">
+          <h4>Naledi</h4>
+          <div class="role">Chief Marketing Officer</div>
+        </div>
+      </div>
+      <p class="agent-desc">Manages content calendars, social media scheduling, and campaign drafting across Meta, Instagram, WhatsApp, and LinkedIn.</p>
+      <div class="agent-specs">
+        <div class="agent-spec">20 posts/month</div><div class="agent-spec">Analytics</div><div class="agent-spec">Multi-platform</div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-top">
+        <div class="agent-avatar">🛒</div>
+        <div class="agent-info">
+          <h4>Auto-Commerce</h4>
+          <div class="role">E-Commerce Manager</div>
+        </div>
+      </div>
+      <p class="agent-desc">Manages Shopify, product listings, order workflows, inventory, and customer communication. Fully automated.</p>
+      <div class="agent-specs">
+        <div class="agent-spec">Shopify</div><div class="agent-spec">Inventory</div><div class="agent-spec">Orders</div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-top">
+        <div class="agent-avatar">📋</div>
+        <div class="agent-info">
+          <h4>Robusca</h4>
+          <div class="role">Chief of Staff</div>
+        </div>
+      </div>
+      <p class="agent-desc">Coordinates all agents, manages priorities, maintains the operational calendar, drives the War Room dashboard.</p>
+      <div class="agent-specs">
+        <div class="agent-spec">Coordination</div><div class="agent-spec">War Room</div><div class="agent-spec">Reporting</div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-top">
+        <div class="agent-avatar">🧠</div>
+        <div class="agent-info">
+          <h4>Obsidian Mind</h4>
+          <div class="role">Memory & Reasoning Core</div>
+        </div>
+      </div>
+      <p class="agent-desc">Persistent memory vault. Semantic search. Decision records. Client history. Claude Code integration. Agents never start from zero.</p>
+      <div class="agent-specs">
+        <div class="agent-spec">Semantic Search</div><div class="agent-spec">Vault</div><div class="agent-spec">Memory</div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-top">
+        <div class="agent-avatar">🎙️</div>
+        <div class="agent-info">
+          <h4>Voice Agent</h4>
+          <div class="role">Client Communications</div>
+        </div>
+      </div>
+      <p class="agent-desc">Real-time voice AI. Speaks to clients, qualifies leads, books appointments. Available 24/7. Your own voice or custom persona via Eleven Labs.</p>
+      <div class="agent-specs">
+        <div class="agent-spec">OpenAI Realtime</div><div class="agent-spec">Eleven Labs</div><div class="agent-spec">SA Phone</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SAFETY -->
+<section>
+  <div class="section-eyebrow">Data Sovereignty</div>
+  <h2 class="section-title">Your Data Stays<br>in South Africa</h2>
+  <p class="section-desc">Every VM is a sovereign island. No overseas servers. No third-party data sharing. Full POPIA compliance. Full root access. Export anytime.</p>
+
+  <div class="safety-grid">
+    <div class="safety-card">
+      <div class="safety-icon">🇿🇦</div>
+      <div>
+        <h4>Dedicated SA VM — Johannesburg</h4>
+        <p>Your own virtual machine, hosted in a Johannesburg data centre. Not shared. Not co-mingled. You own it outright with full root access.</p>
+      </div>
+    </div>
+    <div class="safety-card">
+      <div class="safety-icon">🔒</div>
+      <div>
+        <h4>Zero Overseas API Calls for Client Data</h4>
+        <p>Voice processing uses Eleven Labs (you control the key). Ollama runs locally. No client names, numbers, or data ever sent to US servers.</p>
+      </div>
+    </div>
+    <div class="safety-card">
+      <div class="safety-icon">⚖️</div>
+      <div>
+        <h4>Full POPIA Compliance</h4>
+        <p>Protection of Personal Information Act — South Africa's data protection law. Data Processing Agreement available on request.</p>
+      </div>
+    </div>
+    <div class="safety-card">
+      <div class="safety-icon">📤</div>
+      <div>
+        <h4>Export Anytime — No Lock-In</h4>
+        <p>Your Obsidian Mind vault, your data, your agents. SSH access whenever you want. Leave and take everything with you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- PRICING -->
+<section>
+  <div class="section-eyebrow">Investment</div>
+  <h2 class="section-title">ICVMS Partnership Tiers</h2>
+  <p class="section-desc">Transparent pricing. No hidden fees. All prices in USD.</p>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Tier 01</div>
+      <div class="pricing-name">Solo VM</div>
+      <div class="pricing-amount"><span class="currency">$</span><span class="price">2,000</span><span class="period">/mo</span></div>
+      <div class="pricing-setup">One-time setup: <strong>$4,000</strong></div>
+      <ul class="pricing-features">
+        <li>1 dedicated SA VM (4 vCPU / 16GB / 100GB)</li>
+        <li>3 AI agents</li>
+        <li>Obsidian Mind memory vault</li>
+        <li>Basic War Room dashboard</li>
+        <li>Email support</li>
+        <li>POPIA compliance</li>
+        <li class="inactive">Voice Agent + SA phone</li>
+        <li class="inactive">Hermes self-hosted LLM</li>
+        <li class="inactive">ICVMS network access</li>
+      </ul>
+      <a href="mailto:hello@studexglobalmarkets.com?subject=ICVMS Application — Solo VM" class="pricing-btn secondary">Apply →</a>
+    </div>
+
+    <div class="pricing-card primary">
+      <div class="pricing-tier">Tier 02 — Recommended</div>
+      <div class="pricing-name">ICVMS Partner</div>
+      <div class="pricing-amount"><span class="currency">$</span><span class="price">4,000</span><span class="period">/mo</span></div>
+      <div class="pricing-setup">One-time setup: <strong>$7,590</strong></div>
+      <ul class="pricing-features">
+        <li>1 dedicated SA VM (4 vCPU / 16GB / 100GB)</li>
+        <li>6 AI agents (full suite)</li>
+        <li>Voice Agent + SA phone number</li>
+        <li>Web Automation Agent (Page-Agent)</li>
+        <li>Hermes Agent (self-hosted LLM)</li>
+        <li>Obsidian Mind memory vault</li>
+        <li>Full War Room dashboard</li>
+        <li>Access to ICVMS keiretsu network</li>
+        <li>Trade corridor introductions</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="mailto:hello@studexglobalmarkets.com?subject=ICVMS Application — ICVMS Partner" class="pricing-btn primary">Apply for VM 05 →</a>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-tier">Tier 03</div>
+      <div class="pricing-name">Enterprise</div>
+      <div class="pricing-amount"><span class="currency">$</span><span class="price">8,000</span><span class="period">/mo</span></div>
+      <div class="pricing-setup">One-time setup: <strong>$15,000</strong></div>
+      <ul class="pricing-features">
+        <li>High-performance VM (16 vCPU / 64GB)</li>
+        <li>Unlimited AI agents</li>
+        <li>Custom voice persona</li>
+        <li>White-label branding</li>
+        <li>ICVMS + StudEx Health access</li>
+        <li>Regulatory navigation team</li>
+        <li>Blockchain compliance layer</li>
+        <li>Dedicated account manager</li>
+        <li>SLA: 99.99% uptime</li>
+        <li>On-site induction + training</li>
+      </ul>
+      <a href="mailto:hello@studexglobalmarkets.com?subject=ICVMS Application — Enterprise" class="pricing-btn secondary">Apply →</a>
+    </div>
+  </div>
+
+  <!-- Bank -->
+  <div class="bank-section" style="margin-top: 3rem;">
+    <div class="bank-header">
+      <div>
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--dim);font-weight:700;margin-bottom:0.3rem">Payment Details</div>
+        <div style="font-size:0.85rem;font-weight:700;color:var(--text)">Wire Transfer — FNB South Africa</div>
+      </div>
+      <div style="font-size:0.7rem;color:var(--dim)">Payment terms: <span style="color:var(--accent)">50% on signing · 50% on go-live</span></div>
+    </div>
+    <div class="bank-grid">
+      <div class="bank-item"><div class="bk-label">Account Name</div><div class="bk-value">Studex Group</div></div>
+      <div class="bank-item"><div class="bk-label">Account Number</div><div class="bk-value highlight">62760837610</div></div>
+      <div class="bank-item"><div class="bk-label">Branch</div><div class="bk-value">Woodmead · Code: 250-655</div></div>
+      <div class="bank-item"><div class="bk-label">SWIFT / BIC</div><div class="bk-value">FIRNZAJJ</div></div>
+      <div class="bank-item"><div class="bk-label">Currency</div><div class="bk-value">USD</div></div>
+      <div class="bank-item"><div class="bk-label">Invoice Issued By</div><div class="bk-value">Studex Group (Pty) Ltd</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-content">
+    <div class="section-eyebrow">Let's Begin</div>
+    <h2 class="section-title">Ready to join<br>the ICVMS ecosystem?</h2>
+    <p class="section-desc">Sign the proposal, send the 50% deposit, and your VM is provisioned within 48 hours. Your ICVMS ecosystem presence begins immediately.</p>
+    <div class="cta-buttons">
+      <a href="mailto:hello@studexglobalmarkets.com?subject=Acceptance: ICVMS Partnership — OGRE-2026-0706&body=Company Name:%20%0AApplication Tier:%20%0ASigned By:%20%0ADate:%20%0A" class="cta-btn primary">Accept Proposal via Email →</a>
+      <a href="mailto:cto@studex-group.com?subject=Questions — ICVMS Proposal OGRE-2026-0706" class="cta-btn secondary">Questions? →</a>
+    </div>
+    <div class="cta-contact">
+      hello@studexglobalmarkets.com · cto@studex-group.com<br>
+      <a href="https://studexglobalmarkets.com">studexglobalmarkets.com</a> · orgo.ai
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="left">
+    <img src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783311227_902b8a9b.png" alt="Studex" />
+    <span>Studex Global Markets · ICVMS Platform</span>
+  </div>
+  <div>
+    Proposal No: <strong style="color:var(--muted)">OGRE-2026-0706</strong> · Confidential · July 2026
+  </div>
+  <div>
+    Built by <a href="#">Cipher Tr@ce</a> · OGRE Computer Intelligence Division
+  </div>
+</footer>
+
+</body>
+</html>

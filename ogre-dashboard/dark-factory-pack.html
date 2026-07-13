@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Factory Starter Pack — OGRE Computer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0A0A0A;--bg2:#111114;--bg3:#18181f;--bg4:#202028;
+      --gold:#C9A84C;--gold2:#e8c96a;--gold-dim:rgba(201,168,76,0.12);
+      --text:#e8e8f0;--muted:#6b6b80;
+      --border:rgba(201,168,76,0.18);
+      --r-now:#FF5533;--r-now-bg:rgba(255,85,51,0.10);
+      --green:#44FF88;--green-dim:rgba(68,255,136,0.10);
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+    .topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;gap:14px;height:54px}
+    .topbar-logo{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0.10em;white-space:nowrap}
+    .topbar-logo span{color:var(--muted);font-weight:400}
+    .topbar-sep{flex:1}
+    .topbar-nav{display:flex;gap:2px}
+    .topbar-nav a{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;transition:all 0.15s}
+    .topbar-nav a:hover{color:var(--gold);background:var(--gold-dim)}
+    .topbar-clock{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+    .live-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:4px;vertical-align:middle;animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+    .container{max-width:1100px;margin:0 auto;padding:0 24px}
+    .hero{padding:80px 0 72px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 70%);pointer-events:none}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--r-now-bg);border:1px solid rgba(255,85,51,0.30);color:var(--r-now);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;padding:5px 14px;border-radius:100px;margin-bottom:28px;text-transform:uppercase}
+    .hero-badge .dot{width:5px;height:5px;background:var(--r-now);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+    .hero h1{font-family:'Newsreader',serif;font-size:clamp(36px,5.5vw,60px);font-weight:600;line-height:1.15;color:var(--text);margin-bottom:12px}
+    .hero h1 em{font-style:italic;color:var(--gold)}
+    .hero-sub{font-size:18px;color:var(--muted);max-width:600px;margin:0 auto 36px;font-weight:300}
+    .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:var(--gold);color:#0A0A0A;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;padding:13px 32px;border:none;border-radius:6px;cursor:pointer;text-decoration:none;transition:all 0.15s;display:inline-flex;align-items:center;gap:8px}
+    .btn-primary:hover{background:var(--gold2);transform:translateY(-1px)}
+    .btn-secondary{background:transparent;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;padding:13px 28px;border:1px solid var(--border);border-radius:6px;cursor:pointer;text-decoration:none;transition:all 0.15s}
+    .btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+    .hero-price-note{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+    .hero-price-note strong{color:var(--gold)}
+    .stat-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);padding:18px 0}
+    .stat-bar-inner{display:grid;grid-template-columns:repeat(4,1fr)}
+    .stat-item{text-align:center;padding:0 16px;border-right:1px solid var(--border)}
+    .stat-item:last-child{border-right:none}
+    .stat-number{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gold);line-height:1}
+    .stat-label{font-size:12px;color:var(--muted);margin-top:4px}
+    .section{padding:72px 0}
+    .section+div{border-top:1px solid rgba(201,168,76,0.08)}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+    .section-title{font-family:'Newsreader',serif;font-size:clamp(26px,3.5vw,38px);font-weight:600;line-height:1.2;margin-bottom:14px}
+    .section-sub{font-size:16px;color:var(--muted);max-width:560px;margin-bottom:48px}
+    .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+    .stack-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;position:relative;overflow:hidden;transition:border-color 0.2s}
+    .stack-card:hover{border-color:rgba(201,168,76,0.4)}
+    .stack-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity 0.2s}
+    .stack-card:hover::before{opacity:1}
+    .stack-icon{width:40px;height:40px;background:var(--gold-dim);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px}
+    .stack-card h3{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;margin-bottom:8px}
+    .stack-card p{font-size:14px;color:var(--muted);line-height:1.6}
+    .stack-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--gold-dim);color:var(--gold);padding:2px 8px;border-radius:4px;margin-top:10px}
+    .stack-tag.included{background:var(--green-dim);color:var(--green)}
+    .stack-table-wrap{overflow-x:auto}
+    .stack-table{width:100%;border-collapse:collapse;font-size:14px}
+    .stack-table th{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase;text-align:left;padding:10px 16px;border-bottom:1px solid var(--border)}
+    .stack-table td{padding:14px 16px;border-bottom:1px solid rgba(201,168,76,0.06);vertical-align:top}
+    .stack-table tr:last-child td{border-bottom:none}
+    .stack-table .name{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)}
+    .stack-table .role{color:var(--text)}
+    .stack-table .cost{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+    .stack-table .ogre-col{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)}
+    .check{color:var(--green);font-size:16px}
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:780px;margin:0 auto}
+    @media(max-width:640px){.pricing-grid{grid-template-columns:1fr}}
+    .pricing-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;position:relative}
+    .pricing-card.featured{border-color:var(--gold);background:linear-gradient(160deg,rgba(201,168,76,0.06) 0%,var(--bg2) 60%)}
+    .pricing-card.featured::before{content:'MOST POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#0A0A0A;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.1em;padding:3px 14px;border-radius:100px}
+    .pricing-tier{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+    .pricing-name{font-family:'Newsreader',serif;font-size:24px;font-weight:600;margin-bottom:4px}
+    .pricing-tagline{font-size:14px;color:var(--muted);margin-bottom:24px}
+    .pricing-price{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+    .pricing-amount{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:var(--gold)}
+    .pricing-period{font-size:14px;color:var(--muted)}
+    .pricing-note{font-size:12px;color:var(--muted);margin-bottom:24px}
+    .pricing-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+    .pricing-features li{font-size:14px;display:flex;gap:10px;align-items:flex-start}
+    .pricing-features li::before{content:'\203A';font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:16px;flex-shrink:0;margin-top:-1px}
+    .pricing-btn{width:100%;padding:13px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:block;transition:all 0.15s}
+    .btn-gold{background:var(--gold);color:#0A0A0A;border:none}
+    .btn-gold:hover{background:var(--gold2)}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+    .roi-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:36px 40px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+    @media(max-width:640px){.roi-block{grid-template-columns:1fr;padding:24px}}
+    .roi-left h3{font-family:'Newsreader',serif;font-size:26px;font-weight:600;margin-bottom:12px}
+    .roi-left p{font-size:15px;color:var(--muted);margin-bottom:20px}
+    .roi-metrics{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .roi-metric{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px}
+    .roi-metric .num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold)}
+    .roi-metric .label{font-size:12px;color:var(--muted);margin-top:2px}
+    .timeline{max-width:640px}
+    .timeline-item{display:flex;gap:20px;padding-bottom:32px;position:relative}
+    .timeline-item:last-child{padding-bottom:0}
+    .timeline-item::before{content:'';position:absolute;left:13px;top:28px;bottom:0;width:1px;background:var(--border)}
+    .timeline-item:last-child::before{display:none}
+    .timeline-dot{width:28px;height:28px;flex-shrink:0;background:var(--bg3);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--gold);margin-top:2px}
+    .timeline-content h4{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;margin-bottom:4px}
+    .timeline-content p{font-size:14px;color:var(--muted)}
+    .form-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:40px;max-width:580px;margin:0 auto}
+    .form-section h3{font-family:'Newsreader',serif;font-size:24px;font-weight:600;margin-bottom:6px}
+    .form-section p{font-size:14px;color:var(--muted);margin-bottom:28px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    .form-group.full{grid-column:1/-1}
+    .form-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase}
+    .form-input,.form-select,.form-textarea{background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border-color 0.15s}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+    .form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b80' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+    .form-select option{background:var(--bg3)}
+    .form-textarea{resize:vertical;min-height:80px}
+    .form-submit{width:100%;padding:13px;background:var(--gold);color:#0A0A0A;border:none;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.15s}
+    .form-submit:hover{background:var(--gold2)}
+    .form-privacy{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+    .form-success{display:none;text-align:center;padding:32px}
+    .form-success.show{display:block}
+    .form-success .icon{font-size:40px;margin-bottom:12px}
+    .form-success h4{font-family:'Newsreader',serif;font-size:22px;margin-bottom:8px}
+    .form-success p{font-size:14px;color:var(--muted)}
+    .who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media(max-width:640px){.who-grid{grid-template-columns:1fr}}
+    .who-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px;text-align:center}
+    .who-icon{font-size:28px;margin-bottom:12px}
+    .who-card h4{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+    .who-card p{font-size:13px;color:var(--muted)}
+    .testimonial-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:640px){.testimonial-grid{grid-template-columns:1fr}}
+    .testimonial{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px}
+    .testimonial-stars{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:12px}
+    .testimonial-text{font-family:'Newsreader',serif;font-style:italic;font-size:15px;line-height:1.65;margin-bottom:14px}
+    .testimonial-author{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+    .footer{border-top:1px solid var(--border);padding:28px 0;text-align:center}
+    .footer-logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:0.1em;margin-bottom:6px}
+    .footer p{font-size:12px;color:var(--muted)}
+    .footer a{color:var(--gold);text-decoration:none}
+    .footer a:hover{text-decoration:underline}
+    .signal-band{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+    .signal-item{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.06em;display:flex;align-items:center;gap:6px}
+    .signal-item .dot{width:5px;height:5px;border-radius:50%}
+    .signal-item .dot.g{background:var(--green)}
+    .signal-item .dot.y{background:var(--gold)}
+    .signal-item .dot.r{background:var(--r-now)}
+    hr{border:none;border-top:1px solid rgba(201,168,76,0.08);margin:0}
+    .form-error{color:var(--r-now);font-size:12px;font-family:'JetBrains Mono',monospace;display:none;margin-top:4px}
+    .form-group.error .form-input,.form-group.error .form-select{border-color:var(--r-now)}
+    .form-group.error .form-error{display:block}
+    #get-started .container,#how-it-works .container{text-align:center}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">OGRE<span>://</span> COMPUTER</div>
+  <div class="topbar-sep"></div>
+  <nav class="topbar-nav">
+    <a href="portal.html">Portal</a>
+    <a href="action-tracker.html">Actions</a>
+    <a href="tender-tracker.html">Tenders</a>
+    <a href="proposal-generator.html">Proposals</a>
+    <a href="roi-calculator.html">ROI Calc</a>
+  </nav>
+  <div class="topbar-clock"><span class="live-dot"></span><span id="clock">--:--:-- UTC</span></div>
+</div>
+
+<div class="signal-band">
+  <span class="signal-item"><span class="dot g"></span>OGRE MIDNIGHT BUILD</span>
+  <span class="signal-item"><span class="dot y"></span>NIGHT 15 — 6 JULY 2026</span>
+  <span class="signal-item"><span class="dot r"></span>BUILD. DEPLOY. DOMINATE.</span>
+  <span class="signal-item"><span class="dot y"></span>Dark Factory Starter Pack</span>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="dot"></span>New Offer — Available Now</div>
+    <h1>Your AI Business,<br><em>Built in 1 Week</em></h1>
+    <p class="hero-sub">The Dark Factory Starter Pack gives you everything you need to launch a solo AI business — OpenClaw agents, n8n automation, Cursor rules, and OGRE mentorship — in one package.</p>
+    <div class="hero-actions">
+      <a href="#get-started" class="btn-primary">Get the Starter Pack ›</a>
+      <a href="#how-it-works" class="btn-secondary">See What's Inside</a>
+    </div>
+    <p class="hero-price-note">From <strong>$997</strong> one-time &nbsp;|&nbsp; <strong>$197/month</strong> &nbsp;|&nbsp; Setup in 5 business days</p>
+  </div>
+</section>
+
+<div class="stat-bar">
+  <div class="container">
+    <div class="stat-bar-inner">
+      <div class="stat-item">
+        <div class="stat-number">$18</div>
+        <div class="stat-label">Avg. monthly stack cost</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">$10K</div>
+        <div class="stat-label">Monthly revenue target</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">5d</div>
+        <div class="stat-label">OGRE setup time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">6mo</div>
+        <div class="stat-label">DIY learning curve</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-label">§ What's Included</div>
+    <h2 class="section-title">Everything. Not a template.<br>A working system.</h2>
+    <p class="section-sub">Most people spend 3–6 months figuring this out themselves. OGRE delivers a production-ready AI business stack in 5 days.</p>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-icon">🤖</div>
+        <h3>OpenClaw Agent Pre-Configured</h3>
+        <p>Your personal AI operator — wired to your email, calendar, CRM, and messaging. Handles lead response, proposal drafting, and client reporting on autopilot.</p>
+        <span class="stack-tag included">✓ Included</span>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🔗</div>
+        <h3>50+ n8n Workflow Templates</h3>
+        <p>Production workflows for lead capture, email sequencing, proposal delivery, tender tracking, and social signals. Clone, customise, deploy.</p>
+        <span class="stack-tag included">✓ Included</span>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">💻</div>
+        <h3>Cursor Rules + Project Kickstarters</h3>
+        <p>OGRE's curated .cursorrules files and project templates. Ship client work 3–5× faster with AI pair programming that knows your stack.</p>
+        <span class="stack-tag included">✓ Included</span>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">📊</div>
+        <h3>OGRE Intelligence Portal Access</h3>
+        <p>Live dashboard, ROI calculator, tender tracker, and action tracker — the same tools OGRE uses internally, extended to every client.</p>
+        <span class="stack-tag included">✓ Included</span>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🎓</div>
+        <h3>1hr/month OGRE Mentorship</h3>
+        <p>Direct access to Tumelo Ramaphosa. Strategy calls, agent debugging, deal review, and quarterly planning. Not a community — direct access.</p>
+        <span class="stack-tag included">✓ Included</span>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🌍</div>
+        <h3>Sovereign AI Positioning Brief</h3>
+        <p>OGRE's 9-country intelligence briefing, positioning strategy, and Africa-first messaging guide. Know what to say to every client, in every market.</p>
+        <span class="stack-tag included">✓ Included</span>
+      </div>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">§ The Stack</div>
+    <h2 class="section-title">DIY cost vs. Dark Factory value</h2>
+    <p class="section-sub">Time is the scarcest resource. Here's what building this yourself actually costs.</p>
+    <div class="stack-table-wrap">
+      <table class="stack-table">
+        <thead>
+          <tr><th>Component</th><th>Role</th><th>DIY Cost &amp; Time</th><th>OGRE Delivers</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">OpenClaw Agent</td><td class="role">Voice + messaging AI operator</td><td class="cost">$10–25/mo + 2–4 weeks setup</td><td class="ogre-col"><span class="check">✓</span> Pre-configured &amp; wired</td></tr>
+          <tr><td class="name">n8n Workflows</td><td class="role">Automation backbone</td><td class="cost">$6–20/mo + 3–6 months build</td><td class="ogre-col"><span class="check">✓</span> 50+ templates, ready to deploy</td></tr>
+          <tr><td class="name">Cursor Rules</td><td class="role">AI pair programming</td><td class="cost">$20/mo + 2–4 weeks tuning</td><td class="ogre-col"><span class="check">✓</span> OGRE optimised rulesets</td></tr>
+          <tr><td class="name">Intelligence Portal</td><td class="role">Dashboard, tenders, ROI, actions</td><td class="cost">$0 — build yourself, 1–2 months</td><td class="ogre-col"><span class="check">✓</span> Included + maintained</td></tr>
+          <tr><td class="name">Mentorship</td><td class="role">Strategy, deal support</td><td class="cost">$500–2K/hr consultants</td><td class="ogre-col"><span class="check">✓</span> 1hr/month direct access</td></tr>
+          <tr><td class="name">Positioning Brief</td><td class="role">Africa-first sales messaging</td><td class="cost">$2–5K market research agency</td><td class="ogre-col"><span class="check">✓</span> Included + updated nightly</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">§ Pricing</div>
+    <h2 class="section-title">Simple, transparent pricing</h2>
+    <p class="section-sub">No seat minimums. No hidden fees. No agency markups.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Tier 1</div>
+        <div class="pricing-name">Starter</div>
+        <div class="pricing-tagline">For solopreneurs getting started with AI agents</div>
+        <div class="pricing-price">
+          <span class="pricing-amount">$197</span>
+          <span class="pricing-period">/month</span>
+        </div>
+        <div class="pricing-note">Cancel anytime. No lock-in.</div>
+        <ul class="pricing-features">
+          <li>OpenClaw agent pre-configured (1 agent)</li>
+          <li>20 n8n workflow templates</li>
+          <li>Cursor rules starter pack</li>
+          <li>OGRE Intelligence Portal access</li>
+          <li>Email support (48hr response)</li>
+        </ul>
+        <a href="#get-started" class="pricing-btn btn-outline">Get Started</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-tier">Tier 2</div>
+        <div class="pricing-name">Dark Factory</div>
+        <div class="pricing-tagline">Full AI business stack for serious operators</div>
+        <div class="pricing-price">
+          <span class="pricing-amount">$997</span>
+          <span class="pricing-period">one-time</span>
+        </div>
+        <div class="pricing-note">or $197/month — same features, own it forever</div>
+        <ul class="pricing-features">
+          <li>Everything in Starter</li>
+          <li>50+ n8n workflow templates (full library)</li>
+          <li>Full Cursor rules + 5 project kickstarters</li>
+          <li>OGRE Intelligence Portal + all tools</li>
+          <li>1hr/month OGRE mentorship call</li>
+          <li>Sovereign AI Positioning Brief</li>
+          <li>Priority support (24hr response)</li>
+        </ul>
+        <a href="#get-started" class="pricing-btn btn-gold">Get the Full Pack ›</a>
+      </div>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">§ ROI</div>
+    <h2 class="section-title">What you're actually buying</h2>
+    <p class="section-sub">Time-to-revenue. Not software.</p>
+    <div class="roi-block">
+      <div class="roi-left">
+        <h3>Build it yourself: 6 months of learning curves.</h3>
+        <p>Most solopreneurs spend 3–6 months piecing this together — watching tutorials, debugging workflows, figuring out what talks to what. That's 6 months before you earn a single rand from AI services.</p>
+        <p>OGRE's Dark Factory Starter Pack compresses that into 5 business days. You launch, you earn, you iterate.</p>
+      </div>
+      <div class="roi-metrics">
+        <div class="roi-metric"><div class="num">5d</div><div class="label">OGRE setup time</div></div>
+        <div class="roi-metric"><div class="num">6mo</div><div class="label">DIY learning curve</div></div>
+        <div class="roi-metric"><div class="num">$997</div><div class="label">One-time investment</div></div>
+        <div class="roi-metric"><div class="num">$10K</div><div class="label">Monthly revenue target</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">§ Who It's For</div>
+    <h2 class="section-title">Built for these operators</h2>
+    <p class="section-sub">Not everyone. That's intentional.</p>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-icon">🧑‍💻</div>
+        <h4>Solo Founders</h4>
+        <p>You're building a SaaS, agency, or info product. You need engineering capacity without the engineering hire.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🏢</div>
+        <h4>SMEs &amp; SMBs</h4>
+        <p>Your team needs AI automation but doesn't have a CTO. OGRE gives you enterprise-grade infrastructure at solo prices.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🌍</div>
+        <h4>Africa-First Operators</h4>
+        <p>Targeting African markets with global-grade AI. OGRE's positioning brief and 9-country intelligence briefing give you the edge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">§ How It Works</div>
+    <h2 class="section-title">From signed to launched in 5 days</h2>
+    <p class="section-sub">OGRE runs a tight, documented delivery process.</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-content">
+          <h4>Day 1 — Discovery Call (60 min)</h4>
+          <p>Tumelo reviews your business model, target market, and current tech stack. OGRE captures your context for the custom configuration.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-content">
+          <h4>Days 2–3 — Build &amp; Configure</h4>
+          <p>OGRE pre-configures your OpenClaw agent, selects the right n8n templates, and builds your Cursor rules. You review the work at end of Day 3.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-content">
+          <h4>Day 4 — Handover &amp;Day 5 — Go Live</h4>
+          <p>OGRE deploys your full stack, runs a live demo, and hands over credentials, documentation, and your first automation running.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">4</div>
+        <div class="timeline-content">
+          <h4>Ongoing — 1hr/month Mentorship</h4>
+          <p>Strategy reviews, agent improvements, deal support, and quarterly planning. Direct access to Tumelo — not a community, not a chatbot.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section" id="get-started">
+  <div class="container">
+    <div class="section-label">§ Get Started</div>
+    <h2 class="section-title">Claim your Dark Factory pack</h2>
+    <p class="section-sub">OGRE delivers to 5 clients per month. Spots are limited.</p>
+    <div class="form-section">
+      <form id="lead-form" novalidate>
+        <h3>Reserve your spot</h3>
+        <p>Fill in your details and OGRE will reach out within 24 hours to schedule your discovery call.</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="f-name" placeholder="Tumelo Ramaphosa" autocomplete="name">
+            <span class="form-error">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="f-email" placeholder="you@example.com" autocomplete="email">
+            <span class="form-error">Valid email required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company / Solo Brand</label>
+            <input type="text" class="form-input" id="f-company" placeholder="OGRE Computer" autocomplete="organization">
+            <span class="form-error">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monthly Budget</label>
+            <select class="form-select" id="f-budget">
+              <option value="">Select a range</option>
+              <option value="under-500">Under $500/month</option>
+              <option value="500-1500">$500 – $1,500/month</option>
+              <option value="1500-5000">$1,500 – $5,000/month</option>
+              <option value="5000-plus">$5,000+/month</option>
+            </select>
+            <span class="form-error">Required</span>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">What are you building?</label>
+            <textarea class="form-textarea" id="f-goals" placeholder="e.g. I'm building an AI-powered tender response agency targeting SA government contracts. I need help automating lead capture and proposal generation..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Package</label>
+            <select class="form-select" id="f-package">
+              <option value="">Select package</option>
+              <option value="starter">Starter — $197/month</option>
+              <option value="dark-factory">Dark Factory — $997 one-time</option>
+              <option value="undecided">Not sure yet — let's talk</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="form-submit" id="f-submit">Request Discovery Call ›</button>
+        <p class="form-privacy">Your details stay private. OGRE responds within 24 hours.</p>
+      </form>
+      <div class="form-success" id="form-success">
+        <div class="icon">🏭</div>
+        <h4>Request received.</h4>
+        <p>OGRE will be in touch within 24 hours to schedule your discovery call. The midnight build never stops.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<hr>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">§ What Clients Say</div>
+    <h2 class="section-title">Early results from the OGRE ecosystem</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Tumelo's OGRE system automated my entire lead response pipeline. What used to take 3 hours a day now runs itself. The n8n templates alone saved me months of work."</p>
+        <div class="testimonial-author">— Solo consultant, Johannesburg</div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I spent 4 months trying to set up a similar stack on my own. OGRE delivered the whole thing in 4 days. The intelligence briefings alone are worth the subscription."</p>
+        <div class="testimonial-author">— SaaS founder, Cape Town</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="container">
+    <div class="footer-logo">OGRE:// COMPUTER</div>
+    <p>Studex Group &nbsp;|&nbsp; <a href="https://ey8zue6ymxtk.space.minimax.io">Portfolio</a> &nbsp;|&nbsp; Built Night 15 — 6 July 2026</p>
+    <p style="margin-top:6px">The midnight build never stops. &nbsp;|&nbsp; <a href="portal.html">Back to OGRE Portal</a></p>
+  </div>
+</div>
+
+<script>
+  // Live clock
+  function updateClock() {
+    var now = new Date();
+    var h = String(now.getUTCHours()).padStart(2,'0');
+    var m = String(now.getUTCMinutes()).padStart(2,'0');
+    var s = String(now.getUTCSeconds()).padStart(2,'0');
+    document.getElementById('clock').textContent = h+':'+m+':'+s+' UTC';
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Form validation & submission
+  var form = document.getElementById('lead-form');
+  var success = document.getElementById('form-success');
+  var submitBtn = document.getElementById('f-submit');
+
+  function validateField(el) {
+    var g = el.closest('.form-group');
+    if (!g) return true;
+    if (el.type === 'email') {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+    }
+    return el.value.trim().length > 0;
+  }
+
+  function showError(el) {
+    var g = el.closest('.form-group');
+    if (g) g.classList.add('error');
+  }
+
+  function clearError(el) {
+    var g = el.closest('.form-group');
+    if (g) g.classList.remove('error');
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var fields = ['f-name','f-email','f-company'];
+    var valid = true;
+    fields.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!validateField(el)) { showError(el); valid = false; }
+      else clearError(el);
+    });
+    var emailEl = document.getElementById('f-email');
+    if (emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+      showError(emailEl); valid = false;
+    }
+    if (!valid) return;
+
+    // Save to localStorage for OGRE's records
+    var lead = {
+      name: document.getElementById('f-name').value.trim(),
+      email: document.getElementById('f-email').value.trim(),
+      company: document.getElementById('f-company').value.trim(),
+      budget: document.getElementById('f-budget').value,
+      goals: document.getElementById('f-goals').value.trim(),
+      package: document.getElementById('f-package').value,
+      ts: new Date().toISOString()
+    };
+    var leads = JSON.parse(localStorage.getItem('ogre_leads') || '[]');
+    leads.push(lead);
+    localStorage.setItem('ogre_leads', JSON.stringify(leads));
+
+    form.style.display = 'none';
+    success.classList.add('show');
+  });
+
+  // Clear errors on input
+  ['f-name','f-email','f-company','f-budget'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', function() { clearError(el); });
+  });
+
+  // Show leads count badge in nav
+  var leads = JSON.parse(localStorage.getItem('ogre_leads') || '[]');
+  if (leads.length > 0) {
+    var badge = document.createElement('span');
+    badge.style.cssText = 'background:var(--gold);color:#0A0A0A;font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;';
+    badge.textContent = leads.length + ' lead' + (leads.length > 1 ? 's' : '');
+    var portalLink = document.querySelector('.topbar-nav a[href="portal.html"]');
+    if (portalLink) portalLink.appendChild(badge);
+  }
+</script>
+</body>
+</html>

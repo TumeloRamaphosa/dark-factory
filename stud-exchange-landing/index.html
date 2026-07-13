@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA — AI Agent OS for South African Business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080808;
+  --panel: #111111;
+  --border: #1e1e1e;
+  --gold: #C9A84C;
+  --gold-d: #9A7A3A;
+  --text: #F0EDE6;
+  --muted: #777777;
+  --green: #4CAF50;
+  --cyan: #29B6F6;
+  --red: #E05050;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 48px;
+  background: oklch(5% 0 0 / 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+.nav-logo span { color: var(--muted); font-weight: 400; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--gold); color: var(--bg); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 50%, oklch(60% 0.16 85 / 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, oklch(50% 0.12 200 / 0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid oklch(72% 0.16 85 / 0.3);
+  padding: 6px 14px;
+  margin-bottom: 32px;
+  width: fit-content;
+}
+.hero-badge::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 6px var(--gold);
+}
+.hero h1 {
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--text);
+  max-width: 900px;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-sub {
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 400;
+  color: var(--muted);
+  max-width: 600px;
+  margin-bottom: 48px;
+  line-height: 1.5;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 16px 36px;
+  background: var(--gold);
+  color: var(--bg);
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: oklch(80% 0.18 85); }
+.btn-secondary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 16px 36px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+/* SECTION COMMON */
+section { padding: 100px 48px; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  max-width: 700px;
+}
+.section-sub {
+  font-size: 20px;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+/* AGENTS */
+.agents { background: var(--panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+}
+.agent-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.agent-card:hover { border-color: var(--gold); }
+.agent-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.agent-card:hover::after { transform: scaleX(1); }
+.agent-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+  filter: drop-shadow(0 0 8px oklch(72% 0.16 85/0.4));
+}
+.agent-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.agent-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--cyan);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+.agent-desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* STATS BAR */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-item {
+  padding: 48px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 700;
+  color: var(--gold);
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-l {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* WHAT IT DOES */
+.features { }
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 60px;
+}
+.feature-item {
+  padding: 40px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  transition: all 0.3s;
+}
+.feature-item:hover { background: var(--bg); border-color: oklch(72% 0.16 85 / 0.4); }
+.feature-n {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+}
+.feature-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.feature-desc {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* DEMO */
+.demo-section {
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.demo-section .section-title { margin: 0 auto 16px; }
+.demo-section .section-sub { margin: 0 auto 48px; }
+.demo-preview {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  padding: 16px;
+  margin-bottom: 48px;
+  text-align: left;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.demo-preview iframe {
+  width: 100%;
+  height: 480px;
+  border: none;
+  display: block;
+}
+
+/* PRICING */
+.pricing { }
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+}
+.price-card {
+  border: 1px solid var(--border);
+  padding: 40px;
+  background: var(--panel);
+  position: relative;
+}
+.price-card.featured {
+  border-color: var(--gold);
+  background: var(--bg);
+}
+.price-card.featured::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -1px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 4px 16px;
+}
+.price-tier {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.price-n {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.price-n span { font-size: 20px; color: var(--muted); }
+.price-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.price-features { list-style: none; }
+.price-features li {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  padding: 6px 0;
+  border-bottom: 1px solid oklch(100% 0 0 / 0.04);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.price-features li::before {
+  content: '▸';
+  color: var(--gold);
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* CONTACT */
+.contact { background: var(--panel); border-top: 1px solid var(--border); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-top: 60px;
+}
+.contact-info h3 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.contact-info p {
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+.contact-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.contact-item span { color: var(--gold); width: 80px; flex-shrink: 0; }
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.form-group input, .form-group textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+.form-group input:focus, .form-group textarea:focus {
+  border-color: var(--gold);
+}
+.form-submit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 16px;
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+.form-submit:hover { background: oklch(80% 0.18 85); }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+footer p a { color: var(--gold); text-decoration: none; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  nav .nav-links { display: none; }
+  section { padding: 60px 24px; }
+  .agents-grid, .pricing-grid { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+@media (max-width: 600px) {
+  .agents-grid, .pricing-grid { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">LAISA <span>// OGRE Computer</span></div>
+  <ul class="nav-links">
+    <li><a href="#agents">Agents</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Now Available — South Africa</div>
+  <h1>Your AI Agent<br><em>Operating System</em></h1>
+  <p class="hero-sub">LAISA runs your entire business — patient intake, billing, WhatsApp, voice notes, social media, email — while you sleep. Built for South African SMEs by OGRE Computer.</p>
+  <div class="hero-actions">
+    <a href="#demo" class="btn-primary">See Live Demo</a>
+    <a href="#pricing" class="btn-secondary">View Pricing</a>
+  </div>
+  <div class="hero-scroll">scroll</div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-n">6</div><div class="stat-l">AI Agents</div></div>
+  <div class="stat-item"><div class="stat-n">847</div><div class="stat-l">Patient Records</div></div>
+  <div class="stat-item"><div class="stat-n">99.7%</div><div class="stat-l">Uptime</div></div>
+  <div class="stat-item"><div class="stat-n">85%</div><div class="stat-l">Token Savings</div></div>
+</div>
+
+<!-- AGENTS -->
+<section class="agents" id="agents">
+  <div class="section-label">The Fleet</div>
+  <h2 class="section-title">Six agents.<br>One operating system.</h2>
+  <p class="section-sub">Each agent is a specialist. Together they run your entire operation.</p>
+  <div class="agents-grid">
+    <div class="agent-card">
+      <span class="agent-icon">⚕</span>
+      <div class="agent-name">DenchClaw</div>
+      <div class="agent-role">AI Doctor — Patient Intake</div>
+      <p class="agent-desc">Processes patient enquiries, scores leads 0–100, flags contraindications, routes to the correct specialist. Average response: 3 seconds.</p>
+    </div>
+    <div class="agent-card">
+      <span class="agent-icon">💳</span>
+      <div class="agent-name">CashClaw</div>
+      <div class="agent-role">Billing &amp; Invoicing</div>
+      <p class="agent-desc">Reconciled R12,400 today in medical aid claims. Generates invoices, sends payment reminders, tracks receivables automatically.</p>
+    </div>
+    <div class="agent-card">
+      <span class="agent-icon">🎙</span>
+      <div class="agent-name">Charlie</div>
+      <div class="agent-role">Voice — Transcription &amp; Notes</div>
+      <p class="agent-desc">Transcribes voice notes from doctors and patients. 4-minute consultation summarised in 12 seconds. Stored in patient record instantly.</p>
+    </div>
+    <div class="agent-card">
+      <span class="agent-icon">💬</span>
+      <div class="agent-name">ChatterClaw</div>
+      <div class="agent-role">Social Media &amp; Scheduling</div>
+      <p class="agent-desc">Published 3 posts for @safesight_clinic today. Schedules content, monitors mentions, responds to DMs across WhatsApp and social.</p>
+    </div>
+    <div class="agent-card">
+      <span class="agent-icon">📧</span>
+      <div class="agent-name">InboxClaw</div>
+      <div class="agent-role">Email Triage &amp; Routing</div>
+      <p class="agent-desc">7 new client enquiries today. Categorised, prioritised, and routed to the correct agent. Zero inbox overwhelm. Ever.</p>
+    </div>
+    <div class="agent-card">
+      <span class="agent-icon">🛡</span>
+      <div class="agent-name">AuditClaw</div>
+      <div class="agent-role">POPIA Compliance &amp; Audit</div>
+      <p class="agent-desc">Every agent action logged to an immutable audit trail. POPIA-compliant by design. Ready for any regulatory audit — automatic reports on demand.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label">Platform</div>
+  <h2 class="section-title">Everything your business<br>needs in one place.</h2>
+  <p class="section-sub">No stitching together 12 different SaaS tools. LAISA is built as one coherent system.</p>
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-n">01 — WHATSAPP</div>
+      <div class="feature-title">WhatsApp Business, Powered by AI</div>
+      <div class="feature-desc">Your WhatsApp becomes a 24/7 receptionist. Books appointments, answers FAQs, sends reminders — all while maintaining the personal touch your patients expect.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-n">02 — VOICE</div>
+      <div class="feature-title">Voice Notes, Transcribed &amp; Filed</div>
+      <div class="feature-desc">Speak a voice note. Charlie transcribes it, extracts the key actions, and files it directly into the patient record. No app switching. No typing.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-n">03 — CRM</div>
+      <div class="feature-title">Patient CRM — Built In</div>
+      <p class="feature-desc">Every interaction across WhatsApp, email, voice, and web is logged in one patient timeline. No data silos. No missing context when a patient calls.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-n">04 — BILLING</div>
+      <div class="feature-title">Automated Billing &amp; Payments</div>
+      <p class="feature-desc">CashClaw generates invoices, submits to medical aids, reconciles payments, and chases outstanding debt — without a single manual step.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-n">05 — POPIA</div>
+      <div class="feature-title">POPIA Compliance — By Design</div>
+      <p class="feature-desc">AuditClaw logs every data access event. Patient consent is tracked, data requests are honoured automatically, and your audit trail is always ready.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-n">06 — REPORTS</div>
+      <div class="feature-title">Real-Time Business Intelligence</div>
+      <p class="feature-desc">See your pipeline value, agent activity, token usage, and client metrics in one dashboard. Know exactly what's happening in your business, any time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="demo-section" id="demo">
+  <div class="section-label">Live Demo</div>
+  <h2 class="section-title">See it in action</h2>
+  <p class="section-sub">A working demo — SafeSight Clinic running LAISA Agent OS</p>
+  <div class="demo-preview">
+    <iframe src="https://i4fqp9y7bl70.space.minimax.io" title="LAISA Demo"></iframe>
+  </div>
+  <a href="https://i4fqp9y7bl70.space.minimax.io" class="btn-primary" target="_blank">Open Full Demo</a>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">Transparent pricing.<br>No hidden fees.</h2>
+  <p class="section-sub">Monthly retainer. Cancel anytime. Includes all agents, hosting, and support.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <div class="price-n">R1,499<span>/mo</span></div>
+      <p class="price-desc">For startups and solo practitioners getting started with AI.</p>
+      <ul class="price-features">
+        <li>2 AI Agents</li>
+        <li>WhatsApp Business integration</li>
+        <li>Basic CRM (50 contacts)</li>
+        <li>Email support</li>
+        <li>500 AI messages/month</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">Business</div>
+      <div class="price-n">R3,999<span>/mo</span></div>
+      <p class="price-desc">For growing businesses that need the full system.</p>
+      <ul class="price-features">
+        <li>All 6 AI Agents</li>
+        <li>WhatsApp + Email + Voice</li>
+        <li>Full CRM (unlimited contacts)</li>
+        <li>Automated billing &amp; invoicing</li>
+        <li>POPIA audit trail</li>
+        <li>5,000 AI messages/month</li>
+        <li>Priority support</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-n">R9,999<span>/mo</span></div>
+      <p class="price-desc">For clinics, practices, and businesses that need custom AI.</p>
+      <ul class="price-features">
+        <li>Everything in Business</li>
+        <li>Unlimited AI messages</li>
+        <li>Custom agent training</li>
+        <li>Dedicated VM infrastructure</li>
+        <li>SLA + 99.9% uptime guarantee</li>
+        <li>Custom integrations (existing software)</li>
+        <li>Dedicated account manager</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label">Get Started</div>
+  <h2 class="section-title">Ready to meet<br>your AI team?</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>Book a free 30-minute demo. We'll show you exactly how LAISA would work in your business — with your clients, your workflow, your data.</p>
+      <div class="contact-detail">
+        <div class="contact-item"><span>Email</span> agent@stud.exchange</div>
+        <div class="contact-item"><span>VM</span> D@RK F@C#ORY — orgo.ai</div>
+        <div class="contact-item"><span>Stack</span> gstack + headroom + LAISA OS</div>
+        <div class="contact-item"><span>Location</span> Studex Group — South Africa</div>
+      </div>
+    </div>
+    <form class="contact-form" action="mailto:agent@stud.exchange" method="POST" enctype="text/plain">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" name="name" placeholder="Dr. [Your Name]" required>
+      </div>
+      <div class="form-group">
+        <label>Business / Practice</label>
+        <input type="text" name="business" placeholder="Your practice or business name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="you@yourbusiness.co.za" required>
+      </div>
+      <div class="form-group">
+        <label>Tell us about your business</label>
+        <textarea name="message" rows="4" placeholder="What would you use LAISA for?"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Enquiry →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 LAISA Agent OS — A product of <a href="#">OGRE Computer</a> — Studex Group, South Africa</p>
+  <p>Built on <a href="#">OpenClaw</a> · <a href="#">stud.exchange</a></p>
+</footer>
+
+</body>
+</html>

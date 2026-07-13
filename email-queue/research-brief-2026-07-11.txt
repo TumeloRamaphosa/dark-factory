@@ -1,0 +1,200 @@
+OGRE GLOBAL AI RESEARCH BRIEF — 2026-07-11
+============================================
+Compiled: 2026-07-11 | 03:00 AM UTC | By: OGRE Midnight Intelligence Agent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 1: OPENCLAW & HERMES AGENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• OpenClaw: Self-hosted AI agent framework. 7 agents shipped 10 features
+  in 1 month at $4K/week. CMMC/HIPAA/ITAR ready. $10-25/month + model costs.
+• Hermes Agent (Nous Research): Open-source, self-improving, persistent
+  memory. Runs on $5 VPS or GPU cluster. NVIDIA backed.
+• Competitive: OpenClaw = power users + enterprise, Cursor = dev IDE,
+  Copilot = enterprise Microsoft shops, Codeium = free/cheap.
+
+OGRE ACTION: Deploy OpenClaw as default agent runtime for all client
+projects. Build "ogre-agents" skill pack bundling OpenClaw + n8n + Qwen3.
+→ URGENCY: 🔴 NOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 2: ALIBABA QWEN
+━━━━━━━━━━━━━━━━━━━━━━━
+• Qwen3: Open-source, 1M token context, MoE architecture. Qwen3-32B competes
+  with GPT-4. Qwen3-8B runs on MacBook Air. API: $0.10-0.50/M tokens.
+• Alibaba positioning for Africa emerging markets via Model Studio console.
+• 80% cheaper than GPT-4o with 85%+ quality on most tasks.
+
+OGRE ACTION: Deploy Qwen3-32B on D@RK F@C#ORY VM via Ollama. Replace
+GPT-4o calls where quality tolerance allows. Target: 80% cost reduction.
+→ URGENCY: 🔴 NOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 3: KIMI MOONSHOT AI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Kimi K2.6: 1T params MoE, 32B active, 262k token context. Available on
+  Cloudflare Workers AI. Open weights on GitHub.
+• Kimi Chat: 200M+ users in China. Better than GPT-4o on Chinese language
+  and cultural context tasks.
+• Chinese-African trade: $280B+ annually. Huge communication gap.
+
+OGRE ACTION: Build African-Chinese comms bridge using Kimi K2. Fine-tune
+for SA-China trade use case. Target: logistics firms, import/export SMEs.
+→ URGENCY: 🟡 THIS MONTH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 4: MINIMAX AI
+━━━━━━━━━━━━━━━━━━━━
+• MiniMax M3 text: $0.30/M input tokens, $1.20/M output tokens.
+• Hailuo video: text-to-video + image-to-video + audio sync. $0.25/run
+  via API (6 seconds). Free tier available.
+• 200M+ users globally. Multi-modal (text, speech, video).
+
+OGRE ACTION: Build video generation POC for SA e-commerce brands. OGRE
+clients submit brief → Hailuo generates 6s promo video. Charge R500-R2,000
+per video. Target: e-commerce brands who can't afford R20K video fees.
+→ URGENCY: 🟡 THIS MONTH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 5: XIAOMI AI ECOSYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Lei Jun confirmed $8.7B AI investment over 3 years (March 2026). Focus:
+  LLMs, AI infrastructure, AIoT, humanoid robotics.
+• 500M+ MIUI active devices = massive AI distribution channel.
+• AI Laptops: RedmiBook Pro + Xiaomi Book S 12.4" running Snapdragon X2.
+  20+ hour battery, NPU for on-device AI. $800-1,400.
+
+OGRE ACTION: Test RedmiBook Pro + Qwen3-8B as "AI PC in a box" for SA
+SME clients. Monitor Xiaomi developer API (expected Q3 2026) for AIoT
+distribution opportunity.
+→ URGENCY: 🔵 WATCH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 6: AI PCs & LOCAL MODEL HARDWARE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Intel Core Ultra 200V: 48 TOPS NPU, Dell/HP/Lenovo shipping now.
+• AMD Ryzen AI 300: 50+ TOPS NPU, best iGPU performance per dollar.
+• Qualcomm Snapdragon X2: 45 TOPS, 20-24hr battery, 5G option.
+• Apple M4 MacBook Air: 16GB base, 24GB option. Qwen3-8B Q8 = 11GB RAM.
+  Zero internet required for local inference.
+
+RECOMMENDED CLIENT SETUP (July 2026):
+- Budget: Xiaomi RedmiBook Pro or MacBook Air M4 24GB
+- Software: Ollama + Qwen3-8B + OGRE agent config + n8n
+- All-in cost: R12,000-18,000 hardware + R3,000 setup
+
+OGRE ACTION: Package "OGRE AI PC Setup" as a client onboarding product.
+OGRE margins: 25-35%. Target: SA SMEs wanting local AI workstation.
+→ URGENCY: 🔴 NOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 7: SOLOPRENEUR AGENT STACKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOP STACKS IN 2026:
+- Marc Louvion ($47-50K/month): Next.js + Supabase + Claude Code + Cursor
+- Pieter Levels ($1M+/year): Node.js + AI agents + Vercel + Stripe
+- microSaaS movement: n8n + Claude Code + Cursor + Supabase + LemonSqueezy
+
+THE 2026 SOLOPRENEUR STACK:
+Frontend: Next.js | DB: Supabase | Hosting: Vercel/Render
+AI Coding: Claude Code, Cursor | Automation: n8n (self-hosted)
+Agent Runtime: OpenClaw | LLM: OpenRouter + Ollama (local)
+Payments: Stripe, LemonSqueezy | Email: Resend
+
+OGRE ACTION: Offer "Solopreneur in a Box" — OGRE agents + pre-configured
+n8n workflows + Qwen3 inference + Supabase template + launch playbook.
+Price: R8,500 once-off + R1,500/month retainer.
+→ URGENCY: 🟡 THIS MONTH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 8: AI AGENTS (JUNE-JULY 2026)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Devin (Cognition Labs): Now enterprise-focused. Parallel cloud agents.
+  No longer solo-dev focused. Raising Series B.
+• Cursor AI: 2.0 with Composer model. Agent mode, .cursorrules, BugBot,
+  MCP support, Mission Control UI. $20/month Pro. Free tier.
+• Trae AI (ByteDance): FREE AI IDE on VS Code. Game-changer for solo
+  devs. SA-adjacent via ByteDance/TikTok footprint. WATCH closely.
+• Manus: General-purpose autonomous agent. 300 free credits/day.
+  Good for internal OGRE workflows.
+• AutoGPT: Builder UI + marketplace. Now legitimate for non-technical
+  users building automations.
+
+OGRE ACTION: Run internal agent bake-off — Manus vs AutoGPT vs OpenClaw.
+Same task across all three: research brief compilation, client report,
+invoice drafting. Measure: time, quality, cost.
+→ URGENCY: 🔴 NOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 9: AFRICAN AI LANDSCAPE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY PLAYERS:
+• Nigeria: Moniepoint (fintech unicorn), Turaco, Andela-AI pivot.
+  Draft AI policy identifies Big Tech dependence as national threat.
+• Kenya: M-KOPA, Wasoko, OECD AI governance workshop (March 2026).
+  Fastest East Africa growth.
+• Egypt: Fastest North Africa growth. AI policy in draft.
+• South Africa: Discovery Health AI, Yoco, BankSeta. Active tender market.
+• Ghana: Dash fintech, agritech AI growing.
+• Continent: 200+ AI startups active (May 2026). 73% survival rate.
+
+GOVERNMENT TENDERS (ACTIVE — JULY 2026):
+• South Africa: DCDT AI policy framework RFP, SARS AI tax compliance EOI,
+  NSFAS AI student support, CSIR AI research tenders.
+• Nigeria: NCC AI in telecom regulation, Ministry of Innovation AI services.
+• Kenya: Ministry of ICT AI in agriculture (FAO partnership).
+• KEY THREAT: Microsoft + G42 $1B African data centre proposal (June 2026).
+  African governments divided on sovereignty vs convenience.
+
+OGRE POSITIONING: "Africa's Sovereign AI Infrastructure Partner"
+• Your data stays in Africa.
+• Your models are trained for Africa.
+• Your agents are built by Africans.
+
+OGRE ACTIONS:
+1. Register on etenders.gov.za (submit EOI within 30 days)
+2. Submit for AI infrastructure RFPs in SA, Nigeria, Kenya
+3. Position as alternative to Microsoft/G42 data centre play
+→ URGENCY: 🔴 NOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COST BENCHMARKS (July 2026)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Qwen3-8B local (Ollama):          FREE (D@RK F@C#ORY infra only)
+Qwen3-32B (OpenRouter):           $0.50/M tokens (80% < GPT-4o)
+MiniMax M3 text:                  $0.30/M input tokens
+Hailuo video (6s):                $0.25/run via API
+Claude Code:                      $20/month
+OpenClaw (self-hosted):           $10-25/month
+n8n (self-hosted):                FREE
+MacBook Air M4 24GB:              R22,000 (hardware)
+RedmiBook Pro (Snapdragon X2):    R15,000-18,000 (hardware)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP 5 IMMEDIATE ACTIONS (NEXT 7 DAYS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. 🔴 Deploy Qwen3-32B on D@RK F@C#ORY VM ( Infra setup, TOOLS.md update)
+2. 🔴 Register on etenders.gov.za ( Gov tender access)
+3. 🔴 Run agent bake-off: Manus vs AutoGPT vs OpenClaw (Internal)
+4. 🟡 Build Hailuo video generation POC for SA e-commerce (Revenue)
+5. 🟡 Package "Solopreneur in a Box" offering (New product)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"We don't compete with Big Tech on their terms.
+ We build on African terms."
+  — OGRE Computer, Dark Factory
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OGRE MIDNIGHT BUILD | RESEARCH BRIEF
+NEXT UPDATE: 2026-08-01 | openclaw.ai | D@RK F@C#ORY VM

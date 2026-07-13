@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudEx Health — PharmaSyntez Products | OGRE Computer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--surface:#0F0F0F;--surface2:#141414;--border:#1E1E1E;--gold:#C9A84C;--gold-d:#9A7A3A;--cyan:#29B6F6;--green:#4CAF50;--red:#E05050;--text:#F0EDE6;--muted:#888;--muted2:#555;--fd:'Cormorant Garamond',Georgia,serif;--fm:'JetBrains Mono',monospace;--fb:'Inter',system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6;overflow-x:hidden}
+h1,h2,h3{font-family:var(--fd);font-weight:700;line-height:1.15}
+.mono{font-family:var(--fm)}
+.label{font-family:var(--fm);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+section{padding:80px 0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:oklch(5% 0 0/.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.25em;text-transform:uppercase}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.cart-btn{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border2);padding:10px 16px;cursor:pointer;transition:all .2s}
+.cart-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cart-count{background:var(--gold);color:#080808;width:16px;height:16px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700}
+
+/* HERO BANNER */
+.store-hero{background:linear-gradient(135deg,#080808 0%,#0d1a0d 50%,#080808 100%);border-bottom:1px solid var(--border);padding:120px 0 80px;position:relative;overflow:hidden}
+.store-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,oklch(72% .16 85 / .06) 0%,transparent 70%);pointer-events:none}
+.hero-content{position:relative;max-width:700px}
+.hero-content .label{margin-bottom:20px}
+.hero-content h1{font-size:clamp(44px,6vw,80px);margin-bottom:20px}
+.hero-content h1 em{font-style:italic;color:var(--gold)}
+.hero-content p{font-size:18px;color:var(--muted);max-width:500px;line-height:1.65;margin-bottom:32px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-powered{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2);margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+.hero-powered span{color:var(--gold)}
+
+/* BANNER STRIP */
+.banner-strip{display:flex;border-bottom:1px solid var(--border);overflow:hidden}
+.banner-item{flex:1;padding:20px 24px;border-right:1px solid var(--border);display:flex;align-items:center;gap:12px;font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.banner-item:last-child{border-right:none}
+.banner-item span{color:var(--gold);font-size:18px}
+
+/* CATEGORY NAV */
+.cat-nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:69px;z-index:90}
+.cat-nav-inner{display:flex;gap:0;overflow-x:auto;padding:0}
+.cat-btn{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:16px 28px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;background:none;border:none;border-right:1px solid var(--border)}
+.cat-btn:hover{color:var(--gold)}
+.cat-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* PRODUCTS */
+.products-section{border-top:1px solid var(--border)}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:40px}
+.product-card{background:var(--surface);border:1px solid var(--border);padding:0;transition:all .3s;cursor:pointer;position:relative;overflow:hidden}
+.product-card:hover{border-color:oklch(72% .16 85 / .3);transform:translateY(-2px)}
+.product-img{height:180px;background:linear-gradient(135deg,#0d1a0d,#0a0a0a);display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;border-bottom:1px solid var(--border)}
+.product-badge{position:absolute;top:12px;left:12px;font-family:var(--fm);font-size:7px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;background:var(--gold);color:#080808;font-weight:700}
+.product-badge.new{background:var(--green);color:#fff}
+.product-badge.bestseller{background:var(--red);color:#fff}
+.product-info{padding:20px}
+.product-category{font-family:var(--fm);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.product-name{font-family:var(--fd);font-size:18px;font-weight:700;margin-bottom:4px;line-height:1.2}
+.product-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.product-uses{font-size:11px;color:var(--muted2);margin-bottom:16px}
+.product-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border)}
+.product-price{font-family:var(--fd);font-size:22px;font-weight:700;color:var(--gold)}
+.product-price span{font-size:12px;color:var(--muted);margin-left:4px}
+.product-add{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;background:var(--gold);color:#080808;border:none;cursor:pointer;font-weight:700;transition:background .2s}
+.product-add:hover{background:oklch(82% .18 85)}
+
+/* ABOUT PHARMASYNTEZ */
+.about-section{background:var(--surface);border-top:1px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:40px}
+.about-text h3{font-size:28px;margin-bottom:16px}
+.about-text p{color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:16px}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.about-stat{background:var(--bg);border:1px solid var(--border);padding:24px;text-align:center}
+.about-stat-val{font-family:var(--fd);font-size:36px;font-weight:700;color:var(--gold);line-height:1}
+.about-stat-lbl{font-family:var(--fm);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.about-img{background:var(--bg);border:1px solid var(--border);padding:40px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px}
+.about-img-icon{font-size:80px;margin-bottom:20px;filter:drop-shadow(0 0 20px oklch(72% .16 85 / .2))}
+.about-img-note{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2);margin-top:16px}
+
+/* CART */
+.cart-panel{position:fixed;top:0;right:0;bottom:0;width:400px;background:var(--surface);border-left:1px solid var(--border);z-index:200;transform:translateX(100%);transition:transform .3s;padding:24px;display:flex;flex-direction:column}
+.cart-panel.open{transform:translateX(0)}
+.cart-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.cart-title{font-family:var(--fm);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.cart-close{font-family:var(--fm);font-size:18px;color:var(--muted);cursor:pointer;background:none;border:none}
+.cart-items{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.cart-item{display:flex;gap:12px;padding:12px;background:var(--bg);border:1px solid var(--border)}
+.cart-item-img{width:48px;height:48px;background:linear-gradient(135deg,#0d1a0d,#0a0a0a);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.cart-item-name{font-weight:600;font-size:14px;margin-bottom:2px}
+.cart-item-desc{font-size:11px;color:var(--muted)}
+.cart-item-price{font-family:var(--fm);font-size:12px;color:var(--gold);margin-top:4px}
+.cart-footer{padding-top:20px;border-top:1px solid var(--border)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cart-total-label{font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.cart-total-amount{font-family:var(--fd);font-size:28px;font-weight:700;color:var(--gold)}
+.cart-checkout{width:100%;padding:14px;background:var(--gold);color:#080808;border:none;font-family:var(--fm);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.cart-checkout:hover{background:oklch(82% .18 85)}
+.cart-note{font-family:var(--fm);font-size:8px;letter-spacing:.1em;color:var(--muted2);text-align:center;margin-top:12px}
+
+/* CTA SECTION */
+.cta-section{background:var(--surface);border-top:1px solid var(--border);text-align:center}
+.cta-section h2{margin:16px 0 12px}
+.cta-section p{color:var(--muted);max-width:560px;margin:0 auto 32px}
+.btn{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
+.btn-gold{background:var(--gold);color:#080808;border-color:var(--gold)}
+.btn-gold:hover{background:oklch(82% .18 85)}
+.btn-outline{background:transparent;color:var(--muted);border-color:var(--border2)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:center}
+footer p{font-family:var(--fm);font-size:9px;letter-spacing:.2em;color:var(--muted2);text-transform:uppercase}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:900px){nav{padding:16px 24px}.nav-links{display:none}.container{padding:0 24px}.products-grid{grid-template-columns:repeat(2,1fr)}.about-grid{grid-template-columns:1fr}.cart-panel{width:100%}footer{flex-direction:column;gap:16px;text-align:center}}
+@media(max-width:600px){.products-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">StudEx Health <span style="color:var(--muted);font-weight:400">// Powered by PharmaSyntez</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">LAISA</a></li>
+    <li><a href="invoice.html">Invoice</a></li>
+    <li><a href="global-markets.html">Global VM</a></li>
+    <li><a href="store.html">Health Store</a></li>
+  </ul>
+  <button class="cart-btn" onclick="toggleCart()">
+    <span>Cart</span>
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="store-hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="label">StudEx Health — Official PharmaSyntez Distribution Partner</div>
+      <h1>Authentic Pharma.<br><em>Delivered to You.</em></h1>
+      <p>PharmaSyntez pharmaceutical products, distributed in Africa by Studex Group. Authentic, GMP-certified, competitively priced. Delivered across South Africa and the continent.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Browse Products</button>
+        <a href="global-markets.html" class="btn btn-outline">Join Distribution Network</a>
+      </div>
+      <div class="hero-powered">
+        Powered by <span>PharmaSyntez</span> · <span>OGRE Computer</span> · <span>D@RK F@C#ORY</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER STRIP -->
+<div class="banner-strip">
+  <div class="banner-item"><span>✓</span> GMP Certified — PharmaSyntez Russia</div>
+  <div class="banner-item"><span>✓</span> Authenticated Products — No Counterfeit</div>
+  <div class="banner-item"><span>✓</span> Cold Chain Distribution Across Africa</div>
+  <div class="banner-item"><span>✓</span> Studex Group — SAHPRA Compliant</div>
+  <div class="banner-item"><span>✓</span> LAISA AI Compliance Audit Trail</div>
+</div>
+
+<!-- CATEGORY NAV -->
+<div class="cat-nav">
+  <div class="cat-nav-inner">
+    <button class="cat-btn active" onclick="filterCategory('all')">All Products</button>
+    <button class="cat-btn" onclick="filterCategory('anti-infective')">Anti-Infectives</button>
+    <button class="cat-btn" onclick="filterCategory('cardiology')">Cardiology</button>
+    <button class="cat-btn" onclick="filterCategory('diabetes')">Diabetes</button>
+    <button class="cat-btn" onclick="filterCategory('neurology')">Neurology</button>
+    <button class="cat-btn" onclick="filterCategory('oncology')">Oncology</button>
+    <button class="cat-btn" onclick="filterCategory('supplements')">Supplements</button>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="container">
+    <div class="label">Product Catalog</div>
+    <h2 style="margin:16px 0 0">Available Products</h2>
+    <div class="products-grid" id="productGrid">
+
+      <div class="product-card" data-category="anti-infective">
+        <div class="product-img">💊
+          <span class="product-badge">GMP</span>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Anti-Infective · Anti-TB</div>
+          <div class="product-name">Rifampicin 150mg</div>
+          <div class="product-desc">Pharmasyntez Anti-TB formulation. First-line tuberculosis treatment. GMP certified manufacturing.</div>
+          <div class="product-uses">TB treatment · Respiratory infection · Hospital supply</div>
+          <div class="product-footer">
+            <div class="product-price">R89 <span>per strip/30 tabs</span></div>
+            <button class="product-add" onclick="addToCart('Rifampicin 150mg', 89)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="cardiology">
+        <div class="product-img">❤️
+          <span class="product-badge bestseller">Bestseller</span>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Cardiology · Blood Pressure</div>
+          <div class="product-name">Amlodipine 5mg</div>
+          <div class="product-desc">Pharmasyntez calcium channel blocker. Hypertension management. Long-acting formulation.</div>
+          <div class="product-uses">Hypertension · Angina · Cardiovascular risk</div>
+          <div class="product-footer">
+            <div class="product-price">R124 <span>per strip/30 tabs</span></div>
+            <button class="product-add" onclick="addToCart('Amlodipine 5mg', 124)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="diabetes">
+        <div class="product-img">🩺
+          <span class="product-badge new">New</span>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Diabetes · Glucose Control</div>
+          <div class="product-name">Metformin 500mg</div>
+          <div class="product-desc">Pharmasyntez biguanide. First-line Type 2 diabetes treatment. Proven efficacy, SAHPRA approved.</div>
+          <div class="product-uses">Type 2 Diabetes · Insulin resistance · PCOS</div>
+          <div class="product-footer">
+            <div class="product-price">R67 <span>per strip/30 tabs</span></div>
+            <button class="product-add" onclick="addToCart('Metformin 500mg', 67)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="neurology">
+        <div class="product-img">🧠
+        </div>
+        <div class="product-info">
+          <div class="product-category">Neurology · Cognitive</div>
+          <div class="product-name">Piracetam 800mg</div>
+          <div class="product-desc">Pharmasyntez nootropic. Cognitive enhancement, memory support, post-stroke recovery. Used in neurological rehabilitation.</div>
+          <div class="product-uses">Cognitive decline · Stroke recovery · Dementia support</div>
+          <div class="product-footer">
+            <div class="product-price">R198 <span>per strip/30 tabs</span></div>
+            <button class="product-add" onclick="addToCart('Piracetam 800mg', 198)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="oncology">
+        <div class="product-img">🧬
+          <span class="product-badge">Specialist</span>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Oncology · Biopharmaceutical</div>
+          <div class="product-name">Paclitaxel 100mg</div>
+          <div class="product-desc">Pharmasyntez oncology injectable. Taxane chemotherapy agent. Specialist prescription required. Full oncology protocol support via LAISA compliance.</div>
+          <div class="product-uses">Breast cancer · Ovarian cancer · Lung cancer</div>
+          <div class="product-footer">
+            <div class="product-price">R2,450 <span>per vial</span></div>
+            <button class="product-add" onclick="addToCart('Paclitaxel 100mg', 2450)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="anti-infective">
+        <div class="product-img">💉</div>
+        <div class="product-info">
+          <div class="product-category">Anti-Infective · Antibiotic</div>
+          <div class="product-name">Azithromycin 500mg</div>
+          <div class="product-desc">Pharmasyntez macrolide antibiotic. Respiratory infections, STIs, skin infections. Short-course therapy.</div>
+          <div class="product-uses">Respiratory infection · Chlamydia · Skin infection</div>
+          <div class="product-footer">
+            <div class="product-price">R156 <span>per strip/3 tabs</span></div>
+            <button class="product-add" onclick="addToCart('Azithromycin 500mg', 156)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="supplements">
+        <div class="product-img">🌿
+          <span class="product-badge new">New</span>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Dietary Supplement</div>
+          <div class="product-name">Immunoglobulin Complex</div>
+          <div class="product-desc">Pharmasyntez immunomodulator. Immune system support, post-illness recovery, chronic immune deficiency. GMP certified.</div>
+          <div class="product-uses">Immune support · Post-COVID recovery · Chronic illness</div>
+          <div class="product-footer">
+            <div class="product-price">R345 <span>per bottle/60 caps</span></div>
+            <button class="product-add" onclick="addToCart('Immunoglobulin Complex', 345)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="cardiology">
+        <div class="product-img">💊</div>
+        <div class="product-info">
+          <div class="product-category">Cardiology · Anticoagulant</div>
+          <div class="product-name">Warfarin 5mg</div>
+          <div class="product-desc">Pharmasyntez anticoagulant. Blood clot prevention, atrial fibrillation, DVT prophylaxis. Full INR monitoring via LAISA health protocol.</div>
+          <div class="product-uses">AF · DVT · Pulmonary embolism · Heart valve</div>
+          <div class="product-footer">
+            <div class="product-price">R89 <span>per strip/30 tabs</span></div>
+            <button class="product-add" onclick="addToCart('Warfarin 5mg', 89)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT PHARMASYNTEZ -->
+<section class="about-section">
+  <div class="container">
+    <div class="label">About PharmaSyntez</div>
+    <h2 style="margin:16px 0 0">Russia's Top 3 Fastest-Growing<br>Pharmaceutical Company</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>Creating Drugs to Save Lives</h3>
+        <p>Pharmasyntez Group operates five pharmaceutical manufacturing plants across Russia — Moscow, St. Petersburg, Tyumen, Bratsk, and Irkutsk. Ranked among the top 3 fastest-growing pharmaceutical companies in Russia, achieving 52% year-on-year growth.</p>
+        <p>Products include Anti-TB drugs, antibiotics, cardiology medications, diabetes treatments, oncology injectables, neurology drugs, and biopharmaceuticals — all GMP certified for international export.</p>
+        <div class="about-stats">
+          <div class="about-stat"><div class="about-stat-val">52%</div><div class="about-stat-lbl">YoY Revenue Growth</div></div>
+          <div class="about-stat"><div class="about-stat-val">5</div><div class="about-stat-lbl">Manufacturing Plants</div></div>
+          <div class="about-stat"><div class="about-stat-val">100+</div><div class="about-stat-lbl">Product Registrations</div></div>
+          <div class="about-stat"><div class="about-stat-val">14+</div><div class="about-stat-lbl">Countries Reached</div></div>
+        </div>
+      </div>
+      <div class="about-img">
+        <div class="about-img-icon">🏭</div>
+        <div style="font-family:var(--fd);font-size:24px;font-weight:700;color:var(--gold);margin-bottom:8px">Pharmasyntez Russia</div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:8px">Five cities. Five plants. One mission.</div>
+        <div style="font-size:12px;color:var(--muted2)">Moscow · St. Petersburg · Tyumen<br>Bratsk · Irkutsk</div>
+        <div class="about-img-note">GMP Certified · SAHPRA Registered · ISO Compliant</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="label">For Prescribers &amp; Distributors</div>
+    <h2>Want to stock PharmaSyntez products<br>in your pharmacy or clinic?</h2>
+    <p>Apply to become a Studex Group pharmaceutical distributor. LAISA handles all POPIA compliance, stock management, and order tracking automatically.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="global-markets.html#offer" class="btn btn-gold">Apply as Distributor</a>
+      <a href="global-markets.html" class="btn btn-outline">View Global VM Offer</a>
+    </div>
+  </div>
+</section>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <span class="cart-title">Your Cart</span>
+    <button class="cart-close" onclick="toggleCart()">×</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div style="text-align:center;color:var(--muted2);padding:40px 0;font-size:14px">No products added yet.<br><br>Browse our PharmaSyntez catalog above.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">Total (ZAR)</span>
+      <span class="cart-total-amount" id="cartTotal">R0</span>
+    </div>
+    <button class="cart-checkout" onclick="checkout()">Request Quotation →</button>
+    <div class="cart-note">Prices in South African Rand. Excludes VAT. Subject to availability and prescription requirements for scheduled medicines.</div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Studex Health — Powered by <a href="https://pharmasyntez.com" target="_blank">PharmaSyntez</a> — Distributed by <a href="#">OGRE Computer</a></p>
+  <p>SAHPRA Registered Distributor · POPIA Compliant · D@RK F@C#ORY VM</p>
+</footer>
+
+<script>
+let cart = [];
+
+function addToCart(name, price) {
+  const existing = cart.find(i => i.name === name);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+  updateCart();
+}
+
+function removeFromCart(name) {
+  cart = cart.filter(i => i.name !== name);
+  updateCart();
+}
+
+function updateCart() {
+  document.getElementById('cartCount').textContent = cart.reduce((s, i) => s + i.qty, 0);
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  document.getElementById('cartTotal').textContent = 'R' + total.toLocaleString();
+
+  const itemsEl = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    itemsEl.innerHTML = '<div style="text-align:center;color:var(--muted2);padding:40px 0;font-size:14px">No products added yet.<br><br>Browse our PharmaSyntez catalog above.</div>';
+  } else {
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-img">💊</div>
+        <div style="flex:1">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-desc">Qty: ${item.qty}</div>
+          <div class="cart-item-price">R${(item.price * item.qty).toLocaleString()}</div>
+        </div>
+        <button onclick="removeFromCart('${item.name}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px;align-self:flex-start">×</button>
+      </div>
+    `).join('');
+  }
+}
+
+function toggleCart() {
+  document.getElementById('cartPanel').classList.toggle('open');
+}
+
+function checkout() {
+  if (cart.length === 0) return;
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const items = cart.map(i => `${i.name} x${i.qty} = R${(i.price * i.qty).toLocaleString()}`).join('\n');
+  const body = encodeURIComponent(`STUDENT HEALTH STORE — QUOTATION REQUEST\n\nProducts:\n${items}\n\nTotal: R${total.toLocaleString()}\n\nPlease send this quotation to me. I am interested in purchasing the above PharmaSyntez products.`);
+  window.location.href = `mailto:agent@stud.exchange?subject=Pharmacy Product Quotation Request&body=${body}`;
+}
+
+function filterCategory(cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => {
+    if (cat === 'all' || card.dataset.category === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Intelligence Briefing - 2026-06-24</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400italic&display=swap');
+:root{--gold:#C9A84C;--gold-l:rgba(201,168,76,0.10);--bg:#0A0A0A;--panel:#111111;--panel2:#141414;--border:#1E1E1E;--text:#F0EDE6;--muted:#888;--red:#FF4444;--orange:#FF8C42;--yellow:#F5C518;--green:#4CAF50;--cyan:#29B6F6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-left{display:flex;align-items:center;gap:20px;}
+.brand{font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.25em;text-transform:uppercase;}
+.topbar-nav{display:flex;gap:4px;}
+.topbar-nav a{font-size:12px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;transition:color .15s,background .15s;}
+.topbar-nav a:hover{color:var(--text);background:var(--panel2);}
+.topbar-nav a.active{color:var(--gold);}
+.clock{font-family:JetBrains Mono,monospace;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.container{max-width:1100px;margin:0 auto;padding:0 24px 60px;}
+.hero{padding:56px 0 40px;border-bottom:1px solid var(--border);}
+.hero-eyebrow{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--gold);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--gold);}
+.hero h1{font-family:Newsreader,Georgia,serif;font-size:clamp(32px,5vw,52px);font-weight:700;color:var(--gold);line-height:1.15;margin-bottom:12px;max-width:720px;}
+.hero-sub{font-size:15px;color:var(--muted);margin-bottom:32px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-sub span{display:flex;align-items:center;gap:5px;}
+.hero-verdict{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:20px 24px;max-width:800px;}
+.hero-verdict p{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:17px;color:var(--text);line-height:1.7;}
+.priority-strip{padding:28px 0;border-bottom:1px solid var(--border);}
+.priority-strip-label{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted);letter-spacing:0.25em;text-transform:uppercase;margin-bottom:14px;}
+.priority-list{display:flex;flex-direction:column;gap:10px;}
+.priority-item{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px 16px;cursor:pointer;transition:border-color .15s,background .15s;}
+.priority-item:hover{border-color:var(--gold);background:var(--gold-l);}
+.priority-rank{font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rank-1 .priority-rank{background:var(--red);color:#fff;}
+.rank-2 .priority-rank{background:var(--orange);color:#fff;}
+.rank-3 .priority-rank{background:var(--yellow);color:#111;}
+.rank-4 .priority-rank{background:var(--green);color:#fff;}
+.rank-5 .priority-rank{background:var(--cyan);color:#111;}
+.priority-body{flex:1;min-width:0;}
+.priority-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.priority-meta{font-size:11px;color:var(--muted);display:flex;gap:14px;margin-top:2px;flex-wrap:wrap;}
+.priority-badge{font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;flex-shrink:0;}
+.badge-red{background:rgba(255,68,68,0.15);color:var(--red);}
+.badge-orange{background:rgba(255,140,66,0.15);color:var(--orange);}
+.badge-yellow{background:rgba(245,197,24,0.15);color:var(--yellow);}
+.badge-green{background:rgba(76,175,80,0.15);color:var(--green);}
+.badge-cyan{background:rgba(41,182,246,0.15);color:var(--cyan);}
+.section{padding:36px 0;border-bottom:1px solid var(--border);}
+.section:last-child{border-bottom:none;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:8px;}
+.section-title{font-family:Newsreader,Georgia,serif;font-size:22px;font-weight:700;color:var(--text);}
+.section-tag{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted);background:var(--panel);border:1px solid var(--border);padding:3px 8px;border-radius:3px;}
+.country-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
+.country-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:18px 20px;transition:border-color .15s;}
+.country-card:hover{border-color:rgba(201,168,76,0.4);}
+.country-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.country-flag-name{display:flex;align-items:center;gap:8px;}
+.country-flag{font-size:20px;}
+.country-name{font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:700;color:var(--text);}
+.country-builders{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+.country-builders strong{color:var(--text);font-weight:600;}
+.country-ogre{background:var(--gold-l);border:1px solid rgba(201,168,76,0.2);border-radius:4px;padding:8px 10px;font-size:12px;color:var(--text);line-height:1.55;}
+.country-ogre::before{content:"OGRE \2192 ";color:var(--gold);font-weight:700;font-family:JetBrains Mono,monospace;font-size:10px;}
+.urgency-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-high{background:var(--red);box-shadow:0 0 6px rgba(255,68,68,0.6);}
+.dot-mid{background:var(--orange);box-shadow:0 0 6px rgba(255,140,66,0.5);}
+.dot-low{background:var(--green);}
+.sa-panel{background:var(--panel);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:28px;position:relative;overflow:hidden;}
+.sa-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent);}
+.sa-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.sa-title{font-family:Newsreader,Georgia,serif;font-size:22px;font-weight:700;color:var(--gold);}
+.sa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px;}
+.sa-metric{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px 16px;}
+.sa-metric-value{font-family:JetBrains Mono,monospace;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:3px;}
+.sa-metric-label{font-size:11px;color:var(--muted);}
+.sa-builders-label{font-size:11px;color:var(--muted);font-family:JetBrains Mono,monospace;letter-spacing:0.08em;margin-bottom:12px;}
+.sa-builders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-bottom:20px;}
+.sa-builder{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);}
+.sa-builder-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.sa-cta{background:var(--gold-l);border:1px solid rgba(201,168,76,0.25);border-radius:6px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px;}
+.sa-cta-icon{font-size:28px;flex-shrink:0;line-height:1;padding-top:2px;}
+.sa-cta-text{font-size:13px;color:var(--text);line-height:1.6;}
+.sa-cta-text strong{color:var(--gold);}
+.matrix-table{width:100%;border-collapse:collapse;font-size:12px;}
+.matrix-table th{font-family:JetBrains Mono,monospace;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;}
+.matrix-table td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text);line-height:1.5;}
+.matrix-table tr:last-child td{border-bottom:none;}
+.matrix-table tr:hover td{background:var(--panel);}
+.col-rank{color:var(--muted);font-family:JetBrains Mono,monospace;font-size:11px;width:32px;}
+.col-size{color:var(--gold);font-family:JetBrains Mono,monospace;font-size:11px;white-space:nowrap;}
+.col-timeline{font-size:11px;color:var(--muted);white-space:nowrap;}
+.col-urgency{width:90px;}
+.verdict-block{background:var(--panel);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 36px;position:relative;overflow:hidden;}
+.verdict-watermark{position:absolute;top:-20px;right:24px;font-family:Newsreader,serif;font-size:120px;color:rgba(201,168,76,0.05);line-height:1;pointer-events:none;user-select:none;}
+.verdict-eyebrow{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--gold);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:16px;}
+.verdict-text{font-family:Newsreader,Georgia,serif;font-size:19px;font-style:italic;color:var(--text);line-height:1.85;max-width:780px;position:relative;}
+.verdict-tags{margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;position:relative;}
+.footer{padding:32px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+.footer-brand{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;}
+.footer-meta{font-size:11px;color:var(--muted);line-height:1.8;}
+.footer-sources{font-size:11px;color:var(--muted);max-width:420px;line-height:1.6;}
+.footer-sources strong{color:var(--text);}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0;}
+@media print{.topbar{display:none}body{background:white;color:#111}.country-card,.sa-panel{border:1px solid #ccc;background:#f9f9f9}}
+@media(max-width:640px){.topbar-nav{display:none}.country-grid{grid-template-columns:1fr}.sa-grid{grid-template-columns:1fr 1fr}.footer{flex-direction:column}.priority-meta{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="brand">&#9670; OGRE COMPUTER</span>
+    <nav class="topbar-nav">
+      <a href="index.html">Dashboard</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="roi-calculator.html">ROI Calc</a>
+      <a href="briefing.html" class="active">Briefing</a>
+    </nav>
+  </div>
+  <span class="clock"><span class="live-dot"></span>&nbsp;<span id="clock-time">--:--:--</span> UTC</span>
+</div>
+<div class="container">
+<div class="hero">
+  <div class="hero-eyebrow">Midnight Build Intelligence &mdash; Cycle 2026-06-24</div>
+  <h1>Global AI Frontier:<br>The World Builds South</h1>
+  <div class="hero-sub">
+    <span>&#128197; 24 June 2026</span>
+    <span>&#127757; 9 Countries Scanned</span>
+    <span style="color:var(--red);">&#9679; 5 High-Urgency Markets</span>
+    <span>&#9889; 21 Action Items</span>
+  </div>
+  <div class="hero-verdict">
+    <p>The world&apos;s AI buildout has shifted permanently south. Not because Silicon Valley failed &mdash; because the problems are African now. Load-shedding prediction, crop insurance for 200M smallholders, KYC for 800M people with no credit file, vernacular content at scale, cross-border remittances at $40B+ &mdash; these are not edge cases. They are the main event. And every single one of them is being solved right now in Lagos, Sao Paulo, Accra, and Bangalore. OGRE&apos;s mandate is to be the layer that connects those solutions to South African and Global South clients &mdash; sovereign, fast, and trusted.</p>
+  </div>
+</div>
+
+<div class="priority-strip">
+  <div class="priority-strip-label">&mdash; Strategic Priority Queue &mdash;</div>
+  <div class="priority-list">
+    <div class="priority-item rank-1" onclick="document.getElementById('sa').scrollIntoView({behavior:'smooth'})">
+      <div class="priority-rank">01</div>
+      <div class="priority-body">
+        <div class="priority-title">Pan-African Payment AI Gateway</div>
+        <div class="priority-meta"><span>Flutterwave API + OGRE AI FX/compliance layer</span><span style="color:var(--red);">$12B/yr cross-border market</span></div>
+      </div>
+      <span class="priority-badge badge-red">90 DAY MVP</span>
+    </div>
+    <div class="priority-item rank-2" onclick="document.getElementById('sa').scrollIntoView({behavior:'smooth'})">
+      <div class="priority-rank">02</div>
+      <div class="priority-body">
+        <div class="priority-title">African Sovereign Health AI Layer</div>
+        <div class="priority-meta"><span>Discovery Health + CSIR data + OGRE platform</span><span style="color:var(--orange);">$3.2B AU Health Fund</span></div>
+      </div>
+      <span class="priority-badge badge-orange">120 DAY PILOT</span>
+    </div>
+    <div class="priority-item rank-3">
+      <div class="priority-rank">03</div>
+      <div class="priority-body">
+        <div class="priority-title">DeepSeek / Qwen Sovereign Cloud</div>
+        <div class="priority-meta"><span>Licensed Chinese models on SA-hosted infrastructure</span><span style="color:var(--yellow);">$800M African enterprise AI</span></div>
+      </div>
+      <span class="priority-badge badge-yellow">180 DAYS</span>
+    </div>
+    <div class="priority-item rank-4">
+      <div class="priority-rank">04</div>
+      <div class="priority-body">
+        <div class="priority-title">African-Language AI Product Line</div>
+        <div class="priority-meta"><span>Adapt Krutrim Indic playbook for isiZulu, Sesotho, Afrikaans</span><span style="color:var(--green);">$400M vernacular AI market</span></div>
+      </div>
+      <span class="priority-badge badge-green">12 MONTHS</span>
+    </div>
+    <div class="priority-item rank-5">
+      <div class="priority-rank">05</div>
+      <div class="priority-body">
+        <div class="priority-title">SA Government AI Services Contract Vehicle</div>
+        <div class="priority-meta"><span>Certified AI partner for Ghana RAI + SA DoH</span><span style="color:var(--cyan);">$250M in 3 years</span></div>
+      </div>
+      <span class="priority-badge badge-cyan">60 DAY PROPOSAL</span>
+    </div>
+  </div>
+</div>
+<div class="section" id="sa">
+  <div class="section-header">
+    <h2 class="section-title">South Africa &mdash; The Sleeping Giant Wakes</h2>
+    <span class="section-tag">HOME MARKET</span>
+  </div>
+  <div class="sa-panel">
+    <div class="sa-header">
+      <div class="sa-title">Smart Health Africa 2026 &mdash; Today</div>
+      <div class="urgency-dot dot-high"></div>
+    </div>
+    <div class="sa-grid">
+      <div class="sa-metric"><div class="sa-metric-value">4.5M+</div><div class="sa-metric-label">Discovery Health AI lives covered</div></div>
+      <div class="sa-metric"><div class="sa-metric-value">$800M</div><div class="sa-metric-label">AU Africa Health Sovereignty Fund &mdash; Q3 2026</div></div>
+      <div class="sa-metric"><div class="sa-metric-value">R2.7B</div><div class="sa-metric-label">SA Green Economy incentives available now</div></div>
+      <div class="sa-metric"><div class="sa-metric-value">1.2M</div><div class="sa-metric-label">SA SMMEs &mdash; OGRE addressable market</div></div>
+    </div>
+    <div class="sa-builders-label">WHO&apos;S BUILDING RIGHT NOW</div>
+    <div class="sa-builders-grid">
+      <div class="sa-builder"><div class="sa-builder-dot"></div>Discovery Health AI &mdash; clinical decision support</div>
+      <div class="sa-builder"><div class="sa-builder-dot"></div>Media24 &mdash; vernacular AI content (3 languages)</div>
+      <div class="sa-builder"><div class="sa-builder-dot"></div>Brainbox AI &mdash; commercial building energy</div>
+      <div class="sa-builder"><div class="sa-builder-dot"></div>CSIR AI for Public Good &mdash; rural health + load-shedding</div>
+      <div class="sa-builder"><div class="sa-builder-dot"></div>Smart Health Africa 2026 Summit &mdash; June 24</div>
+    </div>
+    <div class="sa-cta">
+      <div class="sa-cta-icon">&#128567;</div>
+      <div class="sa-cta-text">
+        <strong>Highest-Conviction Internal Build:</strong> African Sovereign Health AI Layer &mdash; combining Discovery Health&apos;s clinical data architecture, the CSIR&apos;s rural health models, and an open API African health ministries can plug into. Healthcare data sovereignty is a stated national priority for <strong>14 African governments</strong>. Procurement cycles open July 2026. AU Health Fund allocates Q3 2026.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Global AI Landscape &mdash; 8 Markets</h2>
+    <span class="section-tag">COUNTRY INTELLIGENCE</span>
+  </div>
+  <div class="country-grid">
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127482;&#127480;</span><span class="country-name">United States</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>OpenAI</strong> (GPT-5 autonomous agents) &middot; <strong>Anthropic</strong> (Claude Corps, $65B round) &middot; <strong>xAI</strong> (Grok Build) &middot; <strong>Google</strong> (Gemini 2.5 Ultra)</div>
+      <div class="country-ogre">License DeepSeek R2 open-weight models for OGRE&apos;s sovereign AI stack. Build multilingual agentic workflow layer (English, Zulu, Afrikaans, Xhosa) &mdash; no Western lab currently serves this. Anthropic&apos;s June 2026 geo-restriction creates a once-in-a-decade opening for African enterprise adoption.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127464;&#127475;</span><span class="country-name">China</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>DeepSeek V4-Pro</strong> &middot; <strong>MiniMax M3</strong> (near-zero API cost) &middot; <strong>Qwen3-235B</strong> (most deployed open-weight in Asia/Africa) &middot; <strong>ByteDance Doubao</strong> (500M+ endpoints)</div>
+      <div class="country-ogre">Stand up DeepSeek/Qwen sovereign AI cloud for African governments with data residency guarantees &mdash; no US provider can offer this. Position OGRE as trusted African gateway to Chinese frontier models. If not us, Chinese cloud providers own African enterprise AI in 24 months.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127471;&#127477;</span><span class="country-name">Japan</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>SoftBank</strong> AI GPU cloud (May 2026) &middot; <strong>Preferred Networks</strong> (&frac12; OpenAI cost) &middot; <strong>Sony-Honda</strong> consortium &middot; &yen;300B NEDO consortium</div>
+      <div class="country-ogre">Partner with PFN or SoftBank to co-develop Southern Hemisphere AI sovereign cloud using Japan&apos;s proven public-private consortium model. Attract SA government backing for local data centre qualifying for SA&apos;s IP &amp; Innovation Incentive tax credits. Open through Q4 2026.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127475;</span><span class="country-name">India</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>Krutrim</strong> (profitable &pound;300Cr, Indic-language AI) &middot; <strong>Infosys.ai</strong> ($500M GCC deal) &middot; <strong>IndiaAI mission</strong> (18 regional language datasets)</div>
+      <div class="country-ogre">Replicate India&apos;s GCC-to-AI-services pipeline: OGRE as AI delivery arm for African multinationals, 40% below Accenture/IBM. Use Krutrim&apos;s Indic-language playbook to launch African-language AI product (isiZulu, Setswana, Sesotho). 3&ndash;5 year window before India replicates GCC model into Africa.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127479;</span><span class="country-name">Brazil</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>Nubank</strong> (R$45B AI investment 2026, credit models open-sourced) &middot; <strong>WildLife Studios</strong> (AI game content) &middot; <strong>SuperFX</strong> (AI FX risk) &middot; <strong>ICLR 2026 Rio</strong></div>
+      <div class="country-ogre">License Nubank&apos;s open-sourced credit model architecture for a SA digital lending spin-off under OGRE umbrella. Africa&apos;s credit underwriting gap (80% unbanked + thin credit files) is structurally identical to Brazil&apos;s 2015 fintech moment. Implementation advantage is highest right now.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127469;</span><span class="country-name">Mexico</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>ODAIA</strong> ($47M pharma AI) &middot; <strong>Bitso</strong> (AI crypto rails, $20B+) &middot; <strong>Kavak</strong> AI &middot; <strong>AI Finance Summit 2026</strong> (12,000 attendees)</div>
+      <div class="country-ogre">Build OGRE AI Remittance Intelligence targeting SA&apos;s R25B annual diaspora remittance corridor &mdash; zero AI optimization exists there today. Bitso&apos;s cross-border AI model as reference. 6&ndash;9 months to adapt for SA SARB regulatory framework.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127475;&#127472;</span><span class="country-name">Nigeria</span></div><div class="urgency-dot dot-high"></div></div>
+      <div class="country-builders"><strong>Flutterwave</strong> ($40B/yr txns, 1B transactions, banking licence) &middot; <strong>Jasiri AI</strong> (micro-lending) &middot; <strong>Touchless.ai</strong> (Africa-first KYC/AML platform)</div>
+      <div class="country-ogre">Integrate Flutterwave API into OGRE payment infrastructure for Pan-African payment AI gateway. SA businesses processing from Nigeria, Ghana, Kenya plug into single OGRE-hosted API for FX, compliance, settlement. Flutterwave&apos;s banking licence makes SA-Nigeria AI corridor commercially viable RIGHT NOW.</div>
+    </div>
+    <div class="country-card">
+      <div class="country-top"><div class="country-flag-name"><span class="country-flag">&#127463;&#127469;</span><span class="country-name">Ghana</span></div><div class="urgency-dot dot-mid"></div></div>
+      <div class="country-builders"><strong>Ghana AI Authority (RAI)</strong> &middot; <strong>Cropin AI</strong> (200K+ smallholder farmers) &middot; <strong>mNotify</strong> (48 ministry AI comms) &middot; <strong>3 new AI bootcamps</strong> H1 2026</div>
+      <div class="country-ogre">Position OGRE as implementation partner for Ghana&apos;s National AI Strategy cross-border components &mdash; agricultural AI and digital ID integration. First South African partner gets a strategic relationship that compounds over the 10-year strategy lifecycle. RAI Authority actively seeking implementation partners in 2026.</div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Priority Matrix &mdash; All 5 Moves</h2>
+    <span class="section-tag">STRATEGIC PLAN</span>
+  </div>
+  <table class="matrix-table">
+    <thead><tr><th class="col-rank">#</th><th>Initiative</th><th>Market Size</th><th>Timeline</th><th class="col-urgency">Urgency</th><th>Key Partner / Model</th></tr></thead>
+    <tbody>
+      <tr><td class="col-rank">01</td><td style="color:var(--red);font-weight:600;">Pan-African Payment AI Gateway</td><td class="col-size">$12B/yr</td><td class="col-timeline">90 days to MVP</td><td><span class="priority-badge badge-red">CRITICAL</span></td><td>Flutterwave (Nigeria)</td></tr>
+      <tr><td class="col-rank">02</td><td style="color:var(--orange);font-weight:600;">African Sovereign Health AI Layer</td><td class="col-size">$3.2B AU Fund</td><td class="col-timeline">120 days to pilot</td><td><span class="priority-badge badge-orange">HIGH</span></td><td>Discovery Health, CSIR, SA DoH</td></tr>
+      <tr><td class="col-rank">03</td><td style="color:var(--yellow);font-weight:600;">DeepSeek / Qwen Sovereign Cloud</td><td class="col-size">$800M</td><td class="col-timeline">180 days to market</td><td><span class="priority-badge badge-yellow">MEDIUM</span></td><td>DeepSeek, Teraco (SA data centre)</td></tr>
+      <tr><td class="col-rank">04</td><td style="color:var(--green);font-weight:600;">African-Language AI Product Line</td><td class="col-size">$400M</td><td class="col-timeline">12 months</td><td><span class="priority-badge badge-green">STANDARD</span></td><td>Krutrim (India), Wits AI Dept</td></tr>
+      <tr><td class="col-rank">05</td><td style="color:var(--cyan);font-weight:600;">SA Government AI Services Contract Vehicle</td><td class="col-size">$250M / 3yr</td><td class="col-timeline">60 days to proposal</td><td><span class="priority-badge badge-cyan">CONTRACT</span></td><td>Ghana RAI, SA GPW</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="section">
+  <div class="section-header"><h2 class="section-title">The 3AM Verdict</h2><span class="section-tag">SYNTHESIS</span></div>
+  <div class="verdict-block">
+    <div class="verdict-watermark">&#9670;</div>
+    <div class="verdict-eyebrow">OGRE MIDNIGHT BUILD &mdash; 2026-06-24</div>
+    <div class="verdict-text">The world&apos;s AI buildout has shifted permanently south. Not because Silicon Valley failed &mdash; because the problems are African now. Load-shedding prediction, crop insurance for 200M smallholders, KYC for 800M people with no credit file, vernacular content at scale, cross-border remittances at $40B+ &mdash; these are not edge cases. They are the main event. And every single one of them is being solved right now in Lagos, Sao Paulo, Accra, and Bangalore. OGRE&apos;s mandate is to be the layer that connects those solutions to South African and Global South clients &mdash; sovereign, fast, and trusted.</div>
+    <div class="verdict-tags">
+      <span class="priority-badge badge-red">9 Countries Scanned</span>
+      <span class="priority-badge badge-orange">21 Action Items</span>
+      <span class="priority-badge badge-yellow">$16.5B Total Addressable Market</span>
+      <span class="priority-badge badge-green">5 Priority Moves</span>
+      <span class="priority-badge badge-cyan">18&ndash;24 Month Window</span>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div>
+    <div class="footer-brand">&#9670; OGRE COMPUTER &mdash; Studex Group</div>
+    <div class="footer-meta">Report ID: OGRE-MIDNIGHT-2026-06-24<br>Compiled: 2026-06-24 03:00 AM SAST &middot; Next cycle: 2026-06-25 03:00 AM SAST<br>Delivered to: Studex Group AI Strategy Team &middot; OGRE Computer Executive</div>
+  </div>
+  <div class="footer-sources"><strong>Sources:</strong> Verified public announcements across all featured companies and government bodies, June 2026. Research window: 2026-05-25 to 2026-06-24. "What OGRE can implement" items are OGRE strategic analysis &mdash; internal only, not for external distribution.</div>
+</div>
+</div>
+<script>
+function updateClock(){var n=new Date(),h=String(n.getUTCHours()).padStart(2,'0'),m=String(n.getUTCMinutes()).padStart(2,'0'),s=String(n.getUTCSeconds()).padStart(2,'0');document.getElementById('clock-time').textContent=h+':'+m+':'+s;}updateClock();setInterval(updateClock,1000);
+</script>
+</body>
+</html>

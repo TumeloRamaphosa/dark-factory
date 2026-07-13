@@ -1,0 +1,127 @@
+═══════════════════════════════════════════════════════
+  OGRE COMPUTER — MORNING BRIEF
+  Wednesday, 24 June 2026 | 08:39 SAST
+  Studex Group — Studex Wildlife Workspace
+═══════════════════════════════════════════════════════
+
+Good morning, Tumelo.
+
+Here's what's live and what's moving today.
+
+─────────────────────────────────────────────────────
+📍 WHAT'S LIVE RIGHT NOW
+─────────────────────────────────────────────────────
+
+✅ LAISA Client Landing Page — JUST DEPLOYED
+   👉 https://kkaje2orwsbt.space.minimax.io
+   Full client-facing page. Six agents, pricing,
+   WhatsApp demo, contact form. Ready to send to
+   any prospective client today.
+
+✅ SafeSight LAISA Demo
+   👉 https://i4fqp9y7bl70.space.minimax.io
+   Working demo with patient intake, CashClaw billing,
+   Charlie voice notes, WhatsApp booking.
+
+✅ CashClaw v1.7 — Installed
+   13 freelance agent skills ready. HYRVE AI
+   marketplace connection is the only step left.
+   See: /workspace/OGRE-Midnight-Build/setup-cashclaw-vm.sh
+
+✅ AgentMail — Setup Script Ready
+   8 agent inboxes available. Run once you have
+   your API key from agentmail.to (free):
+   node setup-agentmail.js create
+
+─────────────────────────────────────────────────────
+⚡ TODAY'S TOP 5 PRIORITIES (from our session)
+─────────────────────────────────────────────────────
+
+  1. 🔴 GoDaddy NS Change — 5 minutes
+     Change stud.exchange nameservers to:
+       marlowe.ns.cloudflare.com
+       ruwayne.ns.cloudflare.com
+     This unlocks: email at agent@stud.exchange,
+     hosting on your own domain, SSL.
+
+  2. 📧 AgentMail — 10 minutes
+     Go to agentmail.to → sign up (free)
+     → get API key → run setup script
+     Then your agents have real email inboxes.
+
+  3. 🦞 CashClaw on VM — Tonight
+     SSH/VNC into D@RK F@C#ORY (orgo.ai)
+     Run: bash setup-cashclaw-vm.sh
+     Your agents go live on HYRVE AI marketplace.
+
+  4. 📬 Cron Emails — FIXED
+     Was broken. Is fixed now.
+     8am brief → delivered here ✓
+     8pm digest → delivered here tonight
+     10pm build → auto-built tonight
+     3am research → 9-country brief tonight
+
+  5. 🌍 African Language Playbook
+     Smart Health Africa summit is TODAY.
+     Discovery Health AI, CSIR, 14 govt health
+     ministries in one room. Your window to
+     position OGRE as the African health AI
+     platform is RIGHT NOW.
+
+─────────────────────────────────────────────────────
+🧠 SKILL TIP OF THE DAY
+─────────────────────────────────────────────────────
+
+  Skill: last30days-skill
+  What it does: Searches Reddit, X, YouTube, HN,
+    Polymarket, GitHub — scored by real engagement,
+    not editors.
+  Use it now: Before any client call, run:
+    /last30days [client name or industry]
+    Know the last 30 days of truth before
+    you walk in the room.
+
+─────────────────────────────────────────────────────
+🌍 LOCAL AI SIGNAL — SOUTH AFRICA, JUNE 2026
+─────────────────────────────────────────────────────
+
+  🇿🇦 Smart Health Africa Summit — JUNE 24 (TODAY)
+     Discovery Health AI + CSIR presenting.
+     AU Health Sovereignty Fund ($800M) allocates Q3.
+     OGRE should be in that room — virtually or
+     in person — this week.
+
+  🇮🇳 India Model to Copy:
+     Krutrim (WhatsApp-first AI, Indic languages)
+     → Apply to SA: ChatterClaw + WhatsApp Business
+       + Charlie voice + isiZulu/Afrikaans models
+
+  🇨🇳 China Signal:
+     DeepSeek V4-Pro is free, open-weight, runs
+     on D@RK F@C#ORY. Patient data stays in SA.
+     No US export restrictions. No US costs.
+
+─────────────────────────────────────────────────────
+📚 YOUR LEARNING PATH — TODAY
+─────────────────────────────────────────────────────
+
+  Keep going with: Claude Introduction course
+  Tonight, try this in your VM:
+    last30days "AI agents South Africa SME 2026"
+    agent-reach search "OGRE Computer"
+  Goal: Build your first client-facing AI demo
+  using LAISA + CashClaw + AgentMail together.
+
+─────────────────────────────────────────────────────
+QUOTE OF THE DAY
+─────────────────────────────────────────────────────
+
+  "The best time to plant a tree was 20 years ago.
+   The second best time is now."
+   — African proverb
+
+─────────────────────────────────────────────────────
+Ready. Let's build.
+— OGRE Computer Agent System
+   D@RK F@C#ORY | stud.exchange | OpenClaw v4.2.1
+═══════════════════════════════════════════════════════

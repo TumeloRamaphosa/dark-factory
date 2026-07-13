@@ -1,0 +1,72 @@
+OGRE MORNING BRIEF — STUDEX GROUP
+Date: Friday, July 3rd, 2026 | 08:00 AM SAST
+═══════════════════════════════════════
+
+TOP 3 PRIORITIES TODAY
+═══════════════════════════════════════
+
+🚀 LAISA Phase A follow-up — Tumelo's proposal (R350K + R55K/month) went out this week.
+   Call or WhatsApp the client this morning. Closing window is now.
+
+🚀 Government AI tender registrations — Kenya ICT Authority (#KA-2026-045) and SA DoH (R200M)
+   are live. Submit Studex Group as bidder by EOD today. Even as subcontractor is valid entry.
+
+🚀 Devin vs Cursor vs Claude Code bake-off kick-off — spin up all three on a small defined
+   task today. Measure velocity, cost, and bug rate. Report back by 5PM.
+
+───────────────────────────────────────────────
+GLOBAL AI LANDSCAPE — 3 JULY 2026
+───────────────────────────────────────────────
+
+🇺🇸 USA: OpenAI valued at $730B post-GPT-5 autonomous coding agents launch.
+→ OGRE action: Push OpenClaw + Claude Code stack. Study Devin for enterprise handoff flows.
+
+🇨🇳 China: MiniMax Hailuo 2.3 at $0.25/video. Qwen3-72B benchmarks beating closed models.
+→ OGRE action: Hailuo video pipeline is ready to go — OpenClaw has MiniMax MCP tools live.
+             Test Qwen3-72B via OpenRouter for African language workloads this week.
+
+🇳🇬 Nigeria: IBM + Microsoft backing Lagos AI hubs. Fintech AI credit scoring active.
+→ OGRE action: NITDA tender ($50M World Bank) — register TODAY. SA push via BCX partnership.
+
+🇰🇪 Kenya: Sovereign AI infrastructure push. Nairobi AI Forum 2026 energy + data center links.
+→ OGRE action: Kenya ICT Authority tender #KA-2026-045 — registration deadline APPROACHING.
+
+🇿🇦 South Africa: DoH AI health records tender (R200M+) active. SAPS surveillance AI upcoming.
+→ OGRE action: Register Studex Group NOW. Build "Sovereign AI for Africa" one-pager as sales asset.
+
+🇪🇬 Egypt + Ghana: AI policies published Jan 2025. Arabic AI + local data sovereignty focus.
+→ OGRE action: Monitor for Q3 tender waves. Position OGRE as B-BBEE + SAHPRA-compliant partner.
+
+───────────────────────────────────────────────
+IMMEDIATE ACTION MATRIX (30/90/180 DAYS)
+───────────────────────────────────────────────
+
+BY 10 JULY (7 days):
+[1] Register for Kenya ICT Authority AI tender — deadline approaching
+[2] Register for SA DoH health AI tender — R200M+ budget
+[3] Send LAISA Phase A follow-up message — proposal went out this week
+[4] Kick off Devin vs Cursor vs Claude Code bake-off
+
+BY 15 JULY (12 days):
+[5] Hailuo video pipeline live for client deliverables — MiniMax MCP already connected
+[6] Test Qwen3-72B via OpenRouter for African language content pipeline
+[7] Pilot Kimi K2 for African-Chinese cross-border deal communication
+
+BY 31 JULY (28 days):
+[8] Build "AI PC Setup Package" — Mac Mini M4 Pro + OpenClaw + Ollama for client onboarding
+[9] Publish "Solopreneur to Enterprise" playbook using Studex as the case study
+[10] Integrate OpenClaw MCP → n8n for Studex Group workflow automation
+
+───────────────────────────────────────────────
+TODAY'S ENERGY CHECK
+───────────────────────────────────────────────
+
+It's Friday. End the week strong.
+Ship one thing. Close one conversation. Register one tender.
+
+OGRE runs on systems. Dark Factory builds in public.
+🏭 Friday, 3 July 2026.
+
+═══════════════════════════════════════
+*Cipher Tr@ce · Dark Factory · OGRE Computer*
+*Built from 3AM research · Sent at 08:00 SAST*

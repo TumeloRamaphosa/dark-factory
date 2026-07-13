@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CipherTrace — What We Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --a: #6c63ff; --ac: #00d4ff; --ap: #f59e0b; --ag: #10b981;
+  --p: #ec4899; --bg: #09090e; --bgs: #0f0f1a; --w: #ffffff;
+  --t: #e8e8f0; --t2: #9090b0; --t3: #5a5a7a;
+  --b: rgba(255,255,255,0.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--t); line-height: 1.6; overflow-x: hidden; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--a); border-radius: 3px; }
+
+/* GRID BG */
+.grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(9,9,14,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); height: 64px; display: flex; align-items: center; }
+.nav-inner { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
+.brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--a), #8b5cf6); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(108,99,255,0.35); font-size: 1rem; }
+.brand-name { font-weight: 800; font-size: 0.9rem; color: var(--t); letter-spacing: -0.01em; }
+.brand-sub { font-size: 0.6rem; color: var(--t3); font-family: 'JetBrains Mono', monospace; }
+.nav-links { display: flex; gap: 4px; }
+.nav-btn { padding: 0.45rem 0.875rem; border-radius: 10px; font-size: 0.825rem; font-weight: 600; border: none; cursor: pointer; background: transparent; color: var(--t2); font-family: inherit; transition: all 0.15s; }
+.nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--t); }
+.btn-primary { padding: 0.6rem 1.25rem; border-radius: 12px; background: var(--a); color: #fff; border: none; font-weight: 700; font-size: 0.825rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 20px rgba(108,99,255,0.35); font-family: inherit; transition: all 0.2s; text-decoration: none; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(108,99,255,0.5); }
+
+/* HERO */
+.hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 6rem 2rem 4rem; overflow: hidden; }
+.hero-glow { position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(ellipse, rgba(108,99,255,0.12) 0%, rgba(0,212,255,0.05) 40%, transparent 70%); pointer-events: none; }
+.hero-inner { max-width: 1200px; width: 100%; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; }
+.badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25); border-radius: 100px; padding: 0.3rem 1rem; margin-bottom: 1.5rem; }
+.pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--a); animation: pulse-anim 2s infinite; }
+.badge-text { font-size: 0.7rem; font-weight: 700; color: var(--a); letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace; }
+.h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.03em; color: var(--t); margin-bottom: 1.25rem; }
+.h1 .a { color: var(--a); }
+.h1 .p { color: var(--p); }
+.hero-desc { font-size: 1.05rem; color: var(--t2); line-height: 1.8; margin-bottom: 2rem; max-width: 480px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 3rem; }
+.hero-stats { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+.stat-val { font-size: 2.25rem; font-weight: 900; letter-spacing: -0.03em; color: var(--a); }
+.stat-lbl { font-size: 0.7rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; font-weight: 600; margin-top: 4px; }
+.canvas-wrap { position: relative; height: 500px; }
+.canvas-hint { text-align: center; font-size: 0.75rem; color: var(--t3); margin-top: 12px; font-family: 'JetBrains Mono', monospace; }
+
+/* SECTIONS */
+.section { padding: 5rem 2rem; position: relative; z-index: 1; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.label { font-size: 0.7rem; font-weight: 700; color: var(--a); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; text-align: center; }
+.title { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 900; letter-spacing: -0.025em; color: var(--t); line-height: 1.1; text-align: center; margin-bottom: 0.5rem; }
+.desc { color: var(--t2); font-size: 1rem; line-height: 1.75; max-width: 540px; margin: 0 auto; text-align: center; }
+.section-dark { background: var(--bgs); }
+
+/* CAPABILITIES */
+.cap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-top: 2.5rem; }
+.cap-card { background: var(--b); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.25rem; display: flex; gap: 12px; align-items: flex-start; transition: all 0.2s; }
+.cap-card:hover { background: rgba(108,99,255,0.08); border-color: rgba(108,99,255,0.3); transform: translateY(-2px); }
+.cap-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(108,99,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.cap-title { font-weight: 700; font-size: 0.875rem; color: var(--t); margin-bottom: 4px; }
+.cap-desc { font-size: 0.775rem; color: var(--t2); line-height: 1.5; }
+
+/* METRICS */
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 3rem 0; }
+.metric-card { background: var(--b); border: 1px solid rgba(108,99,255,0.15); border-radius: 24px; padding: 1.75rem; text-align: center; transition: all 0.2s; }
+.metric-card:hover { border-color: rgba(108,99,255,0.4); background: rgba(108,99,255,0.06); }
+.metric-val { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.03em; color: var(--a); }
+.metric-lbl { font-weight: 700; font-size: 0.875rem; margin-top: 6px; }
+.metric-sub { font-size: 0.775rem; color: var(--t3); margin-top: 4px; }
+
+/* PRODUCTS */
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+.product-card { background: rgba(15,15,26,0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; overflow: hidden; backdrop-filter: blur(10px); transition: all 0.25s; cursor: pointer; }
+.product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.product-top { height: 4px; width: 100%; }
+.product-body { padding: 1.5rem; }
+.product-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.product-icon-wrap { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+.product-live { padding: 0.25rem 0.75rem; border-radius: 100px; font-size: 0.65rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.product-name { font-weight: 800; font-size: 1.05rem; color: var(--t); margin-bottom: 4px; }
+.product-tagline { font-size: 0.8rem; color: var(--t3); margin-bottom: 12px; }
+.product-price { font-weight: 900; font-size: 1.5rem; margin-bottom: 12px; }
+.product-features { list-style: none; padding: 0; margin: 0 0 1.25rem; display: flex; flex-direction: column; gap: 6px; }
+.product-feature { display: flex; align-items: flex-start; gap: 8px; font-size: 0.825rem; color: var(--t2); }
+.check-icon { color: var(--a); flex-shrink: 0; margin-top: 2px; }
+
+/* SUCCESS */
+.success-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.success-card { background: rgba(15,15,26,0.9); border-radius: 24px; padding: 2rem; backdrop-filter: blur(10px); }
+.success-card.green { border: 1px solid rgba(16,185,129,0.2); }
+.success-card.purple { border: 1px solid rgba(139,92,246,0.2); }
+.success-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+.success-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+.success-title { font-weight: 800; font-size: 1rem; }
+.success-sub { font-size: 0.775rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+.success-text { font-size: 0.9rem; color: var(--t2); line-height: 1.8; margin-bottom: 1.25rem; }
+.success-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.success-metric { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 0.75rem; text-align: center; }
+.success-metric-key { font-size: 0.65rem; color: var(--t3); font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+.success-metric-val { font-weight: 800; font-size: 0.9rem; }
+
+/* FOUNDER */
+.founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+.tag { padding: 0.3rem 0.875rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; background: rgba(236,72,153,0.08); color: var(--p); border: 1px solid rgba(236,72,153,0.2); font-family: 'JetBrains Mono', monospace; }
+.ec-card { background: var(--b); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.ec-title { font-size: 0.7rem; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
+.ec-item { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.ec-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ec-name { font-weight: 700; font-size: 0.85rem; }
+.ec-desc { font-size: 0.75rem; color: var(--t3); }
+.timeline { position: relative; padding-left: 1.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--a), transparent); }
+.tli { position: relative; padding-bottom: 1.25rem; padding-left: 1.25rem; }
+.tld { position: absolute; left: -1.5rem; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--a); border: 2px solid var(--bg); box-shadow: 0 0 8px rgba(108,99,255,0.5); }
+.tly { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; color: var(--a); margin-bottom: 2px; }
+.tle { font-size: 0.825rem; color: var(--t2); line-height: 1.5; }
+
+/* FOOTER */
+footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 2.5rem 2rem; position: relative; z-index: 1; }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-brand { display: flex; align-items: center; gap: 12px; }
+.footer-name { font-weight: 700; font-size: 0.875rem; }
+.footer-sub { font-size: 0.75rem; color: var(--t3); }
+.footer-links { font-size: 0.825rem; color: var(--t3); }
+.footer-links a { color: var(--a); text-decoration: none; }
+
+/* ANIMATIONS */
+@keyframes pulse-anim { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.modal-box { background: #0d0d20; border: 1px solid rgba(108,99,255,0.25); border-radius: 24px; width: 100%; max-width: 520px; overflow: hidden; box-shadow: 0 0 80px rgba(108,99,255,0.15); }
+.modal-top { height: 4px; }
+.modal-body { padding: 1.75rem; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.06); border: none; color: var(--t2); cursor: pointer; padding: 6px 10px; border-radius: 8px; font-size: 0.875rem; }
+.modal-icon-price { display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem; }
+.modal-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; }
+.modal-name { font-weight: 900; font-size: 1.2rem; color: var(--t); }
+.modal-desc { font-size: 0.8rem; color: var(--t2); }
+.price-box { background: rgba(255,255,255,0.04); border-radius: 14px; padding: 1rem; margin-bottom: 1.25rem; }
+.price-label { font-size: 0.65rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+.price-val { font-size: 1.75rem; font-weight: 900; }
+.modal-tagline { font-size: 0.875rem; color: var(--t2); line-height: 1.7; margin-bottom: 1.5rem; }
+.modal-features { list-style: none; padding: 0; margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+.modal-feature { display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--t2); }
+.modal-cta { width: 100%; padding: 0.875rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; transition: all 0.2s; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .canvas-wrap { height: 360px; }
+  .success-grid { grid-template-columns: 1fr; }
+  .founder-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero { padding: 5rem 1.25rem 3rem; }
+  .section { padding: 3.5rem 1.25rem; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .product-grid { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; text-align: center; }
+}
+@media (max-width: 480px) {
+  .metrics-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="brand" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'}); return false;">
+      <div class="brand-icon">🏭</div>
+      <div>
+        <div class="brand-name">CipherTrace</div>
+        <div class="brand-sub">Dark Factory | Studex Dev</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="document.getElementById('capabilities').scrollIntoView({behavior:'smooth'})">Capabilities</button>
+      <button class="nav-btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Products</button>
+      <button class="nav-btn" onclick="document.getElementById('success').scrollIntoView({behavior:'smooth'})">Success</button>
+      <button class="nav-btn" onclick="document.getElementById('founder').scrollIntoView({behavior:'smooth'})">Founder</button>
+    </div>
+    <a href="mailto:info@studexmeat.com" class="btn-primary">✨ Work With Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="badge">
+        <div class="pulse-dot"></div>
+        <span class="badge-text">8 VMs · 60+ Agents · 24/7 Operations</span>
+      </div>
+      <h1 class="h1">
+        An automated<br>
+        <span class="a">software</span><br>
+        <span class="p">environment.</span>
+      </h1>
+      <p class="hero-desc">
+        We build Cyber Sapien companies — AI agents run operations, humans orchestrate from the command centre. Every business has the intelligence of a multinational at African prices.
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:info@studexmeat.com" class="btn-primary">✨ Work With Us</a>
+        <button class="nav-btn" style="padding:0.8rem 1.75rem;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font-size:0.9rem;" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">⚙️ See Products</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-val">8</div><div class="stat-lbl">VMs Active</div></div>
+        <div><div class="stat-val">60+</div><div class="stat-lbl">AI Agents</div></div>
+        <div><div class="stat-val">24/7</div><div class="stat-lbl">Operations</div></div>
+        <div><div class="stat-val">9</div><div class="stat-lbl">Countries</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="canvas-wrap">
+        <canvas id="sphere" style="width:100%;height:100%;border-radius:24px;cursor:grab;"></canvas>
+      </div>
+      <div class="canvas-hint">● Click any node to explore the product</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities" class="section section-dark">
+  <div class="section-inner">
+    <div class="label">// Capabilities</div>
+    <h2 class="title">The <span class="a">full stack</span> of an AI company</h2>
+    <p class="desc">Everything you need to run an AI-powered business. Built once. Running 24/7.</p>
+    <div class="cap-grid" id="capGrid"></div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="section">
+  <div class="section-inner">
+    <div class="label" style="color:var(--p)">// Products</div>
+    <h2 class="title">Build. Operate. <span class="a">Scale.</span></h2>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</section>
+
+<!-- SUCCESS -->
+<section id="success" class="section section-dark">
+  <div class="section-inner">
+    <div class="label" style="color:var(--ag)">// Proof</div>
+    <h2 class="title">Results that <span style="color:var(--ag)">speak.</span></h2>
+    <div class="metrics-grid">
+      <div class="metric-card"><div class="metric-val">8</div><div class="metric-lbl">VMs Active</div><div class="metric-sub">OGRE GPU cluster, 24/7</div></div>
+      <div class="metric-card"><div class="metric-val">60+</div><div class="metric-lbl">AI Agents</div><div class="metric-sub">Research, build, comms, security</div></div>
+      <div class="metric-card"><div class="metric-val">9</div><div class="metric-lbl">Countries</div><div class="metric-sub">SA, Nigeria, Kenya, Ghana, Russia</div></div>
+      <div class="metric-card"><div class="metric-val">R4.2M</div><div class="metric-lbl">Pipeline</div><div class="metric-sub">Active proposals + contracts</div></div>
+    </div>
+    <div class="success-grid">
+      <div class="success-card green">
+        <div class="success-header">
+          <div class="success-icon" style="background:rgba(16,185,129,0.1)">🏥</div>
+          <div>
+            <div class="success-title">LAISA Aesthetic Clinic</div>
+            <div class="success-sub" style="color:var(--ag)">Phase A — Production</div>
+          </div>
+        </div>
+        <p class="success-text">We built and deployed the LAISA Agent OS in 6 weeks. Dr. Musa's clinic now runs on 6 AI agents — WhatsApp CRM, booking, email, social. Zero missed follow-ups.</p>
+        <div class="success-metrics">
+          <div class="success-metric"><div class="success-metric-key">Build cost</div><div class="success-metric-val" style="color:var(--ag)">R350K</div></div>
+          <div class="success-metric"><div class="success-metric-key">Monthly</div><div class="success-metric-val" style="color:var(--ag)">R55K/mo</div></div>
+          <div class="success-metric"><div class="success-metric-key">Agents deployed</div><div class="success-metric-val" style="color:var(--ag)">6</div></div>
+          <div class="success-metric"><div class="success-metric-key">Response time</div><div class="success-metric-val" style="color:var(--ag)">&lt; 2 hours</div></div>
+        </div>
+      </div>
+      <div class="success-card purple">
+        <div class="success-header">
+          <div class="success-icon" style="background:rgba(139,92,246,0.1)">🌍</div>
+          <div>
+            <div class="success-title">Studex Global Markets</div>
+            <div class="success-sub" style="color:#8b5cf6">Pharmasyntez Partnership Active</div>
+          </div>
+        </div>
+        <p class="success-text">Africa pharma market: <strong style="color:var(--t)">$29.3B (2025) → $44.1B (2032)</strong>. Anti-TB, HIV, oncology, diabetes. SAHPRA licensed. B-BBEE Level 1. VM agent manages pipeline autonomously.</p>
+        <div class="success-metrics">
+          <div class="success-metric"><div class="success-metric-key">Y1 Pipeline</div><div class="success-metric-val" style="color:#8b5cf6">R2.99M</div></div>
+          <div class="success-metric"><div class="success-metric-key">License</div><div class="success-metric-val" style="color:#8b5cf6">SAHPRA</div></div>
+          <div class="success-metric"><div class="success-metric-key">B-BBEE</div><div class="success-metric-val" style="color:#8b5cf6">Level 1</div></div>
+          <div class="success-metric"><div class="success-metric-key">Market access</div><div class="success-metric-val" style="color:#8b5cf6">54 African countries</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder" class="section">
+  <div class="section-inner">
+    <div class="founder-grid">
+      <div>
+        <div class="label" style="text-align:left;color:var(--p)">// The Founder</div>
+        <h2 class="title" style="text-align:left;font-size:clamp(1.5rem,3vw,2.25rem)">Meet <span style="color:var(--p)">Tumelo Ramaphosa</span></h2>
+        <p style="font-size:0.9rem;color:var(--t2);line-height:1.8;margin:1.5rem 0">
+          From McDonald's to South Africa's premier Wagyu supplier. Hult Business School. IBM + Cardano. AWS partner. 11 years building what others said was impossible.
+        </p>
+        <div class="tag-list">
+          <span class="tag">IBM Partner</span><span class="tag">Cardano Partner</span><span class="tag">AWS Partner</span><span class="tag">Google Cloud Partner</span>
+        </div>
+        <div class="ec-card">
+          <div class="ec-title">Studex Ecosystem</div>
+          <div class="ec-item"><div class="ec-dot" style="background:#22c55e"></div><div><div class="ec-name">Studex Meat</div><div class="ec-desc">Premium Wagyu · 50+ restaurants</div></div></div>
+          <div class="ec-item"><div class="ec-dot" style="background:#3b82f6"></div><div><div class="ec-name">StudEx Enterprise</div><div class="ec-desc">Cloud FinOps · AWS + Google Partner</div></div></div>
+          <div class="ec-item"><div class="ec-dot" style="background:#ec4899"></div><div><div class="ec-name">StudEx Wild Life</div><div class="ec-desc">Blockchain · IBM + Cardano</div></div></div>
+          <div class="ec-item" style="border-bottom:none"><div class="ec-dot" style="background:#0f172a"></div><div><div class="ec-name">Dark Factory</div><div class="ec-desc">AI Agent Factory · CipherTr@ce CEO</div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="ec-title">11 Years of Building</div>
+        <div class="timeline">
+          <div class="tli"><div class="tld"></div><div class="tly">2009</div><div class="tle">McDonald's SA batch cooker, age 18</div></div>
+          <div class="tli"><div class="tld"></div><div class="tly">2011</div><div class="tle">Founded Studex Meat at age 20</div></div>
+          <div class="tli"><div class="tld"></div><div class="tly">2017</div><div class="tle">MSc International Business, Hult Business School
+          <div class="tli"><div class="tld"></div><div class="tly">2019</div><div class="tle">AWS + Google Cloud partnerships signed</div></div>
+          <div class="tli"><div class="tld"></div><div class="tly">2019</div><div class="tle">IBM + Cardano blockchain confirmed (Forbes Africa)</div></div>
+          <div class="tli"><div class="tld"></div><div class="tly">2020</div><div class="tle">ITWeb: 'SA's First Son looks to cut cloud costs'</div></div>
+          <div class="tli"><div class="tld"></div><div class="tly">2020</div><div class="tle">GQ SA: 'Changing the nature of conservation'</div></div>
+          <div class="tli"><div class="tld"></div><div class="tly">2026</div><div class="tle">Dark Factory + CipherTr@ce CEO — fully operational</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand-icon">🏭</div>
+      <div>
+        <div class="footer-name">CipherTrace — Dark Factory</div>
+        <div class="footer-sub">Th3 Dark Factory | Studex Dev♤¿\$ | Studex Group 2026</div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:info@studexmeat.com">info@studexmeat.com</a> · Cipher Tr@ce · Tumelo Ramaphosa — Founder
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div id="modal" class="modal-overlay" style="display:none" onclick="if(event.target===event.currentTarget)closeModal()">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-top" id="modalTop"></div>
+    <div class="modal-body">
+      <div class="modal-icon-price">
+        <div class="modal-icon" id="modalIcon"></div>
+        <div><div class="modal-name" id="modalName"></div><div class="modal-desc" id="modalDesc"></div></div>
+      </div>
+      <div class="price-box">
+        <div class="price-label">Investment</div>
+        <div class="price-val" id="modalPrice"></div>
+      </div>
+      <p class="modal-tagline" id="modalTagline"></p>
+      <ul class="modal-features" id="modalFeatures"></ul>
+      <a href="mailto:info@studexmeat.com" class="modal-cta" id="modalCta" style="background:var(--a);color:#fff">Request Proposal →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// DATA
+const PRODUCTS = [
+  { id:"laisa", name:"LAISA Agent OS", icon:"🏥", color:"#10b981", desc:"AI Agent OS for Aesthetic Clinics", price:"R350K + R55K/mo", tagline:"WhatsApp CRM, Booking, 6 AI Agents, Dashboard — Dr. Musa manages his clinic from his phone.", features:["WhatsApp CRM + Appointment Booking","6 specialist AI agents","Real-time dashboard","Email + social automation","Notion CRM integration","VoiceBox AI voice calls"] },
+  { id:"df", name:"Dark Factory BMAD", icon:"🏭", color:"#6c63ff", desc:"Build Me A Dashboard — R29 per product", price:"R29 per product", tagline:"Voice note or Figma link goes in, a working product comes out in 48 hours.", features:["Voice note → PRD pipeline","CodeRabbit review every PR","Auto-deploy to Vercel","Multi-agent build team","48hr delivery guarantee","Dark Factory VM included"] },
+  { id:"rt", name:"Red Team Agent", icon:"🛡️", color:"#ec4899", desc:"Cybersecurity AI VM", price:"From R25K/month", tagline:"16 specialist AI agents running 24/7 penetration testing on your systems.", features:["16 specialist AI agents","Autonomous pen testing","AI Trust Monitor dashboard","Purple Team loop","POPIA compliance audit","MITRE ATT⚠CK mapped"] },
+  { id:"vm", name:"VM Base Package", icon:"🖥️", color:"#00d4ff", desc:"Your own isolated AI agent VM", price:"R599/month", tagline:"Each client on their own VM. Zero data mixing. Your AI agents, your server.", features:["Isolated VM environment","Up to 6 AI agents","Branded client portal","WhatsApp integration","Email integration","99.7% uptime SLA"] },
+  { id:"sg", name:"Studex Global", icon:"🌍", color:"#f59e0b", desc:"Pharma distribution across Africa", price:"R2.99M Y1", tagline:"SAHPRA licensed. B-BBEE Level 1. Access to 54 African countries.", features:["SAHPRA wholesaler license","B-BBEE Level 1 certified","54 African countries","Anti-TB + HIV + oncology","VM agent pipeline management","Government tender access"] },
+];
+
+const CAPABILITIES = [
+  { label:"Multi-Agent Orchestration", icon:"🤖", desc:"60+ agents across 8 VMs working in parallel on your projects" },
+  { label:"24/7 Operations", icon:"⏱️", desc:"VMs never sleep. Tasks queue and execute around the clock, every day" },
+  { label:"Voice-First Interface", icon:"🎤", desc:"WhatsApp, voice notes, speech. AI converts every input to structured action" },
+  { label:"Isolated VM Architecture", icon:"🔒", desc:"Each client on their own VM. Your data never touches another client's VM" },
+  { label:"Auto-Deploy Pipeline", icon:"🚀", desc:"From approved PRD to live URL in 48 hours. Vercel, auto-SSL, CDN included" },
+  { label:"Real-Time Dashboard", icon:"📊", desc:"Your command centre. Every agent, every task, every result — live, on any device" },
+  { label:"Market Intelligence", icon:"🔍", desc:"Reddit, X, YouTube, HackerNews — scored by upvotes and real-money bets" },
+  { label:"POPIA Compliant", icon:"✅", desc:"South African data protection fully built-in. No overseas data transfers without consent" },
+];
+
+// SPHERE GRAPH
+const NODES = PRODUCTS.map(p => {
+  const rad = (p.angle - 90) * Math.PI / 180;
+  const lat = 25 * Math.PI / 180;
+  const R = 110;
+  return { ...p, x3: R * Math.cos(lat) * Math.cos(rad), y3: R * Math.sin(lat), z3: R * Math.cos(lat) * Math.sin(rad) };
+});
+
+let mouseX = 0, mouseY = 0, rotY = 0.4, t = 0;
+const canvas = document.getElementById('sphere');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  const r = canvas.getBoundingClientRect();
+  canvas.width = r.width * 2;
+  canvas.height = r.height * 2;
+}
+resize();
+window.addEventListener('resize', resize);
+
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  mouseX = e.clientX - r.left;
+  mouseY = e.clientY - r.top;
+});
+
+canvas.addEventListener('click', () => {
+  const cx = canvas.width / 2, cy = canvas.height / 2;
+  for (const n of NODES2D) {
+    if (Math.abs(mouseX - n.px) < 40 && Math.abs(mouseY - n.py) < 40) {
+      openModal(n.id);
+      return;
+    }
+  }
+});
+
+function project(x3, y3, z3) {
+  const cosX = Math.cos(0.4), sinX = Math.sin(0.4);
+  const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+  const rx = y3 * cosX - z3 * sinX;
+  const rz = y3 * sinX + z3 * cosX;
+  const ry = x3 * cosY - rz * sinY;
+  const rz2 = x3 * sinY + rz * cosY;
+  const scale = 500 / (500 + rz2);
+  return { px: cx + ry * scale, py: cy + rx * scale, z: rz2, s: scale };
+}
+
+let NODES2D = [];
+let cx = 0, cy = 0;
+
+function draw() {
+  t++;
+  rotY += 0.004;
+  cx = canvas.width / 2;
+  cy = canvas.height / 2;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  NODES2D = NODES.map(n => {
+    const p = project(n.x3, n.y3, n.z3);
+    return { ...n, px: p.px, py: p.py, z: p.z, s: p.s };
+  });
+
+  // Edges
+  for (let i = 0; i < NODES2D.length; i++) {
+    for (let j = i + 1; j < NODES2D.length; j++) {
+      const a = NODES2D[i], b = NODES2D[j];
+      const dx = NODES[i].x3 - NODES[j].x3;
+      const dy = NODES[i].y3 - NODES[j].y3;
+      const dz = NODES[i].z3 - NODES[j].z3;
+      const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (d < 150) {
+        ctx.beginPath();
+        ctx.moveTo(a.px, a.py);
+        ctx.lineTo(b.px, b.py);
+        ctx.strokeStyle = 'rgba(108,99,255,' + ((1 - d/150) * 0.2).toFixed(3) + ')';
+        ctx.lineWidth = 0.8 * a.s;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Center glow
+  const pulse = Math.sin(t * 0.002) * 0.5 + 0.5;
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 50 + pulse * 20);
+  grad.addColorStop(0, 'rgba(108,99,255,' + (0.15 + pulse * 0.1).toFixed(3) + ')');
+  grad.addColorStop(1, 'rgba(108,99,255,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 50 + pulse * 20, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+  ctx.fillStyle = '#6c63ff';
+  ctx.shadowBlur = 30;
+  ctx.shadowColor = 'rgba(108,99,255,0.8)';
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  ctx.font = '28px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('🏭', cx, cy);
+
+  // Nodes
+  const sorted = [...NODES2D].sort((a, b) => a.z - b.z);
+  for (const n of sorted) {
+    const size = 14 * n.s;
+    const hover = Math.abs(mouseX - n.px) < 40 && Math.abs(mouseY - n.py) < 40;
+    const r = parseInt(n.color.slice(1, 3), 16);
+    const g = parseInt(n.color.slice(3, 5), 16);
+    const b2 = parseInt(n.color.slice(5, 7), 16);
+
+    // Glow
+    const grd = ctx.createRadialGradient(n.px, n.py, 0, n.px, n.py, size * 2.5);
+    grd.addColorStop(0, 'rgba(' + r + ',' + g + ',' + b2 + ',' + (0.25 + (hover ? 0.3 : 0)).toFixed(3) + ')');
+    grd.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b2 + ',0)');
+    ctx.beginPath();
+    ctx.arc(n.px, n.py, size * 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // Circle
+    ctx.beginPath();
+    ctx.arc(n.px, n.py, size + (hover ? 4 : 0), 0, Math.PI * 2);
+    ctx.fillStyle = n.color;
+    ctx.shadowBlur = hover ? 25 : 15;
+    ctx.shadowColor = n.color + '80';
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.beginPath();
+    ctx.arc(n.px, n.py, size, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.font = (Math.max(10, size * 1.2)) + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(n.icon, n.px, n.py);
+
+    if (n.s > 0.78 || hover) {
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.font = 'bold ' + (Math.max(9, 11 * n.s)) + 'px sans-serif';
+      ctx.fillText(n.name, n.px, n.py + size + 14);
+      ctx.fillStyle = n.color;
+      ctx.font = (Math.max(8, 9 * n.s)) + 'px monospace';
+      ctx.fillText(n.price.split(' ')[0], n.px, n.py + size + 26);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// CAPABILITIES
+const capGrid = document.getElementById('capGrid');
+CAPABILITIES.forEach(cap => {
+  capGrid.innerHTML += '<div class="cap-card"><div class="cap-icon">' + cap.icon + '</div><div><div class="cap-title">' + cap.label + '</div><div class="cap-desc">' + cap.desc + '</div></div></div>';
+});
+
+// PRODUCTS
+const productGrid = document.getElementById('productGrid');
+PRODUCTS.forEach(p => {
+  const features = p.features.map(f => '<li class="product-feature"><span class="check-icon">✓</span>' + f + '</li>').join('');
+  productGrid.innerHTML += '<div class="product-card" onclick="openModal('' + p.id + '')">' +
+    '<div class="product-top" style="background:linear-gradient(90deg,' + p.color + ',' + p.color + '60)"></div>' +
+    '<div class="product-body">' +
+      '<div class="product-header">' +
+        '<div class="product-icon-wrap" style="background:' + p.color + '15">' + p.icon + '</div>' +
+        '<span class="product-live" style="background:' + p.color + '15;color:' + p.color + ';border:1px solid ' + p.color + '30">LIVE</span>' +
+      '</div>' +
+      '<div class="product-name">' + p.name + '</div>' +
+      '<div class="product-tagline">' + p.desc + '</div>' +
+      '<div class="product-price" style="color:' + p.color + '">' + p.price + '</div>' +
+      '<ul class="product-features">' + features + '</ul>' +
+      '<button class="btn-primary" style="width:100%;justify-content:center;background:' + p.color + '">Explore →</button>' +
+    '</div>' +
+  '</div>';
+});
+
+// MODAL
+function openModal(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('modalTop').style.background = 'linear-gradient(90deg,' + p.color + ',' + p.color + '80)';
+  document.getElementById('modalTop').style.height = '4px';
+  document.getElementById('modalIcon').textContent = p.icon;
+  document.getElementById('modalIcon').style.background = p.color + '20';
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPrice').textContent = p.price;
+  document.getElementById('modalPrice').style.color = p.color;
+  document.getElementById('modalTagline').textContent = p.tagline;
+  const feats = p.features.map(f => '<li class="modal-feature"><span class="check-icon">✓</span>' + f + '</li>').join('');
+  document.getElementById('modalFeatures').innerHTML = feats;
+  document.getElementById('modalCta').style.background = p.color;
+  document.getElementById('modal').style.display = 'flex';
+}
+function closeModal() { document.getElementById('modal').style.display = 'none'; }
+</script>
+</body>
+</html>

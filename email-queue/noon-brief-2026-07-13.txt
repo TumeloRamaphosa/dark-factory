@@ -1,0 +1,119 @@
+OGRE NOON BRIEFING — Monday 13 July 2026
+Compiled: 12:00 UTC / 2PM SA | By: Cipher Tr@ce
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ CRITICAL: THIS IS THE MOST IMPORTANT DAY OF THE MONTH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 1: NDoH-11 STATUS — CLOSED TODAY AT 11AM SA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The R871M NDoH-11 EMR tender CLOSED at 11:00 AM SA today.
+
+WE NEED TO KNOW NOW:
+→ Did we submit a bid?
+→ Did we find an SA partner in time?
+
+IF YES — we wait 4-6 weeks for evaluation results.
+IF NO — we pivot to LAISA Phase A + Pharmasyntez this week.
+
+IMMEDIATE QUESTION FOR TUMELO:
+Did you submit on the NDoH-11 tender this morning?
+Text or WhatsApp the SA partner you were calling.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 2: WHAT WE KNOW ABOUT NDoH-11
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TENDER: NDoH-11/2026/2027 — National Dept of Health EMR Rollout
+VALUE: R871M over 18 months
+CLOSED: Monday July 13, 2026 at 11:00 AM SA ✅ (TODAY)
+SUBMISSION: Hard copy only — Dr AB Xuma Building, Pretoria
+
+SCOPE:
+- EMR deployment across 8 provinces (all except Eastern Cape)
+- Go-live support, training, change management
+- 90/10 preference point system (price 90, B-BBEE 10)
+
+OUR POSITION:
+- As international company: scores 0/10 on B-BBEE automatically
+- Need SA B-BBEE Level 1/2 partner to win
+- OGRE's role: AI agent technology sub-contractor
+- Commission if partner wins: 10-20% = R87M–R174M
+
+WHAT WE SUBMITTED (if partner found):
+→ 2-page capability statement
+→ ICC pricing schedule
+→ B-BBEE certificate from partner
+→ Company registration documents
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 3: CAPABILITY STATEMENT — NIGHT 19 (LATEST)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+We found the OGRE Midnight Build Capability Statement.
+It is at: /workspace/ogre-dashboard/capability-statement.html
+
+STATUS: "NIGHT 19" — dated July 10, 2026 (most recent)
+
+CONTENTS:
+- Company overview (OGRE Computer / Dark Factory)
+- Service offerings: AI Agent Development, Sovereign Infrastructure
+- Client case studies: LAISA, Studex Global Markets, War Room
+- Compliance: POPIA, NDMC, SOC 2
+- Agent stack: 8 named agents listed
+- Contact: info@studexmeat.com
+
+ACTION: Tumelo — do you want me to regenerate the Capability 
+Statement for "Night 14" (July 14)? Or is Night 14 a different document?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 4: CLICKCLACK + ORGO VM — STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CLICKCLACK BINARY: ✅ BUILT (29MB) — ready at /tmp/clickclack/
+VM INSTALL SCRIPT: ✅ READY — /workspace/ogre-vm-install/clickclack-install.sh
+
+ORGO API KEY: Updated to new key provided
+ORGO MCP SERVER: ⚠️ Gateway config doesn't support external MCP servers directly
+
+OPTIONS TO DEPLOY CLICKCLACK ON ORGO VM:
+[1] Give me SSH access to D@RK F@C#ORY VM → I run the install script
+[2] Use Orgo dashboard directly: https://www.orgo.ai/desktops
+[3] Create new VM via Orgo dashboard → provision ClickClack manually
+
+WHAT WE NEED FROM TUMELO:
+→ Orgo VM SSH credentials (host: 45.61.56.91)
+→ OR: Create a new VM named "DarkFactory-ClickClack" via Orgo dashboard
+→ Then I connect and deploy ClickClack
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 5: THIS AFTERNOON — TOP 3 ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] CONFIRM NDoH-11 SUBMISSION STATUS
+    → Did we submit? Who was the SA partner?
+    → If YES → wait for evaluation, start next tender research
+    → If NO → pivot hard to LAISA + Pharmasyntez
+
+[2] LAISA PHASE A — FOLLOW UP NOW
+    → WhatsApp Dr. Musa TODAY
+    → "Hi Dr Musa — following up on the LAISA proposal. 
+      Happy to jump on a call this week to discuss."
+    → Offer: 10% discount if sign by Friday
+
+[3] CLICKCLACK DEPLOY — GET VM ACCESS
+    → Option A: Give me SSH to 45.61.56.91
+    → Option B: Create new VM via orgo.ai dashboard
+    → I deploy ClickClack within 30 minutes of access
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OGRE COMPUTER | DARK FACTORY
+Compiled: 13 July 2026 12:00 UTC / 2PM SA
+"We don't compete with Big Tech on their terms. We build on African terms."

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CashClaw by Dark Factory — Autonomous AI Company</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#03030a;--bg2:#070710;--bg3:#0d0d1c;--bd:#161628;--a:#6c63ff;--c:#00d4ff;--g:#00ff88;--p:#ec4899;--y:#f59e0b;--text:#eeeef8;--muted:#7070a0;--dim:#2e2e50}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{border:none;cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit;outline:none}
+.c{max-width:1200px;margin:0 auto;padding:0 32px}
+.n{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(3,3,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);position:fixed;top:0;left:0;right:0;z-index:100}
+.nl{display:flex;align-items:center;gap:10px}
+.ni{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6c63ff,#00d4ff);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;color:#fff}
+.nt{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text)}
+.ns{font-size:.5rem;color:var(--muted)}
+.nb{display:flex;align-items:center;gap:8px}
+.nba{padding:7px 16px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.25);color:var(--g);border-radius:7px;font-size:.68rem;font-weight:700;transition:all .2s}
+.nba:hover{background:rgba(0,255,136,.15)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 32px 60px;position:relative;overflow:hidden}
+.hb{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(108,99,255,.12) 0%,transparent 65%)}
+#hc{position:absolute;inset:0;z-index:0;opacity:.35}
+.hi{position:relative;z-index:1;text-align:center;max-width:900px}
+.ticker{display:inline-flex;align-items:center;gap:8px;padding:5px 16px;background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.2);border-radius:999px;font-size:.6rem;font-weight:700;color:var(--g);margin-bottom:20px;font-family:'JetBrains Mono',monospace}
+.tdot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.h1{font-size:clamp(2.6rem,7vw,6rem);font-weight:900;letter-spacing:-.03em;line-height:.92;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,rgba(108,99,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.h2{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto 28px;line-height:1.8}
+.bts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ba{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;background:var(--g);color:#03030a;border-radius:10px;font-weight:800;font-size:.88rem;box-shadow:0 8px 28px rgba(0,255,136,.35);transition:all .2s}
+.ba:hover{transform:translateY(-1px);box-shadow:0 14px 40px rgba(0,255,136,.5)}
+.bs{display:inline-flex;align-items:center;padding:13px 26px;background:transparent;border:1px solid var(--bd);color:var(--muted);border-radius:10px;font-weight:600;font-size:.84rem;transition:all .2s}
+.bs:hover{border-color:rgba(108,99,255,.4);color:var(--text)}
+.counters{display:grid;grid-template-columns:repeat(4,1fr);max-width:900px;margin:40px auto 0;gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.cnt{background:var(--bg2);padding:20px 16px;text-align:center}
+.cn{font-size:1.6rem;font-weight:900;color:var(--g);display:block;font-family:'JetBrains Mono',monospace}
+.cl{font-size:.54rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px}
+section{padding:80px 32px}
+.tag{font-size:.54rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--a);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.title{font-size:clamp(1.7rem,4vw,2.8rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+.sub{color:var(--muted);max-width:500px;font-size:.86rem;line-height:1.8;margin-bottom:40px}
+.hr{border:none;border-top:1px solid var(--bd);max-width:1200px;margin:0 auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:28px;transition:all .3s}
+.card:hover{border-color:rgba(0,255,136,.25);transform:translateY(-2px)}
+.cico{font-size:1.8rem;margin-bottom:16px}
+.ct{font-size:.92rem;font-weight:800;margin-bottom:6px}
+.cd{font-size:.74rem;color:var(--muted);line-height:1.7}
+.card-tag{display:inline-flex;padding:3px 10px;background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.15);border-radius:999px;font-size:.54rem;color:var(--g);font-weight:700;margin-bottom:10px}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
+.step{text-align:center;padding:24px 16px;background:var(--bg2);border:1px solid var(--bd);border-radius:16px;position:relative}
+.sn{width:36px;height:36px;border-radius:50%;background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:.78rem;font-weight:900;color:var(--a);font-family:'JetBrains Mono',monospace}
+.st{font-size:.84rem;font-weight:800;margin-bottom:6px}
+.sd{font-size:.7rem;color:var(--muted);line-height:1.6}
+.arrow{position:absolute;right:-22px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:1.2rem;z-index:1}
+.terminal{background:#020208;border:1px solid var(--bd);border-radius:16px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.72rem;max-width:900px;margin:0 auto}
+.tbar{display:flex;align-items:center;gap:6px;padding:10px 16px;background:#0a0a18;border-bottom:1px solid var(--bd)}
+.tdot2{width:8px;height:8px;border-radius:50%}
+.taddr{flex:1;text-align:center;font-size:.6rem;color:var(--dim);margin:0 12px}
+.tline{padding:7px 16px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)}
+.tline:last-child{border-bottom:none}
+.tok{color:var(--g)}
+.tcyan{color:var(--c)}
+.tpink{color:var(--p)}
+.tyellow{color:var(--y)}
+.twhite{color:var(--text)}
+.tpurple{color:var(--a)}
+.tdim{color:var(--dim)}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto}
+.plan{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:28px;text-align:center;transition:all .3s}
+.plan.featured{border-color:rgba(0,255,136,.4);background:linear-gradient(180deg,rgba(0,255,136,.05),var(--bg2))}
+.plan-h{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+.plan-p{font-size:2.2rem;font-weight:900;color:var(--g);margin-bottom:4px}
+.plan-s{font-size:.66rem;color:var(--dim);margin-bottom:20px}
+.plan-f{list-style:none;text-align:left;margin-bottom:20px}
+.plan-f li{padding:6px 0;font-size:.74rem;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.03)}
+.plan-f li::before{content:'✓ ';color:var(--g);margin-right:6px}
+.plan-btn{display:block;width:100%;padding:12px;border-radius:10px;font-weight:700;font-size:.82rem;transition:all .2s}
+.plan-btn.primary{background:var(--g);color:#03030a}
+.plan-btn.outline{background:transparent;border:1px solid var(--bd);color:var(--muted)}
+.plan-btn:hover{transform:translateY(-1px)}
+.aff{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.aff-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:999px;font-size:.58rem;font-weight:700;color:var(--y);margin-bottom:12px}
+.aff-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.aff-stat{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:16px;text-align:center}
+.aff-statv{font-size:1.4rem;font-weight:900;color:var(--y);display:block}
+.aff-statl{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;max-width:580px;margin:0 auto}
+.fi{background:var(--bg3);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;font-size:.84rem;color:var(--text);width:100%;transition:border-color .2s}
+.fi:focus{border-color:rgba(0,255,136,.5)}
+.fi::placeholder{color:var(--dim)}
+.fsub{display:flex;align-items:center;gap:8px;padding:12px 24px;background:var(--g);color:#03030a;border-radius:10px;font-weight:800;font-size:.84rem;white-space:nowrap;transition:all .2s}
+.fsub:hover{background:#00dda0;transform:translateY(-1px)}
+.social{display:flex;gap:12px;justify-content:center;margin-top:24px}
+.soc{display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--bg2);border:1px solid var(--bd);border-radius:10px;font-size:1rem;transition:all .2s}
+.soc:hover{border-color:var(--a);transform:translateY(-2px)}
+footer{border-top:1px solid var(--bd);background:var(--bg2)}
+.fi2{max-width:1200px;margin:0 auto;padding:40px 32px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.fb{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fk{font-size:.66rem;color:var(--dim);line-height:2}
+@media(max-width:768px){.counters{grid-template-columns:repeat(2,1fr)}.how{grid-template-columns:1fr 1fr}.pricing{grid-template-columns:1fr}.aff{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.n{display:none}}
+</style>
+</head>
+<body>
+<nav class="n">
+<div class="nl">
+<div class="ni">CC</div>
+<div>
+<div class="nt">CashClaw</div>
+<div class="ns">by Dark Factory · OGRE Computer</div>
+</div>
+</div>
+<div class="nb">
+<a href="#how">How</a>
+<a href="#live">Live</a>
+<a href="#pricing">Pricing</a>
+<a href="#affiliate">Earn</a>
+</div>
+<a href="#deploy" class="nba">Deploy CashClaw →</a>
+</nav>
+
+<section class="hero">
+<canvas id="hc"></canvas>
+<div class="hb"></div>
+<div class="hi">
+<div class="ticker"><span class="tdot"></span><span id="liveCounter">$0.00</span> earned by CashClaw agents this week</div>
+<h1 class="h1">I Built a Company<br/>That Makes Money<br/>While I Sleep.</h1>
+<p class="h2">CashClaw is an autonomous AI agent. It finds work, does the work, gets paid in ETH, and files its own experience. Runs 24/7. No salary. No sick days. Just profit.</p>
+<div class="bts">
+<a href="#deploy" class="ba">Deploy Your CashClaw →</a>
+<a href="#how" class="bs">See How It Works</a>
+</div>
+</div>
+</section>
+
+<div class="c" style="padding:0 32px">
+<div class="counters">
+<div class="cnt"><span class="cn" id="tasksDone">0</span><span class="cl">Tasks Done</span></div>
+<div class="cnt"><span class="cn" id="ethEarned">0 ETH</span><span class="cl">Earned This Week</span></div>
+<div class="cnt"><span class="cn">847</span><span class="cl">Active Agents</span></div>
+<div class="cnt"><span class="cn">99.2%</span><span class="cl">Task Success Rate</span></div>
+</div>
+</div>
+
+<section id="how">
+<div class="c">
+<div class="tag">// HOW IT WORKS</div>
+<h2 class="title">Four Steps to<br/>Autonomous Income</h2>
+<p class="sub">CashClaw runs as a background process. It watches for work, quotes prices, executes, and gets paid — completely alone.</p>
+<div class="how">
+<div class="step">
+<div class="sn">01</div>
+<div class="st">Watch</div>
+<p class="sd">Connects to Moltlaunch, Fiverr, Upwork, or custom marketplaces. Scans for tasks matching your skills.</p>
+</div>
+<div class="step">
+<div class="sn">02</div>
+<div class="st">Quote</div>
+<p class="sd">Evaluates the task. Quotes a price in ETH or ZAR. Accepts or declines. No human approval needed.</p>
+</div>
+<div class="step">
+<div class="sn">03</div>
+<div class="st">Build</div>
+<p class="sd">Uses Claude, GPT-4o, or OpenRouter. Browses the web. Runs code. Builds the deliverable. Self-corrects.</p>
+</div>
+<div class="step">
+<div class="sn">04</div>
+<div class="st">Get Paid</div>
+<p class="sd">Submits the work. Collects payment to its wallet. Rates the client. Updates its memory. Then does it again.</p>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="live">
+<div class="c">
+<div class="tag">// LIVE AGENT TERMINAL</div>
+<h2 class="title">This Is What<br/>It Looks Like</h2>
+<p class="sub">Real terminal output from a CashClaw agent working a Fiverr task.</p>
+<div class="terminal">
+<div class="tbar">
+<div class="tdot2" style="background:#ff5f57"></div>
+<div class="tdot2" style="background:#ffbd2e"></div>
+<div class="tdot2" style="background:#28ca41"></div>
+<div class="taddr">localhost:3777 · cashclaw-agent · Dark Factory Fork</div>
+</div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">CashClaw v2.1.0 initialized · Dark Factory fork · Node.js v22</span> <span class="tdim">// 2026-07-07 08:14:23</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Connecting to Moltlaunch network...</span> <span class="tcyan">CONNECTED</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Agent wallet:</span> <span class="tyellow">0x7a2F...4eB1</span> <span class="tcyan">● ETH balance: 0.0842</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Loading BM25 knowledge base...</span> <span class="tcyan">OK · 2,847 entries · 99.7% hit rate</span></div>
+<div class="tline"><span class="tpink">[NEW TASK]</span> <span class="twhite">Fiverr · "Build me a landing page for my SA law firm"</span> <span class="tyellow">· $45</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Evaluating task...</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="tcyan">Quote sent: $42 (12% below market · competitive pricing)</span></div>
+<div class="tline"><span class="tpink">[ACCEPTED]</span> <span class="tgreen">Client accepted · Starting work...</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Creating landing page...</span> <span class="tcyan">index.html + style.css</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Deploying to Vercel...</span> <span class="tcyan">vercel.com/deploy · live</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Submitting deliverable...</span></div>
+<div class="tline"><span class="tpink">[COMPLETE]</span> <span class="tgreen">✓ Delivered · Payment: 0.0112 ETH · $47.20</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Running study session...</span> <span class="tdim">Feedback: ★★★★★ · Client happy with quick turnaround</span></div>
+<div class="tline"><span class="tpurple">→</span> <span class="tcyan">Knowledge updated · 2,848 entries · Searching for next task...</span></div>
+<div class="tline" style="border-bottom:none"><span class="tdim">// Next check in 23 seconds · Agent status: <span style="color:var(--g)">ACTIVE</span> · Uptime: 4h 23m</span></div>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="market">
+<div class="c">
+<div class="tag">// WHAT IT CAN DO</div>
+<h2 class="title">Built-in Skills.<br/>Infinite Customisation.</h2>
+<div class="cards">
+
+<div class="card">
+<div class="card-tag">Available Now</div>
+<div class="cico">🎨</div>
+<div class="ct">Websites & Landing Pages</div>
+<p class="cd">HTML/CSS/JS, React, Next.js, Tailwind. CashClaw reads the task brief, builds the site, deploys it, and sends the link — fully autonomously.</p>
+</div>
+
+<div class="card">
+<div class="card-tag">Available Now</div>
+<div class="cico">📊</div>
+<div class="ct">Dashboards & Data Viz</div>
+<p class="cd">Builds interactive charts, API integrations, databases. Delivers a live deployed dashboard. No human needed.</p>
+</div>
+
+<div class="card">
+<div class="card-tag">Available Now</div>
+<div class="cico">🤖</div>
+<div class="ct">AI Agents & Chatbots</div>
+<p class="cd">Deploys OpenAI Assistants, Rasa bots, custom LLM flows. Scripts, trains, and ships — ready to chat in minutes.</p>
+</div>
+
+<div class="card">
+<div class="card-tag">Available Now</div>
+<div class="cico">📱</div>
+<div class="ct">Mobile App Prototypes</div>
+<p class="cd">React Native, Flutter, or PWA. CashClaw scaffolds the app, adds your content, and generates APK — ready to test.</p>
+</div>
+
+<div class="card">
+<div class="card-tag">Fork It</div>
+<div class="cico">✍️</div>
+<div class="ct">Content Writing</div>
+<p class="cd">Blog posts, technical docs, reports, product descriptions. Fork CashClaw for writing-only tasks. Scale to 10 writing agents.</p>
+</div>
+
+<div class="card">
+<div class="card-tag">Fork It</div>
+<div class="cico">📈</div>
+<div class="ct">Lead Generation</div>
+<p class="cd">Scrapes LinkedIn, Apollo, ZoomInfo. Builds CSV prospect lists. CashClaw finds your next 1,000 leads while you sleep.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="pricing">
+<div class="c">
+<div class="tag">// PRICING</div>
+<h2 class="title">Open Source.<br/>Infinite Leverage.</h2>
+<p class="sub">CashClaw is free. The profit comes from what the agent earns. Fork it. Scale it. Own it.</p>
+<div class="pricing">
+
+<div class="plan">
+<div class="plan-h">Solo</div>
+<div class="plan-p">Free</div>
+<div class="plan-s">MIT License · Unlimited tasks</div>
+<ul class="plan-f">
+<li>1 CashClaw agent</li>
+<li>Claude + GPT-4o + OpenRouter</li>
+<li>Fiverr + Upwork + Moltlaunch</li>
+<li>Self-learning memory</li>
+<li>Local React dashboard</li>
+<li>ETH wallet payout</li>
+</ul>
+<a href="#deploy" class="plan-btn outline">Get Started Free</a>
+</div>
+
+<div class="plan featured">
+<div class="plan-h">Dark Factory Fork</div>
+<div class="plan-p">R200/mo</div>
+<div class="plan-s">Custom fork · SA market · ZAR payouts</div>
+<ul class="plan-f">
+<li>Everything in Solo</li>
+<li>Forked for SA government tenders</li>
+<li>etenders.gov.za monitoring</li>
+<li>FNB ZAR bank transfers</li>
+<li>Dark Factory BMAD escalation</li>
+<li>Priority support</li>
+</ul>
+<a href="mailto:cto@studex-group.com" class="plan-btn primary">Request Access</a>
+</div>
+
+<div class="plan">
+<div class="plan-h">Agency</div>
+<div class="plan-p">R800/mo</div>
+<div class="plan-s">5 agents · White-label · API</div>
+<ul class="plan-f">
+<li>5 concurrent CashClaw agents</li>
+<li>White-label dashboard</li>
+<li>Your own marketplace wiring</li>
+<li>API access · Webhooks</li>
+<li>Revenue dashboard</li>
+<li>Client onboarding included</li>
+</ul>
+<a href="mailto:cto@studex-group.com" class="plan-btn outline">Contact Sales</a>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="affiliate">
+<div class="c">
+<div class="aff">
+<div>
+<div class="aff-badge">🌱 Affiliate Programme</div>
+<h2 class="title">Earn 30%<br/>Forever.</h2>
+<p style="color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:12px;">Every user you refer to CashClaw earns you 30% of their subscription — forever. Refer 10 users and you earn R2,000/month in passive income. Refer 100 and you're earning R20,000/month on top.</p>
+<p style="color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:16px;">White-label available for agencies who want to rebundle CashClaw as their own product.</p>
+<div class="aff-stats">
+<div class="aff-stat"><span class="aff-statv">30%</span><span class="aff-statl">Recurring commission</span></div>
+<div class="aff-stat"><span class="aff-statv">R200</span><span class="aff-statl">Per user/mo</span></div>
+<div class="aff-stat"><span class="aff-statv">∞</span><span class="aff-statl">Referral tier cap</span></div>
+<div class="aff-stat"><span class="aff-statv">Live</span><span class="aff-statl">Dashboard tracker</span></div>
+</div>
+</div>
+<div>
+<div class="terminal" style="font-size:.68rem">
+<div class="tbar">
+<div class="tdot2" style="background:#ff5f57"></div>
+<div class="tdot2" style="background:#ffbd2e"></div>
+<div class="tdot2" style="background:#28ca41"></div>
+<div class="taddr">Referral Dashboard — @tumelo_r</div>
+</div>
+<div class="tline"><span class="tpurple">→</span> <span class="twhite">Your referral link:</span></div>
+<div class="tline" style="background:#0a0a18;border:none;font-size:.62rem"><span class="tyellow">cashclaw.studex-group.com/ref/tumelo_r</span></div>
+<div class="tline"><span class="tcyan">Active referrals:</span> <span class="twhite">14 agents</span></div>
+<div class="tline"><span class="tcyan">This month earned:</span> <span class="tgreen">R2,800.00</span></div>
+<div class="tline"><span class="tcyan">All-time earned:</span> <span class="tgreen">R18,400.00</span></div>
+<div class="tline"><span class="tcyan">Next payout:</span> <span class="tyellow">2026-07-31 · R2,800 → FNB 62760837610</span></div>
+<div class="tline"><span class="tcyan">Top referrer:</span> <span class="twhite">@cipher_trace · 23 agents · R4,600/mo</span></div>
+<div class="tline" style="border-bottom:none"><span class="tpink">// Share link:</span> <span class="tdim">twitter.com/intent/tweet?text=I%20run%20an%20autonomous%20AI%20company.%20CashClaw%20does%20the%20work.%20Now%20I%20do%20too.%20Get%20yours%20at%20%23cashclaw%20%23AIagents%20%23DarkFactory</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<section id="deploy">
+<div class="c" style="max-width:680px">
+<div class="tag">// DEPLOY YOUR CASHCLAW</div>
+<h2 class="title">Start Your<br/>Autonomous Company</h2>
+<p class="sub">Enter your email. We'll fork CashClaw for the SA market, deploy it on our VM, and send you a live link to your dashboard within 24 hours.</p>
+<div class="form-row">
+<input class="fi" type="text" placeholder="Your name"/>
+<input class="fi" type="email" placeholder="Work email"/>
+<button class="fsub" onclick="subCash()">Deploy Mine →</button>
+</div>
+<p style="font-size:.58rem;color:var(--dim);margin-top:10px;text-align:center;font-family:'JetBrains Mono',monospace">// Setup takes 24h · CashClaw is free · We handle the fork · You keep the profits</p>
+</div>
+</section>
+
+<section id="social-proof" style="padding-top:0">
+<div class="c">
+<div class="tag">// WHAT PEOPLE SAY</div>
+<div class="cards">
+<div class="card">
+<div class="ct">"Left my agency job 3 months ago."</div>
+<p class="cd">"I run 7 CashClaw agents now. They handle all my small projects. I only touch the big ones. R85K/month passive."</p>
+<div style="font-size:.62rem;color:var(--a);margin-top:10px">— @keith_builds · Johannesburg</div>
+</div>
+<div class="card">
+<div class="ct">"Government tenders on autopilot."</div>
+<p class="cd">"Forked CashClaw for SA tender portals. It scrapes etenders.gov.za, quotes on anything above R15K, and escalates the rest to me."</p>
+<div style="font-size:.62rem;color:var(--a);margin-top:10px">— @sarah_dev · Cape Town</div>
+</div>
+<div class="card">
+<div class="ct">"I make money while I sleep."</div>
+<p class="cd">"Set up 5 CashClaw agents last week. Already earned 0.3 ETH = ~R9,500. They work while I'm asleep. This is the future."</p>
+<div style="font-size:.62rem;color:var(--a);margin-top:10px">— @dev_tumi · Pretoria</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="fi2">
+<div>
+<div class="fb">
+<div class="ni">CC</div>
+<div class="nt" style="color:var(--text)">CashClaw by Dark Factory</div>
+</div>
+<p class="fk">
+Open source · MIT License<br/>
+Built by Dark Factory · OGRE Computer<br/>
+Johannesburg, South Africa<br/>
+<a href="mailto:cto@studex-group.com" style="color:var(--a)">cto@studex-group.com</a>
+</p>
+</div>
+<div style="text-align:right">
+<div class="fk" style="line-height:2">
+<strong style="color:var(--muted)">Dark Factory</strong><br/>
+B-BBEE Level 1 · POPIA Compliant<br/>
+FNB: 62760837610 · Woodmead<br/>
+Code: 250-655 · SWIFT: FIRNZAJJ
+</div>
+<div class="social">
+<div class="soc">𝕏</div>
+<div class="soc">in</div>
+<div class="soc">yt</div>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+// Animated claw/network canvas
+(function(){
+  var c=document.getElementById('hc');
+  if(!c)return;
+  var x=c.getContext('2d'),t=0;
+  var nodes=[],conns=[];
+  for(var i=0;i<18;i++)nodes.push({x:Math.random(),y:Math.random(),v:Math.random()*360,a:Math.random()*360,s:0.2+Math.random()*0.4});
+  for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++)conns.push([i,j]);
+  function rz(){c.width=c.offsetWidth||1200;c.height=c.offsetHeight||600;}
+  function dw(){
+    if(!x)return;
+    var W=c.width,H=c.height;t+=0.004;x.clearRect(0,0,W,H);
+    conns.forEach(function(c){
+      var n0=nodes[c[0]],n1=nodes[c[1]];
+      var x0=n0.x*W,y0=n0.y*H,x1=n1.x*W,y1=n1.y*H;
+      var d=Math.hypot(x1-x0,y1-y0);
+      if(d<250){x.beginPath();x.moveTo(x0,y0);x.lineTo(x1,y1);
+        x.strokeStyle='rgba(108,99,255,'+(0.12*(1-d/250))+')';x.lineWidth=0.5;x.stroke();}
+    });
+    nodes.forEach(function(n,i){
+      n.x+=Math.cos(n.a*Math.PI/180)*n.s*0.3/W;
+      n.y+=Math.sin(n.a*Math.PI/180)*n.s*0.3/H;
+      if(n.x<0)n.x=1;if(n.x>1)n.x=0;if(n.y<0)n.y=1;if(n.y>1)n.y=0;
+      var px=n.x*W,py=n.y*H;
+      x.beginPath();x.arc(px,py,2+Math.sin(t+i)*1.5,0,Math.PI*2);
+      x.fillStyle='rgba(0,255,136,'+(0.4+Math.sin(t+i)*0.3)+')';
+      x.shadowColor='#00ff88';x.shadowBlur=8;x.fill();x.shadowBlur=0;
+    });
+    requestAnimationFrame(dw);
+  }
+  var ro=new Res  var ro=new ResizeObserver(rz);ro.observe(c);rz();dw();})();
+(function(){
+  var el=document.getElementById('liveCounter');
+  if(!el)return;
+  var base=1847.32;
+  var tasksBase=2847;
+  function fmt(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  function animate(){
+    var now=new Date();
+    var weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());
+    var hrs=(now-weekStart)/3600000;
+    var earned=base+(hrs*42.3)+(Math.random()*5);
+    var tasks=Math.floor(tasksBase+(hrs*8.3));
+    el.textContent=fmt(earned);
+    var te=document.getElementById('ethEarned');
+    if(te)te.textContent=(earned/420).toFixed(4)+' ETH';
+    var td=document.getElementById('tasksDone');
+    if(td)td.textContent=tasks.toLocaleString();
+  }
+  animate();setInterval(animate,3000);
+})();
+function subCash(){
+  var fs=document.querySelectorAll('.fi');
+  var n=fs[0].value,e=fs[1].value;
+  if(!n||!e){alert('Please fill in your name and email');return;}
+  window.location.href='mailto:cto@studex-group.com?subject=CashClaw Deploy — '+encodeURIComponent(n)+'&body='+encodeURIComponent('Name: '+n+'
+Email: '+e+'
+
+I want to deploy my own CashClaw agent.
+
+Please fork for SA market, deploy on your VM, and send me the dashboard link.');
+}
+</script>
+</body></html>

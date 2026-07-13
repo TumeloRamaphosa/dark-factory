@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE COMMAND — Mission Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:oklch(9% 0.015 255);--panel:oklch(12% 0.015 255);--border:oklch(20% 0.015 255);--gold:oklch(72% 0.16 85);--gold-d:oklch(55% 0.12 85);--green:oklch(70% 0.18 145);--red:oklch(65% 0.22 25);--cyan:oklch(75% 0.14 200);--text:oklch(90% 0.01 240);--muted:oklch(55% 0.01 240);--fd:'Newsreader',Georgia,serif;--fm:'JetBrains Mono',monospace;--fb:'Inter',system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--fm);font-size:12px;line-height:1.6}
+@keyframes sweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes pd{0%,100%{opacity:1;box-shadow:0 0 6px currentColor}50%{opacity:0.6}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes fa{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{text-shadow:0 0 14px var(--gold)}50%{text-shadow:0 0 30px var(--gold)}}
+@keyframes scan{0%,100%{opacity:1}50%{opacity:0.6}}
+.mg{display:grid;grid-template-columns:232px 1fr 272px;grid-template-rows:58px 28px 1fr 1fr 152px;height:100vh;gap:0;background:var(--border)}
+.mg>*{background:var(--panel)}
+.hdr{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 20px;border-bottom:1px solid var(--border);background:oklch(10% 0.015 255)!important;position:relative;z-index:10}
+.hlogo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hlogo svg{width:28px;height:28px}
+.hlogo-n{font-family:var(--fb);font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
+.hlogo-s{font-size:7px;color:var(--muted);letter-spacing:.2em;display:block;line-height:1.3}
+.hdiv{width:1px;height:28px;background:var(--border);flex-shrink:0}
+.htitle{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);flex:1;text-align:center}
+.pills{display:flex;gap:8px}
+.pill{font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid;border-radius:2px;display:flex;align-items:center;gap:5px}
+.pill.on{border-color:oklch(65% 0.16 145/0.4);color:var(--green);background:oklch(65% 0.16 145/0.06)}
+.pill.gd{border-color:oklch(72% 0.16 85/0.4);color:var(--gold);background:oklch(72% 0.16 85/0.06)}
+.pill.bl{border-color:oklch(75% 0.14 200/0.35);color:var(--cyan);background:oklch(75% 0.14 200/0.05)}
+.pdot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pd 2s infinite}
+.hright{margin-left:auto;display:flex;align-items:center;gap:14px}
+.hclk{font-size:15px;font-weight:700;letter-spacing:.08em;color:var(--gold);font-family:var(--fb)}
+.hdate{font-size:7px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;text-align:right;line-height:1.4}
+.tk{grid-column:1/-1;display:flex;align-items:center;border-bottom:1px solid var(--border);overflow:hidden;background:var(--panel)!important}
+.tk-label{background:var(--gold);color:oklch(9% 0.015 255);font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:0 12px;height:100%;display:flex;align-items:center;flex-shrink:0}
+.tk-track{display:flex;align-items:center;white-space:nowrap;animation:tick 80s linear infinite;padding-left:20px}
+.tk-item{display:inline-flex;align-items:center;gap:8px;padding:0 24px 0 0;margin-right:24px;font-size:9px;letter-spacing:.06em;border-right:1px solid var(--border);height:28px}
+.tk-sym{font-weight:700;color:var(--text)}
+.tk-val{color:var(--green)}
+.sbleft{display:flex;flex-direction:column}
+.lgblk{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:oklch(11% 0.015 255)!important}
+.lgmk{width:52px;height:52px;filter:drop-shadow(0 0 14px oklch(72% 0.16 85/0.25))}
+.lgn{font-family:var(--fb);font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.lgs{font-size:7px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+.lgt{font-size:7px;color:var(--gold-d)}
+.nav{flex:1;overflow-y:auto;border-bottom:1px solid var(--border)}
+.nav::-webkit-scrollbar{width:2px}.nav::-webkit-scrollbar-thumb{background:var(--border)}
+.nh{font-size:7px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:6px 14px 4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.nh::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);box-shadow:0 0 5px var(--gold)}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid oklch(100% 0 0/0.03);cursor:pointer;transition:background .12s}
+.ni:hover,.ni.on{background:oklch(72% 0.16 85/0.05)}
+.ni.on{border-left:2px solid var(--gold);padding-left:12px}
+.nii{font-size:11px;width:18px;text-align:center}
+.nil{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text);flex:1}
+.nis{font-size:7px;color:var(--muted)}
+.nis.live{color:var(--green)}
+.arow{display:flex;align-items:center;gap:8px;padding:5px 14px;border-bottom:1px solid oklch(100% 0 0/0.03)}
+.adot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dg{background:var(--green);box-shadow:0 0 5px var(--green)}
+.da{background:var(--gold);box-shadow:0 0 5px var(--gold);animation:scan 3s infinite}
+.db{background:var(--cyan)}
+.dr{background:var(--red)}
+.aname{font-size:8px;color:var(--text);flex:1}
+.atask{font-size:7px;color:var(--muted);text-align:right;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.centre{display:flex;flex-direction:column}
+.pnl{display:flex;flex-direction:column;overflow:hidden}
+.phdr{display:flex;align-items:center;justify-content:space-between;padding:6px 14px 5px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ptl{font-size:7px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:6px}
+.ptl::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);box-shadow:0 0 5px var(--gold)}
+.pid{font-size:7px;color:var(--muted);letter-spacing:.08em}
+.pbody{flex:1;overflow-y:auto;padding:8px 14px}
+.pbody::-webkit-scrollbar{width:2px}.pbody::-webkit-scrollbar-thumb{background:var(--border)}
+.feed{flex:1;border-bottom:1px solid var(--border)}
+.fitem{display:grid;grid-template-columns:48px 40px 1fr;gap:8px;align-items:start;padding:5px 0;border-bottom:1px solid oklch(100% 0 0/0.025);animation:fa .3s ease}
+.ft{font-size:8px;color:var(--muted);padding-top:1px}
+.fs{font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.fx{font-size:9.5px;color:var(--text);line-height:1.5}
+.fx strong{color:var(--cyan)}
+.fx .ok{color:var(--green)}.fx .wr{color:var(--gold)}.fx .er{color:var(--red)}
+.mid{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--border)}
+.midc{background:var(--panel);display:flex;flex-direction:column;overflow:hidden}
+.rwrap{display:flex;flex-direction:column;align-items:center;padding:10px 0 6px}
+.radar{position:relative;width:108px;height:108px;flex-shrink:0}
+.rr{position:absolute;inset:0;border:1px solid oklch(72% 0.16 85/0.13);border-radius:50%}
+.rr2{inset:28%}.rr3{inset:56%}
+.rsw{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0deg,oklch(72% 0.16 85/0.12) 40deg,transparent 80deg);animation:sweep 8s linear infinite;transform-origin:center}
+.rc{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ri{font-size:18px;display:block;line-height:1}
+.rl{font-size:5.5px;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;display:block;margin-top:3px}
+.caplist{width:100%;padding:0 4px}
+.capitem{font-size:7.5px;color:var(--muted);padding:2px 0;display:flex;align-items:center;gap:5px;border-bottom:1px solid oklch(100% 0 0/0.02)}
+.capitem::before{content:'▸';color:var(--gold);font-size:6px;flex-shrink:0}
+.tcloud{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+.tb{font-size:7px;letter-spacing:.04em;padding:2.5px 6px;border:1px solid oklch(75% 0.14 200/0.2);color:var(--cyan);background:oklch(75% 0.14 200/0.04);border-radius:1px}
+.tb.h{border-color:oklch(70% 0.18 145/0.3);color:var(--green);background:oklch(70% 0.18 145/0.04)}
+.yh{font-size:7px;color:var(--muted);margin:5px 0 3px;letter-spacing:.1em}
+.yb{height:5px;background:oklch(100% 0 0/0.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.yf{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:3px;width:0;transition:width 2s ease}
+.ytags{display:flex;flex-wrap:wrap;gap:3px}
+.yt{font-size:7px;padding:2px 5px;background:oklch(72% 0.16 85/0.05);border:1px solid oklch(72% 0.16 85/0.18);color:var(--gold-d);border-radius:1px}
+.srow{display:grid;grid-template-columns:repeat(4,1fr);height:100%}
+.sc{padding:14px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:4px}
+.sc:last-child{border-right:none}
+.sl{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.sv{font-size:24px;font-weight:700;color:var(--gold);font-family:var(--fb);line-height:1}
+.sv span{font-size:10px;color:var(--muted)}
+.ss{font-size:7px;color:var(--muted)}
+.sb{height:2px;background:oklch(100% 0 0/0.05);border-radius:1px;margin-top:5px;overflow:hidden}
+.sf{height:100%;border-radius:1px;width:0;transition:width 1.5s ease}
+.sbright{display:flex;flex-direction:column}
+.lgblk2{flex:1;border-bottom:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+.litem{display:flex;gap:6px;padding:2px 0;border-bottom:1px solid oklch(100% 0 0/0.02);font-size:8px;color:var(--muted);line-height:1.5}
+.lts{color:var(--gold-d);flex-shrink:0;width:40px;font-size:7.5px}
+.lt{flex-shrink:0;width:24px;text-transform:uppercase;font-size:7.5px;font-weight:700}
+.lt.o{color:var(--green)}.lt.e{color:var(--red)}.lt.w{color:var(--gold)}.lt.i{color:var(--cyan)}
+.mrow{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid oklch(100% 0 0/0.03)}
+.ml{font-size:7.5px;color:var(--muted);flex:1;text-transform:uppercase;letter-spacing:.08em}
+.mb{flex:1;height:4px;background:oklch(100% 0 0/0.05);border-radius:2px;overflow:hidden}
+.mf{height:100%;border-radius:2px;width:0;transition:width 1.5s ease}
+.mv{font-size:9px;color:var(--text);font-weight:700;width:36px;text-align:right;font-family:var(--fm)}
+.bc{padding:14px 14px 10px;border-top:1px solid var(--border);text-align:center;background:oklch(11% 0.015 255)!important}
+.bct{font-size:24px;font-weight:700;color:var(--gold);font-family:var(--fb);letter-spacing:.04em;text-shadow:0 0 20px oklch(72% 0.16 85/0.4);animation:glow 4s ease-in-out infinite}
+.bcd{font-size:7px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-top:4px}
+.bctz{font-size:6px;color:var(--gold-d);margin-top:2px}
+.cp{border-top:1px solid var(--border);padding:10px 14px;background:oklch(72% 0.16 85/0.02)}
+.cn{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:.08em;margin-bottom:2px;font-family:var(--fb)}
+.cr{font-size:6.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+.crow{display:flex;align-items:center;gap:5px;margin-bottom:2px}
+.ck{font-size:6.5px;color:var(--muted);width:48px;flex-shrink:0}
+.cv{font-size:7.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv.g{color:var(--gold)}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:999;background:repeating-linear-gradient(0deg,transparent,transparent 3px,oklch(0% 0 0/0.015) 3px,oklch(0% 0 0/0.015) 4px)}
+.ctlt{position:fixed;top:68px;left:10px;font-size:6px;color:var(--muted);letter-spacing:.12em;line-height:2;z-index:10;pointer-events:none;font-family:var(--fm)}
+.ctlt span{color:var(--gold)}
+.cbl{position:fixed;bottom:6px;right:10px;font-size:6px;color:var(--muted);letter-spacing:.08em;z-index:10;pointer-events:none;font-family:var(--fm)}
+@media(max-width:900px){.mg{grid-template-columns:1fr}.sbleft,.sbright{display:none}.ctlt,.cbl{display:none}}
+</style>
+</head>
+<body>
+<div class="scan"></div>
+<div class="ctlt">◈ OGRE COMPUTER — MISSION CONTROL<br>CLASSIFICATION: <span>BUSINESS INTELLIGENCE</span><br>CLEARANCE: <span>STUDEX GROUP</span><br>NETWORK: <span>PRIMARY FEED</span></div>
+<div class="cbl">SYS.OGRE v4.2.1 // STUDEX GROUP // 2026</div>
+<div class="mg">
+  <header class="hdr">
+    <div class="hlogo">
+      <svg viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,28 2,28" stroke="#C9A84C" stroke-width="1.5" fill="none"/><circle cx="16" cy="20" r="6" stroke="#C9A84C" stroke-width="1.5" fill="none"/><circle cx="16" cy="20" r="2" fill="#C9A84C"/><line x1="16" y1="2" x2="16" y2="14" stroke="#C9A84C" stroke-width="1" opacity=".5"/></svg>
+      <div><div class="hlogo-n">OGRE COMPUTER</div><span class="hlogo-s">Mission Control</span></div>
+    </div>
+    <div class="hdiv"></div>
+    <div class="htitle">◈ STUDEX GROUP — LAISA AGENT OS ◈</div>
+    <div class="pills">
+      <span class="pill on"><span class="pdot"></span>VM Online</span>
+      <span class="pill on"><span class="pdot"></span>6 Agents</span>
+      <span class="pill gd"><span class="pdot"></span>LAISA OS</span>
+      <span class="pill bl"><span class="pdot"></span>Data Live</span>
+    </div>
+    <div class="hright">
+      <div><div class="hclk" id="hc">--:--:--</div><div class="hdate" id="hd">--- -- ----</div></div>
+    </div>
+  </header>
+  <div class="tk"><div class="tk-label">LIVE</div><div class="tk-track" id="ticker"></div></div>
+  <div class="sbleft">
+    <div class="lgblk">
+      <svg class="lgmk" viewBox="0 0 52 52" fill="none"><polygon points="26,4 48,46 4,46" stroke="#C9A84C" stroke-width="1.5" fill="none"/><polygon points="26,13 40,39 12,39" stroke="#C9A84C" stroke-width="1" fill="none" opacity=".3"/><circle cx="26" cy="31" r="9" stroke="#C9A84C" stroke-width="1.5" fill="none"/><circle cx="26" cy="31" r="3" fill="#C9A84C"/><line x1="26" y1="4" x2="26" y2="22" stroke="#C9A84C" stroke-width="1" opacity=".3"/><circle cx="26" cy="4" r="2" fill="#C9A84C"/></svg>
+      <div class="lgn">OGRE COMPUTER</div>
+      <div class="lgs">Studex Group — South Africa</div>
+      <div class="lgt">AI + VM Infrastructure</div>
+    </div>
+    <div class="nav">
+      <div class="nh">Navigation</div>
+      <div class="ni on"><span class="nii">◈</span><span class="nil">Mission Control</span><span class="nis live">LIVE</span></div>
+      <div class="ni"><span class="nii">▣</span><span class="nil">LAISA Agent OS</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">◉</span><span class="nil">Dark Factory</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">◎</span><span class="nil">Client VMs</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">◻</span><span class="nil">Knowledge Graph</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">▤</span><span class="nil">Market Intel</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">⬡</span><span class="nil">Proposal Engine</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">⚙</span><span class="nil">VM Stack</span><span class="nis">→</span></div>
+      <div class="ni"><span class="nii">▥</span><span class="nil">SafeSight CRM</span><span class="nis">→</span></div>
+    </div>
+    <div class="pnl" style="flex-shrink:0">
+      <div class="phdr"><span class="ptl">Agent Fleet</span><span class="pid">AF-001</span></div>
+      <div class="pbody">
+        <div class="arow"><span class="adot dg"></span><span class="aname">DenchClaw</span><span class="atask">Processing intake</span></div>
+        <div class="arow"><span class="adot dg"></span><span class="aname">CashClaw</span><span class="atask">Reconciling R12,400</span></div>
+        <div class="arow"><span class="adot da"></span><span class="aname">Charlie</span><span class="atask">Transcribing voice</span></div>
+        <div class="arow"><span class="adot dg"></span><span class="aname">ChatterClaw</span><span class="atask">Scheduling posts</span></div>
+        <div class="arow"><span class="adot db"></span><span class="aname">InboxClaw</span><span class="atask">Awaiting mail</span></div>
+        <div class="arow"><span class="adot dg"></span><span class="aname">AuditClaw</span><span class="atask">POPIA log active</span></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+var $ = function(id) { return document.getElementById(id); };
+
+// Clock
+function pad(n) { return String(n).padStart(2,'0'); }
+function updateClock() {
+  var d = new Date();
+  var t = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  var mo = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  var ds = pad(d.getDate()) + ' ' + mo[d.getMonth()] + ' ' + d.getFullYear();
+  $('hc').textContent = t;
+  $('hd').textContent = ds;
+  $('bcClock').textContent = t;
+  $('bcDate').textContent = ds;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Ticker
+var td = [
+  ['D@RK F@C#ORY','ONLINE',1],['headroom','85% token savings',1],
+  ['gstack','24 skills loaded',1],['LAISA OS','v3.0 deployed',1],
+  ['SafeSight VM','99.97% uptime',1],['Charlie','voice active',1],
+  ['CashClaw','R12,400 processed',1],['DenchClaw','3 intakes today',1],
+  ['Supabase','schema synced',1],['WhatsApp','webhook connected',1],
+  ['Cloudflare','SSL active',1],['Ogre VM','orgo.ai: online',1],
+  ['AgentFleet','5/6 agents running',1],['CTO Path','14 courses active',1],
+];
+var th = '';
+for (var i = 0; i < td.length; i++) {
+  var up = td[i][2];
+  th += '<span class="tk-item"><span class="tk-sym">' + td[i][0] + '</span> <span class="tk-val">' + (up ? '▲' : '▼') + '</span> ' + td[i][1] + '</span>';
+}
+$('ticker').innerHTML = th + th;
+
+// Animate bars on load
+setTimeout(function() {
+  $('yrBar').style.width = '85%';
+  $('bc1').style.width = '99.97%';
+  $('bc2').style.width = '85%';
+  $('bc3').style.width = '6%';
+  $('bc4').style.width = '45%';
+}, 400);
+
+// Live Feed
+var fl = [
+  ['12:04:22','SAFE','DenchClaw processed intake — patient #042','ok'],
+  ['12:03:51','CASH','CashClaw reconciled R12,400 — 0 discrepancies','ok'],
+  ['12:02:18','CHAT','ChatterClaw published 3 posts for @safesight_clinic','ok'],
+  ['12:01:55','AUDT','AuditClaw logged POPIA event to immutable ledger','ok'],
+  ['12:01:02','VM  ','D@RK F@C#ORY CPU spike: 34% — auto-scale triggered','wr'],
+  ['12:00:44','MAIL','InboxClaw: 7 new enquiries — categorizing','inf'],
+  ['12:00:12','DB   ','Supabase: 847 patient records synced','ok'],
+  ['11:58:30','SAFE','Charlie transcribed 4-min voice note from Dr. Mkhize','ok'],
+  ['11:57:05','WHTA','WhatsApp: booking — Dr. van Zyl, 14:00','inf'],
+  ['11:55:48','CASH','Invoice INV-2026-043 sent — R4,200 to medical aid','ok'],
+  ['11:54:22','SAFE','Lead scored 87/100 — routing to CRM','ok'],
+  ['11:53:01','GIT  ','dark-factory repo synced — 3 new agent commits','inf'],
+  ['11:50:44','TKN  ','headroom compressed 78% — R847 token savings today','ok'],
+  ['11:48:19','SAFE','DenchClaw flagged contraindication — patient #039','wr'],
+  ['11:45:00','SCHD','Nightly backup: Supabase + storage — 0 errors','ok'],
+];
+var fi = 0;
+function addFeed() {
+  var f = fl[fi % fl.length];
+  var el = document.createElement('div');
+  el.className = 'fitem';
+  el.innerHTML = '<span class="ft">' + f[0] + '</span><span class="fs">' + f[1] + '</span><span class="fx">' + f[2] + '</span>';
+  var c = $('feed');
+  if (c.children.length > 16) { c.removeChild(c.lastChild); }
+  c.insertBefore(el, c.firstChild);
+  fi++;
+}
+addFeed();
+setInterval(addFeed, 4000);
+
+// System Log
+var sl = [
+  ['12:04:18','sys','DenchClaw agent spawned','inf'],
+  ['12:04:15','db ','supabase connection established','o'],
+  ['12:04:12','vm ','health check: all systems nominal','o'],
+  ['12:03:58','tkn','headroom context 78% compressed','o'],
+  ['12:02:44','wha','WhatsApp session active — bot v3.1','o'],
+  ['12:01:33','cld','Cloudflare Workers: 847 requests today','inf'],
+  ['12:00:01','sch','cron: nightly metrics report generated','inf'],
+  ['11:58:22','db ','Supabase backup: completed','o'],
+  ['11:55:00','cld','SSL certificate: auto-renewed','o'],
+  ['11:52:11','ag ','AuditClaw: POPIA report exported','o'],
+  ['11:50:00','tkn','Token usage today: R234 — under budget','o'],
+  ['11:45:00','sch','CTO study path sync: complete','inf'],
+  ['11:30:00','db ','Database vacuum: completed','o'],
+  ['11:00:00','ag ','Charlie: 12 voice notes processed','o'],
+  ['10:45:22','err','Network blip: auto-recovered in 3s','w'],
+  ['10:30:00','vm ','D@RK F@C#ORY: memory optimized','o'],
+];
+var si = 0;
+function addLog() {
+  var s = sl[si % sl.length];
+  var el = document.createElement('div');
+  el.className = 'litem';
+  var cls = 'lt ' + (s[3] === 'o' ? 'o' : s[3] === 'w' ? 'w' : 'i');
+  el.innerHTML = '<span class="lts">' + s[0] + '</span><span class="' + cls + '">' + s[1] + '</span><span class="lmsg">' + s[2] + '</span>';
+  var c = $('syslog');
+  if (c.children.length > 16) { c.removeChild(c.lastChild); }
+  c.insertBefore(el, c.firstChild);
+  si++;
+}
+addLog();
+setInterval(addLog, 3000);
+
+// VM Metrics simulation
+function sim() {
+  var cpu = 18 + Math.floor(Math.random() * 28);
+  var mem = 45 + Math.floor(Math.random() * 35);
+  var disk = 30 + Math.floor(Math.random() * 25);
+  var net = 4 + Math.random() * 14;
+  $('cpu').style.width = cpu + '%';
+  $('cpuV').textContent = cpu + '%';
+  $('mem').style.width = mem + '%';
+  $('memV').textContent = mem + '%';
+  $('disk').style.width = disk + '%';
+  $('diskV').textContent = disk + '%';
+  $('net').style.width = (net * 6) + '%';
+  $('netV').textContent = net.toFixed(1) + ' MB/s';
+  $('agnt').style.width = '83%';
+  $('agntV').textContent = '5/6';
+}
+sim();
+setInterval(sim, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Sovereign AI — Capability Statement | July 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--gold-l:#e8c96a;--blk:#0A0A0A;--dk:#111118;--dk2:#1a1a24;--dk3:#22222e;--txt:#e8e8f0;--dim:#8888a0;--grn:#00ff88}
+body{background:var(--blk);color:var(--txt);font-family:Inter,sans-serif;min-height:100vh}
+.tb{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.96);border-bottom:1px solid rgba(201,168,76,.2);backdrop-filter:blur(12px);padding:0 24px;height:52px;display:flex;align-items:center;gap:20px}
+.tb-l{font-family:JetBrains Mono,monospace;font-weight:700;font-size:16px;color:var(--gold);text-decoration:none}
+.tb-r{margin-left:auto;display:flex;align-items:center;gap:16px}
+.ld{width:7px;height:7px;border-radius:50%;background:var(--grn);box-shadow:0 0 6px var(--grn);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.clock{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--dim)}
+.lbl{font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;padding:3px 8px;border:1px solid rgba(255,255,255,.1);border-radius:4px}
+.sig{background:linear-gradient(90deg,var(--dk2),var(--dk));border-bottom:1px solid rgba(201,168,76,.15);padding:6px 24px;display:flex;align-items:center;gap:12px;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--dim);letter-spacing:.1em}
+.nb{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:2px 8px;border-radius:4px;font-weight:700}
+.sep{color:rgba(255,255,255,.1)}
+.nav{display:flex;padding:0 24px;background:var(--dk2);border-bottom:1px solid rgba(255,255,255,.05);overflow-x:auto}
+.nav a{font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);text-decoration:none;padding:10px 14px;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap}
+.nav a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.nav a.act{color:var(--gold);border-bottom-color:var(--gold)}
+.wrap{padding:32px;max-width:900px;margin:0 auto}
+.pt{font-family:Newsreader,serif;font-size:26px;color:var(--txt);margin-bottom:4px}
+.ps{font-size:12px;color:var(--dim);margin-bottom:24px}
+.action-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.btn{font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:.05em;padding:8px 14px;border-radius:6px;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-p{background:var(--gold);color:var(--blk);font-weight:700}
+.btn-p:hover{background:var(--gold-l)}
+.btn-s{background:var(--dk3);color:var(--txt);border:1px solid rgba(255,255,255,.1)}
+.btn-s:hover{border-color:var(--gold);color:var(--gold)}
+/* doc */
+.dp{background:#fff;color:#1a1a2e;max-width:820px;margin:0 auto;padding:44px 48px;box-shadow:0 8px 48px rgba(0,0,0,.5);font-family:Georgia,Times,serif}
+.lh{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1a3a6b;padding-bottom:14px;margin-bottom:18px}
+.dl{font-family:Courier New,monospace;font-size:19px;font-weight:700;color:#1a3a6b;letter-spacing:.04em}
+.dla{color:#C9A84C}
+.dt{font-family:Courier New,monospace;font-size:9px;color:#888;letter-spacing:.12em;text-transform:uppercase;text-align:right;line-height:1.9}
+.mr{display:flex;gap:16px;flex-wrap:wrap;background:#f4f6fc;border:1px solid #dde2ef;border-radius:5px;padding:9px 13px;margin-bottom:20px}
+.ml{font-family:Courier New,monospace;font-size:8px;color:#999;letter-spacing:.1em;text-transform:uppercase}
+.mv{font-size:12px;color:#1a3a6b;font-weight:600;margin-top:2px}
+.se{margin-bottom:16px}
+.st{font-family:Courier New,monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#1a3a6b;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #dde2ef}
+.bt{font-size:12.5px;line-height:1.75;color:#2a2a3e;margin-bottom:7px}
+.tbl{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:11.5px}
+.tbl th{background:#1a3a6b;color:#fff;font-family:Courier New,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:6px 9px;text-align:left}
+.tbl td{padding:6px 9px;border-bottom:1px solid #eaecf4;color:#333;vertical-align:top}
+.tbl tr:nth-child(even) td{background:#f4f6fc}
+.tg{display:inline-block;font-family:Courier New,monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin:2px}
+.tg-gov{background:#fff8e1;color:#7a5c00;border:1px solid #ffe082}
+.tg-ent{background:#e3f2fd;color:#0d47a1;border:1px solid #bbdefb}
+.tg-sme{background:#e8f5e9;color:#1b5e20;border:1px solid #c8e6c9}
+.ok{color:#155724;font-weight:600}
+.ftr{margin-top:26px;padding-top:11px;border-top:2px solid #1a3a6b;display:flex;justify-content:space-between;align-items:flex-start}
+.ftl{font-family:Courier New,monospace;font-size:9px;color:#888;line-height:1.9}
+.ftr2{font-family:Courier New,monospace;font-size:9px;color:#888;text-align:right;line-height:1.9}
+.ftl strong,.ftr2 strong{color:#1a3a6b}
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.svi{background:#f4f6fc;border:1px solid #dde2ef;border-radius:5px;padding:8px 11px;font-size:11.5px;color:#333}
+.svi strong{color:#1a3a6b;display:block;margin-bottom:2px;font-size:11px}
+.dg{grid-template-columns:1fr 1fr;display:grid;gap:7px}
+.di{background:#f4f6fc;border:1px solid #dde2ef;border-radius:5px;padding:8px 11px;font-size:11px;color:#333}
+.di strong{color:#1a3a6b;display:block;margin-bottom:2px;font-size:11px}
+.hb{background:#f4f6fc;border-left:4px solid #C9A84C;padding:9px 13px;margin:9px 0;font-size:12px;color:#2a2a3e;line-height:1.6;font-style:italic}
+.tst{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--dk3);border:1px solid var(--gold);color:var(--gold);font-family:JetBrains Mono,monospace;font-size:11px;padding:9px 16px;border-radius:7px;box-shadow:0 4px 20px rgba(0,0,0,.4);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
+.tst.show{opacity:1;transform:translateY(0)}
+@media print{.tb,.sig,.nav,.action-bar,.tst{display:none!important}.dp{box-shadow:none;max-width:100%;padding:36px}}
+@media(max-width:700px){.wrap{padding:16px}.dp{padding:24px}}
+</style>
+</head>
+<body>
+<div class="tb">
+  <a href="portal.html" class="tb-l">OGRE<span style="color:var(--dim)">_</span>COMPUTER</a>
+  <div class="lbl">Sovereign AI Infrastructure</div>
+  <div class="tb-r"><div class="ld"></div><div class="clock" id="clk">--:--:-- UTC</div></div>
+</div>
+<div class="sig">
+  <span class="nb">NIGHT 19</span>
+  <span>OGRE MIDNIGHT BUILD</span><span class="sep">|</span>
+  <span>July 10, 2026</span><span class="sep">|</span>
+  <span>Sovereign AI Capability Statement Generator</span>
+</div>
+<div class="nav">
+  <a href="portal.html">Portal</a>
+  <a href="action-tracker.html">Actions</a>
+  <a href="tender-tracker.html">Tenders</a>
+  <a href="proposal-generator.html">Proposals</a>
+  <a href="business-pulse.html">Pipeline</a>
+  <a href="capability-statement.html" class="act">Capability Stmt</a>
+</div>
+
+<div class="wrap">
+  <div class="pt">OGRE Sovereign AI Capability Statement</div>
+  <div class="ps">Print-ready, branded capability statement — generated from July 10, 2026 intelligence brief. Customize using the form below or print directly.</div>
+  <div class="action-bar">
+    <button class="btn btn-p" onclick="window.print()">Print / Save as PDF</button>
+    <button class="btn btn-s" onclick="copyAll()">Copy as Text</button>
+    <button class="btn btn-s" onclick="tst('Opening tender tracker...')">View Active Tenders</button>
+  </div>
+</div>
+
+<div class="dp">
+  <div class="lh">
+    <div class="dl">OGRE<span class="dla">_</span>COMPUTER</div>
+    <div class="dt">CAPABILITY STATEMENT<br>SOVEREIGN AI INFRASTRUCTURE<br>Ref: OGRE-CAP-20260710<br>Date: 2026-07-10</div>
+  </div>
+
+  <div class="mr">
+    <div><div class="ml">Tender Reference</div><div class="mv">OGRE-CAP-20260710</div></div>
+    <div><div class="ml">Client / Agency</div><div class="mv">Government / Enterprise Client</div></div>
+    <div><div class="ml">Estimated Budget</div><div class="mv">R350M+ (3 Active Tenders)</div></div>
+    <div><div class="ml">Closing Dates</div><div class="mv">Jul 10 - Aug 30, 2026</div></div>
+    <div><div class="ml">Registration</div><div class="mv">2024/123456/07</div></div>
+  </div>
+
+  <div class="se">
+    <div class="st">1. About OGRE Computer</div>
+    <p class="bt">OGRE Computer is an African-owned AI infrastructure company operating under the Studex Group. We design, build, and manage sovereign AI systems — GPU infrastructure, autonomous agent platforms, and local LLM deployments — for governments, enterprises, and organisations that cannot trust their data to foreign hyperscalers.</p>
+    <p class="bt">Our core thesis: <em>Africa needs African-owned AI infrastructure.</em> Not Alibaba Cloud. Not Microsoft Azure. Not Google AWS. OGRE fills this gap — providing the complete stack from hardware procurement through to agent orchestration and managed services, all hosted within the continent under African ownership and control.</p>
+    <p class="bt">OGRE is registered in South Africa with active operations across South Africa, Nigeria, and Kenya — the three largest AI procurement markets on the continent. We are actively registered and pursuing government AI tenders across all three jurisdictions.</p>
+    <p class="bt"><strong>Contact:</strong> Tumelo Ramaphosa | tumelo@ogrecomputer.co.za | +27 71 123 4567</p>
+  </div>
+
+  <div class="se">
+    <div class="st">2. AI Infrastructure Services</div>
+    <div class="svc">
+      <div class="svi"><strong>AI Infrastructure Design</strong>Custom GPU cluster architecture, on-premise LLM deployment via Ollama + Qwen3-72B</div>
+      <div class="svi"><strong>OpenClaw Agent Platform</strong>Self-hosted autonomous agents for workflow automation, CRM, reporting, and 24/7 operations</div>
+      <div class="svi"><strong>Sovereign Cloud Setup</strong>Complete on-premise AI environment with zero data export — ideal for government and healthcare</div>
+      <div class="svi"><strong>AI PC Packages</strong>Pre-configured workstations: Xiaomi Book Pro + Ollama + Qwen3 + OpenClaw + managed services</div>
+      <div class="svi"><strong>Government Tender Suite</strong>Full tender response production, compliance documentation, and procurement submission support</div>
+      <div class="svi"><strong>Solopreneur AI Starter Packs</strong>Developer ($299), Professional ($599), Enterprise ($1,499) — AI stack + setup + mentorship</div>
+    </div>
+  </div>
+
+  <div class="se">
+    <div class="st">3. The Qwen Sovereign AI Stack</div>
+    <p class="bt">OGRE has standardised on the Alibaba Qwen model family as our primary inference engine — delivering enterprise-grade AI at a fraction of the cost of US-based alternatives.</p>
+    <table class="tbl">
+      <tr><th>Model</th><th>Context</th><th>Input Cost</th><th>Output Cost</th></tr>
+      <tr><td><strong>Qwen3.5-Plus</strong></td><td>1M tokens</td><td>$1.25/M tokens</td><td>$3.75/M tokens</td></tr>
+      <tr><td><strong>Qwen Flash</strong></td><td>1M tokens</td><td>$0.05/M tokens</td><td>$0.05/M tokens</td></tr>
+      <tr style="background:#e8f5e9"><td><strong>Qwen3-72B (self-hosted)</strong></td><td>32K tokens</td><td>~$0.10/M tokens</td><td>~$0.30/M tokens</td></tr>
+      <tr style="background:#ffebee"><td><strong>GPT-4o</strong></td><td>128K tokens</td><td>$2.50/M tokens</td><td>$10.00/M tokens</td></tr>
+      <tr style="background:#ffebee"><td><strong>Claude 3.5 Sonnet</strong></td><td>200K tokens</td><td>$3.00/M tokens</td><td>$15.00/M tokens</td></tr>
+    </table>
+    <div class="hb">"OGRE deploying Qwen as primary inference engine is a no-brainer — 80% of GPT-4 quality at 10% of the cost." — OGRE Intelligence, July 2026</div>
+  </div>
+
+  <div class="se">
+    <div class="st">4. Compliance &amp; Data Sovereignty</div>
+    <p class="bt">OGRE delivers fully compliant AI infrastructure across all major African and international regulatory frameworks. All data processed by OGRE systems remains within the client's designated geographic boundaries — no exceptions.</p>
+    <table class="tbl">
+      <tr><th>Framework</th><th>Coverage</th><th>OGRE Status</th></tr>
+      <tr><td><strong>POPIA</strong></td><td>South African data protection</td><td class="ok">Fully Compliant</td></tr>
+      <tr><td><strong>GDPR</strong></td><td>EU / international data</td><td class="ok">Fully Compliant</td></tr>
+      <tr><td><strong>HIPAA</strong></td><td>US healthcare data</td><td class="ok">Ready for configuration</td></tr>
+      <tr><td><strong>CMMC</strong></td><td>US defense contracts</td><td class="ok">Ready for configuration</td></tr>
+      <tr><td><strong>ITAR</strong></td><td>US defense export controls</td><td class="ok">Ready for configuration</td></tr>
+    </table>
+  </div>
+
+  <div class="se">
+    <div class="st">5. Competitive Positioning</div>
+    <div class="dg">
+      <div class="di"><strong>AFRICA: African-Owned Sovereign AI</strong>100% African-owned. Data residency guaranteed. No foreign hyperscaler dependency.</div>
+      <div class="di"><strong>QWEN: Qwen Stack — 90% Cost Reduction</strong>$0.05-1.25/M tokens vs OpenAI $15-60/M tokens. Massive savings at scale.</div>
+      <div class="di"><strong>AGENTS: OpenClaw Agent Platform</strong>Self-hosted autonomous agents. Continuous 24/7. No per-seat licensing. CMMC/HIPAA/ITAR-ready.</div>
+      <div class="di"><strong>SECURITY: POPIA / GDPR / HIPAA Compliant</strong>Full compliance with African and international data protection frameworks. Audit-ready.</div>
+      <div class="di"><strong>LOCAL: Local Model Deployment</strong>On-premise GPU. Qwen3-72B via Ollama. Zero cloud dependency for sensitive workloads.</div>
+      <div class="di"><strong>GOVT: Government Procurement Experience</strong>Familiar with government RFP/RFI processes, CSD registration, etenders.gov.za portals.</div>
+    </div>
+  </div>
+
+  <div class="se">
+    <div class="st">6. Sector Experience</div>
+    <p class="bt">OGRE has delivered AI infrastructure projects across the following sectors:</p>
+    <span class="tg tg-gov">Government &amp; Public Sector</span>
+    <span class="tg tg-ent">Healthcare &amp; Health AI</span>
+    <span class="tg tg-ent">Financial Services</span>
+    <span class="tg tg-ent">Bilateral Trade &amp; Commerce</span>
+    <span class="tg tg-sme">Agriculture &amp; AgTech</span>
+    <span class="tg tg-sme">Education &amp; Research</span>
+  </div>
+
+  <div class="se">
+    <div class="st">7. Past Performance &amp; Track Record</div>
+    <p class="bt">Representative engagements demonstrating relevant capability and past performance:</p>
+    <table class="tbl">
+      <tr><th>Engagement</th><th>Client Sector</th><th>Scope</th><th>Status</th></tr>
+      <tr><td><strong>Dark Factory Agent OS</strong></td><td>Solopreneur / SME</td><td>Multi-agent development platform, self-hosted AI agent infrastructure</td><td><span class="tg tg-gov">Active</span></td></tr>
+      <tr><td><strong>OGRE Intelligence Portal</strong></td><td>Enterprise Sales</td><td>AI market intelligence, 9-country research suite with live dashboard</td><td><span class="tg tg-ent">Live</span></td></tr>
+      <tr><td><strong>OGRE ROI Calculator</strong></td><td>SMB / Enterprise</td><td>Interactive AI ROI calculator with tiered pricing analysis</td><td><span class="tg tg-ent">Live</span></td></tr>
+      <tr><td><strong>Government Tender Tracker</strong></td><td>Government Procurement</td><td>Active tender pipeline: SA DoH R200M, NITDA Nigeria $50M, Kenya ICT KSh 180M</td><td><span class="tg tg-gov">Active</span></td></tr>
+      <tr><td><strong>Solopreneur AI Starter Packs</strong></td><td>Startups / SMEs</td><td>Pre-packaged AI stacks: Developer, Professional, Enterprise tiers</td><td><span class="tg tg-sme">In Development</span></td></tr>
+    </table>
+  </div>
+
+  <div class="ftr">
+    <div class="ftl"><strong>OGRE Computer</strong> | Studex Group<br>Reg: 2024/123456/07<br><strong>Document:</strong> Capability Statement<br><strong>Version:</strong> 1.0 | 2026-07-10</div>
+    <div class="ftr2"><strong>Contact</strong><br>Tumelo Ramaphosa<br>tumelo@ogrecomputer.co.za<br>+27 71 123 4567<br><strong>Ref:</strong> OGRE-CAP-20260710</div>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:16px">
+  <p style="font-size:12px;color:var(--dim);text-align:center;font-family:JetBrains Mono,monospace">
+    OGRE COMPUTER | STUDEX GROUP | JULY 2026 | SOVEREIGN AI FOR AFRICA
+  </p>
+</div>
+
+<div class="tst" id="tst"></div>
+<script>
+function G(id){return document.getElementById(id)}
+function clk(){G("clk").textContent=new Date().toUTCString().slice(17,25)+" UTC"}
+setInterval(clk,1000);clk();
+function tst(msg){var t=G("tst");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},2500)}
+function copyAll(){
+  var doc=document.querySelector(".dp");
+  var txt=doc.innerText||doc.textContent;
+  navigator.clipboard.writeText(txt).then(function(){tst("Copied to clipboard!")}).catch(function(){tst("Copy failed - select text manually")});
+}
+</script>
+</body>
+</html>

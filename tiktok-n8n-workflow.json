@@ -1,0 +1,73 @@
+{
+  "name": "TikTok Analytics Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hours", "hoursInterval": 1}]
+        }
+      },
+      "id": "schedule",
+      "name": "Every 1 Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.blotato.com/api/v1/account/profile",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "Bearer {{Secrets.BLOTATO_API_KEY}}"},
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "blotato",
+      "name": "Blotato - Get Profile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hxegtd91lggu.space.minimax.io/api/sync",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {"name": "followers", "value": "{{ $json.followers }}"},
+            {"name": "following", "value": "{{ $json.following }}"},
+            {"name": "likes", "value": "{{ $json.likes }}"},
+            {"name": "views", "value": "{{ $json.views }}"},
+            {"name": "videos", "value": "{{ $json.video_count }}"},
+            {"name": "username", "value": "ramaphosatumelo"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "dashboard",
+      "name": "Send to Dashboard",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "Every 1 Hour": {
+      "main": [[{"node": "Blotato - Get Profile", "type": "main", "index": 0}]]
+    },
+    "Blotato - Get Profile": {
+      "main": [[{"node": "Send to Dashboard", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-11T03:12:00.000Z",
+  "versionId": "1"
+}

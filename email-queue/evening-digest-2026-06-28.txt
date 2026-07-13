@@ -1,0 +1,93 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: 28 June 2026 | 06:00 PM UTC (08:00 PM SA)
+================================================
+
+🏭 OGRE COMPUTER — SUNDAY EVENING DIGEST
+DARK FACTORY × MAPHIRI BOOKS × GHANA AI MINISTRY
+================================================
+
+A productive Sunday. Three major builds across separate tracks.
+Ghana AI Ministry still the top strategic opportunity.
+
+================================================
+🚀 MAJOR: MAPHIRI BOOKS — COMPLETE REBUILD
+================================================
+
+New website deployed (no Donate CTAs, brand-correct):
+  → https://nqfzueq7b8uu.space.minimax.io
+
+Built sections:
+  ✅ Landing page — animated sphere + floating coins
+  ✅ 5 retailer buy links (Takealot / Amazon / dotdot.direct / Apple Books / Kindle)
+  ✅ About the Book + 4 Chapters
+  ✅ Meet Maphiri character section (navy background, traits, bio)
+  ✅ About Author — Keamogetswe Matsho (Woolworths SA Youth Maker 2026)
+  ✅ Maphiri Foundation — "Buy a Book" support CTA only (no Donate)
+  ✅ Final CTA band + footer
+
+Brand colours: Pink #E91E8C · Green #2ECC71 · Navy #1A1A2E
+Fonts: Nunito (headings) + Quicksand (body)
+Responsive, mobile-friendly, animated ticker marquee
+
+Full plan: /workspace/MAPHIRI-BOOKS-COMPLETE-PLAN.md
+Obsidian vault: /workspace/maphiri-obsidian/
+Business hub: /workspace/maphiri-obsidian/wiki/projects/maphiri-books/MAPIRI-BOOKS-BUSINESS.md
+
+================================================
+🌍 OPPORTUNITY: GHANA AI MINISTRY — $250M PROGRAMME
+================================================
+
+Status: Proposal needed THIS WEEK
+Ghana's $250M AI programme contracts being signed now.
+Partnership with a local entity required (SA connection ideal).
+
+Key contact angle:
+  → Flutterwave banking licence (secured April 2026)
+  → Pan-African payment rails = Ghana认可的合作伙伴
+  → Studex Global Markets can position as distribution partner
+
+Action required from Tumelo:
+  1. Draft 1-page partnership proposal (I can write it)
+  2. Identify Ghanaian AI/tech ministry contacts
+  3. Submit via official channels this week
+
+================================================
+📊 TODAY'S MARKETS BRIEF (Research Brief — June 28)
+================================================
+
+Top reads from today's research:
+  → Africa AI funding at inflection point — Ghana $250M, Nigeria $200M
+  → SoftBank + Foxconn $9B Physical AI fund (robotics + manufacturing)
+  → AI agent frameworks: CrewAI, AutoGen, LangGraph dominance
+  → Nigeria: AI startups attracting $50M+ rounds (e.g. Nestcoin)
+  → China: DeepSeek-V3 outperforming GPT-5 on reasoning benchmarks
+
+OGRE must move on Ghana before July 15 window closes.
+
+================================================
+⚡ STUDEX GROUP — TOP 3 FOR TOMORROW (MONDAY)
+================================================
+
+1. [EMAIL] Send Gmail App Password → unblocks all email reports
+2. [STRATEGY] Draft Ghana partnership proposal (I can write tonight)
+3. [MARKETING] Push Dark Factory to GitHub Pages (need PAT from Tumelo)
+
+================================================
+📁 OGRE SYSTEM STATUS
+================================================
+
+Email queue depth: 3 unsent (morning brief, research, evening digest)
+Gmail credentials: NOT YET CONFIGURED — Tumelo to provide App Password
+GitHub PAT: NOT YET PROVIDED — blocks GitHub Pages deployment
+
+Active projects running:
+  ✅ Dark Factory Portfolio v2 — live
+  ✅ Dark Factory YouTube Pipeline — live
+  ✅ Maphiri Books site — live
+  ⏳ Voice Agent (waiting on 30s Keamogetswe voice recording)
+  ⏳ Remotion sphere render (ready to build on ORGO VM)
+
+—
+OGRE Computer | Cipher Tr@ce, CEO — Dark Factory
+Studex Group | Tumelo Ramaphosa, Founder + CTO-in-Training
+Reports: /workspace/email-queue/

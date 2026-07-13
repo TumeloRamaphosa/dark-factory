@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CipherTrace — Dark Factory | Automated Software Environment</title>
+<meta name="description" content="CipherTrace builds AI-native software companies. 8 VMs. 60+ agents. 24/7 operations. Drop a PRD and watch us build it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ MODAL ============ -->
+<div id="prdModal" class="modal-overlay" style="display:none">
+  <div class="modal">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="modalTitle">Drop a PRD</div>
+        <div class="modal__subtitle">CipherTrace · Dark Factory</div>
+      </div>
+      <button class="modal__close" onclick="closePRD()">✕</button>
+    </div>
+    <div class="stepper" id="modalStepper"></div>
+    <div class="modal__body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+  <div class="navbar__inner">
+    <div class="brand" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">
+      <div class="brand__icon"><span style="font-size:1rem">🏭</span></div>
+      <div>
+        <div class="brand__name">CipherTrace</div>
+        <div class="brand__sub">Dark Factory | Studex Dev♤¿$</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button onclick="document.getElementById('clients').scrollIntoView({behavior:'smooth'})">Clients</button>
+      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Products</button>
+      <button onclick="document.getElementById('success').scrollIntoView({behavior:'smooth'})">Success</button>
+      <button onclick="document.getElementById('founder').scrollIntoView({behavior:'smooth'})">Founder</button>
+    </div>
+    <button class="btn btn--green" onclick="openPRD()">✨ Drop a PRD</button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero__inner">
+    <div>
+      <div class="badge">
+        <div class="badge__dot"></div>
+        <span class="badge__text">8 VMs · 60+ Agents · 24/7 Operations</span>
+      </div>
+      <h1 class="h1">
+        An automated<br>
+        <span class="accent">software</span><br>
+        <span class="pink">environment.</span>
+      </h1>
+      <p class="desc" style="max-width:460px;margin-bottom:2rem">
+        We build Cyber Sapien companies — AI agents run operations, humans orchestrate from the command centre. Every business has the intelligence of a multinational at African prices.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:2.5rem">
+        <button class="btn btn--green" onclick="openPRD()">✨ Drop a PRD</button>
+        <button class="btn btn--outline" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">⚙️ See Products</button>
+      </div>
+      <div class="stats">
+        <div><div class="stat__value">8</div><div class="stat__label">VMs Active</div></div>
+        <div><div class="stat__value">60+</div><div class="stat__label">AI Agents</div></div>
+        <div><div class="stat__value">24/7</div><div class="stat__label">Operations</div></div>
+      </div>
+    </div>
+    <div class="hero__canvas">
+      <canvas id="nodeCanvas" width="400" height="320"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLIENTS ============ -->
+<section class="section" id="clients">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <div class="label label--center">// Live Clients</div>
+      <h2 class="h2">Our <span class="accent">VMs</span> in the Wild</h2>
+      <p class="desc desc--center">Every client runs on their own isolated VM. AI agents working 24/7. Here's who's live right now.</p>
+    </div>
+    <div class="grid-auto" id="clientsGrid"></div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS ============ -->
+<section class="section section--white" id="products">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <div class="label label--center">// Products</div>
+      <h2 class="h2">Build. Operate. <span class="accent">Scale.</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- ============ SUCCESS ============ -->
+<section class="section section--green" id="success">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <div class="label label--center">// Proof</div>
+      <h2 class="h2">Results that <span class="accent">speak.</span></h2>
+    </div>
+    <div class="grid-4" style="margin-bottom:2.5rem">
+      <div class="mc"><div class="mc__value">8</div><div class="mc__label">VMs Active</div><div class="mc__sub">OGRE GPU cluster, 24/7</div></div>
+      <div class="mc"><div class="mc__value">60+</div><div class="mc__label">AI Agents</div><div class="mc__sub">Research, build, comms, security</div></div>
+      <div class="mc"><div class="mc__value">9</div><div class="mc__label">Countries</div><div class="mc__sub">SA, Nigeria, Kenya, Ghana, Russia</div></div>
+      <div class="mc"><div class="mc__value">R4.2M</div><div class="mc__label">Pipeline</div><div class="mc__sub">Active proposals + contracts</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="success-card" style="border:1px solid #bbf7d0;box-shadow:0 4px 20px rgba(34,197,94,0.08)">
+        <div class="sc-header">
+          <div class="sc-icon" style="background:#f0fdf4">🏥</div>
+          <div>
+            <div class="sc-title">LAISA Aesthetic Clinic</div>
+            <div class="sc-sub" style="color:var(--a)">Phase A — Production</div>
+          </div>
+        </div>
+        <p class="sc-body">We built and deployed the LAISA Agent OS in 6 weeks. Dr. Musa's clinic now runs on 6 AI agents — WhatsApp CRM, appointment booking, email campaigns, social content, CRM, and a live dashboard — all managed from a mobile phone.</p>
+        <div class="sc-grid">
+          <div class="sc-stat"><div class="sc-stat__key">Build Cost</div><div class="sc-stat__val" style="color:var(--a)">R350,000</div></div>
+          <div class="sc-stat"><div class="sc-stat__key">Monthly</div><div class="sc-stat__val" style="color:var(--a)">R55,000</div></div>
+          <div class="sc-stat"><div class="sc-stat__key">Agents</div><div class="sc-stat__val" style="color:var(--a)">6</div></div>
+          <div class="sc-stat"><div class="sc-stat__key">Response Time</div><div class="sc-stat__val" style="color:var(--a)">< 2 hours</div></div>
+        </div>
+      </div>
+      <div class="success-card" style="border:1px solid #ddd6fe;box-shadow:0 4px 20px rgba(139,92,246,0.08)">
+        <div class="sc-header">
+          <div class="sc-icon" style="background:#f5f3ff">🌍</div>
+          <div>
+            <div class="sc-title">Studex Global Markets</div>
+            <div class="sc-sub" style="color:#8b5cf6">Pharmasyntez Partnership Active</div>
+          </div>
+        </div>
+        <p class="sc-body">Africa pharma market: <strong>$29.3B (2025) → $44.1B (2032)</strong>. Anti-TB, HIV, oncology, diabetes distribution. SAHPRA licensed. B-BBEE Level 1. VM agent manages the entire pipeline autonomously.</p>
+        <div class="sc-grid">
+          <div class="sc-stat"><div class="sc-stat__key">Y1 Pipeline</div><div class="sc-stat__val" style="color:#8b5cf6">R2.99M</div></div>
+          <div class="sc-stat"><div class="sc-stat__key">License</div><div class="sc-stat__val" style="color:#8b5cf6">SAHPRA</div></div>
+          <div class="sc-stat"><div class="sc-stat__key">B-BBEE</div><div class="sc-stat__val" style="color:#8b5cf6">Level 1</div></div>
+          <div class="sc-stat"><div class="sc-stat__key">Market Access</div><div class="sc-stat__val" style="color:#8b5cf6">54 Countries</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOUNDER ============ -->
+<section class="section section--white" id="founder">
+  <div class="container">
+    <div class="fw">
+      <div>
+        <div class="label">// The Founder</div>
+        <h2 class="h2" style="margin-bottom:1.5rem">Meet <span style="color:var(--p)">Tumelo Ramaphosa</span></h2>
+        <p class="desc" style="margin-bottom:1.5rem">From McDonald's batch cooker to South Africa's premier Wagyu supplier. From Hult International Business School to the youngest AWS Certified Cloud Practitioner in Africa. From IBM + Cardano blockchain wildlife conservation to AI agents running 24/7. 11 years building what others said was impossible.</p>
+        <div class="tags">
+          <span class="tag">IBM Partner</span>
+          <span class="tag">Cardano Partner</span>
+          <span class="tag">AWS Partner</span>
+          <span class="tag">Google Cloud Partner</span>
+        </div>
+        <div class="ec" id="ecosystemList">
+          <div class="ec-title">Studex Ecosystem</div>
+        </div>
+      </div>
+      <div>
+        <div class="label" style="margin-bottom:1.5rem">// 11 Years of Building</div>
+        <div class="tl" id="timelineList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <div class="footer__icon"><span style="font-size:0.875rem">🏭</span></div>
+      <div>
+        <div class="footer__name">CipherTrace — Dark Factory</div>
+        <div class="footer__sub">Th3 Dark Factory | Studex Dev♤¿$ | Studex Group 2026</div>
+      </div>
+    </div>
+    <div class="footer__text">
+      <a href="mailto:info@studexmeat.com">info@studexmeat.com</a> · Cipher Tr@ce · CEO AI Agent · Tumelo Ramaphosa — Founder
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

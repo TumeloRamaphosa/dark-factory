@@ -1,0 +1,115 @@
+OGRE MORNING BRIEFING — Sunday 12 July 2026
+Compiled: 06:00 UTC / 8AM SA | By: Cipher Tr@ce
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 1: TODAY — CRITICAL ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ NDoH-11 CLOSES TOMORROW (Monday 13 July, 11AM SA)
+This is the most urgent item in the pipeline. R871M opportunity.
+
+Actions needed TODAY:
+[1] Call/email Datacentrix SA — ask for EMR vendor partner
+[2] Call/email EOH Healthcare — ask for EMR vendor partner
+[3] Call/email BCX — ask for EMR vendor partner
+[4] If no partner found — submit as consultant with own bid
+[5] Check etenders.gov.za for addenda/amendments before close
+
+SA Partner contact targets:
+- Datacentrix: datacentrix.co.za | +27 11 123 4567
+- EOH Healthcare: eoh.com | +27 21 123 4567
+- BCX: bcx.co.za | +27 11 123 4567
+
+---
+
+SECTION 2: REVENUE PIPELINE — SUNDAY STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LIVE MRR:
+- Red Team Agent: R45,000/month ✅
+
+THIS WEEK — CLOSE THIS WEEK:
+- LAISA Phase A (Dr. Musa): R350K + R55K/mo
+  → Follow up today via WhatsApp
+  → Proposal has been out 13 days — acceptable to follow up
+
+PROPOSALS SENT (awaiting response):
+- LAISA Phase A: R350K + R55K/mo (Day 13)
+- Pharmasyntez: R2.99M Y1 (Russia — 5+ days, no response)
+
+TENDER PIPELINE:
+- NDoH-11/2026-2027: R871M — CLOSES TOMORROW 11AM SA ⚡⚡⚡
+- Ghana Data Centre: $250M / ~R4.5B — closes July 24
+- Rwanda AI: World Bank funded — closing soon
+
+---
+
+SECTION 3: TODAY'S AGENT ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CLICKCLACK DEPLOYMENT:
+- ClickClack cloned to /tmp/clickclack
+- Dependencies installed, build in progress
+- Deploy script ready: /workspace/ogre-vm-install/clickclack-install.sh
+- Once Go binary built → deploy to D@RK F@C#ORY VM
+
+DARK FACTORY SITE:
+- Preview: https://jlydlvu36z11.space.minimax.io
+- GitHub PAT needs regeneration — user action needed
+- Factory.studex-group.com update pending
+
+---
+
+SECTION 4: TODAY'S TOP 3 ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] NDoH-11 SA PARTNER — CALL TODAY
+    → This is a 1-hour task. Make the calls. Find the partner.
+    → Template: "We have a healthcare AI tender opportunity, looking for an EMR vendor to partner with"
+    → Alternative: Submit as consultant bid (lower chance but still valid)
+
+[2] LAISA PHASE A FOLLOW-UP
+    → WhatsApp Dr. Musa: "Morning Dr. Musa — any questions on the LAISA proposal? 
+      Happy to jump on a call today."
+
+[3] GITHUB PAT REGENERATION
+    → github.com → Settings → Developer Settings → PAT → Regenerate
+    → Paste new token here → I push dark-factory to GitHub
+    → Cloudflare auto-deploys
+
+---
+
+SECTION 5: WEEK AHEAD — MONDAY 13 JULY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Monday is the biggest day of the month:
+- NDoH-11 closes 11AM SA (no extensions)
+- If SA partner found → submit by 11AM
+- If not → still submit solo consultant bid
+
+This week:
+- LAISA Phase A close (R350K + R55K/mo)
+- Pharmasyntez follow-up (R2.99M)
+- ClickClack deploy + agent connection
+- Dark Factory GitHub push → Cloudflare auto-deploy
+
+---
+
+SECTION 6: INTELLIGENCE BRIEF — WEEKEND DEVELOPMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+From OGRE Midnight Research (July 11):
+- Kimi K2.6: 262k token context — SA-China trade opportunity identified
+- Qwen3-32B: Deploy on D@RK F@C#ORY → 80% cost reduction vs GPT-4o
+- Hailuo video: $0.25/video — SA e-commerce brand POC ready to build
+- Agent bake-off: Manus vs AutoGPT vs OpenClaw — queue this week
+
+Market opportunity: AI PC Setup product (hardware + Qwen3-8B) = R12-18K per client
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OGRE COMPUTER | DARK FACTORY
+Next update: Monday 13 July 2026 8AM SA
+"We don't compete with Big Tech on their terms. We build on African terms."

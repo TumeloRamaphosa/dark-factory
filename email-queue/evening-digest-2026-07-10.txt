@@ -1,0 +1,92 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: Friday, July 10th, 2026 | 5:00 PM SAST
+================================================================
+
+MAJOR: What Shipped Today
+================================================================
+✅ NDoH-11 Tender — Full Analysis Complete
+Full tender breakdown delivered: R871M EMR rollout, 8 provinces,
+18 months. ICC (International Commission Company) structure documented.
+Proposal at: /workspace/OGRE-TENDER-PROPOSAL-NDOH-11-2026.md
+
+✅ 3 Integrations Wired
+QuickBooks, Vercel (API token vcp_6u72w3...), AgentMail all configured.
+Credentials saved to /workspace/ogre-integrations/.env
+TOOLS.md updated. OGRE SAAS architecture documented.
+
+✅ OGRE SaaS Blueprint Written
+Full architecture: Notion CRM + PRD pipeline + GitHub CI/CD +
+Render cloud + QuickBooks invoicing + OpenClaw agent stack.
+Document: /workspace/OGRE-SAAS-ARCHITECTURE.md
+
+✅ GitHub API List Analyzed
+10,498 APIs from The Operator Vault (TheOperatorVault.io).
+Key MCPs to wire: Notion, QuickBooks, Google Sheets, WhatsApp,
+Tavily (search), Firecrawl (scraping), FetchSERP (SEO).
+OGRE positioned as SaaS wrapping these APIs.
+
+✅ Dark Factory — Live at factory.studex-group.com
+7 builds ready for portfolio showcase.
+Pipeline: BMAD + War Room + Red Team + CipherTrace + LAISA + PRD + Portfolio
+
+OPPORTUNITY: What to Act On
+================================================================
+🔥 NDoH-11 — 72 HOURS TO SUBMISSION
+Tender closes Monday July 13 at 11:00 AM
+Must find SA partner by Saturday July 11
+Targets: Datacentrix, EOH Healthcare, BCX, Altron HealthTech
+OGRE earns 10% commission = R87M if partner wins at R871M
+
+💰 LAISA Phase A — Day 11 Stale
+Proposal out to Dr. Musa. No response since July 1.
+WhatsApp follow-up needed tomorrow (Saturday).
+
+📊 Notion CRM — API Key Needed
+Notion database infrastructure ready to build.
+Once API key provided, I build the full CRM in one session.
+Pipeline + PRD intake + Invoice tracker all wired to OpenClaw agents.
+
+💼 Render Cloud — API Key Needed
+Render.com API key enables:
+- PRD API server deployment
+- N8N workflow automation ($25/mo)
+- PostgreSQL for Notion backup
+- Fallback hosting
+
+TOMORROW: Saturday July 11 — Top 3 Actions
+================================================================
+[1] CALL SA PARTNERS — Datacentrix + EOH Healthcare + BCX
+   Pitch: "We're your AI sub-contractor on the NDoH-11 tender.
+   You win the bid, we deliver the AI agent layer. You earn 90%,
+   we earn 10%. R87M opportunity."
+
+[2] QUICKBOOKS OAUTH — 30-second browser auth
+   I generate the link → you approve → Sobek Trade™ activates.
+   Auto-invoice on every Dark Factory milestone.
+
+[3] DARK FACTORY PORTFOLIO — Add the 7 builds
+   Showcase section with screenshots + links:
+   - BMAD, War Room, Red Team, CipherTrace, LAISA, PRD, Portfolio
+
+ECOSYSTEM: New This Week
+================================================================
+• QuickBooks Online — invoicing pipeline ready
+• Vercel — full deployment API active
+• AgentMail — email agent system active
+• GitHub PAT — code push/pull active
+• OpenClaw MCP — 131 MCP servers available
+• Operator Vault API list — 10,498 APIs analyzed
+
+REVENUE STATUS — End of Day
+================================================================
+Live MRR:        R45,000  (Red Team Agent)
+Today closes:    R0
+Proposals out:   R350K + R55K/mo (LAISA Phase A)
+                 R2.99M Y1 (Pharmasyntez)
+Tender pipeline: R871M (NDoH-11, 72hrs!)
+                 R85M (Ghana Data Centre)
+                 R120M (Rwanda AI)
+
+Cipher Tr@ce | Dark Factory | OGRE Computer
+5:00 PM SAST — Friday, July 10, 2026
+"We don't use AI. We build the infrastructure others use to run AI."

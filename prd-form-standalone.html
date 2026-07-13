@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CipherTrace — PRD Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#22c55e;--p:#ec4899;--bg:#f8fafc;--w:#fff;--t:#0f172a;--t2:#475569;--t3:#94a3b8;--b:#e2e8f0;--b2:#e2e8f0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--t);line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--a);border-radius:3px}
+.n{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--b)}
+.nc{max-width:1100px;margin:0 auto;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between}
+.bi{display:flex;align-items:center;gap:12px;cursor:pointer}
+.bl{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--a),#16a34a);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(34,197,94,0.3)}
+.bn{font-weight:800;font-size:0.875rem;letter-spacing:-0.01em;color:var(--t)}
+.bs{font-size:0.65rem;color:var(--t3);font-family:monospace}
+.nav{display:flex;gap:4px}
+.nb{padding:0.5rem 0.875rem;border-radius:10px;font-size:0.825rem;font-weight:600;background:transparent;border:none;color:var(--t2);cursor:pointer;font-family:inherit}
+.nb:hover{background:rgba(0,0,0,0.04);color:var(--t)}
+.btn-green{padding:0.6rem 1.25rem;border-radius:12px;background:var(--a);color:#fff;border:none;font-weight:700;font-size:0.825rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;box-shadow:0 4px 16px rgba(34,197,94,0.3)}
+.btn-green:hover{box-shadow:0 6px 24px rgba(34,197,94,0.45);transform:translateY(-1px)}
+.lbl{display:block;font-size:0.7rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-family:monospace}
+.inp{width:100%;padding:0.625rem 0.875rem;border-radius:10px;border:1px solid var(--b);background:#f8fafc;color:var(--t);font-size:0.875rem;font-family:inherit;outline:none;transition:border-color 0.15s}
+.inp:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(34,197,94,0.1)}
+.ta{resize:vertical;line-height:1.6;min-height:80px}
+.gr{grid-template-columns:1fr 1fr;display:grid;gap:1rem}
+.g1{display:grid;gap:1rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.card{background:var(--w);border:1px solid var(--b);border-radius:24px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:1.5rem}
+.h2{font-size:1.4rem;font-weight:800;letter-spacing:-0.025em;color:var(--t);margin-bottom:0.25rem}
+.sub{color:var(--t2);font-size:0.875rem;margin-bottom:2rem}
+.step{display:flex;align-items:center;margin-bottom:2rem;gap:0}
+.sp{flex:1}
+.sc{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;border:2px solid var(--b);background:var(--bg);color:var(--t3);font-family:monospace;transition:all 0.2s}
+.sc.active{background:var(--a);border-color:var(--a);color:#fff;box-shadow:0 4px 12px rgba(34,197,94,0.3)}
+.sc.done{background:var(--a);border-color:var(--a);color:#fff}
+.sl{font-size:0.7rem;font-weight:600;color:var(--t3);margin-top:4px;font-family:monospace}
+.sl.active{color:var(--a)}
+.conn{flex:1;height:2px;background:var(--b);margin:0 0.5rem;margin-bottom:18px;flex-shrink:0}
+.conn.done{background:var(--a)}
+.cta-bar{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid var(--b);margin-top:1.5rem}
+.pill{display:inline-flex;padding:0.4rem 0.875rem;border-radius:100px;font-size:0.775rem;font-weight:600;border:1px solid var(--b);background:transparent;color:var(--t2);cursor:pointer;transition:all 0.15s;font-family:inherit}
+.pill.sel{background:rgba(34,197,94,0.08);border-color:var(--a);color:var(--a)}
+.voice-btn{width:60px;height:60px;border-radius:50%;background:var(--a);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 20px rgba(34,197,94,0.3);transition:all 0.2s}
+.voice-btn:hover{box-shadow:0 6px 28px rgba(34,197,94,0.5);transform:scale(1.05)}
+.voice-btn.recording{background:var(--p);box-shadow:0 4px 20px rgba(236,72,153,0.3);animation:voice-pulse 1s infinite}
+@keyframes voice-pulse{0%,100%{box-shadow:0 0 0 0 rgba(236,72,153,0.4)}50%{box-shadow:0 0 0 16px rgba(236,72,153,0)}}
+.success-page{text-align:center;padding:3rem 2rem}
+.icon-3d{font-size:4rem;margin-bottom:1.5rem}
+.badge-live{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.75rem;border-radius:100px;background:rgba(34,197,94,0.08);color:var(--a);border:1px solid rgba(34,197,94,0.2);font-family:monospace;margin-bottom:1rem;display:inline-block}
+.mono{font-family:monospace}
+.footer{border-top:1px solid var(--b);padding:2.5rem 2rem;text-align:center}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+@media(max-width:640px){.gr{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.step-label{display:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const BRAND = { name:'CipherTrace', sub:'Dark Factory | Studex Dev' };
+
+const CLIENTS = [
+  { id:'laisa', name:'LAISA Aesthetic Clinic', vm:'LAISA-VM-01', live:true, agents:6, uptime:'99.7%', since:'June 2026', tagline:'Phase A — Agent OS + WhatsApp CRM + Booking', metrics:'R350K build + R55K/month · 247 beds', color:'#22c55e', bg:'#f0fdf4', border:'#bbf7d0', icon:'🏥', agent:'Dr. Musa + 6 AI Agents' },
+  { id:'safe', name:'SafeSight Aesthetic Clinic', vm:'SAFE-VM-01', live:false, agents:3, uptime:'Demo', since:'June 2026', tagline:'Primary demo client — Agent OS showcase', metrics:'R1,499/month · Proposal pending', color:'#ec4899', bg:'#fdf2f8', border:'#fce7f3', icon:'🛡️', agent:'Demo Agent OS' },
+  { id:'pharma', name:'Pharmasyntez Russia', vm:'PHARMA-VM-GLOBAL', live:true, agents:4, uptime:'98.2%', since:'Jan 2026', tagline:'Anti-TB, HIV, oncology distribution Africa', metrics:'R2.99M Y1 pipeline · SAHPRA licensed', color:'#8b5cf6', bg:'#f5f3ff', border:'#ddd6fe', icon:'💊', agent:'Studex Global Markets Agent' },
+  { id:'rt', name:'Red Team Agent', vm:'RT-VM-SENTINEL', live:true, agents:16, uptime:'24/7', since:'July 2026', tagline:'Autonomous pen testing + AI Trust Monitor', metrics:'R45K/month · 16 specialist agents', color:'#ef4444', bg:'#fef2f2', border:'#fecaca', icon:'🔴', agent:'16 Cybersecurity AI Agents' },
+];
+
+const PRODUCTS = [
+  { name:'LAISA Agent OS', tagline:'AI Agent OS for Aesthetic Clinics', price:'R350K + R55K/month', color:'#22c55e', bg:'#f0fdf4', border:'#bbf7d0', icon:'🏥',
+    features:['WhatsApp CRM + Booking','6 specialist AI agents','Dashboard + reporting','Email + social automation','Notion CRM integration','VoiceBox AI'] },
+  { name:'Dark Factory', tagline:'Build Me A Dashboard — R29/product', price:'R29 per product', color:'#22c55e', bg:'#f0fdf4', border:'#bbf7d0', icon:'🏭',
+    features:['Voice note → PRD pipeline','CodeRabbit review every PR','Auto-deploy to Vercel','Multi-agent build team','48hr delivery','Dark Factory VM included'] },
+  { name:'Red Team Agent', tagline:'Cybersecurity AI VM', price:'From R25K/month', color:'#ec4899', bg:'#fdf2f8', border:'#fce7f3', icon:'🛡️',
+    features:['16 specialist AI agents','Autonomous pen testing','AI Trust Monitor','Purple Team loop','POPIA compliance','MITRE ATT\u0026CK mapped'] },
+];
+
+function NodeCanvas() {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = 400; canvas.height = 300;
+    let frame = 0;
+    const nodes = Array.from({length:16}, () => ({x:Math.random()*400,y:Math.random()*300,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*2.5+1,p:Math.random()*Math.PI*2}));
+    let anim;
+    const draw = () => {
+      ctx.clearRect(0,0,400,300);
+      frame += 0.004;
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if (d<100) { ctx.beginPath(); ctx.strokeStyle=`rgba(34,197,94,${(1-d/100)*0.25})`; ctx.lineWidth=0.7;
+          ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      for (const n of nodes) {
+        n.x += n.vx + Math.sin(frame+n.y*0.003)*0.25; n.y += n.vy + Math.cos(frame+n.x*0.003)*0.25;
+        if (n.x<0)n.x=400; if (n.x>400)n.x=0; if (n.y<0)n.y=300; if (n.y>300)n.y=0;
+        const b = 0.45 + Math.sin(frame*1.5+n.p)*0.3;
+        const g = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3.5);
+        g.addColorStop(0,`rgba(74,222,128,${b})`);
+        g.addColorStop(0.4,`rgba(34,197,94,${b*0.6})`);
+        g.addColorStop(1,'rgba(34,197,94,0)');
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3.5,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle=`rgba(150,255,180,${b})`; ctx.fill();
+      }
+      anim = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(anim);
+  }, []);
+  return <canvas ref={ref} style={{borderRadius:'24px',maxWidth:'100%',opacity:0.85}} />;
+}
+
+function Navbar({ onPRD }) {
+  return (
+    <nav className="n">
+      <div className="nc">
+        <div className="bi" onClick={() => document.getElementById('hero')?.scrollIntoView({behavior:'smooth'})}>
+        <div className="bl"><span style={{fontSize:'1rem}}>🏭</span></div>
+        <div>
+          <div className="bn">CipherTrace</div>
+          <div className="bs">Dark Factory | Studex Dev♤¿$</div>
+        </div>
+        </div>
+        <nav className="nav">
+          {['clients','products','success','founder'].map(id => (
+            <button key={id} className="nb" onClick={() => document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}>
+              {id.charAt(0).toUpperCase()+id.slice(1)}
+            </button>
+          ))}
+        </nav>
+        <button className="btn-green" onClick={onPRD}>
+          ✨ Drop a PRD
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+function Clients() {
+  return (
+    <section style={{padding:'5rem 2rem',background:'var(--bg)'}>
+      <div style={{maxWidth:'1100px',margin:'0 auto'}}>
+        <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
+          <div className="lbl" style={{textAlign:'center',marginBottom:'0.5rem'}}>// Live Clients</div>
+          <h2 style={{fontSize:'clamp(1.75rem,4vw,2.5rem)',fontWeight:900,letterSpacing:'-0.025em',marginBottom:'0.5rem'}}>
+            Our <span style={{color:'var(--a)}}>VMs</span> in the Wild
+          </h2>
+          <p style={{color:'var(--t2)',fontSize:'0.9rem',maxWidth:480,margin:'0 auto'}}>
+            Every client runs on their own isolated VM. AI agents working 24/7.
+          </p>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(260px,1fr)',gap:'1.25rem'}}>
+          {CLIENTS.map(c => (
+            <div key={c.id} className="card" style={{borderColor:c.border, cursor:'pointer',
+              ':hover':{transform:'translateY(-4px)',boxShadow:'0 12px 40px rgba(0,0,0,0.12)'}}>
+              <div style={{height:4,background:c.color}} />
+              <div style={{padding:'1.25rem'}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:12}}>
+                  <div style={{display:'flex',alignItems:'center',gap:10}}>
+                    <div style={{width:40,height:40,borderRadius:10,background:c.bg,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.25rem'}}>{c.icon}
+                    <div>
+                      <div style={{fontWeight:700,fontSize:'0.875rem',color:'var(--t)'}}>{c.name}</div>
+                      <div style={{fontFamily:'monospace',fontSize:'0.65rem',color:c.color,fontWeight:600,marginTop:2}}>{c.vm}
+                    </div>
+                  </div>
+                  <div style={{padding:'0.25rem 0.625rem',borderRadius:100,fontSize:'0.6rem',fontWeight:700,fontFamily:'monospace',background:c.live?'#f0fdf4':'#fff7ed',color:c.live?'var(--a)':'#f97316',border:`1px solid ${c.live?'#bbf7d0':'#fed7aa'}`}}>
+                    {c.live ? 'LIVE' : 'DEMO'}
+                  </div>
+                </div>
+                <p style={{fontSize:'0.825rem',color:'var(--t2)',lineHeight:1.6,margin:'0.75rem 0'}>{c.tagline}</p>
+                <div style={{background:c.bg,borderRadius:10,padding:'0.75rem',marginBottom:12}}>
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',textAlign:'center',gap:8}}>
+                    <div>
+                      <div style={{fontWeight:800,fontSize:'1rem',color:c.color}}>{c.agents}</div>
+                      <div style={{fontSize:'0.6rem',color:'var(--t3)',textTransform:'uppercase',fontFamily:'monospace',marginTop:2}}>Agents
+                    </div>
+                    <div>
+                      <div style={{fontWeight:800,fontSize:'1rem',color:c.color}}>{c.uptime}</div>
+                      <div style={{fontSize:'0.6rem',color:'var(--t3)',textTransform:'uppercase',fontFamily:'monospace',marginTop:2}}>Uptime
+                    </div>
+                    <div>
+                      <div style={{fontSize:'0.85rem',fontWeight:800,color:c.color}}>{c.since}</div>
+                      <div style={{fontSize:'0.6rem',color:'var(--t3)',textTransform:'uppercase',fontFamily:'monospace',marginTop:2}}>Since
+                    </div>
+                  </div>
+                </div>
+                <div style={{fontSize:'0.75rem',color:'var(--t3)',fontFamily:'monospace'}}>{c.agent}</div>
+              </div>
+              <div style={{padding:'0.75rem 1.25rem',borderTop:`1px solid ${c.border}`,background:c.bg}}>
+                <span style={{fontSize:'0.75rem',fontWeight:600,color:'var(--t2)'}}>{c.metrics}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Products({ onPRD }) {
+  return (
+    <section id="products" style={{padding:'5rem 2rem,background:'var(--w)'}}>
+      <div style={{maxWidth:'1100px',margin:'0 auto'}}>
+        <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
+          <div className="lbl" style={{textAlign:'center',marginBottom:8}}>// Products</div>
+          <h2 style={{fontSize:'clamp(1.75rem,4vw,2.5rem)',fontWeight:900,letterSpacing:'-0.025em'}}>
+            Build. Operate. <span style={{color:'var(--a)}}>Scale.
+          </h2>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill',minmax(280px,1fr),gap:'1.5rem'}}>
+          {PRODUCTS.map(p => (
+            <div key={p.name} className="card" style={{borderColor:p.border}}>
+              <div style={{height:4,background:p.color}} />
+              <div style={{padding:'1.5rem'}}>
+                <div style={{display:'flex',justifyContent:'space-between',marginBottom:12}}>
+                  <div style={{width:44,height:44,borderRadius:12,background:p.bg,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.25rem'}}>{p.icon}
+                  <div style={{padding:'0.2rem 0.6rem',borderRadius:100,fontSize:'0.6rem',fontWeight:700,background:p.bg,color:p.color,fontFamily:'monospace',border:`1px solid ${p.border}`}}>LIVE</div>
+                </div>
+                <h3 style={{fontWeight:800,fontSize:'1rem',marginBottom:4}}>{p.name}</h3>
+                <p style={{fontSize:'0.8rem',color:'var(--t3)',marginBottom:8}}>{p.tagline}</p>
+                <div style={{fontWeight:900,fontSize:'1.5rem',color:p.color,marginBottom:12}}>{p.price}</div>
+                <ul style={{listStyle:'none',margin:'0 0 1rem',padding:0,display:'flex',flexDirection:'column',gap:6}}>
+                  {p.features.map(f => (
+                    <li key={f} style={{display:'flex',alignItems:'flex-start',gap:8,fontSize:'0.825rem,color:'var(--t2'}}>
+                      <span style={{color:'var(--a),fontWeight:700,flexShrink:0}}>✓
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <button className="btn-green" onClick={onPRD} style={{width:'100%',justifyContent:'center'}}>
+                  Get Started →
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Success() {
+  const metrics = [
+    { v:'8', l:'VMs Active', s:'OGRE GPU cluster 24/7' },
+    { v:'60+', l:'AI Agents', s:'Research, build, comms, security' },
+    { v:'9', l:'Countries', s:'SA, Nigeria, Kenya, Ghana, Russia' },
+    { v:'R4.2M', l:'Pipeline', s:'Active proposals + contracts' },
+  ];
+  return (
+    <section id="success" style={{padding:'5rem 2rem,background:'#f0fdf4'}}>
+      <div style={{maxWidth:'1100px',margin:'0 auto'}}>
+        <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
+          <div className="lbl" style={{textAlign:'center',marginBottom:8}}>// Proof</div>
+          <h2 style={{fontSize:'clamp(1.75rem,4vw,2.5rem',fontWeight:900,letterSpacing:'-0.025em'}}>
+            Results that <span style={{color:'var(--a)}}>speak.
+          </h2>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr),gap:'1.5rem',marginBottom:'2.5rem'}}>
+          {metrics.map(m => (
+            <div key={m.l} style={{background:'var(--w)',borderRadius:20,padding:'1.75rem',textAlign:'center',boxShadow:'0 4px 16px rgba(34,197,94,0.08)',border:'1px solid #bbf7d0'}}>
+              <div style={{fontSize:'2.5rem',fontWeight:900,letterSpacing:'-0.03em',color:'var(--a)'}}>{m.v}
+              <div style={{fontWeight:700,fontSize:'0.875rem',marginTop:6}}>{m.l}
+              <div style={{fontSize:'0.775rem',color:'var(--t3),marginTop:4}}>{m.s}
+            </div>
+          ))}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
+          <div className="card" style={{borderColor:'#bbf7d0',boxShadow:'0 4px 20px rgba(34,197,94,0.08)'}}>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:'1.25rem'}}>
+              <div style={{width:48,height:48,borderRadius:12,background:'#f0fdf4',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.5rem'}}>🏥
+              <div>
+                <div style={{fontWeight:800,fontSize:'1rem'}}>LAISA Aesthetic Clinic
+                <div style={{fontSize:'0.775rem',color:'var(--a)',fontFamily:'monospace',fontWeight:600}}>Phase A — Production
+              </div>
+              </div>
+            </div>
+            <p style={{fontSize:'0.9rem',color:'var(--t2),lineHeight:1.8,marginBottom:'1.25rem'}}>
+              Built and deployed LAISA Agent OS in 6 weeks. Dr. Musa's clinic runs on 6 AI agents. WhatsApp CRM, booking, email, social. Zero missed follow-ups.
+            </p>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              {[['Build cost','R350K'],['Monthly','R55K/month'],['Agents','6 agents'],['Response','< 2 hours']].map(([k,v]) => (
+                <div key={k} style={{background:'#f0fdf4',borderRadius:10,padding:'0.75rem',textAlign:'center'}>
+                  <div style={{fontSize:'0.65rem',color:'var(--t3),marginBottom:4,fontFamily:'monospace'}}>{k}
+                  <div style={{fontWeight:800,color:'var(--a)'}}>{v}
+                </div>
+              </div>
+            ))}
+            </div>
+          </div>
+          <div className="card" style={{borderColor:'#ddd6fe',boxShadow:'0 4px 20px rgba(139,92,246,0.08)'}}>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:'1.25rem'}}>
+              <div style={{width:48,height:48,borderRadius:12,background:'#f5f3ff',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.5rem'}}>🌍
+              <div>
+                <div style={{fontWeight:800,fontSize:'1rem'}}>Studex Global Markets
+                <div style={{fontSize:'0.775rem',color:'#8b5cf6',fontFamily:'monospace',fontWeight:600}}>Pharmasyntez Partnership Active
+              </div>
+              </div>
+            </div>
+            <p style={{fontSize:'0.9rem',color:'var(--t2),lineHeight:1.8,marginBottom:'1.25rem'}}>
+              Africa pharma market: <strong style={{color:'var(--t)}}>$29.3B (2025) → $44.1B (2032)</strong>. Anti-TB, HIV, oncology, diabetes. SAHPRA licensed. B-BBEE Level 1. VM agent manages pipeline autonomously.
+            </p>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              {[['Y1 Pipeline','R2.99M'],['License','SAHPRA'],['B-BBEE','Level 1'],['Market access','54 African countries']].map(([k,v]) => (
+                <div key={k} style={{background:'#f5f3ff',borderRadius:10,padding:'0.75rem',textAlign:'center'}}>
+                  <div style={{fontSize:'0.65rem',color:'var(--t3),fontFamily:'monospace',marginBottom:4}}>{k}
+                  <div style={{fontWeight:800,color:'#8b5cf6'}}>{v}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Founder() {
+  const eco = [
+    { n:'Studex Meat', s:'Premium Wagyu · 50+ restaurants', c:'#22c55e' },
+    { n:'StudEx Enterprise', s:'Cloud FinOps · AWS + Google Partner', c:'#3b82f6' },
+    { n:'StudEx Wild Life', s:'Blockchain · IBM + Cardano', c:'#ec4899' },
+    n:'Dark Factory', s:'AI Agent Factory · CipherTr@ce CEO', c:'var(--t)' },
+  ];
+  const tl = [
+    {y:'2009',e:"McDonald's batch cooker age 18"},
+    {y:'2011',e:'Founded Studex Meat age 20'},
+    {y:'2017',e:'MSc International Business, Hult Business School'},
+    {y:'2019',e:'AWS + Google Cloud partnerships'},
+    {y:'2019',e:'IBM + Cardano blockchain confirmed'},
+    {y:'2020',e:"ITWeb: 'SA's First Son looks to cut cloud costs'"},
+    {y:'2026',e:'Dark Factory + CipherTr@ce CEO operational'},
+  ];
+  return (
+    <section id="founder" style={{padding:'5rem 2rem,background:'var(--w)'}}>
+      <div style={{maxWidth:'1100px',margin:'0 auto',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'4rem',alignItems:'start'}>
+        <div>
+          <div className="lbl">// The Founder</div>
+          <h2 style={{fontSize:'clamp(1.5rem,3vw,2.25rem',fontWeight:900,letterSpacing:'-0.025em',marginBottom:'1.5rem',lineHeight:1.1}}>
+            Meet <span style={{color:'var(--p)}}>Tumelo Ramaphosa</span>
+          </h2>
+          <p style={{fontSize:'0.9rem',color:'var(--t2),lineHeight:1.8,marginBottom:'1.5rem'}}>
+            From McDonald's to South Africa's premier Wagyu supplier. Hult Business School. IBM + Cardano. AWS partner. 11 years building what others said impossible.
+          </p>
+          <div style={{display:'flex',flexWrap:'wrap',gap:8,marginBottom:'1.5rem'}}>
+            {['IBM Partner','Cardano Partner','AWS Partner','Google Cloud Partner'].map(t => (
+              <span key={t} style={{padding:'0.3rem 0.875rem',borderRadius:100,fontSize:'0.7rem',fontWeight:700,background:'#fdf2f8',color:'var(--p)',border:'1px solid #fce7f3',fontFamily:'monospace'}}>
+                {t}
+              </span>
+            ))}
+          </div>
+          <div style={{background:'#f8fafc',borderRadius:16,padding:'1.25rem',border:'1px solid var(--b)'}}>
+            <div style={{fontSize:'0.7rem',fontWeight:700,color:'var(--t3),textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:12,fontFamily:'monospace'}}>
+              Studex Ecosystem
+            </div>
+            {eco.map(c => (
+              <div key={c.n} style={{display:'flex',alignItems:'center',gap:10,padding:'0.6rem 0',borderBottom:'1px solid var(--b)'}}>
+                <div style={{width:8,height:8,borderRadius:'50%',background:c.c,flexShrink:0}} />
+                <div>
+                  <div style={{fontWeight:700,fontSize:'0.85rem'}}>{c.n}
+                  <div style={{fontSize:'0.75rem',color:'var(--t3)}>{c.s}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div style={{fontSize:'0.7rem',fontWeight:700,color:'var(--t3),textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'1.5rem',fontFamily:'monospace'}}>
+            11 Years of Building
+          </div>
+          <div style={{position:'relative',paddingLeft:'1.5rem'}}>
+            <div style={{position:'absolute',left:0,top:0,bottom:0,width:1,background:'linear-gradient(to bottom,var(--a), transparent'}}
+            {tl.map((t,i) => (
+              <div key={t.y} style={{position:'relative',paddingBottom:'1.25rem',paddingLeft:'1.25rem'}}>
+                <div style={{position:'absolute',left:'-1.5rem',top:6,width:8,height:8,borderRadius:'50%',background:'var(--a)',border:'2px solid var(--w)',boxShadow:'0 0 8px rgba(34,197,94,0.5

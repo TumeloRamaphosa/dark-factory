@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CashClaw Command Center — 10 Agents Live</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#03030a;--bg2:#070710;--bg3:#0d0d1c;--bd:#161628;--a:#6c63ff;--c:#00d4ff;--g:#00ff88;--y:#f59e0b;--p:#ec4899;--text:#eeeef8;--muted:#7070a0;--dim:#2e2e50}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased}
+button{border:none;cursor:pointer;font-family:inherit}
+canvas{display:block}
+.c{max-width:1400px;margin:0 auto;padding:0 24px}
+.n{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(3,3,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);position:fixed;top:0;left:0;right:0;z-index:100}
+.nl{display:flex;align-items:center;gap:10px}
+.ni{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#6c63ff,#00d4ff);display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:900;color:#fff}
+.nt{font-size:.58rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+.nb{display:flex;align-items:center;gap:8px}
+.nstatus{display:flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.15);border-radius:999px;font-size:.6rem;font-weight:700;color:var(--g);font-family:'JetBrains Mono',monospace}
+.nd{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.top-bar{padding:64px 24px 0;background:var(--bg2);border-bottom:1px solid var(--bd)}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.top-left{display:flex;align-items:center;gap:12px}
+.logo-text{font-size:1rem;font-weight:900;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,rgba(108,99,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.top-sub{font-size:.62rem;color:var(--muted)}
+.top-right{display:flex;align-items:center;gap:20px}
+.big-stat{text-align:center}
+.big-n{font-size:1.8rem;font-weight:900;color:var(--g);font-family:'JetBrains Mono',monospace;display:block}
+.big-l{font-size:.5rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.big-sep{width:1px;height:36px;background:var(--bd)}
+.fiverr-btn{display:flex;align-items:center;gap:7px;padding:8px 18px;background:#1a8f06;color:#fff;border-radius:8px;font-size:.72rem;font-weight:700;transition:all .2s}
+.fiverr-btn:hover{background:#156d04;transform:translateY(-1px)}
+.canvas-wrap{background:var(--bg);padding:16px 24px 0}
+canvas{width:100%;display:block;border-radius:12px;border:1px solid var(--bd)}
+.agents-section{padding:20px 24px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sh{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.sh span{color:var(--g)}
+.live-badge{display:flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.15);border-radius:999px;font-size:.6rem;font-weight:700;color:var(--g)}
+.lb{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 1.4s infinite}
+.agents-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.agent-card{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;overflow:hidden;transition:all .3s}
+.agent-card:hover{border-color:rgba(108,99,255,.3);transform:translateY(-1px)}
+.agent-card.active{border-color:rgba(0,255,136,.35)}
+.agent-card.working{border-color:rgba(245,158,11,.4)}
+.acard{height:4px;background:var(--bg3)}
+.apbar{height:100%;background:var(--g);transition:width .8s ease}
+.agent-header{display:flex;align-items:center;gap:8px;padding:10px 12px 6px}
+.aicon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0}
+.aname{font-size:.72rem;font-weight:800;margin-bottom:1px}
+.atype{font-size:.52rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.aonline{width:5px;height:5px;border-radius:50%;margin-left:auto;flex-shrink:0}
+.aonline.idle{background:var(--dim)}
+.aonline.active{background:var(--g);animation:blink 1.4s infinite}
+.aonline.working{background:var(--y);animation:blink 0.7s infinite}
+.aterminal{background:#020208;margin:0 10px;border-radius:6px;padding:6px 8px;height:56px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
+.atline{font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--dim);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atline.green{color:var(--g)}
+.atline.cyan{color:var(--c)}
+.atline.yellow{color:var(--y)}
+.atline.pink{color:var(--p)}
+.astats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd);margin-top:4px}
+.ast{background:var(--bg2);padding:5px 10px;text-align:center}
+.asv{font-size:.68rem;font-weight:800;color:var(--g);display:block;font-family:'JetBrains Mono',monospace}
+.asl{font-size:.46rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:1px}
+.aqueue{background:#020208;margin:6px 10px 10px;border-radius:6px;padding:6px 8px;border:1px solid rgba(255,255,255,.04)}
+.aqlabel{font-size:.48rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.aqtext{font-size:.54rem;color:var(--muted);line-height:1.4;font-family:'JetBrains Mono',monospace}
+.aqfiverr{display:flex;align-items:center;gap:4px;font-size:.52rem;color:var(--y);margin:0 10px 10px;font-weight:700}
+.aqfiverr::before{content:'FIVERR ';font-size:.48rem}
+.bottom-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--bd);margin:0 24px 20px;border-radius:10px;overflow:hidden;border:1px solid var(--bd)}
+.bstat{background:var(--bg2);padding:14px 12px;text-align:center}
+.bsv{font-size:1.2rem;font-weight:900;color:var(--g);display:block;font-family:'JetBrains Mono',monospace}
+.bsl{font-size:.5rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+@media(max-width:900px){.agents-grid{grid-template-columns:repeat(2,1fr)}.bottom-bar{grid-template-columns:repeat(3,1fr)}.top-right{flex-wrap:wrap;justify-content:center}}
+</style>
+</head>
+<body>
+<nav class="n">
+<div class="nl">
+<div class="ni">CC</div>
+<div>
+<div class="nt">CashClaw</div>
+<div style="font-size:.48rem;color:var(--muted)">Command Center · Dark Factory</div>
+</div>
+</div>
+<div class="nb">
+<div class="nstatus"><div class="nd"></div>10 AGENTS LIVE</div>
+<div class="nstatus" style="color:var(--c)"><div class="nd" style="background:var(--c)"></div>FIVERR ACTIVE</div>
+</div>
+</nav>
+
+<div class="top-bar">
+<div class="top-inner">
+<div class="top-left">
+<div>
+<div class="logo-text">CashClaw Command Center</div>
+<div class="top-sub">Dark Factory · 10 Autonomous Agents · Fiverr Network</div>
+</div>
+</div>
+<div class="top-right">
+<div class="big-stat"><span class="big-n" id="totalEarn">R0</span><span class="big-l">Total Earned</span></div>
+<div class="big-sep"></div>
+<div class="big-stat"><span class="big-n" id="totalTasks">0</span><span class="big-l">Tasks Done</span></div>
+<div class="big-sep"></div>
+<div class="big-stat"><span class="big-n" id="activeNow">0</span><span class="big-l">Active Now</span></div>
+<div class="big-sep"></div>
+<button class="fiverr-btn" onclick="openFiverr()">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M23 1.5a1.5 1.5 0 0 1 1.5 1.5v17a1.5 1.5 0 0 1-1.5 1.5H1a1.5 1.5 0 0 1-1.5-1.5v-17A1.5 1.5 0 0 1 1.5 0H23zM5 6h5v13H5V6z"/></svg>
+Fiverr Dashboard →
+</button>
+</div>
+</div>
+</div>
+
+<div class="canvas-wrap">
+<canvas id="netcanvas" height="160"></canvas>
+</div>
+
+<div class="agents-section">
+<div class="section-header">
+<div class="sh">AGENT FLEET // <span>10 ACTIVE</span></div>
+<div class="live-badge"><div class="lb"></div>LIVE — UPDATING</div>
+</div>
+<div class="agents-grid" id="agentGrid"></div>
+</div>
+
+<div class="bottom-bar">
+<div class="bstat"><span class="bsv" id="mEarnings">R0</span><span class="bsl">This Hour</span></div>
+<div class="bstat"><span class="bsv" id="dEarnings">R0</span><span class="bsl">Today</span></div>
+<div class="bstat"><span class="bsv" id="wEarnings">R0</span><span class="bsl">This Week</span></div>
+<div class="bstat"><span class="bsv" id="ordersIn">0</span><span class="bsl">Orders In Queue</span></div>
+<div class="bstat"><span class="bsv" id="rating">4.9</span><span class="bsl">★ Avg Rating</span></div>
+<div class="bstat"><span class="bsv" id="uptimeVal">99.7%</span><span class="bsl">Uptime</span></div>
+</div>
+
+<script>
+// Agent config — 10 CashClaw agents, each with a specialty
+const AGENTS = [
+  {id:1,name:'Claw-01',short:'C1',full:'CashClaw #1',type:'Web Dev',color:'#6c63ff',icon:'W',skill:'Landing Pages · $45',queue:'"Build my SA law firm landing page"',fiverr:'3 orders',rate:4.9},
+  {id:2,name:'Claw-02',short:'C2',full:'CashClaw #2',type:'Dashboard',color:'#00d4ff',icon:'D',skill:'React Dashboards · $120',queue:'"Build a CRM dashboard with charts"',fiverr:'1 order',rate:5.0},
+  {id:3,name:'Claw-03',short:'C3',full:'CashClaw #3',type:'AI Chat',color:'#ec4899',icon:'A',skill:'AI Chatbots · $200',queue:'"Create an AI chatbot for my website"',fiverr:'2 orders',rate:4.8},
+  {id:4,name:'Claw-04',short:'C4',full:'CashClaw #4',type:'Copy',color:'#f59e0b',icon:'C',skill:'Copywriting · $30',queue:'"Write my product descriptions"',fiverr:'5 orders',rate:4.9},
+  {id:5,name:'Claw-05',short:'C5',full:'CashClaw #5',type:'Data Viz',color:'#00ff88',icon:'V',skill:'Data Visualization · $90',queue:'"Make me an analytics dashboard"',fiverr:'1 order',rate:4.7},
+  {id:6,name:'Claw-06',short:'C6',full:'CashClaw #6',type:'Logo Design',color:'#f59e0b',icon:'L',skill:'Logo Design · $40',queue:'"Design a modern logo for my brand"',fiverr:'4 orders',rate:5.0},
+  {id:7,name:'Claw-07',short:'C7',full:'CashClaw #7',type:'Mobile App',color:'#6c63ff',icon:'M',skill:'App Prototypes · $180',queue:'"Build a PWA for my delivery business"',fiverr:'1 order',rate:4.9},
+  {id:8,name:'Claw-08',short:'C8',full:'CashClaw #8',type:'SEO',color:'#00d4ff',icon:'S',skill:'SEO Audit · $60',queue:'"Audit my website for SEO improvements"',fiverr:'2 orders',rate:4.8},
+  {id:9,name:'Claw-09',short:'C9',full:'CashClaw #9',type:'Email',color:'#ec4899',icon:'E',skill:'Email Sequences · $75',queue:'"Write a 5-email nurture sequence"',fiverr:'1 order',rate:4.9},
+  {id:10,name:'Claw-10',short:'C10',full:'CashClaw #10',type:'Research',color:'#00ff88',icon:'R',skill:'Market Research · $55',queue:'"Research my competitors in SA market"',fiverr:'0 orders',rate:4.8},
+];
+
+const STATES = ['idle','active','working','idle','active','working','idle','active','working','idle'];
+const LOGS = {
+  idle: ['> monitoring Fiverr...','> awaiting order...','> watching inbox...','> no active tasks'],
+  active: ['> order received!','> parsing brief...','> initialising build...','> deploying to Vercel...'],
+  working: ['> building component 1/4...','> writing copy...','> running tests...','> optimising CSS...','> deploying...'],
+};
+
+let agents = AGENTS.map((a,i) => ({
+  ...a,
+  state: STATES[i],
+  progress: Math.floor(Math.random()*100),
+  earnings: Math.floor(Math.random()*800),
+  tasks: Math.floor(Math.random()*12),
+  statusClass: STATES[i] === 'active' ? 'active' : STATES[i] === 'working' ? 'working' : '',
+  statusDot: STATES[i] === 'active' ? 'active' : STATES[i] === 'working' ? 'working' : 'idle',
+  lines: [...LOGS[SOLD_STATES(i)]],
+  logTimer: null,
+}));
+
+function SOLD_STATES(i){ return ['idle','active','working','idle','active','working','idle','active','working','idle'][i]; }
+
+function rnd(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+// Simulate agent state transitions
+function simAgent(a){
+  var r=Math.random();
+  if(r<0.15){ a.state='idle'; }
+  else if(r<0.4){ a.state='active'; }
+  else { a.state='working'; }
+  a.lines = [...LOGS[a.state]];
+  a.statusClass = a.state==='active'?'active':a.state==='working'?'working':'';
+  a.statusDot = a.state==='active'?'active':a.state==='working'?'working':'idle';
+  if(a.state==='working'){ a.progress=Math.min(100,Math.floor(Math.random()*100)); }
+  if(a.state!='idle'){ a.earnings+=Math.floor(Math.random()*40); a.tasks++; }
+}
+
+function updateStats(){
+  var total=0,active=0,tasks=0;
+  agents.forEach(function(a){total+=a.earnings;tasks+=a.tasks;if(a.state!='idle')active++;});
+  var mE=Math.floor(total*0.08),dE=Math.floor(total*0.35),wE=Math.floor(total*0.88);
+  document.getElementById('totalEarn').textContent='R'+total.toLocaleString();
+  document.getElementById('totalTasks').textContent=tasks;
+  document.getElementById('activeNow').textContent=active;
+  document.getElementById('mEarnings').textContent='R'+mE.toLocaleString();
+  document.getElementById('dEarnings').textContent='R'+dE.toLocaleString();
+  document.getElementById('wEarnings').textContent='R'+wE.toLocaleString();
+  document.getElementById('ordersIn').textContent=agents.filter(function(a){return a.state==='active';}).length;
+}
+
+function buildCard(a){
+  var progressWidth = a.state==='working' ? a.progress+'%' : a.state==='active' ? '60%' : '0%';
+  var progressColor = a.state==='working' ? '#f59e0b' : a.state==='active' ? '#00d4ff' : '#2e2e50';
+  var logLine = a.lines[Math.floor(Math.random()*a.lines.length)];
+  var logClass = a.state==='idle'?'dim':a.state==='active'?'cyan':'green';
+  return '<div class="agent-card '+a.statusClass+'">'+
+    '<div class="acard"><div class="apbar" style="width:'+progressWidth+';background:'+progressColor+'"></div></div>'+
+    '<div class="agent-header">'+
+      '<div class="aicon" style="background:'+a.color+'18;color:'+a.color+'">'+a.icon+'</div>'+
+      '<div><div class="aname">'+a.name+'</div><div class="atype">'+a.type+'</div></div>'+
+      '<div class="aonline '+a.statusDot+'"></div>'+
+    '</div>'+
+    '<div class="aterminal"><div class="atline '+logClass+'">'+logLine+'</div></div>'+
+    '<div class="astats">'+
+      '<div class="ast"><span class="asv">R'+a.earnings+'</span><span class="asl">Earned</span></div>'+
+      '<div class="ast"><span class="asv">'+a.tasks+'</span><span class="asl">Tasks</span></div>'+
+    '</div>'+
+    '<div class="aqueue"><div class="aqlabel">Current Order</div><div class="aqtext">'+a.queue+'</div></div>'+
+    '<div class="aqfiverr">Fiverr: '+a.fiverr+'</div>'+
+  '</div>';
+}
+
+function render(){
+  document.getElementById('agentGrid').innerHTML = agents.map(buildCard).join('');
+  updateStats();
+}
+
+// Rotate logs for each agent
+function rotateLogs(){
+  agents.forEach(function(a){
+    if(a.state!=='idle'){
+      var newLine = rnd(LOGS[a.state]);
+      if(!a.lines.includes(newLine)){ a.lines.push(newLine); if(a.lines.length>2)a.lines.shift();}
+    }
+  });
+  render();
+}
+
+// Canvas — network of 10 agent nodes
+(function(){
+  var c=document.getElementById('netcanvas');
+  if(!c)return;
+  var x=c.getContext('2d'),t=0;
+  var nodes=[];
+  for(var i=0;i<12;i++){
+    var angle=(i/12)*Math.PI*2;
+    nodes.push({angle:angle,r:0.28+Math.random()*0.18,speed:0.003+Math.random()*0.004,radius:0.12+Math.random()*0.12,color:AGENTS[i%10].color,a:AGENTS[i%10]});
+  }
+  nodes[11]={angle:0,r:0,speed:0,radius:0.04,color:'#00ff88',a:{name:'FIVERR',type:'Marketplace',color:'#1a8f06',state:'active'}};
+
+  function rz(){
+    c.width=c.offsetWidth||1200;
+    c.height=160;
+  }
+  function dw(){
+    if(!x)return;
+    var W=c.width,H=160;t+=0.012;
+    x.clearRect(0,0,W,H);
+    var cx=W/2,cy=H/2,or=Math.min(W,H)*0.42;
+
+    // Draw connections from FIVERR to active agents
+    var favNode=nodes[11];
+    nodes.slice(0,10).forEach(function(n,i){
+      if(agents[i].state!=='idle'){
+        var nr=or*or*n.r;
+        var nx=cx+nr*Math.cos(n.angle*Math.PI*2-t),ny=cy+nr*Math.sin(n.angle*Math.PI*2-t);
+        x.beginPath();x.moveTo(cx,cy);x.lineTo(nx,ny);
+        x.strokeStyle=n.color+'28';x.lineWidth=1.5;x.stroke();
+      }
+    });
+
+    // Draw orbit rings
+    [0.15,0.28,0.42].forEach(function(fr){
+      x.beginPath();x.arc(cx,cy,or*fr,0,Math.PI*2);
+      x.strokeStyle='rgba(108,99,255,0.06)';x.lineWidth=0.5;x.stroke();
+    });
+
+    // Draw nodes
+    nodes.forEach(function(n,i){
+      if(i===11){
+        // Fiverr center node
+        x.beginPath();x.arc(cx,cy,28,0,Math.PI*2);
+        x.fillStyle='#1a8f0618';x.fill();
+        x.beginPath();x.arc(cx,cy,10,0,Math.PI*2);
+        x.fillStyle='#1a8f06';x.shadowColor='#1a8f06';x.shadowBlur=16;x.fill();x.shadowBlur=0;
+        x.fillStyle='rgba(255,255,255,0.7)';x.font='bold 7px Space Grotesk';x.textAlign='center';x.fillText('FIVERR',cx,cy+3);
+        return;
+      }
+      var nr=or*n.r;
+      var nx=cx+nr*Math.cos(n.angle*Math.PI*2-t);
+      var ny=cy+nr*Math.sin(n.angle*Math.PI*2-t);
+      var a=agents[i];
+      var nc=a.state==='idle'?'28':a.state==='active'?'88':'cc';
+      var glow=a.state==='idle'?4:a.state==='active'?10:14;
+      var pulse=a.state==='idle'?0:a.state==='active'?3:5+Math.sin(t*3+i)*2;
+      x.beginPath();x.arc(nx,ny,pulse+6,0,Math.PI*2);
+      x.fillStyle=n.color+nc+'14';x.fill();
+      x.beginPath();x.arc(nx,ny,pulse+2,0,Math.PI*2);
+      x.fillStyle=n.color;x.shadowColor=n.color;x.shadowBlur=glow;x.fill();x.shadowBlur=0;
+      x.fillStyle='rgba(255,255,255,0.8)';x.font='bold 6px Space Grotesk';x.textAlign='center';x.fillText(n.a.name,nx,ny+2);
+    });
+    requestAnimationFrame(dw);
+  }
+  var ro=new ResizeObserver(rz);ro.observe(c);rz();dw();
+})();
+
+function openFiverr(){
+  window.open('https://www.fiverr.com/','_blank');
+}
+
+// Init
+render();
+setInterval(function(){
+  agents.forEach(function(a){simAgent(a);});
+  rotateLogs();
+},3000);
+setInterval(function(){
+  agents.forEach(function(a){if(a.state==='working'){a.earnings+=Math.floor(Math.random()*15);}});
+  updateStats();
+},5000);
+</script>
+</body>
+</html>

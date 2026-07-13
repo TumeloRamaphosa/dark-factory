@@ -1,0 +1,94 @@
+OGRE MORNING BRIEF — STUDEX GROUP
+Date: Friday, July 10th, 2026 | 08:00 AM SAST
+================================================================
+
+TOP 3 PRIORITIES TODAY
+================================================================
+1. SA DoH EMR TENDER — CLOSES MONDAY 13 JULY ⚡
+   Download docs from etenders.gov.za TODAY. Approach 3 EMR vendors
+   as sub-contractor. R200M+ opportunity.
+
+2. LAISA Dr. Musa Follow-Up — WhatsApp TODAY
+   Day 11 stale. Send voice note: "Dr. Musa, I've attached the updated
+   proposal. R350K + R55K/month all-inclusive. Shall we schedule a call?"
+
+3. Qwen3-72B on Dark Factory GPU — Deploy via Ollama TONIGHT
+   $0.05/M tokens vs GPT-4o pricing. Deploy as primary OGRE engine.
+   Benchmark tonight. Document ROI vs OpenAI.
+
+GLOBAL AI LANDSCAPE — 10 JULY 2026
+================================================================
+
+━━ USA ━━━━━━━━━━━━━━━━━━━━━━
+• GPT-5 embedded in autonomous coding agents. $730B OpenAI valuation.
+• Cursor June 2026 /automate = always-on agents. DIRECT THREAT to OGRE.
+• GitHub Copilot dropped to $10/mo credit-based. Price war on.
+→ OGRE action: Document sovereign AI infrastructure differentiator TODAY
+
+━━ CHINA ━━━━━━━━━━━━━━━━━━━━━
+• Qwen3.6-Plus (May 2026): 1M token context, fully open-source Apache 2.0
+• Qwen3.7-Max: $1.25/M input tokens. 10x cheaper than GPT-4.
+• Kimi K2.6: Tied with GPT-5.5 on coding. Open source release.
+• MiniMax Hailuo 03 video API: $0.0104/sec. Video reports for tenders.
+→ OGRE action: Spin up Qwen3-72B on Dark Factory GPU via Ollama TONIGHT
+
+━━ AFRICA ━━━━━━━━━━━━━━━━━━━━
+• SA: 726 AI companies. Lead continent. IT + AI tenders ACTIVE now.
+• Nigeria: Full banking licence issued to Flutterwave (Apr 2026).
+• Ghana: $250M national AI strategy. Contracts signing NOW.
+• Kenya: ICT Authority rolling registration open.
+→ OGRE action: Register on etenders.gov.za + KenyaTenders.com TODAY
+
+IMMEDIATE ACTION MATRIX (30/90/180 DAYS)
+================================================================
+
+BY 13 JULY (3 days) ⚡ CRITICAL:
+[1] Download SA DoH EMR tender docs from etenders.gov.za
+[2] WhatsApp Dr. Musa with LAISA Phase A follow-up
+[3] Identify 3 EMR vendor sub-contractor targets
+
+BY 15 JULY (5 days):
+[4] Deploy Qwen3-72B on Dark Factory via Ollama — benchmark vs GPT-4o
+[5] Register on etenders.gov.za + KenyaTenders.com
+[6] Set tender monitoring alerts (AI + IT + software categories)
+
+BY 31 JULY (21 days):
+[7] Submit first government tender response
+[8] Fine-tune Kimi K2.6 on isiZulu pilot demo
+[9] Build Cursor vs OpenClaw competitive sales sheet
+[10] Deploy Hailuo video API — test tender visualization clip
+
+ACTIVE TENDER PIPELINE
+================================================================
+• SA DoH EMR NDoH-11: R200M+ | CLOSES 13 JULY ⚡ URGENT
+• Ghana Data Centre AI: R85M | CLOSES 24 JULY
+• Rwanda AI (World Bank): R120M | Rolling
+• Kenya ICT Authority: R40M | Rolling
+• SANTED AI Fund: R60M | Rolling
+
+REVENUE STATUS
+================================================================
+Current MRR: R45,000 (Red Team Agent)
+Pipeline: R200M+ (tenders) + R350K (LAISA) + R2.99M (Pharmasyntez)
+LAISA Phase A: Day 11 stale — Dr. Musa follow-up CRITICAL TODAY
+
+KEY INTELLIGENCE
+================================================================
+• Model war over. Agent war has begun.
+• Qwen3-72B via Ollama = ~$0.05/M tokens. Deploy as primary engine.
+• SA DoH EMR closes Monday. 3 days to get docs + approach vendors.
+• Cursor /automate = always-on agents. Competitive threat. Act NOW.
+• African government tenders: $60B AI Fund flowing. OGRE must be in the flow.
+
+OGRE action items status:
+✅ Dark Factory BMAD deployed
+✅ Red Team Agent deployed
+✅ War Room / OGRE Command deployed
+✅ Qwen research complete
+❌ Qwen3-72B on GPU — NOT YET DEPLOYED ← TONIGHT
+❌ etenders.gov.za registration — NOT DONE ← TODAY
+❌ Dr. Musa follow-up — 10 days stale ← TODAY
+
+Cipher Tr@ce | Dark Factory | OGRE Computer
+08:00 AM SAST — July 10, 2026
+"We don't use AI. We build the infrastructure others use to run AI."

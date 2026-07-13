@@ -1,0 +1,86 @@
+Subject: 🐂 OGRE Morning Brief — 23 June 2026 | Day 3 of the Midnight Build
+
+--- email body below ---
+
+Good morning, Studex Team!
+
+Welcome to your OGRE Computer Morning Brief — Tuesday, 23 June 2026.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 WHAT OGRE COMPUTER SHIPPED IN 24H
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Day 2 of the Midnight Build is LIVE. We deployed the OGRE AI Agent ROI Calculator — a
+fully interactive sales tool that quantifies exactly what OGRE's engagement saves a clinic
+or business. Three sliders (headcount, hourly cost, repetitive hours), live annual savings
+calculation, and an OGRE recommendation engine that adapts to company size and ambition.
+
+→ https://fiwkmjur7ggy.space.minimax.io
+
+Paired with Day 1's Intelligence Dashboard (xp0ruttbspfu.space.minimax.io), the Studex team
+now has a two-asset sales kit: market proof + ROI proof. Both were built in under 24h
+using the Midnight Build cron system — zero manual deploy steps.
+
+Skill pipeline: last30days-skill (research) → ponytail (write lean) → huashu-design
+(style) → minimax-pdf (polished output). That's the OGRE stack.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 TODAY'S ACTIONABLE TIP — Skill Chain: last30days + minimax-pdf
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your last30days-skill pulls live research from Reddit, HN, YouTube, GitHub, and
+Polymarket. minimax-pdf turns that raw output into a client-ready 16-page market report.
+Run them together tonight:
+
+  1. last30days "AI agents South Africa aesthetic clinics 2026"
+  2. Feed the research output → minimax-pdf (use skill)
+  3. Deploy or email within minutes
+
+This = a weekly market intelligence report you can sell as a premium add-on to LAISA
+clients. Competitors aren't doing this. That's your edge.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 SA AI LANDSCAPE — THIS WEEK'S INSIGHT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+South Africa's AI startup ecosystem is quietly accelerating. Three trends Tumelo should
+watch this week:
+
+  • Local VM/cloud demand growing — SA SMMEs need infrastructure, not just prompts.
+    OGRE's R499–R4 999/mo VM packages are exactly the right price point.
+  • Pharma + AI convergence — Pharmasyntez partnership remains hot. Africa's $44.1B
+    pharma market by 2032 is a real opportunity, and LAISA's compliance-ready VM is
+    a credible B-BBEE lever.
+  • HYRVE AI marketplace — CashClaw agents are live there now. OGRE agents can earn
+    on the global freelance market while sleeping.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 WHAT TO LEARN TODAY — Midnight Build Path
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Based on tonight's SPEC.md (Competitive Intelligence Pipeline), today's focus:
+
+  Topic:  How to automate a full research → write → format → deliver pipeline
+  Skills: last30days-skill → Agent-Reach → huashu-design → minimax-pdf
+  Goal:   Build a daily briefing that runs on cron, writes itself, and lands in a
+          client's inbox at 8am every morning
+
+Read SPEC.md at: /workspace/OGRE-Midnight-Build/SPEC.md
+Then run: cron list  (to see the nightly schedule live)
+
+The key lesson: AI agents don't just answer questions. They run businesses while you sleep.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 CLOSING — GO BUILD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tumelo — Day 3 of the Midnight Build. Two sales assets deployed, one pharma partnership
+cooking, and a VM infrastructure serving three active demo clients. The machine is running.
+
+Today: use the ROI calculator on your next prospect call. Close one.
+
+— OGRE Computer 🤖 | Studex Group Chief Engineer Agent
+   built on OpenClaw | orgo.ai | @studexgroup
+
+---
+🐂 OGRE Computer — SA's AI Agent Infrastructure | ogre.ai

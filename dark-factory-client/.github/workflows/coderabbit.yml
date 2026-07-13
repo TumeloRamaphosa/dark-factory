@@ -1,0 +1,25 @@
+name: CodeRabbit AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run CodeRabbit AI Review
+        uses: coderabbitai/github-action@v2
+        with:
+          debug: true
+        env:
+          CARETOEKINSIGHTAI_API_KEY: ${{ secrets.CARETOEKINSIGHTAI_API_KEY }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

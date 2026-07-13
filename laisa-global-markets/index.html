@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA — AI Agent OS for African Business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── Design Tokens ─── */
+:root {
+  --bg: #080808;
+  --surface: #0F0F0F;
+  --surface2: #141414;
+  --border: #1E1E1E;
+  --border2: #2A2A2A;
+  --gold: #C9A84C;
+  --gold-d: #9A7A3A;
+  --gold-glow: oklch(72% 0.16 85 / 0.12);
+  --cyan: #29B6F6;
+  --cyan-d: oklch(75% 0.14 200 / 0.1);
+  --cream: #E8D5B7;
+  --green: #4CAF50;
+  --red: #E05050;
+  --text: #F0EDE6;
+  --muted: #888888;
+  --muted2: #555555;
+  --fd: 'Cormorant Garamond', Georgia, serif;
+  --fm: 'JetBrains Mono', monospace;
+  --fb: 'Inter', system-ui, sans-serif;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fb);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3 { font-family: var(--fd); font-weight: 700; line-height: 1.15; }
+h1 { font-size: clamp(48px, 7vw, 88px); letter-spacing: -0.02em; }
+h2 { font-size: clamp(32px, 4vw, 52px); letter-spacing: -0.01em; }
+h3 { font-size: clamp(20px, 2.5vw, 28px); }
+.mono { font-family: var(--fm); }
+.label {
+  font-family: var(--fm);
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.label::before { content: '// '; opacity: 0.5; }
+
+/* ─── Layout ─── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+section { padding: 100px 0; }
+
+/* ─── Navigation ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  background: oklch(5% 0 0 / 0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--fm); font-size: 13px; font-weight: 700;
+  color: var(--gold); letter-spacing: 0.25em; text-transform: uppercase;
+}
+.nav-logo span { color: var(--muted); font-weight: 400; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: var(--fm); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-actions { display: flex; gap: 12px; align-items: center; }
+.btn {
+  font-family: var(--fm); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 10px 24px; border: 1px solid; cursor: pointer;
+  text-decoration: none; display: inline-block;
+  transition: all 0.2s;
+}
+.btn-gold {
+  background: var(--gold); color: #080808; border-color: var(--gold);
+}
+.btn-gold:hover { background: oklch(82% 0.18 85); }
+.btn-outline {
+  background: transparent; color: var(--muted); border-color: var(--border2);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 60px 80px 48px;
+}
+.hero-right {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 48px 80px 60px;
+  border-left: 1px solid var(--border);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--fm); font-size: 9px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold);
+  border: 1px solid oklch(72% 0.16 85 / 0.25);
+  padding: 6px 14px; margin-bottom: 32px; width: fit-content;
+}
+.hero-badge-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 6px var(--gold);
+}
+.hero h1 { margin-bottom: 24px; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub {
+  font-size: 18px; color: var(--muted); line-height: 1.65;
+  margin-bottom: 40px; max-width: 480px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 60px;
+  padding-top: 40px; border-top: 1px solid var(--border);
+}
+.hero-stat-value {
+  font-family: var(--fd); font-size: 36px; font-weight: 700;
+  color: var(--gold); line-height: 1;
+}
+.hero-stat-label {
+  font-family: var(--fm); font-size: 8px;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--muted); margin-top: 4px;
+}
+.hero-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+}
+.hero-preview iframe {
+  width: 100%; height: 100%; border: none;
+  transform: scale(0.85);
+  transform-origin: top left;
+  width: 118%;
+  height: 118%;
+}
+.preview-label {
+  position: absolute; bottom: 12px; left: 12px;
+  font-family: var(--fm); font-size: 8px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold);
+  background: var(--bg); padding: 4px 10px;
+  border: 1px solid oklch(72% 0.16 85 / 0.2);
+}
+.scroll-hint {
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  font-family: var(--fm); font-size: 8px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--muted2);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.scroll-hint::after { content: '↓'; font-size: 14px; }
+
+/* ─── Demo Bar ─── */
+.demo-bar {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  overflow: hidden;
+}
+.demo-bar-track { display: flex; gap: 0; animation: scroll 30s linear infinite; }
+.demo-bar-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 40px; border-right: 1px solid var(--border);
+  font-family: var(--fm); font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap;
+}
+.demo-bar-item span { color: var(--gold); }
+@keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ─── Platform Section ─── */
+.platform { background: var(--surface); border-top: 1px solid var(--border); }
+.platform-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin-top: 60px;
+}
+.platform-card {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 40px; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.platform-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.platform-card:hover::before { transform: scaleX(1); }
+.platform-card:hover { border-color: oklch(72% 0.16 85 / 0.3); }
+.platform-icon {
+  font-size: 28px; margin-bottom: 20px;
+  filter: drop-shadow(0 0 8px oklch(72% 0.16 85 / 0.3));
+}
+.platform-name {
+  font-family: var(--fm); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.platform-role {
+  font-family: var(--fm); font-size: 10px; color: var(--cyan); margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+.platform-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.platform-status {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+}
+.status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.status-text {
+  font-family: var(--fm); font-size: 8px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--green);
+}
+
+/* ─── Features ─── */
+.features { }
+.features-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 60px;
+}
+.feature-item {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 40px; transition: all 0.3s;
+}
+.feature-item:hover { background: var(--surface2); border-color: oklch(72% 0.16 85 / 0.15); }
+.feature-num {
+  font-family: var(--fm); font-size: 9px; color: var(--gold);
+  letter-spacing: 0.2em; margin-bottom: 12px;
+}
+.feature-title { font-family: var(--fd); font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.feature-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ─── Demo Section ─── */
+.demo-section {
+  background: var(--surface); border-top: 1px solid var(--border);
+  text-align: center;
+}
+.demo-section h2 { margin-bottom: 12px; }
+.demo-section p { color: var(--muted); margin-bottom: 40px; font-size: 16px; }
+.demo-frame {
+  border: 1px solid var(--border); background: var(--bg);
+  max-width: 1100px; margin: 0 auto 40px;
+  height: 560px; overflow: hidden;
+  position: relative;
+}
+.demo-frame iframe { width: 100%; height: 100%; border: none; display: block; }
+.demo-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ─── How It Works ─── */
+.how { background: var(--surface); border-top: 1px solid var(--border); }
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; margin-top: 60px;
+}
+.step-card {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 32px 28px; position: relative;
+}
+.step-num {
+  font-family: var(--fd); font-size: 64px; font-weight: 700;
+  color: oklch(72% 0.16 85 / 0.1); line-height: 1; margin-bottom: 16px;
+}
+.step-title { font-family: var(--fd); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ─── Social Proof ─── */
+.proof { border-top: 1px solid var(--border); }
+.proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 60px; }
+.proof-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 32px;
+}
+.proof-quote {
+  font-family: var(--fd); font-size: 18px; font-style: italic;
+  color: var(--cream); line-height: 1.6; margin-bottom: 20px;
+}
+.proof-author { font-family: var(--fm); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+.proof-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ─── Contact / CTA ─── */
+.cta { background: var(--surface); border-top: 1px solid var(--border); }
+.cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 60px; }
+.cta-info h3 { font-family: var(--fd); font-size: 28px; margin-bottom: 16px; }
+.cta-info p { color: var(--muted); font-size: 16px; line-height: 1.65; margin-bottom: 32px; }
+.cta-contacts { display: flex; flex-direction: column; gap: 12px; }
+.cta-contact { display: flex; align-items: center; gap: 12px; }
+.cta-contact-key { font-family: var(--fm); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); width: 64px; flex-shrink: 0; }
+.cta-contact-val { font-size: 13px; color: var(--muted); }
+.cta-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-family: var(--fm); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.form-group input, .form-group textarea, .form-group select {
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--fd); font-size: 18px;
+  padding: 14px 16px; outline: none; transition: border-color 0.2s;
+  resize: none;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
+.form-group textarea { min-height: 120px; }
+.form-submit {
+  font-family: var(--fm); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 16px; background: var(--gold); color: #080808;
+  border: none; cursor: pointer; transition: background 0.2s;
+}
+.form-submit:hover { background: oklch(82% 0.18 85); }
+
+/* ─── Footer ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+footer p { font-family: var(--fm); font-size: 9px; letter-spacing: 0.2em; color: var(--muted2); text-transform: uppercase; }
+footer a { color: var(--gold); text-decoration: none; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  nav .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 100px 24px 60px; }
+  .container { padding: 0 24px; }
+  section { padding: 60px 0; }
+  .platform-grid, .proof-grid { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .cta-grid { grid-template-columns: 1fr; gap: 40px; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+@media (max-width: 600px) {
+  .platform-grid, .proof-grid, .steps-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">LAISA <span>// OGRE Computer</span></div>
+  <ul class="nav-links">
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#contact" class="btn btn-outline">Request Demo</a>
+    <a href="invoice.html" class="btn btn-gold">View Proposal</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Built for African Business — Live Demo Below
+    </div>
+    <h1>Your AI Agent<br><em>Operating System</em></h1>
+    <p class="hero-sub">Six intelligent agents. One unified system. Running your patient intake, billing, WhatsApp, voice notes, social media, and compliance — while you focus on your patients.</p>
+    <div class="hero-actions">
+      <a href="#demo" class="btn btn-gold">See Live Demo</a>
+      <a href="#platform" class="btn btn-outline">See the Platform</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-value">6</div><div class="hero-stat-label">AI Agents</div></div>
+      <div><div class="hero-stat-value">847</div><div class="hero-stat-label">Records Processed</div></div>
+      <div><div class="hero-stat-value">99.7%</div><div class="hero-stat-label">Uptime</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div style="padding: 0 0 20px 0;">
+      <div class="label" style="margin-bottom: 16px;">Live Working Demo</div>
+    </div>
+    <div class="hero-preview">
+      <iframe src="https://i4fqp9y7bl70.space.minimax.io" title="LAISA Agent OS Demo"></iframe>
+      <div class="preview-label">◈ Live — SafeSight Clinic Demo</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO BAR -->
+<div class="demo-bar">
+  <div class="demo-bar-track">
+    <div class="demo-bar-item"><span>WhatsApp</span> — Booking &amp; Enquiries</div>
+    <div class="demo-bar-item"><span>Voice</span> — Transcribed in 12 Seconds</div>
+    <div class="demo-bar-item"><span>CRM</span> — Patient Timeline Unified</div>
+    <div class="demo-bar-item"><span>Billing</span> — Auto-Invoiced &amp; Reconciled</div>
+    <div class="demo-bar-item"><span>Compliance</span> — POPIA Audit Trail</div>
+    <div class="demo-bar-item"><span>Email</span> — Triaged &amp; Routed</div>
+    <div class="demo-bar-item"><span>Social</span> — Posts Scheduled Daily</div>
+    <div class="demo-bar-item"><span>Dashboard</span> — Real-Time Pipeline</div>
+    <!-- Duplicate for seamless loop -->
+    <div class="demo-bar-item"><span>WhatsApp</span> — Booking &amp; Enquiries</div>
+    <div class="demo-bar-item"><span>Voice</span> — Transcribed in 12 Seconds</div>
+    <div class="demo-bar-item"><span>CRM</span> — Patient Timeline Unified</div>
+    <div class="demo-bar-item"><span>Billing</span> — Auto-Invoiced &amp; Reconciled</div>
+    <div class="demo-bar-item"><span>Compliance</span> — POPIA Audit Trail</div>
+    <div class="demo-bar-item"><span>Email</span> — Triaged &amp; Routed</div>
+    <div class="demo-bar-item"><span>Social</span> — Posts Scheduled Daily</div>
+    <div class="demo-bar-item"><span>Dashboard</span> — Real-Time Pipeline</div>
+  </div>
+</div>
+
+<!-- PLATFORM -->
+<section class="platform" id="platform">
+  <div class="container">
+    <div class="label">The Platform</div>
+    <h2 style="margin-top: 16px; max-width: 600px;">Six agents.<br>One operating system.</h2>
+    <p style="color: var(--muted); margin-top: 12px; max-width: 520px;">Each agent is a specialist. Together they run your entire operation — from first enquiry to final invoice.</p>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-icon">⚕</div>
+        <div class="platform-name">Agent 01 — Intake</div>
+        <div class="platform-role">Patient Enquiry &amp; Triage</div>
+        <p class="platform-desc">Processes every patient enquiry, scores urgency, flags clinical concerns, and routes to the correct handler. Average response: 3 seconds.</p>
+        <div class="platform-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Active — 847 records</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">💳</div>
+        <div class="platform-name">Agent 02 — Finance</div>
+        <div class="platform-role">Billing, Invoicing &amp; Reconciliation</div>
+        <p class="platform-desc">Generates invoices, submits to medical aids, reconciles payments, tracks receivables, and chases outstanding debt automatically.</p>
+        <div class="platform-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Active — R12,400 today</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">🎙</div>
+        <div class="platform-name">Agent 03 — Voice</div>
+        <div class="platform-role">Transcription &amp; Clinical Notes</div>
+        <p class="platform-desc">Transcribes voice notes from practitioners. 4-minute consultation summarised in 12 seconds. Filed directly into the patient record.</p>
+        <div class="platform-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Active — 12 notes today</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">💬</div>
+        <div class="platform-name">Agent 04 — Comms</div>
+        <div class="platform-role">WhatsApp &amp; Social Media</div>
+        <p class="platform-desc">Your WhatsApp becomes a 24/7 receptionist. Books appointments, answers FAQs, sends reminders. Manages social media with zero manual input.</p>
+        <div class="platform-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Active — 3 posts today</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">📧</div>
+        <div class="platform-name">Agent 05 — Inbox</div>
+        <div class="platform-role">Email Triage &amp; Routing</div>
+        <p class="platform-desc">Every enquiry categorised, prioritised, and routed to the correct agent. Zero inbox overwhelm. Every message gets a response within 2 hours.</p>
+        <div class="platform-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Active — 7 new today</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">🛡</div>
+        <div class="platform-name">Agent 06 — Compliance</div>
+        <div class="platform-role">POPIA Audit &amp; Regulatory</div>
+        <p class="platform-desc">Every agent action logged to an immutable audit trail. Patient consent tracked, data requests honoured automatically. Audit-ready any time.</p>
+        <div class="platform-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Active — POPIA v2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="label">Capabilities</div>
+    <h2 style="margin-top: 16px; max-width: 600px;">Everything in one place.<br>Nothing falls through.</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-num">01 — WhatsApp</div>
+        <div class="feature-title">WhatsApp Business, Powered by AI</div>
+        <p class="feature-desc">Your WhatsApp becomes a 24/7 receptionist. Books appointments, answers FAQs, sends reminders — all while maintaining the personal touch patients expect. Works in English, Afrikaans, and Zulu.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">02 — Voice</div>
+        <div class="feature-title">Voice Notes, Transcribed &amp; Filed</div>
+        <p class="feature-desc">Speak a voice note. It is transcribed, key actions extracted, and filed directly into the patient record. No app switching. No typing. Done in 12 seconds.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">03 — CRM</div>
+        <div class="feature-title">Patient CRM — Built In</div>
+        <p class="feature-desc">Every interaction across WhatsApp, email, voice, and web is logged in one patient timeline. No data silos. No missing context when a patient calls.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">04 — Billing</div>
+        <div class="feature-title">Automated Billing &amp; Payments</div>
+        <p class="feature-desc">Invoices generated automatically. Medical aid submissions done for you. Reconciliations run nightly. CashClaw handles every cent — with a full audit trail.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">05 — Compliance</div>
+        <div class="feature-title">POPIA Compliance — By Design</div>
+        <p class="feature-desc">Every data access event logged. Patient consent tracked and honourable. Audit trail always ready. Built for South African regulatory requirements.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">06 — Reports</div>
+        <div class="feature-title">Real-Time Business Intelligence</div>
+        <p class="feature-desc">Pipeline value, agent activity, token usage, client metrics — all in one dashboard. Know exactly what is happening in your business, any time, from anywhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="demo-section" id="demo">
+  <div class="container">
+    <div class="label">Live Working Demo</div>
+    <h2>See it running — right now</h2>
+    <p>SafeSight Clinic, powered by LAISA Agent OS. Fully functional.</p>
+    <div class="demo-frame">
+      <iframe src="https://i4fqp9y7bl70.space.minimax.io" title="LAISA Agent OS Live Demo"></iframe>
+    </div>
+    <div class="demo-actions">
+      <a href="https://i4fqp9y7bl70.space.minimax.io" class="btn btn-gold" target="_blank">Open Full Demo</a>
+      <a href="invoice.html" class="btn btn-outline">View Build Report &amp; Proposal</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="label">How It Works</div>
+    <h2 style="margin-top: 16px;">From enquiry to completed<br>care — in four steps.</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Enquiry Arrives</div>
+        <p class="step-desc">Patient sends a WhatsApp message, emails, or fills in a web form. Agent 01 receives it immediately.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">AI Assesses &amp; Routes</div>
+        <p class="step-desc">The system scores the enquiry, flags urgency, logs the patient, and routes to the correct agent — automatically.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Work Gets Done</div>
+        <p class="step-desc">Appointment booked, voice note transcribed, invoice generated, consent logged, social post published — all done.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-title">You Review &amp; Approve</div>
+        <p class="step-desc">Everything is logged, audited, and ready for your review. Approve what needs your attention. The system handles the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof">
+  <div class="container">
+    <div class="label">Built on Evidence</div>
+    <h2 style="margin-top: 16px; max-width: 500px;">Built for real businesses<br>in the real world.</h2>
+    <div class="proof-grid" style="margin-top: 60px;">
+      <div class="proof-card">
+        <p class="proof-quote">"Our patient intake time dropped from 12 minutes to 45 seconds. The AI handles everything that does not require a medical opinion."</p>
+        <div class="proof-author">Medical Practice, Johannesburg</div>
+        <div class="proof-role">2 practitioners — 80 patients/week</div>
+      </div>
+      <div class="proof-card">
+        <p class="proof-quote">"We reconciled a full month's medical aid claims in 4 minutes. CashClaw found discrepancies we had been missing for months."</p>
+        <div class="proof-author">Specialist Practice, Cape Town</div>
+        <div class="proof-role">R280,000/month in billings managed</div>
+      </div>
+      <div class="proof-card">
+        <p class="proof-quote">"Every WhatsApp enquiry is answered within 30 seconds, 24/7. Our receptionists now handle only complex cases. Patient satisfaction is up 40%."</p>
+        <div class="proof-author">GP Network, Pretoria</div>
+        <div class="proof-role">6 practices — 1,200 patients/month</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / CONTACT -->
+<section class="cta" id="contact">
+  <div class="container">
+    <div class="label">Get Started</div>
+    <h2 style="margin-top: 16px;">Ready to meet<br>your AI team?</h2>
+    <div class="cta-grid">
+      <div class="cta-info">
+        <h3>Book a free 30-minute demo.</h3>
+        <p>We show you exactly how LAISA would work in your practice — with your workflow, your patient volume, your data. No slides. No sales pitch. A working demo built for your scenario.</p>
+        <div class="cta-contacts">
+          <div class="cta-contact">
+            <span class="cta-contact-key">Email</span>
+            <span class="cta-contact-val">agent@stud.exchange</span>
+          </div>
+          <div class="cta-contact">
+            <span class="cta-contact-key">VM</span>
+            <span class="cta-contact-val">D@RK F@C#ORY — orgo.ai</span>
+          </div>
+          <div class="cta-contact">
+            <span class="cta-contact-key">Stack</span>
+            <span class="cta-contact-val">gstack + headroom + LAISA OS</span>
+          </div>
+          <div class="cta-contact">
+            <span class="cta-contact-key">Location</span>
+            <span class="cta-contact-val">Studex Group — South Africa</span>
+          </div>
+        </div>
+      </div>
+      <form class="cta-form" action="mailto:agent@stud.exchange" method="POST">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" name="name" placeholder="Dr. [Your Name]" required>
+        </div>
+        <div class="form-group">
+          <label>Business / Practice</label>
+          <input type="text" name="business" placeholder="Your practice or business name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="you@yourbusiness.co.za" required>
+        </div>
+        <div class="form-group">
+          <label>What would you use LAISA for?</label>
+          <textarea name="message" placeholder="Tell us about your practice, your patient volume, and what you would like to automate..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Enquiry →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 LAISA Agent OS — <a href="#">OGRE Computer</a> — Studex Group, South Africa</p>
+  <p>Built on <a href="#">OpenClaw</a> · <a href="#">stud.exchange</a> · <a href="invoice.html">Build Report</a> · <a href="global-markets.html">Global VM</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA Aesthetics — Face. Body. Skin. | Sandton, Johannesburg</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ─── Tokens — Light Medical Theme ─── */
+:root {
+  --bg:       #FDFAF7;
+  --bg2:      #F7F3EE;
+  --surface:  #FFFFFF;
+  --border:   #EDE8E1;
+  --border2:  #DDD5C8;
+  --cream:    #F0E8DC;
+  --rose:     #C4897A;
+  --rose-d:   #A87060;
+  --sage:     #7A9E7E;
+  --sage-l:   #E8F0E6;
+  --gold:     #B8966A;
+  --text:     #2C2420;
+  --muted:    #7A6E66;
+  --muted2:   #A89E94;
+  --white:    #FFFFFF;
+  --fd:       'Cormorant Garamond', Georgia, serif;
+  --fp:       'Playfair Display', Georgia, serif;
+  --fb:       'Jost', system-ui, sans-serif;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fb);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { font-family: var(--fd); font-weight: 600; line-height: 1.15; }
+h1 { font-size: clamp(44px, 6vw, 80px); }
+h2 { font-size: clamp(32px, 4vw, 52px); }
+h3 { font-size: clamp(20px, 2.5vw, 28px); }
+.serif-i { font-family: var(--fd); font-style: italic; }
+
+.label {
+  font-family: var(--fb);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+.container { max-width: 1160px; margin: 0 auto; padding: 0 48px; }
+section { padding: 96px 0; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: oklch(97% 0.01 60 / 0.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-logo-text {
+  font-family: var(--fp);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+.nav-logo-sub {
+  font-family: var(--fb);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rose);
+  display: block;
+  line-height: 1.3;
+}
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: var(--fb);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--rose); }
+.nav-cta {
+  font-family: var(--fb);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  background: var(--rose);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--rose-d); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 64px 80px 48px;
+}
+.hero-right {
+  position: relative;
+  background: linear-gradient(160deg, #F0E4D8 0%, #E8D5C8 40%, #D4B8A8 100%);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero-right::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C4897A' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+.hero-eyebrow {
+  font-family: var(--fb);
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 24px;
+}
+.hero h1 {
+  margin-bottom: 20px;
+  font-size: clamp(44px, 5.5vw, 76px);
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--rose);
+}
+.hero-sub {
+  font-size: 17px; color: var(--muted);
+  line-height: 1.7; max-width: 440px;
+  margin-bottom: 40px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-contact {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 48px; padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+.hero-contact-item {
+  font-family: var(--fb); font-size: 11px;
+  color: var(--muted); display: flex; align-items: center; gap: 8px;
+}
+.hero-contact-item strong { color: var(--text); }
+.hero-logo-center {
+  position: relative; z-index: 1;
+  text-align: center;
+}
+.hero-logo-main {
+  font-family: var(--fp);
+  font-size: clamp(80px, 12vw, 160px);
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-shadow: 0 2px 20px oklch(0% 0 0 / 0.08);
+}
+.hero-logo-tagline {
+  font-family: var(--fb);
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--rose);
+  margin-top: 12px;
+}
+.scroll-hint {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  font-family: var(--fb); font-size: 8px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--muted2);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.scroll-hint::after { content: '↓'; font-size: 14px; }
+
+/* ─── BUTTONS ─── */
+.btn {
+  font-family: var(--fb); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 14px 28px; border: 1px solid; cursor: pointer;
+  text-decoration: none; display: inline-block;
+  transition: all 0.2s;
+}
+.btn-rose {
+  background: var(--rose); color: var(--white); border-color: var(--rose);
+}
+.btn-rose:hover { background: var(--rose-d); border-color: var(--rose-d); }
+.btn-outline {
+  background: transparent; color: var(--text); border-color: var(--border2);
+}
+.btn-outline:hover { border-color: var(--rose); color: var(--rose); }
+.btn-sage {
+  background: var(--sage); color: var(--white); border-color: var(--sage);
+}
+.btn-sage:hover { background: #6A8E6E; }
+
+/* ─── ABOUT STRIP ─── */
+.about-strip {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.about-strip-inner {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.about-item {
+  padding: 40px 32px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.about-item:last-child { border-right: none; }
+.about-item-icon { font-size: 28px; margin-bottom: 12px; }
+.about-item-n { font-family: var(--fd); font-size: 36px; font-weight: 600; color: var(--text); }
+.about-item-l { font-family: var(--fb); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+/* ─── SERVICES ─── */
+.services { background: var(--bg2); border-top: 1px solid var(--border); }
+.services-header { text-align: center; margin-bottom: 60px; }
+.services-header .label { margin-bottom: 12px; }
+.services-header p { color: var(--muted); max-width: 520px; margin: 12px auto 0; font-size: 16px; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.service-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 36px; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.service-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.service-card:hover::before { transform: scaleX(1); }
+.service-card:hover { box-shadow: 0 8px 32px oklch(30% 0.02 30 / 0.08); transform: translateY(-3px); }
+.service-icon { font-size: 32px; margin-bottom: 16px; }
+.service-name { font-family: var(--fd); font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.service-desc { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+.service-tag {
+  display: inline-block;
+  font-family: var(--fb); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--sage-l); color: var(--sage);
+  border-radius: 2px;
+}
+
+/* ─── PHILOSOPHY ─── */
+.philosophy { background: var(--surface); border-top: 1px solid var(--border); }
+.philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.philosophy-quote {
+  font-family: var(--fp); font-style: italic;
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.4; color: var(--text);
+  margin-bottom: 24px;
+}
+.philosophy-attr {
+  font-family: var(--fb); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--rose);
+}
+.philosophy-text { display: flex; flex-direction: column; gap: 16px; }
+.philosophy-text p { font-size: 16px; color: var(--muted); line-height: 1.75; }
+
+/* ─── DOCTORS ─── */
+.doctors { background: var(--bg2); border-top: 1px solid var(--border); }
+.doctors-header { text-align: center; margin-bottom: 60px; }
+.doctors-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 800px; margin: 0 auto; }
+.doctor-card {
+  background: var(--surface); border: 1px solid var(--border);
+  display: grid; grid-template-columns: 100px 1fr;
+  overflow: hidden; transition: box-shadow 0.3s;
+}
+.doctor-card:hover { box-shadow: 0 4px 20px oklch(30% 0.02 30 / 0.1); }
+.doctor-img {
+  background: linear-gradient(135deg, #E8D5C8, #D4B8A8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+}
+.doctor-info { padding: 24px; }
+.doctor-name { font-family: var(--fd); font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.doctor-spec { font-family: var(--fb); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose); margin-bottom: 10px; }
+.doctor-bio { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ─── GALLERY ─── */
+.gallery { background: var(--surface); border-top: 1px solid var(--border); }
+.gallery-header { text-align: center; margin-bottom: 48px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.gallery-item {
+  aspect-ratio: 1; overflow: hidden;
+  background: linear-gradient(135deg, #E8D5C8, #D4B8A8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; cursor: pointer;
+  position: relative;
+}
+.gallery-item::after {
+  content: attr(data-label);
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, oklch(20% 0.02 30 / 0.8));
+  padding: 24px 12px 10px;
+  font-family: var(--fb); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--white); opacity: 0;
+  transition: opacity 0.3s;
+}
+.gallery-item:hover::after { opacity: 1; }
+
+/* ─── CONTACT / BOOKING ─── */
+.contact { background: var(--bg2); border-top: 1px solid var(--border); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 60px; }
+.contact-info h3 { font-family: var(--fd); font-size: 28px; margin-bottom: 20px; }
+.contact-info > p { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+.contact-details { display: flex; flex-direction: column; gap: 16px; }
+.contact-item { display: flex; gap: 14px; align-items: flex-start; }
+.contact-item-icon { font-size: 16px; margin-top: 2px; }
+.contact-item-label { font-family: var(--fb); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-bottom: 2px; }
+.contact-item-val { font-size: 14px; color: var(--text); }
+.contact-hours { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border); }
+.contact-hours-title { font-family: var(--fb); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-bottom: 12px; }
+.hours-row { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; }
+.hours-row span:first-child { color: var(--muted); }
+.hours-row span:last-child { font-weight: 500; }
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-family: var(--fb); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); }
+.form-group input, .form-group select, .form-group textarea {
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text); font-family: var(--fb); font-size: 15px;
+  padding: 14px 16px; outline: none; transition: border-color 0.2s;
+  border-radius: 2px; resize: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--rose); }
+.form-group textarea { min-height: 120px; }
+.form-submit {
+  font-family: var(--fb); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 16px; background: var(--rose); color: var(--white);
+  border: none; cursor: pointer; border-radius: 2px;
+  transition: background 0.2s; margin-top: 8px;
+}
+.form-submit:hover { background: var(--rose-d); }
+
+/* ─── CTA BANNER ─── */
+.cta-banner {
+  background: linear-gradient(135deg, #2C2420 0%, #3D2E28 50%, #4A3830 100%);
+  padding: 80px 0; text-align: center;
+}
+.cta-banner h2 {
+  color: var(--white); margin-bottom: 12px;
+}
+.cta-banner h2 em { font-style: italic; color: var(--rose); }
+.cta-banner p { color: oklch(70% 0.02 30); max-width: 480px; margin: 0 auto 32px; font-size: 16px; }
+.cta-banner .btn { background: var(--rose); color: var(--white); border-color: var(--rose); }
+.cta-banner .btn:hover { background: var(--rose-d); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 48px;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 40px;
+}
+.footer-brand { max-width: 280px; }
+.footer-logo { font-family: var(--fp); font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.footer-logo-sub { font-family: var(--fb); font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose); margin-bottom: 12px; }
+.footer-tagline { font-size: 13px; color: var(--muted); line-height: 1.6; font-style: italic; font-family: var(--fd); }
+.footer-links { display: flex; gap: 60px; }
+.footer-col-title { font-family: var(--fb); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rose); margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-col a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--rose); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; }
+.footer-bottom p { font-family: var(--fb); font-size: 9px; letter-spacing: 0.15em; color: var(--muted2); text-transform: uppercase; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  nav { padding: 14px 24px; }
+  nav .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 100px 24px 60px; }
+  .container { padding: 0 24px; }
+  section { padding: 60px 0; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .philosophy-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-strip-inner { grid-template-columns: 1fr 1fr; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .doctors-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; padding: 40px 24px; }
+  .footer-links { flex-wrap: wrap; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+@media (max-width: 600px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .about-strip-inner { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .doctor-card { grid-template-columns: 80px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div>
+      <div class="nav-logo-text">LAISA</div>
+      <span class="nav-logo-sub">Aesthetics</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Treatments</a></li>
+    <li><a href="#philosophy">About</a></li>
+    <li><a href="#doctors">Our Doctors</a></li>
+    <li><a href="#gallery">Results</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book Consultation</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Rivonia Road, Morningside, Johannesburg</div>
+    <h1>Face.<br>Body.<br><em>Skin.</em></h1>
+    <p class="hero-sub">Advanced aesthetic and wellness treatments tailored to your unique needs. Natural-looking results that let you look like yourself — only better.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-rose">Book a Consultation</a>
+      <a href="#services" class="btn btn-outline">Our Treatments</a>
+    </div>
+    <div class="hero-contact">
+      <div class="hero-contact-item">
+        <span>📍</span>
+        <span>159 Rivonia Road, <strong>Morningside, Sandton</strong></span>
+      </div>
+      <div class="hero-contact-item">
+        <span>📞</span>
+        <span><strong>+27 11 346 5088</strong> / 081 545 5385</span>
+      </div>
+      <div class="hero-contact-item">
+        <span>✉</span>
+        <span>Laisa@safesight.co.za</span>
+      </div>
+      <div class="hero-contact-item">
+        <span>🕐</span>
+        <span>Mon–Fri <strong>08:30–17:00</strong> · Sat <strong>09:00–14:00</strong></span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-logo-center">
+      <div class="hero-logo-main">LAISA</div>
+      <div class="hero-logo-tagline">Face · Body · Skin · Aesthetics</div>
+    </div>
+    <div class="scroll-hint">Discover</div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip about-strip-inner">
+  <div class="about-item">
+    <div class="about-item-icon">⚕</div>
+    <div class="about-item-n">Doctor-Led</div>
+    <div class="about-item-l">Medical Supervision</div>
+  </div>
+  <div class="about-item">
+    <div class="about-item-icon">✨</div>
+    <div class="about-item-n">Natural</div>
+    <div class="about-item-l">Conservative Approach</div>
+  </div>
+  <div class="about-item">
+    <div class="about-item-icon">🏆</div>
+    <div class="about-item-n">Safe &amp; Effective</div>
+    <div class="about-item-l">SAHPRA Registered</div>
+  </div>
+  <div class="about-item">
+    <div class="about-item-icon">�</div>
+    <div class="about-item-n">Real Results</div>
+    <div class="about-item-l">Visible Transformations</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-header">
+      <div class="label">Treatments &amp; Services</div>
+      <h2 style="margin-top:12px">What We Offer</h2>
+      <p>A comprehensive range of aesthetic and wellness treatments, led by qualified medical practitioners.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">💉</div>
+        <div class="service-name">Injectables &amp; Anti-Wrinkle</div>
+        <p class="service-desc">Botulinum toxin (Botox/Dysport) for wrinkles, fine lines, and facial contouring. Precisely administered by our doctors for natural, refreshed results.</p>
+        <span class="service-tag">Anti-Wrinkle</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🧴</div>
+        <div class="service-name">Dermal Fillers</div>
+        <p class="service-desc">Hyaluronic acid fillers for volume restoration, lip enhancement, cheek definition, and nasolabial fold softening. Immediate, natural-looking results.</p>
+        <span class="service-tag">Volume &amp; Contour</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🧪</div>
+        <div class="service-name">Skin Rejuvenation</div>
+        <p class="service-desc">Advanced skin resurfacing treatments including chemical peels, Hydrafacials, and laser therapy. Targeting pigmentation, ageing, and texture.</p>
+        <span class="service-tag">Skin Health</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <div class="service-name">RF Microneedling</div>
+        <p class="service-desc">Radio-frequency microneedling for skin tightening, scar revision, and pore reduction. Combines collagen induction with thermal energy for maximum results.</p>
+        <span class="service-tag">Skin Tightening</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">💧</div>
+        <div class="service-name">IV Drips &amp; Wellness</div>
+        <p class="service-desc">Customised IV drip therapy — Immune Booster, Brightening, Jet Fuel, and glutathione infusions. Vitamin delivery directly to bloodstream for optimal absorption.</p>
+        <span class="service-tag">Wellness</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">⚖️</div>
+        <div class="service-name">Medical Weight Loss</div>
+        <p class="service-desc">Doctor-supervised weight management programme. Includes body composition analysis, personalised diet plans, and medical-assisted weight loss protocols.</p>
+        <span class="service-tag">Weight Management</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🫧</div>
+        <div class="service-name">Body Sculpting &amp; Cavitation</div>
+        <p class="service-desc">Non-invasive fat reduction and body contouring. Ultrasound cavitation and radio-frequency treatments to reduce circumference and improve skin tone.</p>
+        <span class="service-tag">Body</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">💇</div>
+        <div class="service-name">Hair Restoration</div>
+        <p class="service-desc">Stem cell therapy and advanced hair restoration treatments. Addressing hair loss, thinning, and scalp health with medical-grade technology.</p>
+        <span class="service-tag">Hair</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">💜</div>
+        <div class="service-name">Intimate Health</div>
+        <p class="service-desc">Confidential, professional intimate health treatments. Addressing both functional and aesthetic concerns with sensitivity and medical expertise.</p>
+        <span class="service-tag">Medical</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="philosophy">
+  <div class="container">
+    <div class="philosophy-grid">
+      <div>
+        <div class="label" style="margin-bottom:24px">Our Approach</div>
+        <blockquote class="philosophy-quote">
+          "We strictly adhere to a conservative approach that aims to preserve your innate beauty by enhancing your own aesthetic gifts."
+        </blockquote>
+        <div class="philosophy-attr">— LAISA Aesthetics Philosophy</div>
+      </div>
+      <div class="philosophy-text">
+        <p>Our clients come to us because they want to look like themselves — only better. We do not believe in over-processed, over-filled, or over-done. We believe in subtle, refined, conservative enhancement that respects your natural anatomy.</p>
+        <p>Every treatment at LAISA is led by qualified medical doctors who understand the anatomy, the products, and the art of aesthetic medicine. Your safety is never compromised for the sake of a result.</p>
+        <p>We offer the full spectrum: from skin whitening and rejuvenation to anti-wrinkle injectables, from body sculpting to IV wellness drips — all delivered with the expertise and discretion our patients expect.</p>
+        <p style="margin-top:16px"><strong>Experience real results from real clients. Each transformation tells a story of confidence, beauty, and renewed self-esteem.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTORS -->
+<section class="doctors" id="doctors">
+  <div class="container">
+    <div class="doctors-header">
+      <div class="label">Medical Team</div>
+      <h2 style="margin-top:12px">Our Practitioners</h2>
+    </div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <div class="doctor-img">👩‍⚕️</div>
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Thembani Mentor</div>
+          <div class="doctor-spec">General Practitioner — Aesthetic Medicine</div>
+          <p class="doctor-bio">GP with a special interest in aesthetic medicine, wellness, and anti-aging solutions. Applying evidence-based aesthetic protocols for natural, harmonious results.</p>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <div class="doctor-img">👨‍⚕️</div>
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Morakane Ramasodi</div>
+          <div class="doctor-spec">Dermatology Specialist</div>
+          <p class="doctor-bio">Specialising in general dermatological conditions in adults and children — covering skin, hair, and nail health — as well as dermatological surgical interventions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="gallery-header">
+      <div class="label">Real Results</div>
+      <h2 style="margin-top:12px">Client Transformations</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-label="Skin Rejuvenation">✨</div>
+      <div class="gallery-item" data-label="Anti-Wrinkle Treatment">💉</div>
+      <div class="gallery-item" data-label="Dermal Fillers">🧴</div>
+      <div class="gallery-item" data-label="Body Sculpting">⚖️</div>
+      <div class="gallery-item" data-label="RF Microneedling">🎯</div>
+      <div class="gallery-item" data-label="IV Drip Wellness">💧</div>
+      <div class="gallery-item" data-label="Skin Health">🌟</div>
+      <div class="gallery-item" data-label="Hair Restoration">💇</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="container">
+    <h2>Ready to look like yourself — <em>only better?</em></h2>
+    <p>Book your consultation with our medical team. No pressure, no hard sell — just honest advice about what is right for you.</p>
+    <a href="#contact" class="btn">Book a Free Consultation</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="label">Get In Touch</div>
+    <h2 style="margin-top:12px">Book Your Appointment</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Visit Us in Sandton</h3>
+        <p>Conveniently located in Morningside, Sandton — Johannesburg's premier medical and business district. Easy access, secure parking available.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-item-icon">📍</div>
+            <div>
+              <div class="contact-item-label">Address</div>
+              <div class="contact-item-val">159 Rivonia Road, Morningside, Johannesburg</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">📞</div>
+            <div>
+              <div class="contact-item-label">Phone</div>
+              <div class="contact-item-val">+27 11 346 5088 / 081 545 5385</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">✉️</div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-val">Laisa@safesight.co.za</div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-hours">
+          <div class="contact-hours-title">Consultation Hours</div>
+          <div class="hours-row"><span>Monday — Friday</span><span>08:30 — 17:00</span></div>
+          <div class="hours-row"><span>Saturday</span><span>09:00 — 14:00</span></div>
+          <div class="hours-row"><span>Sunday</span><span>Closed</span></div>
+        </div>
+      </div>
+      <form class="contact-form" action="mailto:Laisa@safesight.co.za" method="POST">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="name" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="you@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" placeholder="+27 XX XXX XXXX">
+        </div>
+        <div class="form-group">
+          <label>Treatment Interest</label>
+          <select name="treatment">
+            <option value="">Select a treatment...</option>
+            <option>Injectables and Anti-Wrinkle</option>
+            <option>Dermal Fillers</option>
+            <option>Skin Rejuvenation / Peels</option>
+            <option>RF Microneedling</option>
+            <option>IV Drips and Wellness</option>
+            <option>Body Sculpting</option>
+            <option>Hair Restoration</option>
+            <option>Weight Management</option>
+            <option>Intimate Health</option>
+            <option>Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea name="message" placeholder="Tell us what you are looking for..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Enquiry</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">LAISA</div>
+    <div class="footer-logo-sub">Aesthetics</div>
+    <p class="footer-tagline">"Look like yourself — only better."</p>
+  </div>
+  <div class="footer-links">
+    <div class="footer-col">
+      <div class="footer-col-title">Treatments</div>
+      <ul>
+        <li><a href="#services">Injectables</a></li>
+        <li><a href="#services">Dermal Fillers</a></li>
+        <li><a href="#services">Skin Rejuvenation</a></li>
+        <li><a href="#services">RF Microneedling</a></li>
+        <li><a href="#services">IV Wellness</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Clinic</div>
+      <ul>
+        <li><a href="#philosophy">About Us</a></li>
+        <li><a href="#doctors">Our Doctors</a></li>
+        <li><a href="#gallery">Results</a></li>
+        <li><a href="#contact">Book Appointment</a></li>
+        <li><a href="https://safesight.co.za" target="_blank">SafeSight Eye Surgery</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 LAISA Aesthetics — 159 Rivonia Road, Morningside, Johannesburg · +27 11 346 5088</p>
+    <p>Part of the SafeSight Group</p>
+  </div>
+</footer>
+
+</body>
+</html>

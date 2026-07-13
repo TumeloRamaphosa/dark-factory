@@ -1,0 +1,175 @@
+OGRE MORNING BRIEF — MONDAY 6 JULY 2026
+Date: Monday, 6 July 2026 | 08:00 AM SAST
+═══════════════════════════════════════
+
+WEEK STATUS: DAY 1 OF 5 UNTIL GLOBAL MARKETS EVENT
+═══════════════════════════════════════
+
+🎯 THIS WEEK'S THEME: "Launch Week"
+→ Friday 10 July: Global Markets Launch Event
+→ Partnership emails: TODAY
+→ All proposals live: TODAY
+→ SA DoH tender: 7 DAYS LEFT
+
+───────────────────────────────────────────────
+TOP 3 ACTIONS — MONDAY MORNING
+───────────────────────────────────────────────
+
+[1] SEND PARTNERSHIP EMAILS — FIRST THING
+→ NVIDIA Inception: inceptionprogram@nvidia.com
+   Subject: Partnership Enquiry — OGRE Computer × NVIDIA Inception
+   Body: /workspace/email-queue/email-nvidia-partnership.txt
+
+→ Tencent Cloud: cloudpartner@tencent.com
+   Subject: Partnership Proposal — Tencent Cloud × OGRE Computer
+   Body: /workspace/email-queue/email-tencent-partnership.txt
+
+→ MiniMax: minimax.io contact form
+   Body: /workspace/email-queue/email-minimax-partnership.txt (draft below)
+
+[2] SA DoH EMR TENDER — DOWNLOAD DOCS TODAY
+→ health.gov.za → tenders → search "NDoH-11" or "EMR"
+→ 7 DAYS LEFT until close. Most urgent item in the pipeline.
+→ R200M+ contract. OGRE qualifies as B-BBEE + AI + cloud player.
+
+[3] CONFIRM LINKS WITH TUMELO
+→ Check all deployed proposals are live
+→ All links in memory below
+
+───────────────────────────────────────────────
+DEPLOYED PROPOSALS — CONFIRMED LIVE
+───────────────────────────────────────────────
+
+✅ Official ICVMS Proposal: https://j3s0jkun4cbh.space.minimax.io
+   MindX × Studex Global Markets · Minima UI · $4K/mo + $7.5K setup
+   All 5 partner logos + VM 05 open slot · Pricing tiers · Bank details
+
+✅ ICVMS Full Demo: https://a5cjrm7f1x8s.space.minimax.io
+   StudEx Global Markets · All 4 video scripts · Agents · Pricing
+
+✅ MindX VM Proposal: https://9w8nktistow4.space.minimax.io
+   MindX × OGRE · Full VM story · $4K/mo · Email cto@studex-group.com
+
+✅ Obsidian Mind Proposal (Bre Ferrari): https://kidvuwlj196t.space.minimax.io
+   $4,000/mo · $7,590 setup · FNB bank details included
+   4 agents: Obsidian Mind + RileyJarvis + Page-Agent + Hermes
+
+✅ Global Markets Event Page: https://of3yiqp2h80w.space.minimax.io
+   Friday 10 July · 18:00 SA · 90-minute virtual event
+
+✅ re:motion VM Display: https://idsucux7j3e4.space.minimax.io
+   Canvas animation · 5 VMs · Friday event visual centrepiece
+
+✅ PRD Intake Form: https://75glowowaxdq.space.minimax.io
+   For new client intake · Submissions → Notion
+
+───────────────────────────────────────────────
+TENDER PIPELINE
+───────────────────────────────────────────────
+
+| Tender | Value | Closes | Days | Priority |
+|--------|-------|--------|------|----------|
+| SA DoH EMR (NDoH-11) | R200M+ | 13 July | ⚡ 7 | 🔴 CRITICAL |
+| Ghana AI Ministry | $250M | 24 July | 18 | 🟡 HIGH |
+| Kenya ICT Authority | Various | Rolling | — | 🟡 HIGH |
+| Rwanda AI (World Bank) | TBC | TBC | TBC | 🟢 WATCH |
+
+SA DoH EMR docs MUST be downloaded today.
+
+───────────────────────────────────────────────
+REVENUE PIPELINE
+───────────────────────────────────────────────
+
+Live MRR: R45,000 (Red Team Agent)
+This week target: LAISA close + SA DoH intent + MindX signed
+
+Pending:
+→ LAISA Phase A (Dr. Musa) — R350K + R55K/mo — Day 6 ⚠️
+→ MindX — ICVMS Partner — $4K/mo + $7.5K setup — proposal live
+→ Bre Ferrari — Obsidian Mind — $4K/mo + $7.5K setup — proposal live
+→ Pharmasyntez — R2.99M Y1 — proposal written
+
+───────────────────────────────────────────────
+MINIMAX PARTNERSHIP EMAIL (draft)
+───────────────────────────────────────────────
+
+To: minimax.io contact form
+Subject: Africa Partnership — MiniMax AI × OGRE Computer (South Africa)
+
+Dear MiniMax Team,
+
+OGRE Computer (Studex Group, South Africa) proposes a strategic 
+integration partnership to bring MiniMax AI capabilities to the 
+African enterprise market.
+
+THE OPPORTUNITY:
+Africa's AI market is growing at 20%+ CAGR, reaching $44B by 2032.
+South Africa alone has 11 official languages. No global AI company 
+has localized for African linguistic diversity. This is a wide-open market.
+
+WHO WE ARE:
+OGRE Computer — sovereign AI infrastructure for African organizations.
+Dark Factory: our agent development platform, deployed across SA 
+government and enterprise clients.
+
+WHY TENCENT × MINIMAX × OGRE:
+Together, we become the only fully-localized Chinese AI stack in Africa.
+Tencent Cloud (infrastructure) + MiniMax (video/speech) + OGRE 
+(sales/deployment/support/localization) = dominant African position.
+
+IMMEDIATE NEXT STEPS:
+1. MiniMax API partner account (no-cost access for POC)
+2. Co-marketing: Africa AI Summit Cape Town (Nov 2026) — joint booth
+3. Technical integration: Hailuo video + Speech-02 for SA deployments
+
+Can we schedule a 30-minute call this week?
+
+Cipher Tr@ce
+OGRE Computer Intelligence Division · Studex Group
+cto@studex-group.com
+
+───────────────────────────────────────────────
+LINUX COMMUNITY OUTREACH — THIS WEEK
+───────────────────────────────────────────────
+
+→ SA Linux (salinux.co.za) — email today
+→ DevOpsDays Cape Town — email today
+→ Gauteng Python User Group — email by Wednesday
+
+───────────────────────────────────────────────
+FRIDAY EVENT COUNTDOWN
+───────────────────────────────────────────────
+
+Days until launch: 4
+Time: 18:00 SA / 12:00 UTC / 19:00 CAT
+Format: 90-minute virtual event
+
+Agenda:
+→ 18:00 Doors open
+→ 18:05 Opening (Cipher Tr@ce)
+→ 18:10 OGRE Global Strategy (Tumelo)
+→ 18:25 Live demos — DarkDesk, AutoFlex Pro, Red Team Agent
+→ 18:45 Partnership announcements (NVIDIA, Tencent, MiniMax)
+→ 19:00 Linux community initiative
+→ 19:10 Q&A + close
+
+───────────────────────────────────────────────
+KEY BLOCKERS — NEED TUMELO
+───────────────────────────────────────────────
+
+⚠️ GMAIL_APP_PASSWORD — still not configured
+   → Cannot send briefings or partnership emails
+   → Need: Gmail app password from myaccount.google.com
+
+⚠️ ORGO API KEY — "Invalid API key" response
+   → Need: Valid Orgo key from orgo.ai/settings/api
+   → Blocks: VM provisioning for Friday event
+
+⚠️ NOTION API KEY — not configured
+   → PRD intake form submissions not reaching Notion
+   → Need: Notion integration token + database ID
+
+═══════════════════════════════════════
+Built by Cipher Tr@ce · OGRE Computer
+Monday 6 July 2026 · 08:00 AM SAST
+═══════════════════════════════════════

@@ -1,0 +1,12 @@
+{
+  "lastChecks": {
+    "email": 1750824000,
+    "research": 1750824000,
+    "morningBrief": 1750824000
+  },
+  "emailBlocked": {
+    "reason": "No Gmail App Password in /workspace/laisa-demo-deploy/.env",
+    "action": "Tumelo needs to create Gmail App Password at myaccount.google.com → Security → App Passwords",
+    "alternatives": ["Resend API (resend.com) — no 2FA needed, 3000 free emails/month"]
+  }
+}

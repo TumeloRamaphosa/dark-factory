@@ -1,0 +1,88 @@
+OGRE EVENING DIGEST — Saturday 11 July 2026
+Compiled: 18:00 UTC / 6PM SA | By: Cipher Tr@ce
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 1: TODAY'S COMPLETED WORK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DARK FACTORY WEBSITE — FULL REBUILD ✅
+- Complete redesign: original design preserved (orange + purple glow, grid bg, dark theme)
+- 5 tabs built: Home, Portfolio, Skills, VM Stack, About
+- 29KB page.tsx — TypeScript clean, builds in 7.6s
+- Live preview: https://jlydlvu36z11.space.minimax.io
+- GitHub repo connected: github.com/TumeloRamaphosa/SrudEx-Agents-Nest-Cloud-VM
+- GitHub PAT needs regeneration (returns 401)
+
+TUMELO RAMAPHOSA PROFILE — ADDED TO ABOUT TAB ✅
+- Blockchain Africa: "Unlocking Blockchain Africa" — Forbes, World Crypto Economic Forum
+- AWS San Francisco: Reserve AI POC, Neural Networks, Aran Khanna
+  - AWS Africa POC: Shoprite + Discovery Health
+- Google Builders: Barista with Gemini, Google AI Studio, Agentic AI
+- Mobiry: 2016, AI business intelligence
+- Domain: tumeloramaphosa.com
+
+SECTION 2: REVENUE PIPELINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LIVE:
+- Red Team Agent MRR: R45,000/month ✅
+
+URGENT — CLOSES MONDAY:
+- NDoH-11/2026-2027: R871M tender — CLOSES Monday July 13, 11AM SA
+  - Need SA partner TODAY (Saturday)
+  - Target: Datacentrix, EOH Healthcare, BCX, Altron HealthTech
+  - Commission: 10% = R87M potential
+
+STALE PROPOSALS:
+- LAISA Phase A (Dr. Musa): R350K + R55K/mo — Day 13, no close
+- Pharmasyntez: R2.99M Y1 — awaiting Russia response
+
+SECTION 3: TOMORROW'S TOP 3 ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] CRITICAL — NDoH-11 SA partner
+    → Call/email Datacentrix + EOH Healthcare TODAY
+    → Have tender docs ready: /workspace/OGRE-TENDER-PROPOSAL-NDOH-11-2026.md
+
+[2] GitHub PAT regeneration
+    → github.com → Settings → Developer Settings → PAT → Regenerate
+    → Paste new token here → I push dark-factory to GitHub
+    → Cloudflare picks up automatically
+
+[3] QuickBooks OAuth
+    → Visit auth URL → authorize → paste code here
+    → Activates automated invoicing for Sobek Trade
+
+SECTION 4: NEW INTELLIGENCE — OGRE MIDNIGHT RESEARCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEY OPPORTUNITIES IDENTIFIED:
+- Kimi K2.6: 1T params MoE, 262k context — SA-China trade bridge
+- Hailuo Video API: $0.25/video — build SA e-commerce POC at R500-R2,000/video
+- Qwen3-32B: Deploy on D@RK F@C#ORY → 80% cost reduction vs GPT-4o
+- "OGRE AI PC Setup": Hardware bundle R12-18K + R3K setup = new product line
+- Agent bake-off queued: Manus vs AutoGPT vs OpenClaw
+
+THREATS:
+- Microsoft + G42 $1B African data centre proposal (June 2026)
+- African governments divided on data sovereignty vs convenience
+
+OGRE POSITIONING: "Africa's Sovereign AI Infrastructure Partner"
+
+SECTION 5: BLOCKERS STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+| Blocker | Status | Owner |
+|---------|--------|-------|
+| NDoH-11 SA partner | CRITICAL — need today | Tumelo |
+| GitHub PAT | Returns 401 — needs regen | Tumelo |
+| QuickBooks OAuth | Awaiting auth | Tumelo |
+| Render API key | Not provided | — |
+| Notion API key | Not provided | — |
+| Gmail app password | Not provided | — |
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OGRE COMPUTER | DARK FACTORY
+Next update: Sunday July 12, 2026 9AM SA
+"We don't compete with Big Tech on their terms. We build on African terms."

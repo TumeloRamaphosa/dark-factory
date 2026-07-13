@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent ROI Calculator — OGRE Computer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&display=swap');
+:root{--gold:#C9A84C;--gold-d:#A68A3E;--bg:#0A0A0A;--panel:#111;--panel2:#181;--border:#1E1E1E;--border2:#2A2A2A;--text:#F0EDE6;--muted:#888;--green:#3DBA6C;--cyan:#29B6F6}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.brand-mark{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.15em}
+.topbar-sub{font-size:11px;color:var(--muted);border-left:1px solid var(--border2);padding-left:10px}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.live-badge{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cyan);background:rgba(41,182,246,.08);border:1px solid rgba(41,182,246,.2);border-radius:20px;padding:3px 10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.container{max-width:1100px;margin:0 auto;padding:32px 32px 64px}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-family:'Newsreader',Georgia,serif;font-size:38px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.15}
+.hero-title em{color:var(--gold);font-style:italic}
+.hero-sub{font-size:14px;color:var(--muted);margin-bottom:32px;max-width:560px;line-height:1.65}
+.preset-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.preset-chip{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:7px 16px;border-radius:6px;border:1px solid var(--border2);background:var(--panel);color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:.04em}
+.preset-chip:hover{border-color:var(--gold-d);color:var(--text)}
+.preset-chip.active{background:rgba(201,168,76,.12);border-color:var(--gold);color:var(--gold)}
+.calc-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:start}
+.input-panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.input-hdr{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.input-hdr-dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.input-hdr-title{font-size:12px;font-weight:600;color:var(--text);letter-spacing:.05em;text-transform:uppercase}
+.input-body{padding:20px 22px}
+.input-group{margin-bottom:24px}
+.input-group:last-child{margin-bottom:0}
+.input-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.input-label{font-size:12px;font-weight:600;color:var(--text)}
+.input-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--gold)}
+.input-desc{font-size:11px;color:var(--muted);margin-bottom:10px}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--border2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 0 1px var(--gold-d);transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);cursor:pointer}
+.range-ticks{display:flex;justify-content:space-between;margin-top:6px}
+.range-tick{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted)}
+.tier-label{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.tier-desc{font-size:11px;color:var(--muted);margin-bottom:10px}
+.savings-tier-row{display:flex;gap:8px}
+.tier-btn{flex:1;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:10px 4px;border-radius:6px;border:1px solid var(--border2);background:var(--panel2);color:var(--muted);cursor:pointer;text-align:center;transition:all .2s;line-height:1.5}
+.tier-btn:hover{border-color:var(--gold-d);color:var(--text)}
+.tier-btn.active{background:rgba(201,168,76,.12);border-color:var(--gold);color:var(--gold)}
+.results-panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.results-hdr{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.results-hdr-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);animation:blink 2s ease-in-out infinite}
+.results-hdr-title{font-size:12px;font-weight:600;color:var(--text);letter-spacing:.05em;text-transform:uppercase}
+.results-body{padding:20px 22px}
+.big-number{text-align:center;padding:22px 16px;background:linear-gradient(135deg,#141200 0%,#1a1600 100%);border:1px solid rgba(201,168,76,.25);border-radius:10px;margin-bottom:14px}
+.big-number-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.big-number-value{font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px}
+.big-number-unit{font-size:13px;color:var(--gold-d)}
+.big-number-sub{font-size:11px;color:var(--muted);margin-top:5px}
+.roi-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.roi-card{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:13px 10px;text-align:center}
+.roi-card-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.roi-card-value{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--green);line-height:1;margin-bottom:4px}
+.roi-card-sub{font-size:9px;color:var(--muted);line-height:1.4}
+.breakdown-title{font-size:10px;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.breakdown-row:last-child{border-bottom:none}
+.breakdown-label{color:var(--muted)}
+.breakdown-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text)}
+.breakdown-value.gold{color:var(--gold)}
+.breakdown-value.green{color:var(--green)}
+.ogre-rec{margin-top:14px;padding:16px;background:linear-gradient(135deg,#0d1200 0%,#111800 100%);border:1px solid rgba(201,168,76,.25);border-radius:10px}
+.ogre-rec-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.ogre-rec-title{font-family:'Newsreader',serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.3}
+.ogre-rec-title em{color:var(--gold);font-style:italic}
+.ogre-rec-desc{font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+.ogre-svcs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.ogre-svc{font-size:10px;color:var(--gold);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:3px 8px;background:rgba(201,168,76,.05)}
+.ogre-contact{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);line-height:1.8}
+.compare-section{margin-top:20px}
+.compare-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.compare-table{width:100%;border-collapse:collapse;font-size:12px}
+.compare-table th{text-align:left;padding:8px 12px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.08em}
+.compare-table th:not(:first-child){text-align:right}
+.compare-table td{padding:9px 12px;border:1px solid var(--border);color:var(--text)}
+.compare-table td:not(:first-child){text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px}
+.compare-table tr.current td{background:rgba(201,168,76,.05)}
+.disclaimer{margin-top:18px;padding:12px 16px;background:var(--panel2);border:1px solid var(--border);border-left:3px solid var(--border2);border-radius:6px;font-size:11px;color:var(--muted);line-height:1.65}
+.disclaimer strong{color:var(--text)}
+.footer{border-top:1px solid var(--border);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.footer-text{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.footer-text span{color:var(--gold)}
+@media(max-width:780px){.calc-grid{grid-template-columns:1fr}.container{padding:20px 16px 40px}.roi-cards{grid-template-columns:1fr 1fr}.big-number-value{font-size:38px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-brand">
+    <span class="brand-mark">OGRE//ROI</span>
+    <span class="topbar-sub">AI Agent ROI Calculator</span>
+  </div>
+  <div class="topbar-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE CALCULATOR</div>
+    <div class="clock" id="clock">—</div>
+  </div>
+</div>
+<div class="container">
+  <div>
+    <div class="hero-label">OGRE Computer — Interactive Sales Tool</div>
+    <h1 class="hero-title">AI Agent <em>ROI</em> Calculator</h1>
+    <p class="hero-sub">See exactly how much your company can save by deploying AI agents. Adjust the sliders, pick your deployment tier, and get a live breakdown with OGRE's personalised recommendation.</p>
+  </div>
+  <div class="preset-row">
+    <button class="preset-chip active" data-preset="smb">SMB — 20 Staff</button>
+    <button class="preset-chip" data-preset="midmarket">Mid-Market — 100 Staff</button>
+    <button class="preset-chip" data-preset="enterprise">Enterprise — 500 Staff</button>
+    <button class="preset-chip" data-preset="custom">Custom Input</button>
+  </div>
+  <div class="calc-grid">
+    <div class="input-panel">
+      <div class="input-hdr"><div class="input-hdr-dot"></div><div class="input-hdr-title">Your Company</div></div>
+      <div class="input-body">
+        <div class="input-group">
+          <div class="input-label-row"><span class="input-label">Company size</span><span class="input-val" id="val-employees">20 employees</span></div>
+          <div class="input-desc">Total full-time employees in your organisation</div>
+          <input type="range" id="inp-employees" min="5" max="1000" value="20" step="5">
+          <div class="range-ticks"><span class="range-tick">5</span><span class="range-tick">250</span><span class="range-tick">500</span><span class="range-tick">1000</span></div>
+        </div>
+        <div class="input-group">
+          <div class="input-label-row"><span class="input-label">Avg. hourly cost / employee</span><span class="input-val" id="val-hourly">R 450</span></div>
+          <div class="input-desc">Fully-loaded cost (salary + benefits + overhead) per billable hour</div>
+          <input type="range" id="inp-hourly" min="50" max="3000" value="450" step="10">
+          <div class="range-ticks"><span class="range-tick">R 50</span><span class="range-tick">R 800</span><span class="range-tick">R 1600</span><span class="range-tick">R 3000</span></div>
+        </div>
+        <div class="input-group">
+          <div class="input-label-row"><span class="input-label">Hours/week on repetitive tasks</span><span class="input-val" id="val-hours">12 hrs/employee</span></div>
+          <div class="input-desc">Average hours per employee per week on tasks AI could automate</div>
+          <input type="range" id="inp-hours" min="2" max="35" value="12" step="1">
+          <div class="range-ticks"><span class="range-tick">2h</span><span class="range-tick">10h</span><span class="range-tick">20h</span><span class="range-tick">35h</span></div>
+        </div>
+        <div class="input-group">
+          <div class="tier-label">Deployment ambition</div>
+          <div class="tier-desc">How aggressively does your organisation adopt AI agents?</div>
+          <div class="savings-tier-row">
+            <button class="tier-btn" data-tier="15"><div>Pilot</div><div style="font-weight:400;color:var(--muted);font-size:9px">15% savings</div></button>
+            <button class="tier-btn active" data-tier="40"><div>Standard</div><div style="font-weight:400;color:var(--muted);font-size:9px">40% savings</div></button>
+            <button class="tier-btn" data-tier="65"><div>Aggressive</div><div style="font-weight:400;color:var(--muted);font-size:9px">65% savings</div></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="results-panel">
+        <div class="results-hdr"><div class="results-hdr-dot"></div><div class="results-hdr-title">Your Estimated ROI</div></div>
+        <div class="results-body">
+          <div class="big-number">
+            <div class="big-number-label">Annual Labour Cost Savings</div>
+            <div class="big-number-value" id="res-annual">R 1.87M</div>
+            <div class="big-number-unit">per year</div>
+            <div class="big-number-sub" id="res-hours-saved">4,992 hours reclaimed/year</div>
+          </div>
+          <div class="roi-cards">
+            <div class="roi-card"><div class="roi-card-label">Monthly savings</div><div class="roi-card-value" id="res-monthly">R 155,520</div><div class="roi-card-sub">free up for growth</div></div>
+            <div class="roi-card"><div class="roi-card-label">ROI multiple</div><div class="roi-card-value" id="res-roi">14.4x</div><div class="roi-card-sub">vs. OGRE implementation</div></div>
+            <div class="roi-card"><div class="roi-card-label">Payback period</div><div class="roi-card-value" id="res-payback">0.7 mo</div><div class="roi-card-sub">to break-even</div></div>
+          </div>
+          <div class="breakdown-title">Annual Savings Breakdown</div>
+          <div class="breakdown-row"><span class="breakdown-label">Baseline annual task cost</span><span class="breakdown-value" id="bd-baseline">—</span></div>
+          <div class="breakdown-row"><span class="breakdown-label">AI agent efficiency gain</span><span class="breakdown-value gold" id="bd-efficiency">—</span></div>
+          <div class="breakdown-row"><span class="breakdown-label">OGRE implementation cost est.</span><span class="breakdown-value" id="bd-cost">—</span></div>
+          <div class="breakdown-row"><span class="breakdown-label">Net annual benefit</span><span class="breakdown-value green" id="bd-net">—</span></div>
+          <div class="ogre-rec">
+            <div class="ogre-rec-label">OGRE Recommendation</div>
+            <div class="ogre-rec-title" id="rec-title">Start with a <em>Proof of Value</em></div>
+            <div class="ogre-rec-desc" id="rec-desc">Given your company size and AI maturity, we recommend a focused 6-8 week pilot targeting your highest-volume repetitive process. Our team handles everything — you see results before scaling.</div>
+            <div class="ogre-svcs" id="rec-svcs"><span class="ogre-svc">AI Strategy Workshop</span><span class="ogre-svc">Pilot Design &amp; Build</span><span class="ogre-svc">Team Training</span></div>
+            <div class="ogre-contact">info@studexmeat.com &nbsp;&bull;&nbsp; studexmeat.com</div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-section">
+        <div class="compare-label">All Three Deployment Scenarios</div>
+        <table class="compare-table">
+          <thead><tr><th>Metric</th><th>Pilot (15%)</th><th>Standard (40%)</th><th>Aggressive (65%)</th></tr></thead>
+          <tbody id="compare-body"></tbody>
+        </table>
+      </div>
+      <div class="disclaimer"><strong>Disclaimer:</strong> These figures are estimates based on industry benchmarks (Gartner, McKinsey, Ringly.io) and OGRE's experience with South African enterprise deployments. Actual results vary based on use-case selection, change management, and integration complexity. Use as a planning guide only — request a tailored assessment from OGRE for precise projections.</div>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div class="footer-text"><span>OGRE//ROI</span> &mdash; AI Agent ROI Calculator &mdash; &copy; 2026 OGRE Computer (Studex Meat Co.)</div>
+  <div class="footer-text">Midnight Build &mdash; <span>Day 2</span></div>
+</div>
+<script>
+(function(){
+  var state={employees:20,hourly:450,hoursPerWeek:12,savingsTier:40};
+  var presets={smb:{employees:20,hourly:350,hoursPerWeek:10,savingsTier:40},midmarket:{employees:100,hourly:600,hoursPerWeek:15,savingsTier:40},enterprise:{employees:500,hourly:900,hoursPerWeek:18,savingsTier:40},custom:null};
+  function ogreCost(e,t){var b=85000;if(e>=100)b=180000;if(e>=500)b=420000;if(t>=65)b=Math.round(b*1.4);return b}
+  function calc(s){var w=48,th=s.employees*s.hoursPerWeek*w,bc=th*s.hourly,sp=s.savingsTier/100,as=bc*sp,ms=as/12,ic=ogreCost(s.employees,s.savingsTier),roi=ic>0?as/ic:0,pb=as>0?(ic/as)*12:0,hs=Math.round(th*sp),nb=as-ic;return{baselineCost:bc,annualSavings:as,monthlySavings:ms,implCost:ic,roiMultiple:roi,paybackMo:pb,hoursSaved:hs,netBenefit:nb}}
+  function fmtR(n){if(n>=1e6)return'R '+(n/1e6).toFixed(2)+'M';if(n>=1e3)return'R '+Math.round(n/1e3)+'K';return'R '+Math.round(n)}
+  function fmtRF(n){return'R '+Math.round(n).toLocaleString('en-ZA')}
+  function fmtH(n){return n>=1000?(n/1000).toFixed(1)+'K hrs':n.toLocaleString()+' hrs'}
+  function fmtPB(mo){return mo<1?Math.round(mo*30)+' days':mo.toFixed(1)+' mo'}
+  function getRec(s){if(s.employees<30){if(s.savingsTier<=20)return{title:'Start with an <em>AI Quick Win</em>',desc:'A focused 4-week pilot targeting your single highest-volume task — automated drafting, data entry, or reporting. Low risk, fast proof of value. OGRE delivers end-to-end.',svcs:['AI Quick Win Workshop','Single-Process Automation','Results Report']};return{title:'Go for a <em>Team Automation Sprint</em>',desc:'OGRE maps 3-5 automatable processes, builds 2 production agents, and certifies your staff to manage them — all in 6 weeks flat.',svcs:['Process Mapping','Multi-Agent Build','Team Certification']}}if(s.employees<150){if(s.savingsTier<=40)return{title:'Start with a <em>Proof of Value</em>',desc:'A focused 6-8 week pilot targeting your highest-volume repetitive process. Our team handles everything — you see results before scaling.',svcs:['AI Strategy Workshop','Pilot Design & Build','Team Training']};return{title:'Go straight to <em>Team Automation</em>',desc:'OGRE deploys a full multi-agent system across your key departments in 10 weeks — with change management and adoption support built in.',svcs:['AI Strategy Workshop','Multi-Agent Build','Change Management','Production Handoff']}}if(s.savingsTier<=40)return{title:'Start with an <em>Enterprise AI Roadmap</em>',desc:'A 2-week discovery, full automation opportunity map, and a prioritised 12-month deployment plan before writing a single line of agent code.',svcs:['Executive Discovery Workshop','AI Opportunity Map','12-Month Roadmap','Pilot PoC']};return{title:'Enterprise <em>AI Transformation Program</em>',desc:'A 12-month phased program: strategy, pilot wave, scaled deployment, then an internal Centre of Excellence your team runs independently.',svcs:['AI Transformation Strategy','Multi-Team Pilots','Scaled Deployment','Internal CoE Training']}}
+  function render(){var r=calc(state);document.getElementById('res-annual').textContent=fmtR(r.annualSavings);document.getElementById('res-hours-saved').textContent=fmtH(r.hoursSaved)+' reclaimed/year';document.getElementById('res-monthly').textContent=fmtR(r.monthlySavings);document.getElementById('res-roi').textContent=r.roiMultiple.toFixed(1)+'x';document.getElementById('res-payback').textContent=fmtPB(r.paybackMo);document.getElementById('bd-baseline').textContent=fmtRF(r.baselineCost);document.getElementById('bd-efficiency').textContent=state.savingsTier+'% rate — '+fmtRF(r.annualSavings);document.getElementById('bd-cost').textContent=fmtRF(r.implCost);var ne=document.getElementById('bd-net');ne.textContent=r.netBenefit>=0?fmtRF(r.netBenefit):'Recovered in yr 1';ne.style.color=r.netBenefit>=0?'var(--green)':'var(--gold)';var rec=getRec(state);document.getElementById('rec-title').innerHTML=rec.title;document.getElementById('rec-desc').textContent=rec.desc;document.getElementById('rec-svcs').innerHTML=rec.svcs.map(function(s){return'<span class="ogre-svc">'+s+'</span>'}).join('');var s15=calc({employees:state.employees,hourly:state.hourly,hoursPerWeek:state.hoursPerWeek,savingsTier:15});var s40=calc({employees:state.employees,hourly:state.hourly,hoursPerWeek:state.hoursPerWeek,savingsTier:40});var s65=calc({employees:state.employees,hourly:state.hourly,hoursPerWeek:state.hoursPerWeek,savingsTier:65});var tierIdx={15:1,40:2,65:3}[state.savingsTier]||2;var rows=[['Annual savings',fmtRF(s15.annualSavings),fmtRF(s40.annualSavings),fmtRF(s65.annualSavings)],['Monthly savings',fmtRF(s15.monthlySavings),fmtRF(s40.monthlySavings),fmtRF(s65.monthlySavings)],['OGRE investment',fmtRF(s15.implCost),fmtRF(s40.implCost),fmtRF(s65.implCost)],['ROI multiple',s15.roiMultiple.toFixed(1)+'x',s40.roiMultiple.toFixed(1)+'x',s65.roiMultiple.toFixed(1)+'x'],['Payback period',fmtPB(s15.paybackMo),fmtPB(s40.paybackMo),fmtPB(s65.paybackMo)],['Hours reclaimed',fmtH(s15.hoursSaved),fmtH(s40.hoursSaved),fmtH(s65.hoursSaved)]];var tb=document.getElementById('compare-body');tb.innerHTML=rows.map(function(row){return'<tr>'+row.map(function(cell,i){return'<td'+(i===tierIdx?' style="color:var(--gold);font-weight:700"':'')+'>'+cell+'</td>'}).join('')+'</tr>'}).join('')}
+  function wire(id,vid,fmt,key){var inp=document.getElementById(id),lbl=document.getElementById(vid);inp.addEventListener('input',function(){state[key]=parseFloat(inp.value);lbl.textContent=fmt(inp.value);render()})}
+  wire('inp-employees','val-employees',function(v){return v+' employees'},'employees');
+  wire('inp-hourly','val-hourly',function(v){return'R '+parseFloat(v).toLocaleString('en-ZA')},'hourly');
+  wire('inp-hours','val-hours',function(v){return v+' hrs/employee'},'hoursPerWeek');
+  document.querySelectorAll('.tier-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.tier-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');state.savingsTier=parseInt(btn.getAttribute('data-tier'));render()})});
+  document.querySelectorAll('.preset-chip').forEach(function(chip){chip.addEventListener('click',function(){var p=chip.getAttribute('data-preset');if(p==='custom'){document.querySelectorAll('.preset-chip').forEach(function(c){c.classList.remove('active')});chip.classList.add('active');render();return}var v=presets[p];if(!v)return;document.querySelectorAll('.preset-chip').forEach(function(c){c.classList.remove('active')});chip.classList.add('active');state.employees=v.employees;state.hourly=v.hourly;state.hoursPerWeek=v.hoursPerWeek;state.savingsTier=v.savingsTier;document.getElementById('inp-employees').value=v.employees;document.getElementById('inp-hourly').value=v.hourly;document.getElementById('inp-hours').value=v.hoursPerWeek;document.getElementById('val-employees').textContent=v.employees+' employees';document.getElementById('val-hourly').textContent='R '+v.hourly.toLocaleString('en-ZA');document.getElementById('val-hours').textContent=v.hoursPerWeek+' hrs/employee';document.querySelectorAll('.tier-btn').forEach(function(b){b.classList.remove('active');if(parseInt(b.getAttribute('data-tier'))===v.savingsTier)b.classList.add('active')});render()})});
+  function updateClock(){document.getElementById('clock').textContent=new Date().toUTCString().replace('GMT','UTC')}updateClock();setInterval(updateClock,1000);
+  render();
+})();
+</script>
+</body>
+</html>

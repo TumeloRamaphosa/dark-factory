@@ -1,0 +1,204 @@
+{
+  "name": "StudEx Leads Qualification Workflow",
+  "nodes": [
+    {
+      "id": "whatsapp-trigger",
+      "name": "WhatsApp Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "studex-lead",
+        "responseMode": "lastNode"
+      },
+      "webhookId": "studex-lead-qualification"
+    },
+    {
+      "id": "parse-lead",
+      "name": "Parse Lead Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [220, 0],
+      "parameters": {
+        "mode": "raw",
+        "assignments": {
+          "fields": [
+            {"name": "phone", "type": "string", "value": "={{ $json.body.phone }}"},
+            {"name": "name", "type": "string", "value": "={{ $json.body.name }}"},
+            {"name": "business", "type": "string", "value": "={{ $json.body.business }}"},
+            {"name": "industry", "type": "string", "value": "={{ $json.body.industry }}"},
+            {"name": "employees", "type": "string", "value": "={{ $json.body.employees }}"},
+            {"name": "budget", "type": "string", "value": "={{ $json.body.budget }}"},
+            {"name": "pain_point", "type": "string", "value": "={{ $json.body.pain_point }}"},
+            {"name": "timestamp", "type": "string", "value": "={{ $now.toISO() }}"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "classify-lead",
+      "name": "AI Classify Lead",
+      "type": "n8n-nodes-base.openAiApi",
+      "typeVersion": 1,
+      "position": [440, 0],
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "prompt": {
+          "type": "string",
+          "value": "Classify this lead as HOT, WARM, or COLD.\n\nHOT = Budget R5,000+/month OR clear pain point AND small team (1-10 employees)\nWARM = Budget R2,500-R5,000/month OR medium team (11-50 employees)\nCOLD = No budget mentioned OR large team OR unclear use case\n\nLead data: {{ $json.business }} | Industry: {{ $json.industry }} | Team size: {{ $json.employees }} | Budget: {{ $json.budget }} | Pain point: {{ $json.pain_point }}\n\nRespond ONLY with one word: HOT, WARM, or COLD."
+        },
+        "messages": [],
+        "model": "gpt-4o"
+      }
+    },
+    {
+      "id": "score-switch",
+      "name": "Route by Score",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [660, 0],
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.choices[0].message.content }}",
+        "operation": "equals",
+        "value2": "HOT",
+        "fallbackValue": "COLD"
+      },
+      "rules": {
+        "values": [
+          {"value2": "HOT", "output": 0},
+          {"value2": "WARM", "output": 1},
+          {"value2": "COLD", "output": 2}
+        ]
+      }
+    },
+    {
+      "id": "hot-notify",
+      "name": "HOT: Notify Sales Immediately",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [880, -200],
+      "parameters": {
+        "channel": "#sales-leads",
+        "text": "🚨 HOT LEAD ALERT\n\nBusiness: {{ $json.name }}\nCompany: {{ $json.business }}\nIndustry: {{ $json.industry }}\nBudget: {{ $json.budget }}\nPain Point: {{ $json.pain_point }}\n\nContact NOW: {{ $json.phone }}",
+        "webhookUri": ""
+      }
+    },
+    {
+      "id": "hot-email",
+      "name": "HOT: Email Sales Team",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [880, 0],
+      "parameters": {
+        "to": "sales@studexagents.africa",
+        "subject": "URGENT: Hot Lead — {{ $json.business }}",
+        "emailType": "formBased",
+        "message": "New hot lead from WhatsApp.\n\nName: {{ $json.name }}\nBusiness: {{ $json.business }}\nIndustry: {{ $json.industry }}\nTeam Size: {{ $json.employees }}\nBudget: {{ $json.budget }}\nPain Point: {{ $json.pain_point }}\nPhone: {{ $json.phone }}\n\nContact within 10 minutes."
+      }
+    },
+    {
+      "id": "hot-welcome",
+      "name": "HOT: Welcome + Book Call",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [1100, -200],
+      "parameters": {
+        "to": "={{ $json.phone }}",
+        "message": "Hi {{ $json.name }}! 👋\n\nThanks for reaching out about StudEx Claw. I can see you're running {{ $json.business }} — that's exactly the kind of business we help.\n\nLet me book you a free 15-min call right now. What works — today or tomorrow?\n\nOr click to book straight away: cal.studexagents.africa"
+      }
+    },
+    {
+      "id": "warm-sequence",
+      "name": "WARM: Start Nurture Sequence",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [880, 100],
+      "parameters": {
+        "operation": "append",
+        "sheetId": "",
+        "range": "Sheet1!A1",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Warm Leads"
+        }
+      }
+    },
+    {
+      "id": "warm-welcome",
+      "name": "WARM: Nurture Message",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [1100, 100],
+      "parameters": {
+        "to": "={{ $json.phone }}",
+        "message": "Hi {{ $json.name }}! Great to hear from you 🌟\n\nI've noted your details — {{ $json.business }} in {{ $json.industry }}. Our team will be in touch within 2 hours with a tailored plan for your needs.\n\nIn the meantime, feel free to explore our live demo: https://1zibcrfi7qrx.space.minimax.io"
+      }
+    },
+    {
+      "id": "cold-save",
+      "name": "COLD: Save to Newsletter List",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [880, 300],
+      "parameters": {
+        "operation": "append",
+        "sheetId": "",
+        "range": "Sheet1!A1",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Cold Leads"
+        }
+      }
+    },
+    {
+      "id": "cold-confirm",
+      "name": "COLD: Monthly Newsletter",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [1100, 300],
+      "parameters": {
+        "to": "={{ $json.phone }}",
+        "message": "Hi {{ $json.name }}! Thanks for your interest in StudEx Claw 💪\n\nWe'll keep you updated as we roll out new features. Expect to hear from us soon with tips on running your business better with AI.\n\nWhenever you're ready, we're here: https://1zibcrfi7qrx.space.minimax.io"
+      }
+    }
+  ],
+  "connections": {
+    "whatsapp-trigger": {
+      "main": [[{"node": "parse-lead", "type": "main", "index": 0}]]
+    },
+    "parse-lead": {
+      "main": [[{"node": "classify-lead", "type": "main", "index": 0}]]
+    },
+    "classify-lead": {
+      "main": [[{"node": "score-switch", "type": "main", "index": 0}]]
+    },
+    "score-switch": {
+      "main": [
+        [{"node": "hot-notify", "type": "main", "index": 0}, {"node": "hot-email", "type": "main", "index": 0}, {"node": "hot-welcome", "type": "main", "index": 0}],
+        [{"node": "warm-sequence", "type": "main", "index": 0}, {"node": "warm-welcome", "type": "main", "index": 0}],
+        [{"node": "cold-save", "type": "main", "index": 0}, {"node": "cold-confirm", "type": "main", "index": 0}]
+      ]
+    }
+  }
+}

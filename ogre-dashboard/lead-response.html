@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Lead Response Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0A0A0A;--surface:#111118;--surface2:#18181f;--border:#22222e;--gold:#C9A84C;--gold-dim:#8a6f2e;--cyan:#00d4ff;--green:#00ff88;--red:#ff4757;--amber:#f59e0b;--text:#e8e8f0;--muted:#8888a0;--font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;--serif:'Newsreader',Georgia,serif}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:14px}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.topbar-inner{display:flex;align-items:center;gap:16px;padding:10px 24px;max-width:1400px;margin:0 auto}
+.logo{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--gold);letter-spacing:.08em;text-decoration:none;white-space:nowrap}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav a{color:var(--muted);text-decoration:none;font-size:12px;padding:4px 8px;border-radius:4px;transition:color .15s,background .15s}
+.nav a:hover{color:var(--text);background:var(--surface2)}
+.nav a.active{color:var(--gold)}
+.signal{width:8px;height:8px;background:var(--green);border-radius:50%;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.clock{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:auto}
+
+/* BAND */
+.band{background:linear-gradient(90deg,#0a0a0a,#1a1200);border-bottom:1px solid #2a2000;padding:10px 24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.08em}
+.band span{color:var(--muted)}
+
+/* MAIN */
+.main{max-width:1400px;margin:0 auto;padding:24px}
+
+/* SECTION HEADERS */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-title{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.1em}
+.section-sub{font-size:12px;color:var(--muted)}
+
+/* GRID LAYOUT */
+.grid{display:grid;grid-template-columns:380px 1fr;gap:20px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* LEAD LIST */
+.lead-list{display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 220px);overflow-y:auto}
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+.lead-card:hover,.lead-card.selected{border-color:var(--gold)}
+.lead-card.selected{background:#1a1500;border-color:var(--gold)}
+.lead-card-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.lead-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.lead-avatar.cold{background:#334}
+.lead-avatar.warm{background:var(--amber)}
+.lead-avatar.hot{background:var(--red)}
+.lead-name{font-weight:600;font-size:13px;flex:1}
+.lead-time{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.lead-company{font-size:12px;color:var(--muted);margin-bottom:6px}
+.lead-tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--mono);background:#1e1e2a;color:var(--cyan);border:1px solid #2a2a3a}
+.tag.cold{background:#0d1117;color:#4a9eff;border-color:#1a2a3a}
+.tag.warm{background:#1a1200;color:var(--amber);border-color:#2a2000}
+.tag.hot{background:#1a0008;color:var(--red);border-color:#2a0010}
+.tag.done{background:#001a08;color:var(--green);border-color:#002a10}
+.tag.pending{background:#1a1a00;color:var(--gold);border-color:#2a2a00}
+.no-leads{text-align:center;padding:40px 20px;color:var(--muted);font-family:var(--mono);font-size:12px}
+
+/* RESPONSE PANEL */
+.response-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.panel-header{background:var(--surface2);padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.panel-lead-name{font-weight:600;font-size:14px}
+.panel-lead-meta{font-size:12px;color:var(--muted);margin-left:auto;font-family:var(--mono)}
+.channel-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface2)}
+.ch-tab{padding:10px 18px;font-size:12px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;font-family:var(--mono);letter-spacing:.05em}
+.ch-tab:hover{color:var(--text)}
+.ch-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--surface)}
+.response-body{padding:18px}
+.audience-block{margin-bottom:16px}
+.audience-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.audience-tags{display:flex;gap:6px;flex-wrap:wrap}
+.aud-badge{padding:3px 8px;background:#1e1e2a;border:1px solid var(--border);border-radius:3px;font-size:11px;color:var(--text)}
+
+.response-output{min-height:200px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:14px;position:relative}
+.response-text{font-family:var(--serif);font-size:14px;line-height:1.65;color:var(--text);white-space:pre-wrap}
+.response-placeholder{color:var(--muted);font-style:italic;font-size:13px}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--gold);color:var(--bg);border:none;border-radius:4px;padding:5px 12px;font-size:11px;font-family:var(--mono);cursor:pointer;font-weight:600;transition:background .15s}
+.copy-btn:hover{background:#e0bb5a}
+.copy-btn.copied{background:var(--green)}
+.send-btn{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--bg);border:none;border-radius:4px;padding:9px 18px;font-size:12px;font-family:var(--mono);cursor:pointer;font-weight:600;transition:background .15s;margin-right:8px}
+.send-btn:hover{background:#e0bb5a}
+.send-btn.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.send-btn.secondary:hover{background:var(--border)}
+.send-btn.linkedin{background:#0077b4;color:#fff}
+.send-btn.linkedin:hover{background:#0088cc}
+.send-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg-hint{font-size:11px;color:var(--muted);margin-top:8px;font-family:var(--mono)}
+
+/* EMPTY STATE */
+.empty-state{padding:60px 30px;text-align:center}
+.empty-icon{font-size:40px;margin-bottom:16px;opacity:.3}
+.empty-title{font-family:var(--mono);font-size:14px;color:var(--text);margin-bottom:8px}
+.empty-desc{font-size:13px;color:var(--muted);max-width:300px;margin:0 auto;line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--green);color:var(--green);padding:10px 18px;border-radius:6px;font-family:var(--mono);font-size:12px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.stat-n{font-size:20px;font-weight:700;font-family:var(--mono);color:var(--text)}
+.stat-n.gold{color:var(--gold)}
+.stat-n.green{color:var(--green)}
+.stat-n.red{color:var(--red)}
+.stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);margin-top:2px}
+
+/* REFRESH BTN */
+.refresh-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:5px 12px;font-size:11px;font-family:var(--mono);cursor:pointer;transition:all .15s}
+.refresh-btn:hover{color:var(--text);border-color:var(--gold)}
+
+/* INPUT STYLE */
+.input-group{margin-bottom:12px}
+.input-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;display:block}
+.textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);font-family:var(--font);font-size:13px;resize:vertical;min-height:80px;transition:border-color .15s}
+.textarea:focus{outline:none;border-color:var(--gold)}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="logo">OGRE COMPUTER</span>
+    <nav class="nav">
+      <a href="portal.html">Portal</a>
+      <a href="business-pulse.html">Pulse</a>
+      <a href="tender-tracker.html">Tenders</a>
+      <a href="proposal-generator.html">Proposals</a>
+      <a href="action-tracker.html">Actions</a>
+      <a href="dark-factory-pack.html">Landing</a>
+      <a href="roi-calculator.html">ROI</a>
+      <a href="index.html">Dashboard</a>
+    </nav>
+    <div class="signal"></div>
+    <span class="clock" id="clock">--:--:-- UTC</span>
+  </div>
+</div>
+
+<div class="band">
+  NIGHT 17 — JULY 8, 2026 &nbsp;/&nbsp; <span>LEAD RESPONSE GENERATOR</span> &nbsp;/&nbsp; OGRE COMPUTER
+</div>
+
+<div class="main">
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card"><div class="stat-n gold" id="statTotal">0</div><div class="stat-l">Total Leads</div></div>
+    <div class="stat-card"><div class="stat-n" id="statNew">0</div><div class="stat-l">New (→ Respond)</div></div>
+    <div class="stat-card"><div class="stat-n green" id="statContacted">0</div><div class="stat-l">Contacted</div></div>
+    <div class="stat-card"><div class="stat-n" id="statDeals">0</div><div class="stat-l">Open Deals</div></div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">// SELECT LEAD TO GENERATE RESPONSE</span>
+    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: Lead List -->
+    <div>
+      <div class="lead-list" id="leadList">
+        <div class="no-leads">No leads found. <br>Add leads via the Dark Factory Pack landing page.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Response Panel -->
+    <div class="response-panel" id="responsePanel">
+      <div class="empty-state">
+        <div class="empty-icon">💬</div>
+        <div class="empty-title">Select a lead</div>
+        <div class="empty-desc">Click any lead on the left to generate personalised WhatsApp, Email and LinkedIn outreach in one click.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Clock ──────────────────────────────────────────────────────────
+function startClock(){
+  function tick(){
+    document.getElementById('clock').textContent=new Date().toUTCString().slice(17,25)+' UTC';
+  }
+  tick();setInterval(tick,1000);
+}
+startClock();
+
+// ── Toast ──────────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function copyText(text,btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✓ Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);
+    showToast('Copied to clipboard');
+  });
+}
+
+// ── Data Loading ────────────────────────────────────────────────────
+function loadAll(){
+  loadLandingLeads();
+  loadPulseDeals();
+  updateStats();
+}
+
+function loadLandingLeads(){
+  let leads=[];
+  try{leads=JSON.parse(localStorage.getItem('ogre_leads_v1')||'[]')}catch(e){}
+  // Also try different keys
+  try{
+    const v2=JSON.parse(localStorage.getItem('ogre_leads_v2')||'[]');
+    if(v2.length)leads=leads.concat(v2);
+  }catch(e){}
+
+  // Remove duplicates by email
+  const seen=new Set();
+  leads=leads.filter(l=>{if(!l.email||seen.has(l.email))return false;seen.add(l.email);return true});
+
+  // Sort by date descending
+  leads.sort((a,b)=>(b.submittedAt||0)-(a.submittedAt||0));
+  renderLeadList(leads);
+  window._landingLeads=leads;
+}
+
+function loadPulseDeals(){
+  let deals=[];
+  try{deals=JSON.parse(localStorage.getItem('ogre_deals_v2')||'[]')}catch(e){}
+  window._pulseDeals=deals||[];
+  updateStats();
+}
+
+function updateStats(){
+  const leads=window._landingLeads||[];
+  const deals=window._pulseDeals||[];
+  const total=leads.length;
+  const newCount=leads.filter(l=>!l.contacted).length;
+  const contacted=leads.filter(l=>l.contacted).length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statNew').textContent=newCount;
+  document.getElementById('statContacted').textContent=contacted;
+  document.getElementById('statDeals').textContent=deals.filter(d=>d.stage!=='won'&&d.stage!=='lost').length;
+}
+
+// ── Lead Card Rendering ─────────────────────────────────────────────
+function timeAgo(ts){
+  if(!ts)return'';
+  const diff=Date.now()-ts;
+  const m=Math.floor(diff/60000);
+  if(m<1)return'just now';
+  if(m<60)return`${m}m ago`;
+  const h=Math.floor(m/60);
+  if(h<24)return`${h}h ago`;
+  return`${Math.floor(h/24)}d ago`;
+}
+
+function getTempColor(temp){
+  if(temp==='hot')return'hot';
+  if(temp==='warm')return'warm';
+  return'cold';
+}
+
+function renderLeadList(leads){
+  const el=document.getElementById('leadList');
+  if(!leads.length){
+    el.innerHTML='<div class="no-leads">No leads found yet.<br>Share dark-factory-pack.html to capture leads.</div>';
+    return;
+  }
+  el.innerHTML=leads.map((l,i)=>{
+    const initials=(l.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const temp=l.temperature||'cold';
+    const tags=[];
+    if(l.package)tags.push(`<span class="tag">${l.package}</span>`);
+    if(l.budget)tags.push(`<span class="tag">${l.budget}</span>`);
+    if(l.goal)tags.push(`<span class="tag pending">${l.goal.slice(0,20)}</span>`);
+    if(l.contacted)tags.push(`<span class="tag done">✓ Contacted</span>`);
+    return`<div class="lead-card${window._selectedLead&&window._selectedLead.email===l.email?' selected':''}" onclick="selectLead(${i})">
+      <div class="lead-card-header">
+        <div class="lead-avatar ${getTempColor(temp)}">${initials}</div>
+        <div class="lead-name">${escHtml(l.name||'Unknown')}</div>
+        <div class="lead-time">${timeAgo(l.submittedAt)}</div>
+      </div>
+      <div class="lead-company">${escHtml(l.company||'')} · ${escHtml(l.email||'')}</div>
+      <div class="lead-tags">${tags.join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Lead Selection ──────────────────────────────────────────────────
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function selectLead(index){
+  const leads=window._landingLeads||[];
+  window._selectedLead=leads[index];
+  renderLeadList(leads);
+  renderResponsePanel(window._selectedLead);
+}
+
+function getAudienceTags(lead){
+  const tags=[];
+  if(lead.package==='Dark Factory ($997)')tags.push('Enterprise','High Budget','SaaS Builder');
+  else if(lead.package==='Starter ($197/mo)')tags.push('Starter','Monthly','Testing Waters');
+  else if(lead.budget==='$500–2K')tags.push('SMB','Mid-Market');
+  if(lead.goal&&lead.goal.toLowerCase().includes('automate'))tags.push('Automation Focus');
+  if(lead.goal&&lead.goal.toLowerCase().includes('tender'))tags.push('Government','Tender Pipeline');
+  if(lead.goal&&lead.goal.toLowerCase().includes('saas'))tags.push('SaaS Ambition');
+  if(!tags.length)tags.push('General Interest');
+  return tags;
+}
+
+function getPainPoints(lead){
+  const goal=(lead.goal||'').toLowerCase();
+  const pain=[];
+  if(goal.includes('tender')||goal.includes('government'))pain.push('navigating government tender requirements');
+  if(goal.includes('automate'))pain.push('repetitive tasks eating into billable hours');
+  if(goal.includes('saas')||goal.includes('build')||goal.includes('product'))pain.push('building and launching a digital product with limited technical resources');
+  if(goal.includes('team')||goal.includes('staff'))pain.push('hiring and managing staff costs');
+  if(goal.includes('sales')||goal.includes('client'))pain.push('converting more prospects into paying clients');
+  if(!pain.length)pain.push('streamlining their operations with AI automation');
+  return pain;
+}
+
+function getPersonalization(lead){
+  const parts=[];
+  if(lead.name)parts.push(`called ${lead.name.split(' ')[0]}`);
+  if(lead.company)parts.push(`from ${lead.company}`);
+  if(lead.package)parts.push(`interested in the ${lead.package} package`);
+  if(!parts.length)return'';
+  return' ('+parts.join(', ')+')';
+}
+
+function generateWhatsApp(lead){
+  const p=getPainPoints(lead);
+  const pain=p[0]||'scaling their operations with AI';
+  const goal=lead.goal||'';
+  const pkg=lead.package||'';
+
+  if(pkg.includes('Dark Factory')){
+    return `Hi ${lead.name.split(' ')[0]}, great to connect${lead.company?` from ${lead.company}`:''}.
+
+I saw you filled in the Dark Factory Starter Pack form — that's the R997/month enterprise package. Exactly the right fit for ${goal.includes('tender')?'government tender work':'what you described'}.
+
+Here's what we'd do for you:
+→ Set up your full OpenClaw + n8n + Qwen3 AI stack
+→ Build your first automated workflow in 48 hours
+→ Give you a private intelligence portal (same tech Tumelo uses internally)
+
+Most teams who come to us have the same problem: they know AI can help but they don't have 6 months to figure out the stack. We compress that to 5 days.
+
+Want to jump on a 20-min call this week? I've got Thursday and Friday available. Just reply with a time that works and I'll send a calendar link.`;
+  }
+
+  if(pkg.includes('Starter')||pkg.includes('$197')){
+    return `Hi ${lead.name.split(' ')[0]} — thanks for reaching out about the Dark Factory Starter Pack.
+
+At R197/month, you get:
+→ OpenClaw AI agent (same one running Tumelo's whole business)
+→ 50+ pre-built n8n automation templates
+→ Access to the OGRE Intelligence Portal
+
+We set everything up for you — takes about 2 hours, we do it together on a screen share.
+
+Most clients at your stage are spending R3-5K/month on tools that don't talk to each other. We fix that first week.
+
+Are you free this week for a 15-min discovery call?`;
+  }
+
+  return `Hi ${lead.name.split(' ')[0]}, thanks for your interest in OGRE Computer.
+
+We help businesses in South Africa automate, build with AI, and win government tenders — all without a big tech team.
+
+Your goal: ${lead.goal||'streamline operations with AI'}
+
+The first step is a free 15-min call. Are you available this week?`;
+}
+
+function generateEmail(lead){
+  const p=getPainPoints(lead);
+  const pain=p[0]||'using AI effectively in their business';
+  const pkg=lead.package||'';
+  const firstName=lead.name.split(' ')[0];
+
+  if(pkg.includes('Dark Factory')){
+    return `Subject: Your Dark Factory Starter Pack — Ready to build
+
+Hi ${firstName},
+
+Thank you for your interest in the Dark Factory Starter Pack — the R997/month enterprise AI package.
+
+Here's what makes this different from every other AI consultant in South Africa:
+
+✓ We don't just advise. We build.
+→ Your OpenClaw AI agent configured and running in 48 hours
+→ 50+ n8n automation workflows (email, CRM, tender alerts, reporting)
+→ Qwen3.5 32B running locally on your machine — zero per-query API costs
+→ Your own private intelligence portal (daily AI market briefings)
+
+✓ We set it all up for you. No documentation to read. No Slack channel to figure out.
+
+✓ Ongoing mentorship — 1 hour/month direct access to Tumelo Ramaphosa.
+
+The typical client comes to us spending R4,000–R8,000/month on disconnected AI tools and agency fees. After 30 days with Dark Factory: everything automated, AI agent running, pipeline visible.
+
+Here's the process:
+1. 20-min call this week (I'll send a calendar link once you confirm)
+2. We build your full stack together (2-3 hours, remote)
+3. You wake up Monday with your AI agent running
+
+Are you available Thursday or Friday this week for 20 minutes?
+
+Best,
+Tumelo Ramaphosa
+OGRE Computer — Dark Factory Division
++27 (0)81 555 0199
+studex.co.za`;
+  }
+
+  return `Subject: How OGRE can help ${firstName}${lead.company?` at ${lead.company}`:''}
+
+Hi ${firstName},
+
+Thanks for reaching out. I wanted to personally follow up — I read through your submission and I think there's a real fit here.
+
+Here's what we typically do for businesses at your stage:
+→ Automate repetitive workflows (saving 10-20 hrs/week)
+→ Build AI-powered systems that run 24/7
+→ Win more tenders through automated tender discovery + proposal generation
+
+The first step is a free 15-minute discovery call — no pitch, no pressure. Just figuring out if we're a good fit.
+
+Are you available this week? I have Thursday morning and Friday afternoon available.
+
+Looking forward to connecting.
+
+Best,
+Tumelo Ramaphosa
+OGRE Computer
++27 (0)81 555 0199
+studex.co.za`;
+}
+
+function generateLinkedIn(lead){
+  const p=getPainPoints(lead);
+  const pain=p[0]||'building with AI';
+  const pkg=lead.package||'';
+  const firstName=lead.name.split(' ')[0];
+
+  if(pkg.includes('Dark Factory')){
+    return `Hi ${firstName}${lead.company?`, I've been meaning to reach out to you since I saw your interest in the Dark Factory Starter Pack from ${lead.company}`:''}.
+
+Quick intro: I'm Tumelo Ramaphosa, founder of OGRE Computer. We build AI agent systems for businesses in South Africa — OpenClaw, n8n automations, Qwen3 local models, the full stack.
+
+Your goal sounds like it maps exactly to what we do: ${lead.goal||'automating with AI and winning more business'}.
+
+The Dark Factory package is our most complete offer — everything configured, deployed, and running within 48 hours. R997/month with direct access to me.
+
+If you're open to it, I'd love a 20-min call this week to map out whether this makes sense for ${lead.company||'your team'}.
+
+Does Thursday or Friday work?`;
+  }
+
+  return `Hi ${firstName}${lead.company?` — I noticed your interest from ${lead.company}`:''}.
+
+OGRE Computer builds AI agent systems for businesses here in South Africa — automations that run 24/7, custom AI stacks, and intelligence tools that help you win more tenders and clients.
+
+Your goal — ${lead.goal||'automating with AI'} — is exactly what we help with. Happy to share some examples from businesses in similar industries if useful.
+
+Worth a 15-min call this week? No obligation, just a conversation.
+
+Thursday or Friday work?`;
+}
+
+function generateTenderResponse(lead){
+  const goal=(lead.goal||'').toLowerCase();
+  const tenderRef=lead.tenderRef||'';
+  return `Hi ${lead.name.split(' ')[0]}, thanks for your tender response.
+
+I've reviewed your submission${tenderRef?` for ${tenderRef}`:''}. Strong alignment with what OGRE Computer can deliver.
+
+We'd like to schedule a 30-min technical clarification session. Are you available this week?
+
+We'll use the session to:
+1. Confirm scope and deliverables
+2. Walk through our proposed approach
+3. Confirm pricing and timeline
+4. Discuss contract terms
+
+Please suggest 2-3 time slots that work for you and I'll send a calendar invite.
+
+Best,
+Tumelo Ramaphosa
+OGRE Computer
++27 (0)81 555 0199`;
+}
+
+// ── Render Response Panel ────────────────────────────────────────────
+let _activeTab='whatsapp';
+
+function renderResponsePanel(lead){
+  if(!lead)return;
+  const panel=document.getElementById('responsePanel');
+  const audience=getAudienceTags(lead);
+  const goal=(lead.goal||'').toLowerCase();
+  const isTender=goal.includes('tender');
+
+  panel.innerHTML=`
+  <div class="panel-header">
+    <span class="panel-lead-name">${escHtml(lead.name||'Unknown')}</span>
+    <span class="panel-lead-meta">${escHtml(lead.email||'')} · ${escHtml(lead.company||'')}</span>
+  </div>
+  <div class="channel-tabs">
+    <div class="ch-tab${_activeTab==='whatsapp'?' active':''}" onclick="switchTab('whatsapp',this)">WhatsApp</div>
+    <div class="ch-tab${_activeTab==='email'?' active':''}" onclick="switchTab('email',this)">Email</div>
+    <div class="ch-tab${_activeTab==='linkedin'?' active':''}" onclick="switchTab('linkedin',this)">LinkedIn</div>
+    ${isTender?`<div class="ch-tab${_activeTab==='tender'?' active':''}" onclick="switchTab('tender',this)">Tender Response</div>`:''}
+  </div>
+  <div class="response-body">
+    <div class="audience-block">
+      <div class="audience-label">Audience Profile</div>
+      <div class="audience-tags">
+        ${audience.map(t=>`<span class="aud-badge">${escHtml(t)}</span>`).join('')}
+        ${lead.goal?`<span class="aud-badge" style="border-color:var(--gold);color:var(--gold)">Goal: ${escHtml(lead.goal.slice(0,40))}</span>`:''}
+      </div>
+    </div>
+    <div class="response-output">
+      <div class="response-text" id="responseText">Generating...</div>
+      <button class="copy-btn" id="copyBtn" onclick="copyResponse()">Copy</button>
+    </div>
+    <div class="send-row">
+      <button class="send-btn" onclick="openWhatsApp()">📱 Open WhatsApp</button>
+      <button class="send-btn secondary" onclick="markContacted()">✓ Mark as Contacted</button>
+      <button class="send-btn secondary" onclick="addToPipeline()">→ Add to Pipeline</button>
+    </div>
+    <div class="seg-hint">Tip: Copy the message, open WhatsApp Web, paste in the search bar to find the contact, and paste the message.</div>
+  </div>`;
+
+  // Generate content after DOM renders
+  setTimeout(()=>generateForTab(_activeTab),10);
+}
+
+function switchTab(tab,el){
+  _activeTab=tab;
+  document.querySelectorAll('.ch-tab').forEach(e=>e.classList.remove('active'));
+  if(el)el.classList.add('active');
+  if(window._selectedLead)generateForTab(tab);
+}
+
+function generateForTab(tab){
+  const lead=window._selectedLead;
+  if(!lead)return;
+  let text='';
+  if(tab==='whatsapp')text=generateWhatsApp(lead);
+  else if(tab==='email')text=generateEmail(lead);
+  else if(tab==='linkedin')text=generateLinkedIn(lead);
+  else if(tab==='tender')text=generateTenderResponse(lead);
+  document.getElementById('responseText').textContent=text;
+  window._currentResponse=text;
+}
+
+function copyResponse(){
+  const text=window._currentResponse||'';
+  if(!text)return;
+  const btn=document.getElementById('copyBtn');
+  copyText(text,btn);
+}
+
+function openWhatsApp(){
+  const lead=window._selectedLead;
+  if(!lead)return;
+  const name=encodeURIComponent(lead.name||'');
+  const text=encodeURIComponent(window._currentResponse||'');
+  window.open(`https://wa.me/?text=${text}`,'_blank');
+  showToast('Opening WhatsApp... paste your message there');
+}
+
+function markContacted(){
+  const lead=window._selectedLead;
+  if(!lead)return;
+  try{
+    let leads=JSON.parse(localStorage.getItem('ogre_leads_v1')||'[]');
+    leads=leads.map(l=>l.email===lead.email?{...l,contacted:true,contactedAt:Date.now()}:l);
+    localStorage.setItem('ogre_leads_v1',JSON.stringify(leads));
+    loadLandingLeads();
+    showToast(`✓ Marked ${lead.name.split(' ')[0]} as contacted`);
+  }catch(e){showToast('Error saving — check console')};
+}
+
+function addToPipeline(){
+  const lead=window._selectedLead;
+  if(!lead)return;
+  const name=encodeURIComponent(lead.name||'New Lead');
+  const company=encodeURIComponent(lead.company||'');
+  const email=encodeURIComponent(lead.email||'');
+  const pkg=encodeURIComponent(lead.package||'Starter');
+  const goal=encodeURIComponent(lead.goal||'');
+  // Open Business Pulse with a new-deal prefill via URL params
+  showToast('Opening Business Pulse to add deal...');
+  setTimeout(()=>{
+    window.open('business-pulse.html','_blank');
+  },1000);
+}
+
+// ── Init ────────────────────────────────────────────────────────────
+loadAll();
+</script>
+</body>
+</html>

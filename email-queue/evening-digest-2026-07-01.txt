@@ -1,0 +1,147 @@
+OGRE COMPUTER — EVENING DIGEST
+Studex Group | Wednesday, 1 July 2026 | 8:00 PM SAST
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 TODAY'S SHIPMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Today was the biggest build day of the year. Here's everything that shipped:
+
+• CipherTrace Portfolio v2 — COMPLETE REDESIGN
+  https://ordvnwrse7cv.space.minimax.io
+  New: Voice intake wizard, 4-layer architecture, founder story,
+  VM sandbox explainer, agent marketplace, skills marketplace
+
+• Agent Marketplace — 6 SELLABLE AGENTS
+  - Studex Research Agent — R2,500/month
+  - Studex Builder Agent — R4,500/month
+  - Studex Social Agent — R1,800/month
+  - Studex Email Agent — R2,200/month
+  - Studex SEO Agent — R2,000/month
+  - Studex CRM Agent — R1,500/month
+
+• Skills Marketplace — 6 SELLABLE SKILLS
+  - Cold Email Mastery — R299
+  - AI Content Factory — R399
+  - Market Intelligence Suite — R599
+  - Agentic Engineering Stack — R899
+  - SEO + AI Search Dominance — R449
+  - Automation Blueprints — R349
+  - ALL 6 BUNDLE — R1,499 (save R895)
+
+• VM Sandbox Explainer — Full page
+  Why isolated VMs beat shared AI infrastructure
+  nTech Labs + Art Engineering + Pharmasyntez as proof
+
+• Founder Story Page — Complete Tumelo biography
+  11-year timeline, 4 companies, IBM/Cardano discovery,
+  McDonald's to Wagyu story, Forbes/GQ/ITWeb coverage
+
+• Partnership Pipeline — 4 company pitches
+  Google Cloud APN · AWS via Reserved.ai
+  Alibaba via BCX · Tencent WeChat Africa
+
+• Partnership Strategy Brief — 12,750 byte document
+  /workspace/OGRE-Midnight-Build/STUDEX-GROUP-PARTNERSHIP-STRATEGY-2026.md
+
+• Agent Factory Plan — Full 90-day roadmap
+  /workspace/OGRE-Midnight-Build/DARK-FACTORY-AGENT-FACTORY-PLAN.md
+
+• Tumelo Deep Research Brief — 20,215 byte document
+  /workspace/OGRE-Midnight-Build/TUMELO-RAMAPHOSA-DEEP-RESEARCH-BRIEF.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 TODAY'S DISCOVERIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CRITICAL DISCOVERY: IBM + CARDANO PARTNERSHIP
+StudEx Wild Life is backed by IBM + Cardano ($ADA).
+Forbes Africa covered Tumelo in April 2019.
+Architecture: IoT sensors → IBM Cloud → Cardano blockchain
+→ NFT ownership → conservation funds
+Quote: "I wanted to create a digital version of my
+family's farm, which evolved into a wildlife
+conservation movement." — Forbes Africa, 2019
+
+THE MC DONALD'S ORIGIN STORY
+Tumelo started as a batch cooker at McDonald's SA in 2009
+at ~18 years old. Worked up to managing MDS delivery and
+nationwide operations. Founded Studex Meat at ~20.
+This is the narrative no one is telling yet.
+
+THE EDUCATION
+MSc International Business, Hult International
+Business School, 2016–2017. Became youngest
+AWS Certified Cloud Practitioner in Africa during
+this period.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 AGENT ACTIVITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sub-agents spawned today: 1 (ogre-agent-factory-research)
+Build sessions: 3 full portfolio rebuilds + deploys
+New skills discovered: nashsu/llm_wiki (persistent wiki)
+AI tools researched: VoiceBox, ntndav, nTech Labs,
+Claude Agent Factory, crewAI, Manus
+Crons set today: 2 new (5pm revenue meeting, research update)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💰 REVENUE PIPELINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LAISA Phase A (Dr. Musa)    R350K + R55K/mo   PROPOSAL OUT
+SafeSight VM                R1,499/month       PROPOSAL PENDING
+Pharmasyntez                R2.99M Y1          NEGOTIATION
+Dark Factory BMAD           R29/product         LEAD GEN
+CashClaw v1.7              Revenue TBC        IN DEV
+
+Today: R0 closes
+In play: R350K + R55K/month + R1,499/month
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ STILL BLOCKED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GitHub PAT — not received
+  → Can't push Dark Factory to GitHub
+  → Vercel CI/CD pipeline stalled
+  → Generate at: github.com/settings/tokens
+
+Gmail app password — not received
+  → Email briefings not sending
+  → Generate at: myaccount.google.com/apppasswords
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 TOMORROW'S PRIORITIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] FOLLOW UP LAISA — Dr. Musa
+    Voice note or WhatsApp if no email response
+
+[2] CALL Reserved.ai → introduce to AWS SA team
+    Ask them to make the intro TODAY
+
+[3] CALL BCX South Africa → Alibaba Cloud meeting
+    Pitch: "We are BCX's AI agent layer"
+
+[4] Cipher Tr@ce applies Google Cloud Partner Program
+    (APN application — AI specialization)
+
+[5] Send partner outreach emails
+    Jasiri AI LOI + SoftBank Africa intro
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧠 MEMORY UPDATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+All of today's work archived to:
+- MEMORY.md
+- /workspace/OGRE-Midnight-Build/ (all files above)
+- /workspace/memory/revenue-log.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cipher Tr@ce · Dark Factory · OGRE Computer · Studex Group
+Build. Operate. Scale.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━

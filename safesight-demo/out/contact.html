@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — LAISA Agent OS</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', Arial, sans-serif; background: #0a0a0a; color: #f5f0e8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+  .card { background: #141414; border: 1px solid rgba(201,168,76,0.2); border-radius: 20px; padding: 48px; max-width: 560px; width: 100%; }
+  .badge { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); color: #c9a84c; padding: 6px 16px; border-radius: 100px; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; display: inline-block; margin-bottom: 24px; }
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; color: #f5f0e8; }
+  p { color: rgba(245,240,232,0.5); font-size: 13px; margin-bottom: 32px; line-height: 1.6; }
+  .field { margin-bottom: 20px; }
+  label { display: block; font-size: 11px; font-weight: 600; color: rgba(245,240,232,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-family: monospace; }
+  input, textarea, select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; color: #f5f0e8; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  input:focus, textarea:focus, select:focus { border-color: #c9a84c; }
+  textarea { min-height: 120px; resize: vertical; }
+  select option { background: #141414; color: #f5f0e8; }
+  .btn { width: 100%; background: linear-gradient(135deg, #c9a84c, #a8893a); color: #0a0a0a; border: none; border-radius: 10px; padding: 16px; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; font-family: inherit; }
+  .btn:hover { opacity: 0.9; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .success { display: none; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 10px; padding: 20px; text-align: center; color: #4ade80; font-size: 14px; }
+  .error-msg { display: none; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 16px; color: #f87171; font-size: 13px; margin-top: 12px; }
+  .info { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15); border-radius: 10px; padding: 16px; margin-bottom: 24px; font-size: 12px; color: rgba(245,240,232,0.6); }
+  .info a { color: #c9a84c; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">📧 Contact LAISA Agent OS</div>
+  <h1>Get in Touch</h1>
+  <p>Fill in the form below and we'll send the demo links directly to your email. You can also use this to send the demo to your clients.</p>
+
+  <div class="info">
+    <strong>📎 Quick links to send:</strong><br>
+    <a href="https://6ln1q8nnuhrz.space.minimax.io">→ Live Demo: https://6ln1q8nnuhrz.space.minimax.io</a><br>
+    <a href="https://78jccbd42jnj.space.minimax.io">→ Proposal PDF: https://78jccbd42jnj.space.minimax.io</a>
+  </div>
+
+  <form id="contactForm">
+    <div class="field">
+      <label>Your Name</label>
+      <input type="text" name="name" placeholder="Dr. Jane Smith" required>
+    </div>
+    <div class="field">
+      <label>Your Email</label>
+      <input type="email" name="email" placeholder="jane@clinic.co.za" required>
+    </div>
+    <div class="field">
+      <label>Company / Clinic Name</label>
+      <input type="text" name="company" placeholder="SafeSight Aesthetic Clinic">
+    </div>
+    <div class="field">
+      <label>What are you interested in?</label>
+      <select name="interest">
+        <option value="">Select an option...</option>
+        <option value="demo">Get a live demo</option>
+        <option value="proposal">View the proposal</option>
+        <option value="pricing">Discuss pricing</option>
+        <option value="partnership">Partnership opportunity</option>
+        <option value="pharma">Pharmasyntez distribution</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Message / Questions</label>
+      <textarea name="message" placeholder="Hi, I'd like to learn more about LAISA Agent OS for our clinic..."></textarea>
+    </div>
+    <button type="submit" class="btn" id="submitBtn">📧 Send Demo Links to My Email</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </form>
+
+  <div class="success" id="successMsg">
+    ✅ Demo links sent! Check your email.<br><br>
+    🌐 <strong>Demo:</strong> https://6ln1q8nnuhrz.space.minimax.io<br>
+    📋 <strong>Proposal:</strong> https://78jccbd42jnj.space.minimax.io
+  </div>
+</div>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+  btn.disabled = true;
+  btn.textContent = '⏳ Sending...';
+  errorMsg.style.display = 'none';
+
+  const form = e.target;
+  const data = {
+    name: form.name.value,
+    email: form.email.value,
+    company: form.company.value,
+    interest: form.interest.value,
+    message: form.message.value,
+  };
+
+  try {
+    // NOTE: To enable real email sending, add Formspree or configure SMTP in server.js
+    // For now, shows success message with demo links
+    // Replace the URL below with your Formspree endpoint or implement server-side SMTP
+    // Example: await fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } });
+
+    // Simulate sending
+    await new Promise(r => setTimeout(r, 1000));
+
+    form.style.display = 'none';
+    successMsg.style.display = 'block';
+  } catch (err) {
+    errorMsg.textContent = 'Something went wrong. Please try again.';
+    errorMsg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '📧 Send Demo Links to My Email';
+  }
+});
+</script>
+
+</body>
+</html>

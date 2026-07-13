@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OGRE Intelligence Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0A0A;
+      --bg2:       #111114;
+      --bg3:       #18181f;
+      --gold:      #C9A84C;
+      --gold2:     #e8c96a;
+      --text:      #e8e8f0;
+      --muted:     #6b6b80;
+      --border:    rgba(201,168,76,0.15);
+      --r-extreme: #FF4444;
+      --r-vhigh:   #FF8800;
+      --r-high:    #FFD700;
+      --r-med:     #44FF88;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex; align-items: center; gap: 16px;
+      height: 56px;
+    }
+    .topbar-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .topbar-logo span { color: var(--muted); font-weight: 400; }
+    .topbar-sep { color: var(--border); flex: 1; }
+    .topbar-clock {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--muted);
+    }
+    .live-dot {
+      display: inline-block; width: 7px; height: 7px;
+      background: #44FF88; border-radius: 50%;
+      margin-right: 5px; vertical-align: middle;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 64px; }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid; grid-template-columns: 1fr 340px; gap: 24px;
+      margin-bottom: 40px;
+    }
+    .hero-main {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 28px 32px;
+    }
+    .hero-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 0.06em; margin-bottom: 16px;
+      display: flex; gap: 16px; align-items: center;
+    }
+    .badge-live {
+      background: rgba(68,255,136,0.1);
+      border: 1px solid rgba(68,255,136,0.3);
+      color: #44FF88; padding: 2px 8px;
+      border-radius: 4px; font-size: 10px; letter-spacing: 0.1em;
+    }
+    .verdict-quote {
+      font-family: 'Newsreader', serif;
+      font-size: 22px; font-style: italic;
+      color: var(--text); line-height: 1.5;
+      margin-bottom: 20px;
+      padding-left: 20px;
+      border-left: 3px solid var(--gold);
+    }
+    .verdict-quote::before { content: '"'; color: var(--gold); font-size: 32px; margin-left: -20px; margin-right: 4px; }
+    .data-freshness {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--muted);
+    }
+
+    /* ── STAT CARDS ── */
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .stat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px; padding: 16px;
+    }
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px; font-weight: 700; color: var(--gold);
+      display: block; margin-bottom: 4px;
+    }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .stat-source { font-size: 10px; color: var(--muted); margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+
+    /* ── PRIORITIES ── */
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.1em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .priority-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px; }
+    .priority-item {
+      display: grid; grid-template-columns: 28px 1fr auto;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 14px 16px; gap: 14px;
+      align-items: start;
+    }
+    .priority-rank {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 700; color: var(--bg);
+      background: var(--gold); width: 24px; height: 24px;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center;
+    }
+    .priority-body { min-width: 0; }
+    .priority-label { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+    .priority-action { font-size: 12px; color: var(--muted); }
+    .priority-meta { text-align: right; white-space: nowrap; }
+    .priority-market { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold); }
+    .priority-timeline { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+    /* ── COUNTRY GRID ── */
+    .country-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      margin-bottom: 40px;
+    }
+    .country-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 18px;
+      position: relative; overflow: hidden;
+    }
+    .country-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--urgency-color, #FFD700);
+    }
+    .country-name {
+      font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .country-code { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+    .country-urgency {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      font-weight: 500; padding: 2px 7px; border-radius: 4px;
+      display: inline-block; margin-bottom: 8px;
+    }
+    .country-players { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+    .country-action {
+      font-size: 11px; color: var(--gold2);
+      font-style: italic; line-height: 1.4;
+    }
+    .country-timeline { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 6px; }
+
+    /* ── TOOLS ── */
+    .tools-section { margin-bottom: 40px; }
+    .tools-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .tool-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px 16px;
+      text-align: center; cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+      text-decoration: none; color: var(--text);
+      display: block;
+    }
+    .tool-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .tool-icon { font-size: 28px; margin-bottom: 8px; }
+    .tool-name { font-weight: 600; font-size: 12px; margin-bottom: 4px; }
+    .tool-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+    /* ── SA DEEP DIVE ── */
+    .sa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+    .sa-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 22px;
+    }
+    .sa-title {
+      font-family: 'Newsreader', serif; font-size: 16px; font-weight: 600;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .sa-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .sa-metric { background: var(--bg3); border-radius: 6px; padding: 12px; text-align: center; }
+    .sa-metric-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--gold); display: block; }
+    .sa-metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+    .sa-building { list-style: none; }
+    .sa-building li { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); }
+    .sa-building li:last-child { border-bottom: none; }
+    .sa-gap {
+      background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.2);
+      border-radius: 6px; padding: 14px; margin-top: 14px;
+      font-size: 12px; color: #FF8888; line-height: 1.5;
+    }
+    .sa-window {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: var(--r-extreme); margin-top: 12px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--muted);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    /* ── LOADING ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .country-grid { grid-template-columns: repeat(2, 1fr); }
+      .tools-grid { grid-template-columns: repeat(3, 1fr); }
+      .sa-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .country-grid { grid-template-columns: 1fr; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">OGRE<span> /// INTELLIGENCE PORTAL</span></div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-clock" id="clock">--:--:-- UTC</div>
+    <div><span class="badge-live"><span class="live-dot"></span>LIVE</span></div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-main">
+        <div class="hero-meta">
+          <span id="report-id" class="skeleton" style="width:160px;height:14px;display:inline-block;">OGRE-INTEL-2026-06-27</span>
+          <span class="badge-live">NIGHTLY SCAN</span>
+        </div>
+        <blockquote class="verdict-quote" id="verdict">
+          <span class="skeleton" style="width:100%;height:22px;display:inline-block;margin-bottom:4px;"></span>
+          <span class="skeleton" style="width:80%;height:22px;display:inline-block;"></span>
+        </blockquote>
+        <div class="data-freshness" id="data-info">Loading intelligence data...</div>
+      </div>
+      <div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-value skeleton" id="s1" style="width:80px;height:28px;display:inline-block;">$16.5B</span>
+            <div class="stat-label">Global AI Market</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value skeleton" id="s2" style="width:60px;height:28px;display:inline-block;">34.6%</span>
+            <div class="stat-label">Market CAGR</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value skeleton" id="s3" style="width:50px;height:28px;display:inline-block;">40%</span>
+            <div class="stat-label">Enterprise Adoption</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value skeleton" id="s4" style="width:50px;height:28px;display:inline-block;">72%</span>
+            <div class="stat-label">SA Executives</div>
+          </div>
+        </div>
+        <div style="margin-top:12px; font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">
+          <div style="margin-bottom:4px;">DATA SOURCES</div>
+          <div>DeepL Research 2026</div>
+          <div>Gartner AI Trends</div>
+          <div>GitHub Trending AI</div>
+          <div>Ringly.io Enterprise</div>
+          <div>OGRE 3AM Nightly Scan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STRATEGIC PRIORITIES -->
+    <div class="section-title">Strategic Priority Queue</div>
+    <div class="priority-list" id="priority-list">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- COUNTRY GRID -->
+    <div class="section-title">Global AI Landscape — 9 Countries</div>
+    <div class="country-grid" id="country-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- OGRE TOOLS -->
+    <div class="tools-section">
+      <div class="section-title">OGRE Intelligence Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="index.html">
+          <div class="tool-icon">&#9670;</div>
+          <div class="tool-name">Dashboard</div>
+          <div class="tool-desc">Live stats, signals, SA landscape</div>
+        </a>
+        <a class="tool-card" href="roi-calculator.html">
+          <div class="tool-icon">&#8677;</div>
+          <div class="tool-name">ROI Calculator</div>
+          <div class="tool-desc">Interactive client savings calc</div>
+        </a>
+        <a class="tool-card" href="explorer.html">
+          <div class="tool-icon">&#9679;</div>
+          <div class="tool-name">Intelligence Explorer</div>
+          <div class="tool-desc">9-country deep-dive tabs</div>
+        </a>
+        <a class="tool-card" href="briefing.html">
+          <div class="tool-icon">&#9776;</div>
+          <div class="tool-name">Briefing Page</div>
+          <div class="tool-desc">Full synthesis document</div>
+        </a>
+        <a class="tool-card" href="email-briefing.html">
+          <div class="tool-icon">&#9993;</div>
+          <div class="tool-name">Email Edition</div>
+          <div class="tool-desc">Email-client-ready HTML</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- SA DEEP DIVE -->
+    <div class="section-title">South Africa — OGRE Priority Market</div>
+    <div class="sa-grid" id="sa-grid">
+      <div class="sa-card">
+        <div class="sa-title">&#9670; Key Metrics</div>
+        <div class="sa-metrics" id="sa-metrics">
+          <div class="sa-metric skeleton" style="height:60px;"><span class="sa-metric-value">4.5M+</span><div class="sa-metric-label">Discovery Lives</div></div>
+          <div class="sa-metric skeleton" style="height:60px;"><span class="sa-metric-value">$800M</span><div class="sa-metric-label">AU Health Fund</div></div>
+          <div class="sa-metric skeleton" style="height:60px;"><span class="sa-metric-value">R2.7B</span><div class="sa-metric-label">Green Incentives</div></div>
+          <div class="sa-metric skeleton" style="height:60px;"><span class="sa-metric-value">1.2M</span><div class="sa-metric-label">SA SMMEs</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">WHO'S BUILDING NOW</div>
+        <ul class="sa-building" id="sa-building"></ul>
+      </div>
+      <div class="sa-card">
+        <div class="sa-title">&#9670; Critical Gap</div>
+        <p id="sa-gap" style="font-size:12px;color:#FF8888;line-height:1.6;"></p>
+        <p id="sa-window" class="sa-window" style="margin-top:12px;"></p>
+        <div style="font-size:11px;color:var(--muted);margin:16px 0 8px;">OGRE IMMEDIATE ACTIONS</div>
+        <div id="sa-actions" style="display:flex;flex-direction:column;gap:6px;"></div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;">NEXT BRIEFING</div>
+          <div id="next-focus" style="font-size:12px;color:var(--text);font-style:italic;"></div>
+          <div id="next-watch" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span id="footer-report">OGRE INTELLIGENCE PORTAL — report: OGRE-INTEL-2026-06-27</span>
+      <span>Cycle: Nightly 3AM UTC &bull; OGRE Computer | Studex Group Research Division</span>
+      <span>&#9670; Midnight Build Night 6</span>
+    </div>
+
+  </div><!-- /container -->
+
+  <script>
+    // ── Live Clock ──────────────────────────────────────────────────────────
+    function tick() {
+      const now = new Date();
+      document.getElementById('clock').textContent =
+        now.toUTCString().slice(17, 25) + ' UTC';
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // ── Load Data ────────────────────────────────────────────────────────────
+    async function loadData() {
+      try {
+        const res  = await fetch('data/intelligence.json?_=' + Date.now());
+        const data = await res.json();
+        render(data);
+      } catch (e) {
+        console.warn('[portal] Could not load data/intelligence.json:', e.message);
+        // graceful degradation — skeleton stays
+        document.getElementById('data-info').textContent =
+          'Standalone mode — run: node build-data.js to refresh data';
+      }
+    }
+
+    // ── Render ───────────────────────────────────────────────────────────────
+    function render(d) {
+      // Report ID
+      document.getElementById('report-id').textContent = d.report_id;
+      document.getElementById('footer-report').textContent =
+        'OGRE INTELLIGENCE PORTAL — ' + d.report_id;
+
+      // Verdict
+      const vEl = document.getElementById('verdict');
+      vEl.innerHTML = d.verdict;
+
+      // Data info
+      const genDate = new Date(d.generated);
+      document.getElementById('data-info').textContent =
+        'Data: ' + d.research_file + ' &bull; Generated: ' +
+        genDate.toUTCString().slice(0, 16) + ' UTC &bull; Cycle: ' + d.cycle;
+
+      // Stats
+      const stats = [
+        { id: 's1', val: d.stats.market_size },
+        { id: 's2', val: d.stats.cagr },
+        { id: 's3', val: d.stats.enterprise_adoption },
+        { id: 's4', val: d.stats.sa_executive_priority },
+      ];
+      stats.forEach(({ id, val }) => {
+        const el = document.getElementById(id);
+        el.textContent = val;
+        el.classList.remove('skeleton');
+      });
+
+      // Priority list
+      const pList = document.getElementById('priority-list');
+      pList.innerHTML = '';
+      d.priorities.forEach(p => {
+        const urgColor = { extreme: '#FF4444', very_high: '#FF8800', high: '#FFD700', medium: '#44FF88' }[p.urgency] || '#FFD700';
+        pList.innerHTML += `
+          <div class="priority-item">
+            <div class="priority-rank">${p.rank}</div>
+            <div class="priority-body">
+              <div class="priority-label">${p.label}</div>
+              <div class="priority-action">${p.action || p.label}</div>
+            </div>
+            <div class="priority-meta">
+              <div class="priority-market">${p.market}</div>
+              <div class="priority-timeline" style="color:${urgColor}">${p.timeline}</div>
+            </div>
+          </div>`;
+      });
+
+      // Country grid
+      const cGrid = document.getElementById('country-grid');
+      cGrid.innerHTML = '';
+      d.countries.forEach(c => {
+        const urgLabel = { extreme: 'EXTREME', very_high: 'VERY HIGH', high: 'HIGH', medium: 'MEDIUM' }[c.urgency] || c.urgency.toUpperCase();
+        const bgUrg    = c.urgency_color + '22';
+        const flagMap  = { US:'&#127482;&#127480;', CN:'&#127464;&#127475;', JP:'&#127471;&#127477;', IN:'&#127470;&#127468;', BR:'&#127463;&#127479;', MX:'&#127463;&#127465;', NG:'&#127469;&#127475;', GH:'&#127468;&#127471;', ZA:'&#127463;&#127479;' };
+        cGrid.innerHTML += `
+          <div class="country-card" style="--urgency-color:${c.urgency_color}">
+            <div class="country-name">${flagMap[c.code] || c.code} ${c.name}</div>
+            <div class="country-code">${c.code} &bull; OGRE TARGET</div>
+            <div class="country-urgency" style="background:${bgUrg};color:${c.urgency_color}">${urgLabel}</div>
+            <div class="country-players">${trunc(c.players, 80)}</div>
+            <div class="country-action">&#9656; ${trunc(c.ogre_action, 120)}</div>
+            <div class="country-timeline">&#9654; ${c.timeline}</div>
+          </div>`;
+      });
+
+      // SA metrics
+      const saMetrics = document.getElementById('sa-metrics');
+      saMetrics.innerHTML = '';
+      d.sa.metrics.forEach(m => {
+        saMetrics.innerHTML += `<div class="sa-metric">
+          <span class="sa-metric-value">${m.value}</span>
+          <div class="sa-metric-label">${m.label}</div>
+        </div>`;
+      });
+
+      // SA building now
+      const saBuild = document.getElementById('sa-building');
+      saBuild.innerHTML = '';
+      d.sa.building_now.forEach(b => {
+        saBuild.innerHTML += `<li>&#9654; ${b}</li>`;
+      });
+
+      // SA gap
+      document.getElementById('sa-gap').textContent = d.sa.critical_gap;
+      document.getElementById('sa-window').textContent = '&#9203; ' + d.sa.window;
+
+      // SA immediate actions (from ZA country)
+      const za = d.countries.find(c => c.code === 'ZA');
+      const saActions = document.getElementById('sa-actions');
+      saActions.innerHTML = '';
+      if (za) {
+        const actions = za.ogre_action.split(';').filter(Boolean);
+        actions.forEach(a => saActions.innerHTML += `
+          <div style="background:var(--bg3);border-radius:4px;padding:8px 10px;font-size:11px;color:var(--gold2)">&#9656; ${a.trim()}</div>`);
+      }
+
+      // Next briefing
+      document.getElementById('next-focus').textContent = d.next_briefing.focus;
+      document.getElementById('next-watch').textContent = 'Watch: ' + d.next_briefing.watch_list.join(' | ');
+    }
+
+    function trunc(s, n) {
+      return s.length > n ? s.slice(0, n) + '...' : s;
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

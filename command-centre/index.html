@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE COMMAND — Mission Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030B18;--p:#071428;--b:rgba(201,168,76,0.13);
+  --g:#C9A84C;--gd:#8A6A2E;--gr:#00FF94;--r:#FF4757;
+  --c:#00D4FF;--w:#E8F4F8;--m:#5A6A7A;
+  --fm:'Space Mono',monospace;--fs:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--w);font-family:var(--fm)}
+@keyframes a{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes b{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes c{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes d{0%{transform:translateY(-4px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes e{0%,100%{text-shadow:0 0 10px var(--g)}50%{text-shadow:0 0 30px var(--g)}}
+@keyframes f{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes g{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(0.98)}}
+
+/* HEADER */
+.hdr{
+  height:60px;background:linear-gradient(180deg,#071428,#030B18);
+  border-bottom:1px solid var(--b);display:flex;align-items:center;
+  padding:0 20px;gap:16px;flex-shrink:0;position:relative;z-index:10;
+}
+.lg{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.lg svg{width:30px;height:30px}
+.lgt{font-family:var(--fs);font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--g);text-transform:uppercase}
+.lgs{font-size:7px;color:var(--m);letter-spacing:.2em;display:block;line-height:1.3}
+.hd{width:1px;height:30px;background:var(--b);flex-shrink:0}
+.sp{display:flex;gap:8px}
+.pl{font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid;border-radius:2px;display:flex;align-items:center;gap:5px;font-family:var(--fm)}
+.pl.gn{border-color:rgba(0,255,148,.35);color:var(--gr);background:rgba(0,255,148,.05)}
+.pl.gd{border-color:rgba(201,168,76,.35);color:var(--g);background:rgba(201,168,76,.05)}
+.pl.bl{border-color:rgba(0,212,255,.35);color:var(--c);background:rgba(0,212,255,.05)}
+.pd{width:5px;height:5px;border-radius:50%;background:currentColor;animation:a 2s infinite}
+.clk{font-size:16px;font-weight:700;letter-spacing:.08em;color:var(--g);font-family:var(--fs)}
+.dt{font-size:8px;color:var(--m);letter-spacing:.12em;text-transform:uppercase;text-align:right;line-height:1.4}
+
+/* TICKER */
+.tk{height:28px;background:var(--p);border-bottom:1px solid var(--b);display:flex;align-items:center;overflow:hidden;flex-shrink:0}
+.tl{background:var(--g);color:#030B18;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:0 12px;height:100%;display:flex;align-items:center;flex-shrink:0}
+.tt{display:flex;align-items:center;white-space:nowrap;animation:f 60s linear infinite;padding-left:20px}
+.ti{display:inline-flex;align-items:center;gap:6px;padding:0 24px;font-size:9px;border-right:1px solid var(--b);height:28px}
+.tv{font-weight:700;color:var(--gr)}
+
+/* MAIN GRID — BIGGER TEXT */
+.m{
+  display:grid;
+  grid-template-columns:240px 1fr 280px;
+  grid-template-rows:1fr 1fr 160px;
+  height:calc(100vh - 60px - 28px);
+  gap:1px;background:var(--b);
+}
+.panel{background:var(--p);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.phdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px 7px;border-bottom:1px solid var(--b);flex-shrink:0;
+}
+.ptl{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--g);display:flex;align-items:center;gap:6px;font-family:var(--fm)}
+.ptl::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--g);box-shadow:0 0 6px var(--g)}
+.pid{font-size:7px;color:var(--m);letter-spacing:.08em;font-family:var(--fm)}
+.pbody{flex:1;overflow-y:auto;padding:10px 14px;font-size:10px}
+.pbody::-webkit-scrollbar{width:2px}.pbody::-webkit-scrollbar-thumb{background:var(--b)}
+
+/* Logo Panel */
+.lp{
+  background:linear-gradient(135deg,var(--p),#0A1E30);border-bottom:1px solid var(--b);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;padding:16px;text-align:center;
+}
+.lp svg{width:56px;height:56px;filter:drop-shadow(0 0 14px rgba(201,168,76,.25))}
+.lpn{font-family:var(--fs);font-size:12px;font-weight:700;letter-spacing:.15em;color:var(--g);text-transform:uppercase}
+.lps{font-size:7px;color:var(--m);letter-spacing:.2em;text-transform:uppercase}
+.lpt{font-size:7px;color:var(--gd)}
+
+/* Nav */
+.ni{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.025);cursor:pointer;transition:all .15s}
+.ni:hover,.ni.on{background:rgba(201,168,76,.04)}
+.ni.on{border-left:2px solid var(--g);padding-left:6px}
+.nii{font-size:12px;width:18px;text-align:center}
+.nil{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--w);flex:1;font-family:var(--fm)}
+.nis{font-size:7px;color:var(--m);margin-left:auto}
+
+/* Agents */
+.ar{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.025)}
+.ad{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ag{background:var(--gr);box-shadow:0 0 6px var(--gr)}
+.ao{background:var(--g);box-shadow:0 0 6px var(--g);animation:a 3s infinite}
+.ab{background:var(--c)}
+.ar3{background:var(--r);box-shadow:0 0 6px var(--r)}
+.an{font-size:9px;color:var(--w);flex:1;font-family:var(--fm)}
+.at{font-size:7px;color:var(--m);text-align:right;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Feed — BIGGER TEXT */
+.fi{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.025);animation:d .3s ease;font-size:10px;line-height:1.5}
+.ft{font-size:8px;color:var(--m);width:48px;flex-shrink:0;font-family:var(--fm)}
+.fs{font-size:8px;color:var(--g);width:42px;flex-shrink:0;text-transform:uppercase;font-family:var(--fm)}
+.fx{font-size:10px;color:var(--w);flex:1;line-height:1.5}
+.fx strong{color:var(--c)}
+
+/* Radar — BIGGER */
+.rdr{position:relative;width:110px;height:110px;margin:0 auto;flex-shrink:0}
+.ring{position:absolute;inset:0;border:1px solid rgba(201,168,76,.13);border-radius:50%}
+.ring2{inset:28%}
+.ring3{inset:56%}
+.sw{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0deg,rgba(201,168,76,.12) 35deg,transparent 70deg);animation:c 8s linear infinite;transform-origin:center}
+.rc{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.rc-i{font-size:18px}
+.rc-t{font-size:6px;letter-spacing:.15em;color:var(--g);text-transform:uppercase}
+.ci{font-size:8px;color:var(--m);padding:2px 0;display:flex;align-items:center;gap:4px;font-family:var(--fm)}
+.ci::before{content:'▸';color:var(--g);font-size:7px}
+
+/* Tech — BIGGER */
+.tc{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+.tb{font-size:7.5px;letter-spacing:.04em;padding:3px 7px;border:1px solid rgba(0,212,255,.2);color:var(--c);background:rgba(0,212,255,.04);border-radius:2px;font-family:var(--fm)}
+.tb.h{border-color:rgba(0,255,148,.25);color:var(--gr);background:rgba(0,255,148,.04)}
+.yh{font-size:8px;color:var(--m);margin:6px 0 4px;letter-spacing:.1em;font-family:var(--fm)}
+.yb{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.yf{height:100%;background:linear-gradient(90deg,var(--gr),var(--g));border-radius:3px;width:0;transition:width 2s ease}
+.yt{display:flex;flex-wrap:wrap;gap:3px}
+.ytag{font-size:7px;padding:2px 6px;background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.18);color:var(--gd);border-radius:2px;font-family:var(--fm)}
+
+/* Bottom Stats — BIGGER */
+.bcg{display:grid;grid-template-columns:repeat(4,1fr);height:100%}
+.bcc{padding:14px 16px;border-right:1px solid var(--b);display:flex;flex-direction:column;justify-content:center;gap:4px}
+.bcc:last-child{border-right:none}
+.bcl{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--m);font-family:var(--fm)}
+.bcv{font-size:24px;font-weight:700;color:var(--g);font-family:var(--fs);line-height:1}
+.bcv span{font-size:11px;color:var(--m)}
+.bcs{font-size:7px;color:var(--m)}
+.cb{height:3px;background:rgba(255,255,255,.05);border-radius:2px;margin-top:6px;overflow:hidden}
+.cf{height:100%;border-radius:2px;width:0;transition:width 1.5s ease}
+
+/* Right panels — BIGGER */
+.li{display:flex;gap:6px;padding:2px 0;font-size:8px;color:var(--m);line-height:1.5;font-family:var(--fm)}
+.lts{color:var(--gd);flex-shrink:0;width:38px}
+.lt{width:24px;flex-shrink:0;text-transform:uppercase}
+.lt.o{color:var(--gr)}.lt.e{color:var(--r)}.lt.w{color:var(--g)}.lt.i{color:var(--c)}
+
+.mr{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.025)}
+.ml{font-size:8px;color:var(--m);flex:1;text-transform:uppercase;letter-spacing:.08em;font-family:var(--fm)}
+.mb{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.mf{height:100%;border-radius:2px;width:0;transition:width 1.5s ease}
+.mv{font-size:9px;color:var(--w);width:40px;text-align:right;font-weight:700;font-family:var(--fm)}
+
+.bgc{font-size:26px;font-weight:700;color:var(--g);font-family:var(--fs);letter-spacing:.04em;text-shadow:0 0 20px rgba(201,168,76,.3);animation:e 4s ease-in-out infinite}
+.bgd{font-size:8px;color:var(--m);letter-spacing:.15em;text-transform:uppercase;margin-top:6px}
+.bgtz{font-size:7px;color:var(--gd);margin-top:3px}
+
+.cp{border-top:1px solid var(--b);padding:12px 14px;background:rgba(201,168,76,.02)}
+.cn{font-size:10px;color:var(--g);font-weight:700;letter-spacing:.08em;margin-bottom:2px;font-family:var(--fs)}
+.cr{font-size:7px;color:var(--m);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.cl{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.ck{font-size:7px;color:var(--m);width:50px;flex-shrink:0;font-family:var(--fm)}
+.cv{font-size:8px;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--fm)}
+.cv.g{color:var(--g)}
+
+/* Scanlines + overlays */
+.scan{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:999;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.012) 3px,rgba(0,0,0,.012) 4px)}
+.cbl{position:fixed;bottom:6px;right:10px;font-size:6px;color:var(--m);letter-spacing:.08em;z-index:10;pointer-events:none;font-family:var(--fm)}
+.ctlt{position:fixed;top:64px;left:10px;font-size:6px;color:var(--m);letter-spacing:.12em;line-height:2;z-index:10;pointer-events:none;font-family:var(--fm)}
+.ctlt span{color:var(--g)}
+
+@media(max-width:900px){.m{grid-template-columns:1fr}.sidebar-left,.sidebar-right{display:none}}
+</style>
+</head>
+<body>
+
+<div class="scan"></div>
+<div class="ctlt">◈ OGRE COMPUTER — MISSION CONTROL<br>CLASSIFICATION: <span>BUSINESS INTELLIGENCE</span><br>CLEARANCE: <span>STUDEX GROUP</span><br>NETWORK: <span>PRIMARY FEED</span></div>
+<div class="cbl">SYS.OGRE v4.2.1 // STUDEX GROUP // 2026</div>
+
+<header class="hdr">
+  <div class="lg">
+    <svg viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,28 2,28" fill="none" stroke="#C9A84C" stroke-width="1.5"/><circle cx="16" cy="20" r="6" fill="none" stroke="#C9A84C" stroke-width="1.5"/><circle cx="16" cy="20" r="2" fill="#C9A84C"/><line x1="16" y1="2" x2="16" y2="14" stroke="#C9A84C" stroke-width="1" opacity=".5"/></svg>
+    <div><div class="lgt">OGRE COMPUTER</div><span class="lgs">Mission Control</span></div>
+  </div>
+  <div class="hd"></div>
+  <div class="sp">
+    <span class="pl gn"><span class="pd"></span>VM Online</span>
+    <span class="pl gn"><span class="pd"></span>6 Agents</span>
+    <span class="pl gd"><span class="pd"></span>LAISA OS</span>
+    <span class="pl bl"><span class="pd"></span>Data Live</span>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:16px">
+    <div><div class="clk" id="hc">--:--:--</div><div class="dt" id="hd">--- -- ----</div></div>
+  </div>
+</header>
+
+<div class="tk"><div class="tl">LIVE</div><div class="tt" id="ticker"></div></div>
+
+<div class="m">
+
+  <!-- LEFT -->
+  <div style="display:flex;flex-direction:column">
+    <div class="lp">
+      <svg viewBox="0 0 52 52" fill="none"><polygon points="26,4 48,46 4,46" fill="none" stroke="#C9A84C" stroke-width="1.5"/><polygon points="26,13 40,39 12,39" fill="none" stroke="#C9A84C" stroke-width="1" opacity=".3"/><circle cx="26" cy="31" r="9" fill="none" stroke="#C9A84C" stroke-width="1.5"/><circle cx="26" cy="31" r="3" fill="#C9A84C"/><line x1="26" y1="4" x2="26" y2="22" stroke="#C9A84C" stroke-width="1" opacity=".3"/><circle cx="26" cy="4" r="2" fill="#C9A84C"/></svg>
+      <div class="lpn">OGRE COMPUTER</div>
+      <div class="lps">Studex Group — South Africa</div>
+      <div class="lpt">AI + VM Infrastructure</div>
+    </div>
+    <div class="panel" style="flex:1">
+      <div class="phdr"><span class="ptl">Navigation</span><span class="pid">NAV-01</span></div>
+      <div class="pbody">
+        <div class="ni on"><span class="nii">◈</span><span class="nil">Mission Control</span><span class="nis">LIVE</span></div>
+        <div class="ni"><span class="nii">▣</span><span class="nil">LAISA Agent OS</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">◉</span><span class="nil">Dark Factory</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">◎</span><span class="nil">Client VMs</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">◻</span><span class="nil">Knowledge Graph</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">▤</span><span class="nil">Market Intel</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">⬡</span><span class="nil">Proposal Engine</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">⚙</span><span class="nil">VM Stack</span><span class="nis">→</span></div>
+        <div class="ni"><span class="nii">▥</span><span class="nil">SafeSight CRM</span><span class="nis">→</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="phdr"><span class="ptl">Agent Fleet</span><span class="pid">AF-001</span></div>
+      <div class="pbody">
+        <div class="ar"><span class="ad ag"></span><span class="an">DenchClaw</span><span class="at">Processing intake</span></div>
+        <div class="ar"><span class="ad ag"></span><span class="an">CashClaw</span><span class="at">Reconciling R12,400</span></div>
+        <div class="ar"><span class="ad ao"></span><span class="an">Charlie</span><span class="at">Transcribing voice</span></div>
+        <div class="ar"><span class="ad ag"></span><span class="an">ChatterClaw</span><span class="at">Scheduling posts</span></div>
+        <div class="ar"><span class="ad ab"></span><span class="an">InboxClaw</span><span class="at">Awaiting mail</span></div>
+        <div class="ar"><span class="ad ag"></span><span class="an">AuditClaw</span><span class="at">POPIA log active</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div style="display:flex;flex-direction:column">
+    <div class="panel" style="flex:1;border-bottom:1px solid var(--b)">
+      <div class="phdr"><span class="ptl">Live Operations Feed</span><span class="pid">LOF-001 // REAL-TIME</span></div>
+      <div class="pbody" id="feed" style="font-size:10px"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--b)">
+      <div class="panel">
+        <div class="phdr"><span class="ptl">10 Years Capability</span><span class="pid">CVR-10</span></div>
+        <div class="pbody" style="display:flex;flex-direction:column;align-items:center">
+          <div class="rdr"><div class="ring"></div><div class="ring ring2"></div><div class="ring ring3"></div><div class="sw"></div><div class="rc"><div class="rc-i">◈</div><div class="rc-t">10 YRS</div></div></div>
+          <div class="ci">Full-Stack Development</div>
+          <div class="ci">Cloud Architecture — AWS / GCP / Azure</div>
+          <div class="ci">AI / LLM Integration &amp; Agents</div>
+          <div class="ci">DevOps — CI/CD Pipelines</div>
+          <div class="ci">Database Engineering</div>
+          <div class="ci">API Design &amp; Microservices</div>
+          <div class="ci">Security — POPIA / GDPR / OWASP</div>
+          <div class="ci">Mobile — iOS / Android / React Native</div>
+          <div class="ci">Real-time Systems / WebRTC</div>
+          <div class="ci">Blockchain / Web3 / DeFi</div>
+          <div class="ci">SaaS Architecture / Multi-tenancy</div>
+          <div class="ci">Event-Driven / Message Queues</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="phdr"><span class="ptl">Technology Radar</span><span class="pid">TR-001</span></div>
+        <div class="pbody">
+          <div class="tc">
+            <span class="tb">Node.js</span><span class="tb">Python</span><span class="tb">TypeScript</span>
+            <span class="tb">Rust</span><span class="tb">Go</span><span class="tb">C++</span>
+            <span class="tb">React</span><span class="tb">Next.js</span><span class="tb">Vue</span>
+            <span class="tb">Swift</span><span class="tb">Kotlin</span>
+            <span class="tb h">Docker</span><span class="tb h">Kubernetes</span>
+            <span class="tb h">Terraform</span><span class="tb h">PostgreSQL</span>
+            <span class="tb">MongoDB</span><span class="tb">Redis</span>
+            <span class="tb">GraphQL</span><span class="tb">WebRTC</span>
+            <span class="tb h">Supabase</span><span class="tb h">Cloudflare</span>
+            <span class="tb h">Vercel</span><span class="tb h">AWS</span>
+            <span class="tb">TensorFlow</span><span class="tb h">OpenAI API</span>
+            <span class="tb">LangChain</span><span class="tb">LangGraph</span>
+            <span class="tb">Twilio</span><span class="tb">Stripe</span>
+          </div>
+          <div class="yh">10 YEARS — INDUSTRY EXPERIENCE</div>
+          <div class="yb"><div class="yf" id="yrBar"></div></div>
+          <div class="yt">
+            <span class="ytag">SaaS</span><span class="ytag">Marketplaces</span><span class="ytag">CRM</span>
+            <span class="ytag">ERP</span><span class="ytag">FinTech</span><span class="ytag">HealthTech</span>
+            <span class="ytag">EdTech</span><span class="ytag">PropTech</span><span class="ytag">Agile</span>
+            <span class="ytag">TDD</span><span class="ytag">Microservices</span><span class="ytag">Event-Driven</span>
+            <span class="ytag">REST</span><span class="ytag">GraphQL</span><span class="ytag">gRPC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bcg" style="background:var(--b)">
+      <div class="bcc" style="background:var(--p)"><div class="bcl">VM Uptime</div><div class="bcv">99.97<span>%</span></div><div class="bcs">D@RK F@C#ORY // orgo.ai</div><div class="cb"><div class="cf" id="bc1" style="background:var(--gr)"></div></div></div>
+      <div class="bcc" style="background:var(--p)"><div class="bcl">Token Savings</div><div class="bcv">85<span>%</span></div><div class="bcs">headroom // vs standard</div><div class="cb"><div class="cf" id="bc2" style="background:var(--g)"></div></div></div>
+      <div class="bcc" style="background:var(--p)"><div class="bcl">Clients on VM</div><div class="bcv">3<span>/50</span></div><div class="bcs">SafeSight + 2 pilots</div><div class="cb"><div class="cf" id="bc3" style="background:var(--c)"></div></div></div>
+      <div class="bcc" style="background:var(--p)"><div class="bcl">Pipeline Value</div><div class="bcv">R187K</div><div class="bcs">6 deals in progress</div><div class="cb"><div class="cf" id="bc4" style="background:var(--g)"></div></div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div style="display:flex;flex-direction:column">
+    <div class="panel" style="flex:1">
+      <div class="phdr"><span class="ptl">System Log</span><span style="font-size:8px;color:var(--gr);animation:b 1s infinite">● LIVE</span></div>
+      <div class="pbody" id="syslog"></div>
+    </div>
+    <div class="panel">
+      <div class="phdr"><span class="ptl">VM Metrics</span><span class="pid">VM-01</span></div>
+      <div class="pbody">
+        <div class="mr"><span class="ml">CPU</span><div class="mb"><div class="mf" id="cpu" style="background:var(--gr)"></div></div><span class="mv" id="cpuV">23%</span></div>
+        <div class="mr"><span class="ml">Memory</span><div class="mb"><div class="mf" id="mem" style="background:var(--c)"></div></div><span class="mv" id="memV">61%</span></div>
+        <div class="mr"><span class="ml">Disk</span><div class="mb"><div class="mf" id="disk" style="background:var(--g)"></div></div><span class="mv" id="diskV">42%</span></div>
+        <div class="mr"><span class="ml">Network</span><div class="mb"><div class="mf" id="net" style="background:var(--gr)"></div></div><span class="mv" id="netV">8 MB/s</span></div>
+        <div class="mr"><span class="ml">Agents</span><div class="mb"><div class="mf" id="agnt" style="background:var(--gr)"></div></div><span class="mv" id="agntV">5/6</span></div>
+      </div>
+    </div>
+    <div style="padding:14px 14px;border-top:1px solid var(--b);text-align:center;background:linear-gradient(180deg,var(--p),#0A1E30)">
+      <div class="bgc" id="bc">--:--:--</div>
+      <div class="bgd" id="bd">--- --, ----</div>
+      <div class="bgtz">UTC+2 // SOUTH AFRICA</div>
+    </div>
+    <div class="cp">
+      <div class="cn">Tumelo Ramaphosa</div>
+      <div class="cr">Chief Engineer — Studex Group</div>
+      <div class="cl"><span class="ck">Email</span><span class="cv g">t.ramaphosa@stud.exchange</span></div>
+      <div class="cl"><span class="ck">VM</span><span class="cv">D@RK F@C#ORY // orgo.ai</span></div>
+      <div class="cl"><span class="ck">Stack</span><span class="cv">gstack + headroom + LAISA</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var $=function(id){return document.getElementById(id)};
+function pad(n){return String(n).padStart(2,'0')}
+function tick(){
+  var d=new Date(),t=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  var mo=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  var ds=pad(d.getDate())+' '+mo[d.getMonth()]+' '+d.getFullYear();
+  $('hc').textContent=t;$('hd').textContent=ds;
+  $('bc').textContent=t;$('bd').textContent=ds;
+}
+tick();setInterval(tick,1000);
+
+// Ticker
+var td=[
+  ['D@RK F@C#ORY','ONLINE',1],['headroom','85% token savings',1],['gstack','24 skills loaded',1],
+  ['LAISA OS','v3.0 deployed',1],['SafeSight VM','99.97% uptime',1],['Charlie','voice active',1],
+  ['CashClaw','R12,400 processed',1],['DenchClaw','3 intakes today',1],
+  ['Supabase','schema synced',1],['WhatsApp','webhook connected',1],
+  ['Cloudflare','SSL active',1],['Ogre VM','orgo.ai: online',1],
+  ['AgentFleet','5/6 agents running',1],['CTO Path','14 courses active',1],
+];
+var th='';
+for(var i=0;i<td.length;i++){
+  th+='<span class="ti"><span class="tv">'+td[i][0]+'</span> '+(td[i][2]?'<span style="color:var(--gr)">▲</span>':'<span style="color:var(--r)">▼</span>')+' '+td[i][1]+'</span>';
+}
+$('ticker').innerHTML=th+th;
+
+// Animate bars
+setTimeout(function(){
+  $('yrBar').style.width='85%';
+  $('bc1').style.width='99.97%';$('bc2').style.width='85%';$('bc3').style.width='6%';$('bc4').style.width='45%';
+},400);
+
+// Live Feed — BIGGER TEXT
+var fl=[
+  ['12:04:22','SAFE','DenchClaw processed intake — patient #042','ok'],
+  ['12:03:51','CASH','CashClaw reconciled R12,400 — 0 discrepancies','ok'],
+  ['12:02:18','CHAT','ChatterClaw published 3 posts for @safesight_clinic','ok'],
+  ['12:01:55','AUDT','AuditClaw logged POPIA event to immutable ledger','ok'],
+  ['12:01:02','VM  ','D@RK F@C#ORY CPU spike: 34% — auto-scale triggered','wr'],
+  ['12:00:44','MAIL','InboxClaw: 7 new enquiries — categorizing','inf'],
+  ['12:00:12','DB   ','Supabase: 847 patient records synced','ok'],
+  ['11:58:30','SAFE','Charlie transcribed 4-min voice note from Dr. Mkhize','ok'],
+  ['11:57:05','WHTA','WhatsApp: booking — Dr. van Zyl, 14:00','inf'],
+  ['11:55:48','CASH','InvoiceINV-2026-043 sent — R4,200 to medical aid','ok'],
+  ['11:54:22','SAFE','Lead scored 87/100 — routing to CRM','ok'],
+  ['11:53:01','GIT  ','dark-factory repo synced — 3 new agent commits','inf'],
+  ['11:50:44','TKN  ','headroom compressed 78% — R847 savings today','ok'],
+  ['11:48:19','SAFE','DenchClaw flagged contraindication — patient #039','wr'],
+  ['11:45:00','SCHD','Nightly backup: Supabase + storage — 0 errors','ok'],
+];
+var fi=0;
+function addF(){
+  var f=fl[fi%fl.length];
+  var el=document.createElement('div');
+  el.className='fi';
+  el.innerHTML='<span class="ft">'+f[0]+'</span><span class="fs">'+f[1]+'</span><span class="fx">'+f[2]+'</span>';
+  var c=$('feed');
+  if(c.children.length>18)c.removeChild(c.lastChild);
+  c.insertBefore(el,c.firstChild);
+  fi++;
+}
+addF();
+setInterval(addF,4000);
+
+// System Log
+var sl=[
+  ['12:04:18','sys','DenchClaw agent spawned','inf'],
+  ['12:04:15','db ','supabase connection established','o'],
+  ['12:04:12','vm ','health check: all systems nominal','o'],
+  ['12:03:58','tkn','headroom context 78% compressed','o'],
+  ['12:02:44','wha','WhatsApp session active — bot v3.1','o'],
+  ['12:01:33','cld','Cloudflare Workers: 847 requests today','inf'],
+  ['12:00:01','sch','cron: nightly metrics report generated','inf'],
+  ['11:58:22','db ','Supabase backup: completed','o'],
+  ['11:55:00','cld','SSL certificate: auto-renewed','o'],
+  ['11:52:11','ag ','AuditClaw: POPIA report exported','o'],
+  ['11:50:00','tkn','Token usage today: R234 — under budget','o'],
+  ['11:45:00','sch','CTO study path sync: complete','inf'],
+  ['11:30:00','db ','Database vacuum: completed','o'],
+  ['11:00:00','ag ','Charlie: 12 voice notes processed','o'],
+  ['10:45:22','err','Network blip: auto-recovered in 3s','w'],
+  ['10:30:00','vm ','D@RK F@C#ORY: memory optimized','o'],
+];
+var si=0;
+function addS(){
+  var s=sl[si%sl.length];
+  var el=document.createElement('div');
+  el.className='li';
+  var cls='lt '+(s[3]==='o'?'o':s[3]==='w'?'w':'i');
+  el.innerHTML='<span class="lts">'+s[0]+'</span><span class="'+cls+'">'+s[1]+'</span><span>'+s[2]+'</span>';
+  var c=$('syslog');
+  if(c.children.length>18)c.removeChild(c.lastChild);
+  c.insertBefore(el,c.firstChild);
+  si++;
+}
+addS();
+setInterval(addS,3000);
+
+// VM Metrics simulation
+function sim(){
+  var cpu=18+(Math.random()*28|0);
+  var mem=45+(Math.random()*35|0);
+  var disk=30+(Math.random()*25|0);
+  var net=4+(Math.random()*14|0);
+  $('cpu').style.width=cpu+'%';$('cpuV').textContent=cpu+'%';
+  $('mem').style.width=mem+'%';$('memV').textContent=mem+'%';
+  $('disk').style.width=disk+'%';$('diskV').textContent=disk+'%';
+  $('net').style.width=(net*6)+'%';$('netV').textContent=net.toFixed(1)+' MB/s';
+  $('agnt').style.width='83%';$('agntV').textContent='5/6';
+}
+sim();
+setInterval(sim,5000);
+</script>
+</body>
+</html>

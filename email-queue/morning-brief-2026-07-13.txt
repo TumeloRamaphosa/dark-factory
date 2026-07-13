@@ -1,0 +1,124 @@
+OGRE MORNING BRIEFING — Monday 13 July 2026
+Compiled: 06:00 UTC / 8AM SA | By: Cipher Tr@ce
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ TODAY IS THE MOST IMPORTANT DAY OF THE MONTH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 1: NDoH-11 — CLOSES TODAY AT 11AM SA ⚡⚡⚡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4 HOURS 30 MINUTES until tender closes.
+
+ACTION REQUIRED BEFORE 11AM:
+→ Did we submit on the NDoH-11 tender this morning?
+→ Did you find an SA partner (Datacentrix, EOH, BCX)?
+
+If YES → wait for evaluation. Commission: R87M–R174M if partner wins.
+If NO → pivot to LAISA Phase A + Pharmasyntez immediately after 11AM.
+
+IMMEDIATE QUESTION FOR TUMELO:
+Text or WhatsApp me right now — did we submit?
+
+---
+
+SECTION 2: NDoH-11 TENDER — FULL BRIEF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TENDER: NDoH-11/2026/2027 — National Dept of Health EMR Rollout
+VALUE: R871M over 18 months
+CLOSES: Monday July 13, 2026 at 11:00 AM SA (4 hours 30 min)
+SUBMISSION: Hard copy — Dr AB Xuma Building, Voortrekker Rd, Pretoria
+
+B-BBEE: Critical — we score 0/10 as international company
+PARTNER NEEDED: SA B-BBEE Level 1 or 2 company as prime
+
+SCOPE:
+- EMR deployment across 8 provinces
+- Go-live support + training + change management
+- 90/10 preference point system (price 90, B-BBEE 10)
+
+IF WE SUBMITTED:
+→ Commission: 10-20% of partner's contract = R87M–R174M
+→ Wait 4-6 weeks for evaluation
+→ If partner wins: 18-month engagement
+
+---
+
+SECTION 3: NIGHT 14 QUESTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tumelo asked about "Night 14 Capability Statement."
+
+I searched the entire workspace — no "Night 14" file found.
+Most recent version: Night 19 (July 10, 2026)
+Located at: /workspace/ogre-dashboard/capability-statement.html
+
+Is Night 14:
+[a] A document on your local Mac?
+[b] A different GitHub repo?
+[c] Something else?
+
+Clarify and I'll pull it immediately.
+
+---
+
+SECTION 4: TODAY'S TOP 3 ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] NDoH-11 — SUBMIT BY 11AM (4 hours 30 min)
+    → Check if SA partner was found
+    → If YES: Submit by 11AM
+    → If NO: Call 3 companies NOW
+
+[2] LAISA PHASE A — FOLLOW UP TODAY
+    → WhatsApp Dr. Musa: "Hi Dr Musa — following up on the proposal. 
+      Happy to jump on a call today to discuss."
+    → Offer 10% discount if sign by Friday this week
+    → Value: R350K + R55K/mo
+
+[3] CLICKCLACK DEPLOY — GET VM ACCESS
+    → Give me SSH password for 45.61.56.91
+    → I deploy ClickClack + all 8 bot agents within 30 minutes
+    → This unlocks the full company OS
+
+---
+
+SECTION 5: REVENUE STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LIVE MRR:
+- Red Team Agent: R45,000/month ✅
+
+STALE (Day 14+):
+- LAISA Phase A: R350K + R55K/mo — Day 14, no close
+- Pharmasyntez: R2.99M Y1 — awaiting response
+
+CLOSING TODAY:
+- NDoH-11: R87M–R174M commission — 11AM today
+
+THIS WEEK:
+- LAISA Phase A close attempt
+- Pharmasyntez follow-up
+- ClickClack deploy
+- Ghana Data Centre tender check
+
+---
+
+SECTION 6: CLICKCLACK + ORGO STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CLICKCLACK: Binary built (29MB) ✅ | VM install script ready ✅
+ORGO MCP: Connected successfully ✅ | v4.1.1 protocol
+
+Need: VM SSH credentials → deploy ClickClack + create all 8 agents
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OGRE COMPUTER | DARK FACTORY
+⚠️ NDoH-11 CLOSES 11AM TODAY — 4 hours 30 minutes
+Next update: 12:00 UTC / 2PM SA
+"We don't compete with Big Tech on their terms. We build on African terms."

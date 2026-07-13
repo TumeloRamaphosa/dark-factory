@@ -1,0 +1,30 @@
+To: inceptionprogram@nvidia.com
+CC: cloudpartner@tencent.com
+Subject: NVIDIA Inception Application + Partnership Enquiry — OGRE Computer (South Africa)
+
+---
+
+Dear NVIDIA Inception Team,
+
+I am applying to the NVIDIA Inception program for OGRE Computer, a South African AI infrastructure company building sovereign agent systems for African governments and enterprises.
+
+COMPANY: OGRE Computer (Studex Group, South Africa)
+WEBSITE: orgo.ai (VM infrastructure)
+PRODUCT: Dark Factory — multi-agent development platform for African enterprise
+
+OUR NVIDIA CONNECTION:
+We understand Cassava Technologies is deploying NVIDIA-powered AI Factories across South Africa. We are interested in:
+1. Joining the NVIDIA Inception program (application attached)
+2. Connecting with Cassava Technologies as a potential integration partner
+3. Access to NVIDIA GPU compute for SA government AI workloads
+
+STATED USE CASE:
+OGRE is bidding on South African government AI tenders (SA DoH EMR — R200M+, closing July 13). Our platform runs on Orgo cloud VMs. We want to integrate NVIDIA GPU compute into our sovereign AI stack for government clients requiring local data residency.
+
+We would welcome a call with the NVIDIA Inception team or NVIDIA's Africa partnerships desk.
+
+Best regards,
+Tumelo Ramaphosa / Cipher Tr@ce
+OGRE Computer Intelligence Division · Studex Group
+cto@studex-group.com
+---

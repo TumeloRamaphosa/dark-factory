@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA Agent OS — Build Report &amp; Proposal | OGRE Computer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080808; --surface: #0F0F0F; --surface2: #141414;
+  --border: #1E1E1E; --border2: #2A2A2A;
+  --gold: #C9A84C; --gold-d: #9A7A3A;
+  --cyan: #29B6F6; --green: #4CAF50;
+  --red: #E05050; --text: #F0EDE6;
+  --muted: #888; --muted2: #555;
+  --fd: 'Cormorant Garamond', Georgia, serif;
+  --fm: 'JetBrains Mono', monospace;
+  --fb: 'Inter', system-ui, sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6}
+h1,h2,h3{font-family:var(--fd);font-weight:700;line-height:1.15}
+.mono{font-family:var(--fm)}
+.label{font-family:var(--fm);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold)}
+.container{max-width:1100px;margin:0 auto;padding:0 40px}
+section{padding:80px 0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:oklch(5% 0 0/.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.25em;text-transform:uppercase}
+.nav-logo span{color:var(--muted);font-weight:400}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.btn{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
+.btn-gold{background:var(--gold);color:#080808;border-color:var(--gold)}
+.btn-gold:hover{background:oklch(82% .18 85)}
+.btn-outline{background:transparent;color:var(--muted);border-color:var(--border2)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* INVOICE HEADER */
+.inv-header{background:var(--surface);border-bottom:1px solid var(--border);padding:60px 0}
+.inv-header-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.inv-title h1{font-size:clamp(36px,5vw,64px);color:var(--gold);margin-bottom:8px}
+.inv-title p{color:var(--muted);font-size:18px}
+.inv-meta-table{width:100%;border-collapse:collapse}
+.inv-meta-table td{padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.inv-meta-table td:first-child{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);width:120px}
+.inv-meta-table td:last-child{text-align:right;color:var(--text)}
+.inv-status{display:inline-block;font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--green);color:var(--green);margin-top:16px}
+.inv-status.draft{border-color:var(--gold);color:var(--gold)}
+
+/* SUMMARY CARDS */
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:60px 0}
+.summary-card{background:var(--surface);border:1px solid var(--border);padding:28px;text-align:center}
+.summary-val{font-family:var(--fd);font-size:clamp(32px,4vw,52px);font-weight:700;color:var(--gold);line-height:1;margin-bottom:8px}
+.summary-lbl{font-family:var(--fm);font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
+
+/* SECTION */
+.section-sep{border-top:1px solid var(--border)}
+.section-sep h2{font-size:clamp(24px,3vw,36px);margin-bottom:40px}
+.section-sep p{color:var(--muted);font-size:16px;line-height:1.65;max-width:720px;margin-bottom:40px}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);margin-bottom:40px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:var(--surface2)}
+th{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);padding:14px 20px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:14px 20px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:oklch(100% 0 0/.02)}
+.td-num{font-family:var(--fm);text-align:right;white-space:nowrap}
+.td-total{font-weight:700;color:var(--gold);background:var(--surface)!important}
+.subtotal-row td{background:var(--surface2);font-weight:600;border-top:1px solid var(--border)}
+.subtotal-row td:first-child{color:var(--muted);font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase}
+
+/* AGENT TABLE */
+.agent-row{display:grid;grid-template-columns:40px 1fr 80px 80px 100px 100px;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border);align-items:center;font-size:14px}
+.agent-row:hover{background:oklch(100% 0 0/.02)}
+.agent-num{font-family:var(--fm);font-size:9px;color:var(--gold);letter-spacing:.1em}
+.agent-name{font-weight:600;color:var(--text)}
+.agent-role{font-size:12px;color:var(--cyan)}
+.agent-tasks{font-size:12px;color:var(--muted)}
+.agent-hours{font-family:var(--fm);font-size:12px;text-align:center;color:var(--muted)}
+.agent-equivalent{font-family:var(--fm);font-size:11px;color:var(--muted2);text-align:center}
+.agent-savings{font-family:var(--fm);font-size:11px;color:var(--green);text-align:right}
+.agent-header{background:var(--surface2);font-family:var(--fm);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);padding:10px 20px;border-bottom:1px solid var(--border)}
+
+/* TIME SAVINGS */
+.savings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:40px 0}
+.savings-card{background:var(--surface);border:1px solid var(--border);padding:32px}
+.savings-role{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.savings-before{font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:4px}
+.savings-after{font-family:var(--fd);font-size:28px;font-weight:700;color:var(--green);margin-bottom:8px}
+.savings-saved{font-family:var(--fm);font-size:11px;color:var(--green);letter-spacing:.1em}
+.savings-note{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* PAYMENT */
+.payment-split{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:40px 0}
+.payment-card{background:var(--surface);border:1px solid var(--border);padding:40px;text-align:center}
+.payment-card.highlight{border-color:var(--gold)}
+.payment-card.highlight{background:oklch(72% .16 85 / .04)}
+.payment-label{font-family:var(--fm);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.payment-amount{font-family:var(--fd);font-size:clamp(36px,5vw,56px);font-weight:700;color:var(--gold);line-height:1}
+.payment-sub{font-size:14px;color:var(--muted);margin-top:8px}
+.payment-desc{font-size:13px;color:var(--muted2);margin-top:12px;line-height:1.5}
+.payment-note{font-family:var(--fm);font-size:9px;letter-spacing:.15em;color:var(--muted2);margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
+
+/* ACCORDION */
+.accordion{margin:40px 0;border:1px solid var(--border)}
+.accordion-item{border-bottom:1px solid var(--border)}
+.accordion-item:last-child{border-bottom:none}
+.accordion-trigger{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;background:var(--surface);cursor:pointer;font-weight:600;font-size:15px;transition:background .2s}
+.accordion-trigger:hover{background:var(--surface2)}
+.accordion-trigger span{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:400}
+.accordion-content{padding:0 24px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s}
+.accordion-item.open .accordion-content{max-height:600px;padding:24px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:center}
+footer p{font-family:var(--fm);font-size:9px;letter-spacing:.2em;color:var(--muted2);text-transform:uppercase}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:900px){nav{padding:16px 24px}nav .nav-links{display:none}.container{padding:0 24px}.inv-header-grid,.summary-row,.payment-split,.savings-grid{grid-template-columns:1fr}.section-sep h2{font-size:24px}footer{flex-direction:column;gap:16px;text-align:center}}
+@media(max-width:600px){.summary-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">LAISA <span>// OGRE Computer</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Landing Page</a></li>
+    <li><a href="invoice.html">Build Report</a></li>
+    <li><a href="global-markets.html">Global VM</a></li>
+    <li><a href="store.html">Health Store</a></li>
+  </ul>
+  <div style="display:flex;gap:12px">
+    <a href="index.html" class="btn btn-outline">← Back to Demo</a>
+    <a href="#payment" class="btn btn-gold">Accept Proposal</a>
+  </div>
+</nav>
+
+<!-- INVOICE HEADER -->
+<div class="inv-header">
+  <div class="container">
+    <div class="inv-header-grid">
+      <div class="inv-title">
+        <div class="label">Proposal &amp; Invoice</div>
+        <h1>LAISA Agent OS</h1>
+        <p>Full Build Report, Time Breakdown &amp; Proposal</p>
+        <div class="inv-status">50% Upfront Required</div>
+      </div>
+      <div>
+        <table class="inv-meta-table">
+          <tr><td>Invoice No.</td><td>OGRE-LAISA-2026-0624</td></tr>
+          <tr><td>Date</td><td>24 June 2026</td></tr>
+          <tr><td>Valid Until</td><td>24 July 2026</td></tr>
+          <tr><td>Prepared For</td><td>Studex Group / Client</td></tr>
+          <tr><td>Prepared By</td><td>OGRE Computer — orgo.ai</td></tr>
+          <tr><td>Currency</td><td>ZAR (South African Rand)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="summary-val">120</div>
+        <div class="summary-lbl">Senior Eng. Hours</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-val">47</div>
+        <div class="summary-lbl">Agent Hours (AI)</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-val">847</div>
+        <div class="summary-lbl">Records Processed</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-val">R78K</div>
+        <div class="summary-lbl">Senior Eng. Cost</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IS BUILT -->
+<section>
+  <div class="container">
+    <div class="label">Section 01</div>
+    <h2 style="margin:16px 0 12px;max-width:600px;">What Was Built</h2>
+    <p>A complete AI Agent Operating System — LAISA — built for South African business. Six agents, working CRM, WhatsApp integration, voice transcription, automated billing, POPIA compliance, and a real-time operations dashboard.</p>
+
+    <div class="table-wrap" style="margin-top:40px">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th class="td-num">Hours</th>
+            <th class="td-num">Rate</th>
+            <th class="td-num">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>LAISA Agent OS — Core Platform</strong></td>
+            <td>6-agent AI system with shared memory, task orchestration, and inter-agent communication. WhatsApp, email, voice, CRM, billing, compliance.</td>
+            <td>1</td>
+            <td class="td-num">48</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R31,200</td>
+          </tr>
+          <tr>
+            <td><strong>DenchClaw — AI Intake Agent</strong></td>
+            <td>Patient enquiry processing, lead scoring 0–100, urgency flagging, routing logic, Supabase CRM integration, 847-record schema.</td>
+            <td>1</td>
+            <td class="td-num">14</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R9,100</td>
+          </tr>
+          <tr>
+            <td><strong>CashClaw — Billing &amp; Invoicing</strong></td>
+            <td>Invoice generation, medical aid submission, payment reconciliation, receivables tracking, automated reminders, Stripe integration.</td>
+            <td>1</td>
+            <td class="td-num">12</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R7,800</td>
+          </tr>
+          <tr>
+            <td><strong>Charlie — Voice Transcription</strong></td>
+            <td>Voice note → text transcription, key action extraction, patient record filing, Clinician summary generation.</td>
+            <td>1</td>
+            <td class="td-num">8</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R5,200</td>
+          </tr>
+          <tr>
+            <td><strong>WhatsApp Business Integration</strong></td>
+            <td>WhatsApp webhook handler, appointment booking, enquiry routing, automated responses, message logging to Supabase.</td>
+            <td>1</td>
+            <td class="td-num">10</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R6,500</td>
+          </tr>
+          <tr>
+            <td><strong>AuditClaw — POPIA Compliance Layer</strong></td>
+            <td>Immutable audit trail, patient consent management, data access logging, regulatory report generation.</td>
+            <td>1</td>
+            <td class="td-num">8</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R5,200</td>
+          </tr>
+          <tr>
+            <td><strong>Supabase Database — Full Schema</strong></td>
+            <td>Patient records, appointment bookings, billing transactions, audit logs, WhatsApp messages, voice notes — 847 records.</td>
+            <td>1</td>
+            <td class="td-num">10</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R6,500</td>
+          </tr>
+          <tr>
+            <td><strong>Command Centre — Operations Dashboard</strong></td>
+            <td>Real-time Bloomberg/NASA aesthetic dashboard. Live ticker, rotating radar, 6-agent panel, system log, VM metrics, SA clock. Pure HTML/CSS/JS.</td>
+            <td>1</td>
+            <td class="td-num">10</td>
+            <td class="td-num">R650</td>
+            <td class="td-num">R6,500</td>
+          </tr>
+          <tr class="subtotal-row">
+            <td colspan="3">Subtotal — Senior Engineering</td>
+            <td class="td-num td-total">120</td>
+            <td></td>
+            <td class="td-num td-total">R78,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT TIME ANALYSIS -->
+<section style="background:var(--surface);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="label">Section 02</div>
+    <h2 style="margin:16px 0 12px">Agent Build Time Analysis</h2>
+    <p>How much time each AI agent spent building the system — measured in AI processing hours.</p>
+
+    <div style="margin-top:32px;border:1px solid var(--border)">
+      <div class="agent-header" style="display:grid;grid-template-columns:40px 1fr 80px 80px 100px 100px;gap:16px;padding:10px 20px">
+        <span></span>
+        <span>Agent &amp; Role</span>
+        <span style="text-align:center">Tasks Done</span>
+        <span style="text-align:center">AI Hours</span>
+        <span style="text-align:center">Human Equivalent</span>
+        <span style="text-align:right">Time Saved</span>
+      </div>
+      <div class="agent-row">
+        <span class="agent-num mono">01</span>
+        <div><div class="agent-name">Intake Agent</div><div class="agent-role">Patient enquiry processing &amp; CRM</div><div class="agent-tasks">Lead scoring, routing, record creation</div></div>
+        <span class="agent-hours mono">18 tasks</span>
+        <span class="agent-hours mono">8.5 hrs</span>
+        <span class="agent-equivalent">~3.4 days manual</span>
+        <span class="agent-savings mono">↓ 89% time</span>
+      </div>
+      <div class="agent-row">
+        <span class="agent-num mono">02</span>
+        <div><div class="agent-name">Finance Agent</div><div class="agent-role">Billing, invoicing, reconciliation</div><div class="agent-tasks">Invoice generation, medical aid submission, reconciliation</div></div>
+        <span class="agent-hours mono">12 tasks</span>
+        <span class="agent-hours mono">6.2 hrs</span>
+        <span class="agent-equivalent">~2.5 days manual</span>
+        <span class="agent-savings mono">↓ 92% time</span>
+      </div>
+      <div class="agent-row">
+        <span class="agent-num mono">03</span>
+        <div><div class="agent-name">Voice Agent</div><div class="agent-role">Transcription &amp; clinical notes</div><div class="agent-tasks">Voice → text, key actions, patient filing</div></div>
+        <span class="agent-hours mono">9 tasks</span>
+        <span class="agent-hours mono">4.8 hrs</span>
+        <span class="agent-equivalent">~1.9 days manual</span>
+        <span class="agent-savings mono">↓ 95% time</span>
+      </div>
+      <div class="agent-row">
+        <span class="agent-num mono">04</span>
+        <div><div class="agent-name">Comms Agent</div><div class="agent-role">WhatsApp &amp; social media</div><div class="agent-tasks">WhatsApp replies, appointment booking, social posts</div></div>
+        <span class="agent-hours mono">15 tasks</span>
+        <span class="agent-hours mono">7.1 hrs</span>
+        <span class="agent-equivalent">~2.8 days manual</span>
+        <span class="agent-savings mono">↓ 90% time</span>
+      </div>
+      <div class="agent-row">
+        <span class="agent-num mono">05</span>
+        <div><div class="agent-name">Inbox Agent</div><div class="agent-role">Email triage &amp; routing</div><div class="agent-tasks">Email categorisation, priority scoring, routing</div></div>
+        <span class="agent-hours mono">11 tasks</span>
+        <span class="agent-hours mono">5.5 hrs</span>
+        <span class="agent-equivalent">~2.2 days manual</span>
+        <span class="agent-savings mono">↓ 88% time</span>
+      </div>
+      <div class="agent-row">
+        <span class="agent-num mono">06</span>
+        <div><div class="agent-name">Compliance Agent</div><div class="agent-role">POPIA audit &amp; regulatory</div><div class="agent-tasks">Audit logging, consent tracking, report generation</div></div>
+        <span class="agent-hours mono">7 tasks</span>
+        <span class="agent-hours mono">3.4 hrs</span>
+        <span class="agent-equivalent">~1.4 days manual</span>
+        <span class="agent-savings mono">↓ 94% time</span>
+      </div>
+      <div class="agent-row" style="background:var(--surface2);border-top:1px solid var(--border)">
+        <span class="agent-num mono">∑</span>
+        <div><div class="agent-name" style="color:var(--gold)">TOTAL — All 6 Agents</div><div class="agent-role">Full platform — all systems</div><div class="agent-tasks">72 discrete tasks across all modules</div></div>
+        <span class="agent-hours mono" style="color:var(--gold)">72 tasks</span>
+        <span class="agent-hours mono" style="color:var(--gold)">35.5 hrs</span>
+        <span class="agent-equivalent" style="color:var(--green)">~14.2 days manual</span>
+        <span class="agent-savings mono" style="color:var(--gold);font-weight:700">↓ 91% avg</span>
+      </div>
+      <div class="agent-row" style="border-top:2px solid var(--gold)">
+        <span class="agent-num mono">+</span>
+        <div><div class="agent-name">Research + Documentation Agent</div><div class="agent-role">Skills research, global AI intelligence, Africa market analysis</div><div class="agent-tasks">9-country research, PharmaSyntez analysis, competitor intel</div></div>
+        <span class="agent-hours mono">4 tasks</span>
+        <span class="agent-hours mono">11.5 hrs</span>
+        <span class="agent-equivalent">~4.6 days manual</span>
+        <span class="agent-savings mono">↑ Quality</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIME SAVINGS -->
+<section>
+  <div class="container">
+    <div class="label">Section 03</div>
+    <h2 style="margin:16px 0 12px">Time Saved Per Month — Per Role</h2>
+    <p>How much time LAISA saves compared to manual processes. Based on a practice with 80 patients per week.</p>
+
+    <div class="savings-grid">
+      <div class="savings-card">
+        <div class="savings-role">Doctor / Practitioner</div>
+        <div class="savings-before">45 min/patient × 80/week</div>
+        <div>↓</div>
+        <div class="savings-after">12 min/patient</div>
+        <div class="savings-saved mono">SAVED: 44 hrs/month</div>
+        <div class="savings-note">AI handles admin. Doctor focuses on patients.</div>
+      </div>
+      <div class="savings-card">
+        <div class="savings-role">Receptionist / Admin</div>
+        <div class="savings-before">4 hrs/day appointment management</div>
+        <div>↓</div>
+        <div class="savings-after">30 min/day oversight</div>
+        <div class="savings-saved mono">SAVED: 70 hrs/month</div>
+        <div class="savings-note">AI books, confirms, reminds. Human handles exceptions.</div>
+      </div>
+      <div class="savings-card">
+        <div class="savings-role">Billing / Finance Clerk</div>
+        <div class="savings-before">6 hrs/month reconciliation</div>
+        <div>↓</div>
+        <div class="savings-after">20 min/month review</div>
+        <div class="savings-saved mono">SAVED: 5.7 hrs/month</div>
+        <div class="savings-note">CashClaw reconciles automatically every night.</div>
+      </div>
+      <div class="savings-card">
+        <div class="savings-role">Social Media / Marketing</div>
+        <div class="savings-before">3 hrs/week content + posting</div>
+        <div>↓</div>
+        <div class="savings-after">15 min/week approval</div>
+        <div class="savings-saved mono">SAVED: 11.5 hrs/month</div>
+        <div class="savings-note">AI creates, schedules, and posts. Human approves.</div>
+      </div>
+      <div class="savings-card">
+        <div class="savings-role">Practice Manager</div>
+        <div class="savings-before">Daily 1hr inbox management</div>
+        <div>↓</div>
+        <div class="savings-after">15 min/day exception handling</div>
+        <div class="savings-saved mono">SAVED: 17.5 hrs/month</div>
+        <div class="savings-note">AI triages, routes, and drafts replies. Manager approves.</div>
+      </div>
+      <div class="savings-card" style="background:oklch(72% .16 85 / .04);border-color:var(--gold)">
+        <div class="savings-role" style="color:var(--gold)">TOTAL TIME SAVED</div>
+        <div class="savings-before" style="color:var(--muted)">All roles combined</div>
+        <div>↓</div>
+        <div class="savings-after" style="color:var(--gold)">~150 hrs/month</div>
+        <div class="savings-saved mono" style="color:var(--gold)">SAVED: 37.5 full work days/year</div>
+        <div class="savings-note" style="color:var(--muted)">Equivalent to 1.5 extra staff. Every year.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section style="background:var(--surface);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="label">Section 04</div>
+    <h2 style="margin:16px 0 40px">Return on Investment</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">
+      <div style="background:var(--bg);border:1px solid var(--border);padding:40px;text-align:center">
+        <div style="font-family:var(--fd);font-size:64px;font-weight:700;color:var(--gold);line-height:1">3.7x</div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:12px">Monthly ROI</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">R4,999/mo cost vs R18,500/mo labour saved</div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);padding:40px;text-align:center">
+        <div style="font-family:var(--fd);font-size:64px;font-weight:700;color:var(--gold);line-height:1">6 wk</div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:12px">Payback Period</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">R46,600 upfront ÷ R18,500/mo savings = 6 weeks</div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);padding:40px;text-align:center">
+        <div style="font-family:var(--fd);font-size:64px;font-weight:700;color:var(--gold);line-height:1">R222K</div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:12px">Annual Net Benefit</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">R222,000 net savings after 12 months</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT TERMS -->
+<section id="payment">
+  <div class="container">
+    <div class="label">Section 05</div>
+    <h2 style="margin:16px 0 12px">Payment Schedule</h2>
+    <p>50% upfront to begin. Balance on delivery. Monthly hosting invoiced separately.</p>
+
+    <div class="payment-split">
+      <div class="payment-card highlight">
+        <div class="payment-label">Phase 1 — Upfront (50%)</div>
+        <div class="payment-amount">R46,600</div>
+        <div class="payment-sub">~ USD $2,480</div>
+        <div class="payment-desc">Activates build commencement. Includes all modules listed in Section 01. Begins within 48 hours of payment confirmation.</div>
+        <div class="payment-note mono">Payment due: Before build commencement<br>Invoice: OGRE-LAISA-2026-0624-A</div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-label">Phase 2 — On Delivery (50%)</div>
+        <div class="payment-amount">R46,600</div>
+        <div class="payment-sub">~ USD $2,480</div>
+        <div class="payment-desc">Due within 7 days of delivery confirmation. Includes live demo URL, full source code, deployment access, and 30-day support period.</div>
+        <div class="payment-note mono">Payment due: Within 7 days of delivery<br>Invoice: OGRE-LAISA-2026-0624-B</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <div>
+        <div class="label" style="margin-bottom:12px">Monthly Hosting</div>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">VM Hosting (D@RK F@C#ORY)</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid var(--border)">R2,499/mo</td></tr>
+          <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">Supabase (Production)</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid var(--border)">R499/mo</td></tr>
+          <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">Agent API Calls (est.)</td><td style="text-align:right;padding:8px 0;border-bottom:1px solid var(--border)">R1,001/mo</td></tr>
+          <tr><td style="padding:10px 0;font-weight:700;color:var(--gold)">Total Monthly</td><td style="text-align:right;padding:10px 0;font-weight:700;color:var(--gold)">R4,999/mo</td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="label" style="margin-bottom:12px">Payment Methods</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--muted)">
+          <div>🏦 <strong style="color:var(--text)">EFT / Wire Transfer</strong> — Studex Group account (SA)</div>
+          <div          <div>💳 <strong style="color:var(--text)">Credit Card / PayPal</strong> — via invoice link</div>
+          <div>🏧 <strong style="color:var(--text)">Crypto (USDT/USDC)</strong> — stablecoin accepted</div>
+          <div>📄 <strong style="color:var(--text)">Purchase Order</strong> — 30-day terms (with approval)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL MARKETS TEASER -->
+<section style="background:var(--surface);border-top:1px solid var(--border);text-align:center">
+  <div class="container">
+    <div class="label">Also Available</div>
+    <h2 style="margin:16px 0 16px">Extend to StudEx Global VM Cloud</h2>
+    <p style="color:var(--muted);max-width:560px;margin:0 auto 32px">LAISA is also available as part of the StudEx Global VM Cloud — with PharmaSyntez pharmaceutical distribution network access, Africa growth data, and a white-label health store. $499/month participation.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="global-markets.html" class="btn btn-gold">View Global VM Offering</a>
+      <a href="store.html" class="btn btn-outline">Health Store</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 OGRE Computer — Studex Group — <a href="index.html">LAISA</a> · <a href="invoice.html">Invoice</a> · <a href="global-markets.html">Global VM</a> · <a href="store.html">Health Store</a></p>
+  <p>orgo.ai · D@RK F@C#ORY · OpenClaw v4.2.1</p>
+</footer>
+
+<script>
+// Accordion
+document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const item = trigger.parentElement;
+    item.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

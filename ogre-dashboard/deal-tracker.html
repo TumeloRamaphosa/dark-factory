@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Deal &amp; Partner Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-dim:rgba(201,168,76,0.15);--gold-border:rgba(201,168,76,0.3);
+  --bg:#0A0A0A;--surface:#111114;--surface2:#18181C;--border:#252530;
+  --text:#E8E8F0;--muted:#6B6B80;--green:#00D67D;--red:#FF4D4D;
+  --amber:#FFAA00;--cyan:#00C9E4;--purple:#A78BFA;
+}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:56px;display:flex;align-items:center;gap:16px;
+}
+.topbar-brand{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  color:var(--gold);letter-spacing:0.08em;
+}
+.topbar-brand span{color:var(--muted);font-weight:400}
+.topbar-sep{flex:1}
+.topbar-nav{display:flex;gap:4px}
+.topbar-nav a{
+  font-size:12px;color:var(--muted);text-decoration:none;padding:6px 12px;
+  border-radius:4px;transition:all 0.15s;letter-spacing:0.03em;
+}
+.topbar-nav a:hover,.topbar-nav a.active{color:var(--gold);background:var(--gold-dim)}
+.topbar-clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+
+/* HERO */
+.hero{
+  padding:48px 24px 40px;max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr auto;align-items:start;gap:32px;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+  letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;
+}
+.hero h1{
+  font-family:Newsreader,serif;font-size:clamp(28px,4vw,44px);
+  line-height:1.15;color:var(--text);margin-bottom:16px;
+}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-sub{
+  font-size:15px;color:var(--muted);line-height:1.6;max-width:560px;
+}
+.hero-meta{
+  display:flex;gap:16px;margin-top:20px;flex-wrap:wrap;
+}
+.hero-stat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:14px 20px;min-width:120px;
+}
+.hero-stat-n{
+  font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;
+  color:var(--gold);line-height:1;
+}
+.hero-stat-l{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.05em;text-transform:uppercase}
+
+/* GRID */
+.section{padding:0 24px 48px;max-width:1200px;margin:0 auto}
+.section-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.15em;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* DEAL CARDS */
+.deal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.deal-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:24px;position:relative;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.deal-card:hover{border-color:var(--gold-border)}
+.deal-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--card-accent,#00D67D);
+}
+.deal-rank{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  color:var(--bg);background:var(--card-accent,#00D67D);
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;margin-bottom:14px;letter-spacing:0;
+}
+.deal-name{
+  font-size:16px;font-weight:600;margin-bottom:6px;line-height:1.3;
+}
+.deal-partner{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+  margin-bottom:14px;
+}
+.deal-timeline-row{
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.deal-timeline-label{font-size:11px;color:var(--muted);flex-shrink:0}
+.deal-timeline-bar{
+  flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;
+}
+.deal-timeline-fill{
+  height:100%;border-radius:3px;background:var(--card-accent,#00D67D);
+  transition:width 1s ease;
+}
+.deal-days-left{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  color:var(--card-accent,#00D67D);flex-shrink:0;
+}
+.deal-description{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.deal-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.deal-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:3px 8px;border-radius:4px;
+  background:rgba(255,255,255,0.05);color:var(--muted);letter-spacing:0.03em;
+}
+.deal-status-row{display:flex;align-items:center;justify-content:space-between}
+.deal-status-badge{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  padding:4px 10px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase;
+}
+.status-not-started{background:rgba(107,107,128,0.2);color:var(--muted)}
+.status-in-progress{background:rgba(0,217,125,0.15);color:var(--green)}
+.status-at-risk{background:rgba(255,74,77,0.15);color:var(--red)}
+.status-closed{background:rgba(201,168,76,0.15);color:var(--gold)}
+.deal-action-btn{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:6px 14px;border-radius:4px;cursor:pointer;border:none;
+  background:var(--gold-dim);color:var(--gold);transition:all 0.15s;letter-spacing:0.05em;
+}
+.deal-action-btn:hover{background:var(--gold);color:var(--bg)}
+
+/* COUNTDOWN */
+.countdown-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:24px;margin-bottom:32px;
+}
+.countdown-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;
+}
+.countdown-item{
+  text-align:center;padding:20px 12px;
+  background:var(--surface2);border-radius:8px;border:1px solid var(--border);
+}
+.countdown-item.highlight{border-color:var(--gold-border);background:var(--gold-dim)}
+.countdown-date{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;
+}
+.countdown-event{font-size:13px;font-weight:600;margin-bottom:8px;line-height:1.3}
+.countdown-timer{
+  font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;
+  color:var(--text);line-height:1;
+}
+.countdown-unit{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.1em}
+
+/* PARTNERS TABLE */
+.partner-table-wrap{overflow-x:auto}
+.partner-table{
+  width:100%;border-collapse:collapse;font-size:13px;
+}
+.partner-table th{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);
+  letter-spacing:0.1em;text-transform:uppercase;padding:12px 16px;
+  text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;
+}
+.partner-table td{
+  padding:14px 16px;border-bottom:1px solid rgba(37,37,48,0.5);
+  vertical-align:top;line-height:1.5;
+}
+.partner-table tr:last-child td{border-bottom:none}
+.partner-table tr:hover td{background:rgba(255,255,255,0.02)}
+.partner-company{font-weight:600;white-space:nowrap}
+.partner-country{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)}
+.partner-type{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:2px 8px;border-radius:4px;
+  background:rgba(255,255,255,0.05);color:var(--muted);white-space:nowrap;
+}
+.partner-action{color:var(--muted);font-size:12px;max-width:260px}
+.partner-priority{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  letter-spacing:0.05em;white-space:nowrap;
+}
+.priority-critical{color:var(--red)}
+.priority-high{color:var(--amber)}
+.priority-medium{color:var(--cyan)}
+.partner-timeline{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;
+}
+
+/* BOTTOM VERDICT */
+.verdict{
+  background:var(--surface);border:1px solid var(--gold-border);
+  border-radius:12px;padding:32px;margin:0 24px 48px;max-width:1200px;
+  margin-left:auto;margin-right:auto;
+}
+.verdict-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);
+  letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px;
+}
+.verdict blockquote{
+  font-family:Newsreader,serif;font-size:clamp(16px,2vw,22px);
+  color:var(--text);line-height:1.6;font-style:italic;
+  border-left:3px solid var(--gold);padding-left:20px;margin-bottom:20px;
+}
+.verdict-tags{display:flex;gap:8px;flex-wrap:wrap}
+.verdict-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:4px 10px;border-radius:20px;
+  border:1px solid var(--gold-border);color:var(--gold);
+}
+
+/* SIGNAL BAND */
+.signal-band{
+  background:var(--surface2);border-top:1px solid var(--border);
+  padding:14px 24px;display:flex;align-items:center;gap:16px;overflow:hidden;
+}
+.signal-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);
+  letter-spacing:0.15em;text-transform:uppercase;flex-shrink:0;
+}
+.signal-items{
+  display:flex;gap:32px;overflow:hidden;
+  mask-image:linear-gradient(to right,transparent,black 5%,black 95%,transparent);
+}
+.signal-item{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  white-space:nowrap;flex-shrink:0;
+}
+.signal-item span{color:var(--green)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;padding:32px 16px 24px}
+  .deal-grid{grid-template-columns:1fr}
+  .countdown-grid{grid-template-columns:repeat(2,1fr)}
+  .section,.verdict{padding-left:16px;padding-right:16px;margin-left:16px;margin-right:16px;width:auto}
+  .topbar-nav{display:none}
+}
+
+/* PULSE DOT */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);
+  display:inline-block;margin-right:6px;
+  animation:pulse 2s infinite;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">OGRE<span> /// DEAL TRACKER</span></div>
+  <div class="topbar-sep"></div>
+  <div class="topbar-nav">
+    <a href="portal.html">Portal</a>
+    <a href="index.html">Dashboard</a>
+    <a href="compare.html">Compare</a>
+    <a href="signal-builder.html">Signal Builder</a>
+    <a href="#" class="active">Deal Tracker</a>
+    <a href="briefing.html">Briefing</a>
+  </div>
+  <div class="topbar-clock" id="clock">--:--:-- UTC</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span class="live-dot"></span>NIGHT 9 BUILD — JUNE 30 2026</div>
+    <h1>Deal &amp; <em>Partner</em> Tracker</h1>
+    <div class="hero-sub">OGRE Computer's active deal pipeline — 5 strategic moves, 8 priority partners, and the countdown clocks that matter. Built from tonight's 3AM intelligence scan.</div>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <div class="hero-stat-n">5</div>
+        <div class="hero-stat-l">Active Deals</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n">8</div>
+        <div class="hero-stat-l">Partners</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n" id="min-days">—</div>
+        <div class="hero-stat-l">Days to Nearest Deadline</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n">90</div>
+        <div class="hero-stat-l">Day Window</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COUNTDOWN CLOCKS -->
+<div class="section">
+  <div class="section-title">Upcoming Deadlines</div>
+  <div class="countdown-panel">
+    <div class="countdown-grid" id="countdown-grid"></div>
+  </div>
+</div>
+
+<!-- DEAL CARDS -->
+<div class="section">
+  <div class="section-title">Strategic Deal Pipeline</div>
+  <div class="deal-grid" id="deal-grid"></div>
+</div>
+
+<!-- PARTNER TABLE -->
+<div class="section">
+  <div class="section-title">Partner Directory &amp; Talking Points</div>
+  <div class="partner-table-wrap">
+    <table class="partner-table">
+      <thead>
+        <tr>
+          <th>Partner</th>
+          <th>Country</th>
+          <th>Type</th>
+          <th>Action Item</th>
+          <th>Priority</th>
+          <th>Deadline</th>
+        </tr>
+      </thead>
+      <tbody id="partner-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div class="verdict-label">OGRE 3AM Verdict — June 30 2026</div>
+  <blockquote>"The global AI race is no longer about who builds the biggest model — it's about who controls the deployment layer in their region. China won the open-source layer. USA is winning the sovereign compute layer. Africa has not chosen a layer yet. OGRE Computer has <strong>90 days to position SA as Africa's AI deployment hub</strong> before the continent is carved up by Chinese infrastructure partners and US data-sovereignty gatekeepers."</blockquote>
+  <div class="verdict-tags">
+    <span class="verdict-tag">$16.5B TAM</span>
+    <span class="verdict-tag">9 Countries</span>
+    <span class="verdict-tag">5 Priority Moves</span>
+    <span class="verdict-tag">8 Partners</span>
+    <span class="verdict-tag">90 Day Window</span>
+    <span class="verdict-tag">OGRE COMPUTER</span>
+  </div>
+</div>
+
+<!-- SIGNAL BAND -->
+<div class="signal-band">
+  <div class="signal-label">SIGNALS</div>
+  <div class="signal-items">
+    <div class="signal-item">CSIR Cabinet <span>▶ JUL 15</span></div>
+    <div class="signal-item">AU Agriculture nominations <span>▶ JUL 30</span></div>
+    <div class="signal-item">SARB AI credit guidelines <span>▶ SEP 2026</span></div>
+    <div class="signal-item">AfCFTA digital protocol <span>▶ OCT 2026</span></div>
+    <div class="signal-item">DeepSeek commoditisation wave <span>▶ Q4 2026</span></div>
+    <div class="signal-item">India Krutrim MOU window <span>▶ AUG 2026</span></div>
+    <div class="signal-item">Discovery Health <span>▶ ACTIVE</span></div>
+    <div class="signal-item">Flutterwave $16B+ vol <span>▶ ACTIVE</span></div>
+  </div>
+</div>
+
+<script>
+// ── LIVE CLOCK ──────────────────────────────────────────────
+function startClock(){
+  function tick(){
+    const now=new Date();
+    document.getElementById('clock').textContent=
+      now.toUTCString().slice(17,25)+' UTC';
+  }
+  tick();setInterval(tick,1000);
+}
+startClock();
+
+// ── DEADLINES ──────────────────────────────────────────────
+const today = new Date('2026-06-30T22:00:00Z'); // tonight's build time
+
+const deadlines = [
+  { date: '2026-07-15', event: 'CSIR Cabinet Deadline', highlight: true },
+  { date: '2026-07-30', event: 'AU AI Agriculture Nominations', highlight: false },
+  { date: '2026-08-01', event: 'India Krutrim MOU Window Closes', highlight: false },
+  { date: '2026-09-01', event: 'SARB AI Credit Guidelines', highlight: false },
+  { date: '2026-10-01', event: 'AfCFTA Digital Protocol Activates', highlight: false },
+  { date: '2026-10-01', event: 'DeepSeek Commoditisation Wave Hits SA', highlight: false },
+];
+
+function daysUntil(dateStr) {
+  const target = new Date(dateStr + 'T00:00:00Z');
+  return Math.max(0, Math.ceil((target - today) / 86400000));
+}
+
+function renderCountdowns() {
+  const grid = document.getElementById('countdown-grid');
+  grid.innerHTML = deadlines.map(d => {
+    const days = daysUntil(d.date);
+    const hoursRem = Math.max(0, (new Date(d.date+'T00:00:00Z') - today) % 86400000);
+    const h = Math.floor(hoursRem / 3600000);
+    const m = Math.floor((hoursRem % 3600000) / 60000);
+    const pct = Math.max(0, Math.min(100, (1 - days/90) * 100));
+    const urgency = days <= 15 ? 'var(--red)' : days <= 45 ? 'var(--amber)' : 'var(--green)';
+    return `<div class="countdown-item ${d.highlight ? 'highlight' : ''}" style="--card-accent:${urgency}">
+      <div class="countdown-date">${d.date.replace('2026-','JUN ')}</div>
+      <div class="countdown-event">${d.event}</div>
+      <div class="countdown-timer">${days}d ${String(h).padStart(2,'0')}h</div>
+      <div class="countdown-unit">remaining</div>
+    </div>`;
+  }).join('');
+
+  const minDays = Math.min(...deadlines.map(d => daysUntil(d.date)));
+  document.getElementById('min-days').textContent = minDays;
+}
+renderCountdowns();
+
+// ── DEAL PIPELINE ──────────────────────────────────────────
+const deals = [
+  {
+    rank: '01',
+    name: 'DeepSeek / Qwen SA Fine-tuning MOU',
+    partner: 'Alibaba Cloud Africa + Wits AI',
+    timeline: 30, days: daysUntil('2026-07-30'),
+    urgency: 30,
+    accent: '#FF4D4D',
+    status: 'in-progress',
+    statusLabel: 'IN PROGRESS',
+    description: 'Partner with a Chinese university or lab to fine-tune Qwen or DeepSeek on SA legal, medical, and financial data — creating a locally-owned SA sovereign AI model. Cheaper than US APIs, politically neutral.',
+    tags: ['#SOVEREIGNTY', '#CHINA', '#AI-MODEL'],
+    deal: 'SA Sovereign AI Model',
+    action: 'Schedule intro call with Alibaba Cloud Africa rep. Draft MOU outline this week.'
+  },
+  {
+    rank: '02',
+    name: 'SARB Fintech-AI Compliance Model',
+    partner: 'Nubank + Discovery Bank',
+    timeline: 45, days: daysUntil('2026-09-01'),
+    urgency: 45,
+    accent: '#FFAA00',
+    status: 'not-started',
+    statusLabel: 'NOT STARTED',
+    description: 'Approach SARB with Brazil\'s Nubank credit-AI methodology. Build an openSA fintech credit-AI model trained on SA consumer data (TransUnion, Compuscan) using Brazil\'s regulatory-AI compliance approach.',
+    tags: ['#FINTECH', '#REGULATION', '#BRAZIL'],
+    deal: 'SA Fintech Compliance Path',
+    action: 'Request Discovery Bank meeting. Prepare Nubank case study deck.'
+  },
+  {
+    rank: '03',
+    name: 'AU AI for Agriculture Initiative',
+    partner: 'Cropin + Dept Agriculture',
+    timeline: 60, days: daysUntil('2026-07-30'),
+    urgency: 60,
+    accent: '#FFAA00',
+    status: 'not-started',
+    statusLabel: 'NOT STARTED',
+    description: 'Register SA as a founding member of the AU AI for Agriculture initiative. Partner with Cropin (already in SA trials) to deploy satellite-AI crop monitoring across SA\'s 30,000+ commercial farms. SA has 60 days before Ghana, Kenya, Rwanda lock up the slots.',
+    tags: ['#AGRICULTURE', '#AU', '#SOBEREIGNTY'],
+    deal: 'AU Funding + Agricultural AI',
+    action: 'Contact Cropin SA lead. Prepare Dept Agriculture nomination letter.'
+  },
+  {
+    rank: '04',
+    name: 'CSIR Private-Sector AI Partnership',
+    partner: 'CSIR + DSI',
+    timeline: 45, days: daysUntil('2026-07-15'),
+    urgency: 45,
+    accent: '#FF4D4D',
+    status: 'at-risk',
+    statusLabel: 'AT RISK',
+    description: 'Lobby CSIR as private-sector implementation partner before Cabinet approves the national AI strategy. Once approved, the window for private-sector influence closes — SA\'s AI agenda becomes government-led.',
+    tags: ['#CSIR', '#NATIONAL', '#POLICY'],
+    deal: 'National AI Strategy Input',
+    action: 'Draft partnership proposal NOW. Target CSIR digital division head by July 7.'
+  },
+  {
+    rank: '05',
+    name: 'Flutterwave–Jasiri SA Payments Bridge',
+    partner: 'Flutterwave + Ozow',
+    timeline: 90, days: daysUntil('2026-10-01'),
+    urgency: 90,
+    accent: '#00D67D',
+    status: 'not-started',
+    statusLabel: 'NOT STARTED',
+    description: 'Extend Flutterwave\'s AI anti-fraud network to SA cross-border payments. Integrate Jasiri\'s SME AI tools into SA\'s small business ecosystem. Pan-African AI payments and credit layer — the backbone of AfCFTA commerce.',
+    tags: ['#PAYMENTS', '#AFCFTA', '#PANAFFICAN'],
+    deal: 'Pan-African AI Payments',
+    action: 'Intro call with Flutterwave partnerships team. Map Ozow integration points.'
+  },
+];
+
+const statusClass = {
+  'not-started': 'status-not-started',
+  'in-progress': 'status-in-progress',
+  'at-risk': 'status-at-risk',
+  'closed': 'status-closed',
+};
+
+function renderDealCard(deal) {
+  const pct = Math.max(0, Math.min(100, (1 - deal.days / deal.timeline) * 100));
+  return `<div class="deal-card" style="--card-accent:${deal.accent}">
+    <div class="deal-rank">${deal.rank}</div>
+    <div class="deal-name">${deal.name}</div>
+    <div class="deal-partner">▶ ${deal.partner}</div>
+    <div class="deal-timeline-row">
+      <div class="deal-timeline-label">TIME REMAINING</div>
+      <div class="deal-timeline-bar"><div class="deal-timeline-fill" style="width:${pct}%"></div></div>
+      <div class="deal-days-left">${deal.days}d</div>
+    </div>
+    <div class="deal-description">${deal.description}</div>
+    <div class="deal-tags">${deal.tags.map(t => `<span class="deal-tag">${t}</span>`).join('')}</div>
+    <div class="deal-status-row">
+      <span class="deal-status-badge ${statusClass[deal.status]}">${deal.statusLabel}</span>
+      <button class="deal-action-btn" onclick="alert('📋 Action:\\n\\n${deal.action.replace(/\n/g,'\\n')}')">NEXT ACTION ▶</button>
+    </div>
+  </div>`;
+}
+
+document.getElementById('deal-grid').innerHTML = deals.map(renderDealCard).join('');
+
+// ── PARTNER TABLE ───────────────────────────────────────────
+const partners = [
+  { company: 'Alibaba Cloud Africa', country: 'CN/SA', type: 'Cloud + Model', action: 'Fine-tune Qwen/DeepSeek on SA legal + medical data. Draft MOU with Wits AI attached.', priority: 'CRITICAL', priorityClass: 'priority-critical', deadline: 'Jul 30' },
+  { company: 'Wits AI Centre', country: 'ZA', type: 'Research Partner', action: 'Anchor the academic leg of SA sovereign AI model. Leverage existing government ties.', priority: 'CRITICAL', priorityClass: 'priority-critical', deadline: 'Jul 30' },
+  { company: 'CSIR Digital Division', country: 'ZA', type: 'Gov + Research', action: 'Propose as private-sector implementation partner for national AI strategy. Lobby before Cabinet.', priority: 'CRITICAL', priorityClass: 'priority-critical', deadline: 'Jul 15' },
+  { company: 'Nubank', country: 'BR', type: 'Fintech Model', action: 'License credit-AI methodology for SA. Reference case for SARB compliance conversation.', priority: 'HIGH', priorityClass: 'priority-high', deadline: 'Sep 2026' },
+  { company: 'Discovery Bank', country: 'ZA', type: 'SA Fintech', action: 'Primary target for Brazil fintech-AI compliance model. Has existing health AI credibility.', priority: 'HIGH', priorityClass: 'priority-high', deadline: 'Sep 2026' },
+  { company: 'Cropin', country: 'IN/KE', type: 'Agri AI', action: 'Deploy satellite-AI crop monitoring. AU AI Agriculture initiative nomination — deadline Jul 30.', priority: 'HIGH', priorityClass: 'priority-high', deadline: 'Jul 30' },
+  { company: 'Flutterwave', country: 'NG', type: 'Payments + AI', action: 'Extend AI anti-fraud to SA cross-border. Pan-African payments backbone for AfCFTA Oct activation.', priority: 'MEDIUM', priorityClass: 'priority-medium', deadline: 'Oct 2026' },
+  { company: 'Ozow', country: 'ZA', type: 'SA Payments', action: 'Integrate into Flutterwave bridge. Township economy credit scoring using mobile money data.', priority: 'MEDIUM', priorityClass: 'priority-medium', deadline: 'Oct 2026' },
+  { company: 'Dept Agriculture (ZA)', country: 'ZA', type: 'Government', action: 'AU AI Agriculture nomination custodian. Must be filed before Jul 30 deadline.', priority: 'HIGH', priorityClass: 'priority-high', deadline: 'Jul 30' },
+  { company: 'India IIT Madras AI Hub', country: 'IN', type: 'Frugal AI', action: 'Knowledge-transfer MOU for Krutrim\'s frugal AI methodology applied to SA\'s 11 official languages.', priority: 'MEDIUM', priorityClass: 'priority-medium', deadline: 'Aug 2026' },
+];
+
+document.getElementById('partner-tbody').innerHTML = partners.map(p => `
+  <tr>
+    <td><span class="partner-company">${p.company}</span></td>
+    <td><span class="partner-country">${p.country}</span></td>
+    <td><span class="partner-type">${p.type}</span></td>
+    <td><span class="partner-action">${p.action}</span></td>
+    <td><span class="partner-priority ${p.priorityClass}">${p.priority}</span></td>
+    <td><span class="partner-timeline">${p.deadline}</span></td>
+  </tr>
+`).join('');
+</script>
+</body>
+</html>

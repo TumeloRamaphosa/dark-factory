@@ -1,0 +1,59 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: Thursday, July 9th 2026 | 05:00 PM SAST
+═══════════════════════════════════════
+
+MAJOR: WHAT SHIPPED TODAY
+═══════════════════════════════════════
+✅ Midnight research brief generated — 9 sections covering global AI landscape
+   → OpenClaw/Hermes, Alibaba Qwen3.5, Kimi Moonshot, MiniMax/Hailuo, Xiaomi, AI Laptops
+   → Top 5 takeaways written. Key insight: open-source wins in Africa (Qwen3.5 + Kimi K2.6 = sovereign stack)
+   → Action: Spin up Qwen3.5 on Dark Factory VM via Ollama — URGENT
+
+✅ Daily memory archived — pipeline status updated
+   → 6 live products confirmed on portfolio
+   → SA DoH EMR flagged as CRITICAL (4 days left)
+
+OPPORTUNITY: WHAT TO ACT ON
+═══════════════════════════════════════
+⚡ SA DoH EMR NDoH-11 — R200M+ — CLOSES MONDAY July 13 (4 days left)
+   → NOT confirmed downloaded. This is the #1 blocker.
+   → OGRE angle: Decepticon AI Trust Monitor as POPIA compliance sub-contractor
+   → ACTION: Download + approach EMR vendors FIRST THING tomorrow
+
+🎯 LAISA Phase A (Dr. Musa) — R350K + R55K/mo. Day 10. Stale.
+   → Proposal sent. No confirmed response.
+   → ACTION: WhatsApp follow-up + offer live demo — tomorrow morning
+
+📧 NVIDIA + Tencent + MiniMax — partnership emails drafted. NOT sent.
+   → 5 minutes of work. Not done today.
+   → ACTION: Send all three tomorrow morning. Batch them.
+
+🤝 GITEX Nigeria — Aug 31–Sep 3, 2026. Not registered.
+   → Nigeria AI Compliance Law = govt procurement filter ACTIVE.
+   → Register this week. Free to attend. High-value networking.
+
+🏛️ SA Draft AI Policy COLLAPSED — vacuum. Position paper opportunity.
+   → Publish "What SA's Failed AI Policy Gets Right — and How to Fix It"
+   → LinkedIn to SA government contacts. Free, high-ROI.
+
+TOMORROW: TOP 3 ACTIONS
+═══════════════════════════════════════
+BY 9AM SAST:
+[1] Download SA DoH EMR NDoH-11 documents from etenders.gov.za (4 days left)
+[2] WhatsApp Dr. Musa — LAISA Day 10 follow-up + live demo offer
+[3] Send NVIDIA + Tencent + MiniMax partnership emails (batch — 5 min)
+
+BY 5PM SAST:
+[4] Confirm SA DoH EMR vendor approach — who to contact as sub-contractor
+[5] Spin up Qwen3.5 on Dark Factory via Ollama (self-hosted = zero API cost)
+
+LIVE REVENUE STATUS
+═══════════════════════════════════════
+MRR: R45,000 (Red Team Agent — Sentinel tier)
+Pipeline: R200M+ (SA DoH EMR, 4 days) | R350K (LAISA Phase A) | R2.99M (Pharmasyntez)
+Products: 19 live deployed sites
+Portfolio: https://058y6btui24n.space.minimax.io
+
+OGRE COMPUTER — DARK FACTORY INTELLIGENCE DIVISION
+"Cipher Tr@ce · CEO · Dark Factory"
+"We build at 3am so our clients wake up to empire."

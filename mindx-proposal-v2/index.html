@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindX × OGRE — Your AI Agent, In Your VM</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #09090e; color: #e8e8f0; line-height: 1.7; }
+    .container { max-width: 820px; margin: 0 auto; padding: 4rem 2rem; }
+    header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #1e1e2e; }
+    .badge { display: inline-block; background: rgba(108,99,255,0.15); color: #6c63ff; border: 1px solid rgba(108,99,255,0.3); padding: 4px 16px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    h1 { font-size: 2.8rem; font-weight: 900; background: linear-gradient(135deg, #6c63ff, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; margin-bottom: 1rem; }
+    .subtitle { font-size: 1.05rem; color: #8888a0; max-width: 560px; margin: 0 auto; }
+    .highlight-box { background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,212,255,0.08)); border: 1px solid rgba(108,99,255,0.25); border-radius: 20px; padding: 2.5rem; margin: 2.5rem 0; text-align: center; }
+    .highlight-box h2 { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 0.8rem; }
+    .highlight-box p { color: #9090a8; font-size: 0.95rem; }
+    .price-tag { font-size: 3rem; font-weight: 900; color: #6c63ff; display: block; margin: 0.5rem 0; }
+    .price-sub { font-size: 0.8rem; color: #6a6a82; }
+    h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: #6c63ff; font-weight: 700; margin: 2.5rem 0 1rem; border-bottom: 1px solid #1a1a28; padding-bottom: 0.5rem; }
+    .section { margin-bottom: 2rem; }
+    .section p { color: #8888a0; margin-bottom: 1rem; }
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1.5rem 0; }
+    .feature { background: #0e0e18; border: 1px solid #1a1a28; border-radius: 10px; padding: 1rem 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start; }
+    .feature-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+    .feature h4 { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
+    .feature p { font-size: 0.75rem; color: #6a6a82; margin: 0; }
+    .vm-section { background: #0a0a12; border: 1px solid #1e1e2e; border-radius: 16px; padding: 2rem; margin: 2rem 0; }
+    .vm-section h2 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+    .vm-section p { color: #8888a0; margin-bottom: 1.2rem; }
+    .spec-row { display: flex; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid #111118; font-size: 0.85rem; }
+    .spec-label { color: #6a6a82; }
+    .spec-value { color: #e8e8f0; font-weight: 600; }
+    .spec-value.highlight { color: #00d4ff; }
+    .pricing-table { background: #111118; border: 1px solid #1e1e2e; border-radius: 14px; overflow: hidden; margin: 2rem 0; }
+    .pricing-row { display: flex; padding: 1rem 1.5rem; border-bottom: 1px solid #1a1a28; }
+    .pricing-row:last-child { border-bottom: none; }
+    .pricing-row.header { background: #0e0e18; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6a6a82; }
+    .pricing-col { flex: 1; }
+    .pricing-col.name { flex: 2; }
+    .pricing-col.price { text-align: right; font-weight: 700; color: #6c63ff; font-size: 1rem; }
+    .pricing-note { font-size: 0.75rem; color: #5a5a72; text-align: center; margin-top: 1rem; }
+    .cta-section { background: linear-gradient(135deg, rgba(108,99,255,0.18), rgba(0,212,255,0.1)); border: 1px solid rgba(108,99,255,0.35); border-radius: 16px; padding: 2.5rem; text-align: center; margin: 2.5rem 0; }
+    .cta-section h2 { font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 0.8rem; }
+    .cta-section p { color: #9090a8; margin-bottom: 1.5rem; }
+    .btn { display: inline-block; background: #6c63ff; color: #fff; padding: 14px 36px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; }
+    .btn:hover { background: #5a52d4; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(108,99,255,0.3); }
+    .btn-outline { display: inline-block; background: transparent; border: 1px solid rgba(108,99,255,0.3); color: #9090c0; padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; text-decoration: none; margin-top: 0.8rem; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, #6c63ff33, transparent); margin: 2.5rem 0; }
+    .contact-row { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
+    .contact-chip { background: #0e0e18; border: 1px solid #1e1e2e; border-radius: 999px; padding: 6px 16px; font-size: 0.75rem; color: #6a6a82; }
+    .contact-chip strong { color: #e8e8f0; }
+    footer { text-align: center; padding-top: 2rem; border-top: 1px solid #1a1a28; color: #4a4a62; font-size: 0.75rem; }
+    .vs-section { background: #0a0a12; border: 1px solid #1e1e2e; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .vs-row { display: flex; gap: 0.5rem; padding: 0.5rem 0; font-size: 0.85rem; }
+    .vs-row .old { color: #e84040; text-decoration: line-through; }
+    .vs-row .new { color: #00d4ff; font-weight: 700; }
+    @media(max-width: 600px) { .features { grid-template-columns: 1fr; } h1 { font-size: 2rem; } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge">🏭 Dark Factory × OGRE Computer</div>
+    <h1>MindX × OGRE</h1>
+    <p class="subtitle">A sovereign AI voice agent running in your own South African VM. Built for MindX. Owned by MindX. Powered by OGRE.</p>
+  </header>
+
+  <!-- HIGHLIGHT -->
+  <div class="highlight-box">
+    <h2>Your AI Agent. In Your VM.<br>In South Africa.</h2>
+    <p>We don't just build you an AI agent. We give you your own virtual machine — in a South African data centre — where your agent lives, works, and stores your data. POPIA-compliant. Sovereign. Yours.</p>
+    <span class="price-tag">From R2,500<span style="font-size:1rem">/month</span></span>
+    <span class="price-sub">Includes your own dedicated VM + voice agent setup</span>
+  </div>
+
+  <!-- WHAT WE BUILD -->
+  <h3>What We Build for MindX</h3>
+  <div class="section">
+    <p>Your AI voice agent is more than software — it's a team member that works 24/7. It speaks to your clients, qualifies leads, books appointments, and routes the best prospects directly to your team. It lives permanently in your own VM.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🎙️</div>
+      <div><h4>Voice Conversations</h4><p>Real-time voice AI. Your clients speak, the agent responds. Natural, human-like dialogue.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💬</div>
+      <div><h4>Web + WhatsApp Chat</h4><p>Same AI brain, available on your website and WhatsApp simultaneously.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎯</div>
+      <div><h4>Lead Qualification</h4><p>Asks the right questions. Scores every lead. Routes hot prospects to your team immediately.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📅</div>
+      <div><h4>Appointment Booking</h4><p>Connects to your calendar. Books, confirms, and sends reminders automatically.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🧠</div>
+      <div><h4>Persistent Memory</h4><p>Remembers every conversation across all sessions. No repetition, no confusion.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🇿🇦</div>
+      <div><h4>South African VM</h4><p>Your agent runs in a dedicated SA VM. Your data never leaves South Africa. POPIA-compliant.</p></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- YOUR VM -->
+  <div class="vm-section">
+    <h2>🖥️ Your Own VM — Included</h2>
+    <p>Every MindX agent runs inside its own dedicated virtual machine. That's the OGRE difference. Most AI agents run on shared infrastructure — yours runs on sovereign hardware that MindX owns and controls.</p>
+
+    <div style="margin-top: 1.5rem;">
+      <div class="spec-row"><span class="spec-label">VM Location</span><span class="spec-value highlight">Johannesburg, South Africa</span></div>
+      <div class="spec-row"><span class="spec-label">Data Residency</span><span class="spec-value">100% South Africa — POPIA Compliant</span></div>
+      <div class="spec-row"><span class="spec-label">Operating System</span><span class="spec-value">Ubuntu 24.04 LTS</span></div>
+      <div class="spec-row"><span class="spec-label">vCPU</span><span class="spec-value highlight">4 vCPU</span></div>
+      <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value highlight">16 GB DDR5</span></div>
+      <div class="spec-row"><span class="spec-label">SSD Storage</span><span class="spec-value">100 GB NVMe</span></div>
+      <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value">Integrated AI accelerator</span></div>
+      <div class="spec-row"><span class="spec-label">Uptime SLA</span><span class="spec-value highlight">99.9% — 24/7 Availability</span></div>
+      <div class="spec-row"><span class="spec-label">SSH Access</span><span class="spec-value">Full root access — yours to control</span></div>
+      <div class="spec-row"><span class="spec-label">Firewall</span><span class="spec-value">Configured and managed by OGRE</span></div>
+      <div class="spec-row"><span class="spec-label">Backups</span><span class="spec-value">Weekly automated backups</span></div>
+    </div>
+  </div>
+
+  <div class="vs-section">
+    <h4 style="font-size:0.85rem;font-weight:700;color:#6a6a82;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.8rem;">Why a dedicated VM matters</h4>
+    <div class="vs-row"><span class="old">❌ Shared server — your data mixed with others</span></div>
+    <div class="vs-row"><span class="new">✅ Dedicated VM — MindX owns 100% of the compute</span></div>
+    <div class="vs-row"><span class="old">❌ Vendor locks you into their platform</span></div>
+    <div class="vs-row"><span class="new">✅ VM is yours — export, migrate, scale anytime</span></div>
+    <div class="vs-row"><span class="old">❌ Data stored overseas — POPIA risk</span></div>
+    <div class="vs-row"><span class="new">✅ Data stays in SA VM — fully compliant</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PRICING -->
+  <h3>Investment</h3>
+
+  <div class="pricing-table">
+    <div class="pricing-row header">
+      <div class="pricing-col name">Package</div>
+      <div class="pricing-col">What's Included</div>
+      <div class="pricing-col price">Monthly</div>
+    </div>
+    <div class="pricing-row">
+      <div class="pricing-col name"><strong style="color:#fff">Solo</strong></div>
+      <div class="pricing-col" style="font-size:0.8rem;color:#6a6a82">1 voice agent · 100 calls/mo · Web chat · SA VM</div>
+      <div class="pricing-col price">R2,500</div>
+    </div>
+    <div class="pricing-row">
+      <div class="pricing-col name"><strong style="color:#fff">Professional</strong></div>
+      <div class="pricing-col" style="font-size:0.8rem;color:#6a6a82">2 agents · 500 calls/mo · WhatsApp + Phone · Priority support</div>
+      <div class="pricing-col price">R7,500</div>
+    </div>
+    <div class="pricing-row">
+      <div class="pricing-col name"><strong style="color:#fff">Enterprise</strong></div>
+      <div class="pricing-col" style="font-size:0.8rem;color:#6a6a82">Unlimited agents · Unlimited calls · All integrations · Dedicated CSM</div>
+      <div class="pricing-col price">R25,000</div>
+    </div>
+    <div class="pricing-row" style="background:#0e0e18;">
+      <div class="pricing-col name"><strong style="color:#00d4ff">One-Time Setup</strong></div>
+      <div class="pricing-col" style="font-size:0.8rem;color:#6a6a82">VM provisioning · Agent configuration · Voice training · Integrations · UAT</div>
+      <div class="pricing-col price" style="color:#00d4ff">R15,000</div>
+    </div>
+  </div>
+  <p class="pricing-note">All prices in South African Rand (ZAR). VAT included. Annual plans available on request.</p>
+
+  <div class="divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <h3>How It Works</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0;">
+    <div>
+      <div style="background:#0e0e18;border:1px solid #1e1e2e;border-radius:10px;padding:1.2rem;margin-bottom:0.8rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.4rem;">📋</div>
+        <h4 style="font-weight:700;color:#fff;margin-bottom:0.3rem;">1. Tell us about MindX</h4>
+        <p style="font-size:0.8rem;color:#6a6a82;margin:0;">Complete the 5-minute PRD intake form. What does the agent need to know? Who are your clients?</p>
+      </div>
+      <div style="background:#0e0e18;border:1px solid #1e1e2e;border-radius:10px;padding:1.2rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.4rem;">🤖</div>
+        <h4 style="font-weight:700;color:#fff;margin-bottom:0.3rem;">2. We build your VM</h4>
+        <p style="font-size:0.8rem;color:#6a6a82;margin:0;">We provision your dedicated SA VM and configure the voice agent with MindX knowledge.</p>
+      </div>
+    </div>
+    <div>
+      <div style="background:#0e0e18;border:1px solid #1e1e2e;border-radius:10px;padding:1.2rem;margin-bottom:0.8rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.4rem;">🧪</div>
+        <h4 style="font-weight:700;color:#fff;margin-bottom:0.3rem;">3. Test & Approve</h4>
+        <p style="font-size:0.8rem;color:#6a6a82;margin:0;">1 week UAT. Your team tests the agent. We fix anything that needs adjustment.</p>
+      </div>
+      <div style="background:#0e0e18;border:1px solid #1e1e2e;border-radius:10px;padding:1.2rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.4rem;">🚀</div>
+        <h4 style="font-weight:700;color:#fff;margin-bottom:0.3rem;">4. Go Live</h4>
+        <p style="font-size:0.8rem;color:#6a6a82;margin:0;">Your agent goes live in your VM. Real clients. Real conversations. 24/7.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#0e0e18;border:1px solid #1e1e2e;border-radius:10px;padding:1.2rem;margin:1.5rem 0;text-align:center;">
+    <div style="font-size:0.75rem;color:#6a6a82;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Timeline from signing to live</div>
+    <div style="font-size:2rem;font-weight:900;color:#6c63ff;">2–3 Weeks</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Ready to give MindX an AI team member?</h2>
+    <p>Start with the PRD intake form. It takes 5 minutes.<br>We'll have a full build proposal in your inbox within 24 hours.</p>
+    <a href="https://75glowowaxdq.space.minimax.io" class="btn" target="_blank">📋 Start the PRD Form →</a><br>
+    <div class="contact-row" style="margin-top:1.2rem;">
+      <div class="contact-chip"><strong>Email:</strong> cto@studex-group.com</div>
+      <div class="contact-chip"><strong>VM Provider:</strong> OGRE Computer</div>
+      <div class="contact-chip"><strong>Built by:</strong> Dark Factory</div>
+    </div>
+  </div>
+
+  <!-- INCLUDED IN ECOSYSTEM -->
+  <h3>You're Joining an Ecosystem</h3>
+  <p style="color:#8888a0;">MindX won't just have an AI agent — MindX will be part of the OGRE ecosystem. That means access to a growing network of tools, integrations, and connections.</p>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🔗</div>
+      <div><h4>PRD Intake System</h4><p>Submit new projects via voice or web. OGRE breaks them down automatically.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <div><h4>CRM & Dashboards</h4><p>Client portal included. See your pipeline, leads, and agent performance in real time.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌍</div>
+      <div><h4>Global Markets Access</h4><p>OGRE's China AI bridge connects MindX to Tencent Cloud, MiniMax, and international AI tools.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔒</div>
+      <div><h4>Sovereign Infrastructure</h4><p>Your VM. Your data. Your AI. No overseas dependencies. Full POPIA compliance.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong style="color:#6c63ff;">OGRE Computer</strong> · Dark Factory Division · Studex Group</p>
+    <p style="margin-top:0.4rem;">cto@studex-group.com · orgo.ai · Built by Cipher Tr@ce</p>
+    <p style="margin-top:0.4rem;color:#3a3a52;">Johannesburg, South Africa · POPIA Compliant · B-BBEE Level 1</p>
+  </footer>
+
+</div>
+</body>
+</html>

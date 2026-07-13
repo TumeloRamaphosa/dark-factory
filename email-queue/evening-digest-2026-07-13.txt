@@ -1,0 +1,79 @@
+OGRE EVENING DIGEST — Monday 13 July 2026
+Compiled: 15:00 UTC / 5PM SA | By: Cipher Tr@ce
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION 1: REVENUE STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LIVE MRR:
+- Red Team Agent: R45,000/month ✅
+
+TODAY:
+- NDoH-11 CLOSED at 11AM SA — submission status UNKNOWN
+- R0 closes today
+
+STALE DEALS:
+- LAISA Phase A: R350K + R55K/mo — Day 15, no close
+- Pharmasyntez: R2.99M Y1 — no response
+
+NDoH-11 OUTCOME:
+→ Did we submit? Who was the SA partner?
+→ If YES: commission R87M–R174M if partner wins
+→ If NO: pivot to LAISA + Pharmasyntez
+
+SECTION 2: TODAY'S CONNECTIVITY WINS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TAILSCALE ✅
+→ VM (orgo-desktop) on tailnet: 100.74.71.60
+→ Tailscale auth key active
+→ Can SSH to VMs on tailnet from here (with password)
+
+GITHUB PAT: Ready to push — need Tumelo to regenerate token
+
+OPENCLAW MAC APP: docs.openclaw.ai → Download for Mac
+→ Connects MacBook/Mac Mini as node
+→ I can then access Mac Mini directly from here
+
+SECTION 3: TOMORROW'S TOP 3 ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] NDoH-11 STATUS CONFIRMATION
+    → Did we submit? Who was the SA partner?
+    → If NO: pivot hard to LAISA Phase A
+
+[2] GitHub PAT — PASTE IT HERE
+    → github.com → Settings → Developer Settings → PAT → Regenerate
+    → I push all code + connect Cloudflare in one shot
+
+[3] MAC MINI SSH ACCESS
+    → Give me the SSH password for 100.74.71.60
+    → I deploy ClickClack + connect all VMs
+
+SECTION 4: SITES + PRODUCTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DARK FACTORY:
+→ Preview: https://jlydlvu36z11.space.minimax.io
+→ GitHub: github.com/TumeloRamaphosa/SrudEx-Agents-Nest-Cloud-VM
+→ Factory.studex-group.com: Waiting for GitHub push → Cloudflare
+
+OGRE OS COMMAND CENTER:
+→ Built on dark-factory site design
+→ All 5 tabs: Home, Portfolio, Skills, VM Stack, About
+→ About: Tumelo's profile with Blockchain Africa + AWS + Google Builders + Mobiry
+
+RED TEAM AGENT: Live ✅ → R45K/month
+
+SECTION 5: WEEK AHEAD — TUE 14 TO FRI 17 JULY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TUE: GitHub push + Cloudflare connect + LAISA follow-up
+WED: ClickClack deploy on VM (with SSH access)
+THU: llm_wiki install + ClawSweeper check
+FRI: Revenue meeting + next tender scan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OGRE COMPUTER | DARK FACTORY
+"We don't compete with Big Tech on their terms. We build on African terms."

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Intelligence Dashboard — June 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
+
+:root {
+  --gold: #C9A84C;
+  --gold-d: #A68A3E;
+  --gold-l: #E8C96A;
+  --bg: #0A0A0A;
+  --bg2: #0F0F0F;
+  --panel: #131313;
+  --panel2: #181818;
+  --border: #1E1E1E;
+  --border2: #2A2A2A;
+  --text: #F0EDE6;
+  --muted: #888;
+  --green: #3DBA6C;
+  --red: #E05A5A;
+  --cyan: #29B6F6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 56px;
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+}
+.topbar-sub {
+  font-size: 11px;
+  color: var(--muted);
+  border-left: 1px solid var(--border2);
+  padding-left: 10px;
+  margin-left: 2px;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  background: rgba(61,186,108,0.08);
+  border: 1px solid rgba(61,186,108,0.2);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* LAYOUT */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 32px;
+}
+
+.hero-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+h1 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+h1 em {
+  color: var(--gold);
+  font-style: italic;
+}
+.hero-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+
+/* STAT CARDS */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  opacity: 0.4;
+}
+.stat-card.green::after { background: var(--green); opacity: 0.5; }
+.stat-card.cyan::after { background: var(--cyan); opacity: 0.5; }
+.stat-card.red::after { background: var(--red); opacity: 0.5; }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-card.green .stat-value { color: var(--green); }
+.stat-card.cyan .stat-value { color: var(--cyan); }
+.stat-card.red .stat-value { color: var(--red); }
+.stat-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.stat-change.up { color: var(--green); background: rgba(61,186,108,0.1); }
+.stat-change.warn { color: var(--gold); background: rgba(201,168,76,0.1); }
+
+/* GRID */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 340px;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.main-grid-narrow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+/* PANELS */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.panel-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+.panel-body { padding: 16px 18px; }
+
+/* FRAMEWORK TABLE */
+.framework-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.framework-row:last-child { border-bottom: none; }
+.framework-rank {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  width: 20px;
+  flex-shrink: 0;
+}
+.framework-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+.framework-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(201,168,76,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.2);
+  flex-shrink: 0;
+}
+.framework-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.score-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.score-bar {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold-d), var(--gold));
+}
+
+/* TREND ITEMS */
+.trend-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.trend-item:last-child { border-bottom: none; }
+.trend-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--panel2);
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.trend-content { flex: 1; }
+.trend-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.trend-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+.trend-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  text-align: right;
+  flex-shrink: 0;
+  align-self: center;
+}
+.trend-value.green { color: var(--green); }
+.trend-value.warn { color: var(--gold); }
+
+/* SA PANEL */
+.sa-meter {
+  margin: 12px 0;
+}
+.sa-meter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+.sa-meter-label { color: var(--muted); }
+.sa-meter-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 700;
+}
+.sa-bar-bg {
+  height: 6px;
+  background: var(--border2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.sa-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--gold-d), var(--gold-l));
+}
+.sa-insight {
+  background: var(--panel2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.sa-insight strong { color: var(--text); }
+
+/* SIGNAL FEED */
+.signal-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.signal-item:last-child { border-bottom: none; }
+.signal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.signal-dot.hot { background: var(--red); }
+.signal-dot.rising { background: var(--gold); }
+.signal-dot.stable { background: var(--green); }
+.signal-text {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+}
+.signal-text span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+/* OGRE CTA */
+.ogre-cta {
+  background: linear-gradient(135deg, #141200 0%, #1a1600 100%);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 10px;
+  padding: 22px;
+  margin-top: 16px;
+}
+.cta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.cta-title {
+  font-family: 'Newsreader', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.cta-title em { color: var(--gold); font-style: italic; }
+.cta-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold);
+  color: #0A0A0A;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  cursor: default;
+}
+.cta-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.cta-svc {
+  font-size: 11px;
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 4px;
+  padding: 3px 9px;
+  background: rgba(201,168,76,0.05);
+}
+
+/* TIMELINE */
+.timeline-item {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 14px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--gold);
+}
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 18px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item:last-child::after { display: none; }
+.timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+.timeline-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.timeline-desc { font-size: 11px; color: var(--muted); }
+
+/* FOOTER */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+.footer-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+.footer-text span { color: var(--gold); }
+
+/* DIVIDER */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+.section-head h2 {
+  font-family: 'Newsreader', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+.section-head h2 em { color: var(--gold); font-style: italic; }
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.section-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .main-grid { grid-template-columns: 1fr 1fr; }
+  .main-grid-narrow { grid-template-columns: 1fr 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .container { padding: 16px; }
+  .main-grid { grid-template-columns: 1fr; }
+  .main-grid-narrow { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  h1 { font-size: 26px; }
+  .topbar { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <span class="brand-mark">OGRE//INTEL</span>
+    <span class="topbar-sub">Competitive Intelligence Dashboard</span>
+  </div>
+  <div class="topbar-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      LIVE — June 2026
+    </div>
+    <div class="clock" id="clock">—</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div style="padding: 20px 0 0">
+    <div class="hero-date">Sunday, 21 June 2026 — 22:00 UTC</div>
+    <h1>AI Agent <em>Intelligence</em> Briefing</h1>
+    <p class="hero-sub">Real-time competitive intelligence for OGRE Computer — South Africa &amp; Global Markets</p>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-label">Global Market Size</div>
+      <div class="stat-value">$15B</div>
+      <div class="stat-desc">AI agents market in 2026</div>
+      <div class="stat-change up">↑ reaching $221B by 2035</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Market CAGR</div>
+      <div class="stat-value">34.6%</div>
+      <div class="stat-desc">Annual growth through 2035</div>
+      <div class="stat-change up">Fastest-growing AI segment</div>
+    </div>
+    <div class="stat-card cyan">
+      <div class="stat-label">Enterprise Adoption</div>
+      <div class="stat-value">40%</div>
+      <div class="stat-desc">apps will embed agents by end-2026</div>
+      <div class="stat-change warn">↑ from &lt;5% in 2025</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">SA Sentiment</div>
+      <div class="stat-value">72%</div>
+      <div class="stat-desc">ZA executives concerned about AI agents</div>
+      <div class="stat-change warn">Opportunity: education &amp; enablement</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+    <!-- FRAMEWORKS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="panel-title-dot"></div>AI Agent Frameworks — Production Rankings</div>
+        <div class="panel-tag">2026 Q2</div>
+      </div>
+      <div class="panel-body">
+        <div class="framework-row">
+          <div class="framework-rank">#1</div>
+          <div class="framework-name">LangGraph</div>
+          <div class="framework-tag">LangChain</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:97%"></div></div>
+          <div class="framework-score">97</div>
+        </div>
+        <div class="framework-row">
+          <div class="framework-rank">#2</div>
+          <div class="framework-name">Claude Agent SDK</div>
+          <div class="framework-tag">Anthropic</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:91%"></div></div>
+          <div class="framework-score">91</div>
+        </div>
+        <div class="framework-row">
+          <div class="framework-rank">#3</div>
+          <div class="framework-name">CrewAI</div>
+          <div class="framework-tag">Multi-agent</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:85%"></div></div>
+          <div class="framework-score">85</div>
+        </div>
+        <div class="framework-row">
+          <div class="framework-rank">#4</div>
+          <div class="framework-name">AutoGen</div>
+          <div class="framework-tag">Microsoft</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:78%"></div></div>
+          <div class="framework-score">78</div>
+        </div>
+        <div class="framework-row">
+          <div class="framework-rank">#5</div>
+          <div class="framework-name">Mastra</div>
+          <div class="framework-tag">New entrant</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:72%"></div></div>
+          <div class="framework-score">72</div>
+        </div>
+        <div class="framework-row">
+          <div class="framework-rank">#6</div>
+          <div class="framework-name">Semantic Kernel</div>
+          <div class="framework-tag">Microsoft</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:68%"></div></div>
+          <div class="framework-score">68</div>
+        </div>
+        <div class="framework-row">
+          <div class="framework-rank">#7</div>
+          <div class="framework-name">LlamaIndex</div>
+          <div class="framework-tag">RAG-focused</div>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:64%"></div></div>
+          <div class="framework-score">64</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKET SIGNALS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="panel-title-dot" style="background:var(--cyan)"></div>Market Signals &amp; Data Points</div>
+        <div class="panel-tag">Verified</div>
+      </div>
+      <div class="panel-body">
+        <div class="signal-item">
+          <div class="signal-dot hot"></div>
+          <div class="signal-text">
+            69% of global executives predict AI agents will reshape business in 2026
+            <span>DeepL Research — Dec 2025</span>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-dot rising"></div>
+          <div class="signal-text">
+            62% of organizations experimenting with AI agents — fewer than 10% at scale
+            <span>Ringly.io — Jun 2026</span>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-dot hot"></div>
+          <div class="signal-text">
+            88% of AI agent pilots never reach production — a critical advisory opportunity
+            <span>Digital Applied — Apr 2026</span>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-dot stable"></div>
+          <div class="signal-text">
+            40% of enterprise apps will embed task-specific agents by end-2026
+            <span>Gartner — Apr 2026</span>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-dot rising"></div>
+          <div class="signal-text">
+            Google Cloud AI Agent Trends 2026 report identifies 5 major transformation vectors
+            <span>Google Cloud — Q2 2026</span>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-dot stable"></div>
+          <div class="signal-text">
+            CrewAI, LangChain, AutoGen dominate GitHub trending AI repos — multi-agent is the trend
+            <span>GitHub / OSSInsight — Jun 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SA MARKET -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="panel-title-dot" style="background:var(--green)"></div>South Africa — AI Agent Landscape</div>
+        <div class="panel-tag">ZA Data</div>
+      </div>
+      <div class="panel-body">
+        <div class="sa-meter">
+          <div class="sa-meter-row">
+            <span class="sa-meter-label">Concerned about AI</span>
+            <span class="sa-meter-val">72%</span>
+          </div>
+          <div class="sa-bar-bg"><div class="sa-bar" style="width:72%"></div></div>
+
+          <div class="sa-meter-row">
+            <span class="sa-meter-label">Equally concerned &amp; excited</span>
+            <span class="sa-meter-val">30%</span>
+          </div>
+          <div class="sa-bar-bg"><div class="sa-bar" style="width:30%; background:linear-gradient(90deg,#29B6F6,#5DC9F5)"></div></div>
+
+          <div class="sa-meter-row">
+            <span class="sa-meter-label">More excited than concerned</span>
+            <span class="sa-meter-val">18%</span>
+          </div>
+          <div class="sa-bar-bg"><div class="sa-bar" style="width:18%; background:linear-gradient(90deg,#3DBA6C,#5DD68E)"></div></div>
+        </div>
+
+        <div class="sa-insight">
+          <strong>OGRE Opportunity:</strong> 72% concern rate vs. 18% excitement signals a massive education gap. South African enterprises are not anti-AI — they lack trusted本地 advisors who understand their constraints (connectivity, cost, skills). OGRE is uniquely positioned as the bridge.
+        </div>
+
+        <div style="margin-top: 14px">
+          <div class="trend-item" style="border-bottom:none; padding-top:0">
+            <div class="trend-icon">🇿🇦</div>
+            <div class="trend-content">
+              <div class="trend-title">SA Enterprise AI Failures</div>
+              <div class="trend-meta">Common pitfalls: skills scarcity, integration complexity, no production roadmap</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-head">
+    <h2>AI Agent <em>Ecosystem</em></h2>
+    <div class="section-line"></div>
+    <div class="section-badge">June 2026</div>
+  </div>
+
+  <div class="main-grid-narrow">
+    <!-- TRENDING TOPICS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="panel-title-dot"></div>Trending This Week</div>
+      </div>
+      <div class="panel-body">
+        <div class="trend-item">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-content">
+            <div class="trend-title">AI Agents on PC / Desktop</div>
+            <div class="trend-meta">Microsoft pushing agents to Windows — mainstream consumer push</div>
+          </div>
+          <div class="trend-value warn">HOT</div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-icon">📦</div>
+          <div class="trend-content">
+            <div class="trend-title">Multi-Agent Orchestration</div>
+            <div class="trend-meta">CrewAI, LangGraph multi-agent workflows dominate discourse</div>
+          </div>
+          <div class="trend-value">#1</div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-icon">🏢</div>
+          <div class="trend-content">
+            <div class="trend-title">Agent-to-Production Gap</div>
+            <div class="trend-meta">88% of pilots stall — consulting &amp; enablement demand surging</div>
+          </div>
+          <div class="trend-value warn">CRITICAL</div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-icon">🌍</div>
+          <div class="trend-content">
+            <div class="trend-title">Local / On-Prem Agents</div>
+            <div class="trend-meta">Data sovereignty concerns driving private deployment demand in ZA</div>
+          </div>
+          <div class="trend-value green">RISING</div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-icon">📚</div>
+          <div class="trend-content">
+            <div class="trend-title">Awesome AI Agents 2026</div>
+            <div class="trend-meta">300+ resources curated — GitHub trending resource list</div>
+          </div>
+          <div class="trend-value">300+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTION READINESS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="panel-title-dot" style="background:var(--green)"></div>Production Readiness Spectrum</div>
+      </div>
+      <div class="panel-body">
+        <div class="timeline-item">
+          <div class="timeline-date">MATURE</div>
+          <div class="timeline-title">RAG + Agent Pipelines</div>
+          <div class="timeline-desc">Document Q&A, internal knowledge bases — highest ROI, lowest risk. LangChain / LlamaIndex.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">PRODUCTION</div>
+          <div class="timeline-title">Single-Agent Automation</div>
+          <div class="timeline-desc">Email drafting, meeting prep, data extraction. Claude Agent SDK, CrewAI single-agent mode.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">EARLY ADOPTER</div>
+          <div class="timeline-title">Multi-Agent Workflows</div>
+          <div class="timeline-desc">Crew-based agents for complex B2B processes. Requires careful orchestration design.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">EXPERIMENTAL</div>
+          <div class="timeline-title">Autonomous Agent Teams</div>
+          <div class="timeline-desc">Agent-swarming, self-correcting pipelines. High potential, high failure risk without expert guidance.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OGRE CTA -->
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="panel-title-dot"></div>How OGRE Helps</div>
+        </div>
+        <div class="panel-body">
+          <div class="ogre-cta" style="margin-top:0">
+            <div class="cta-label">OGRE Computer</div>
+            <div class="cta-title">From Pilot to <em>Production</em> — Without the 88% Failure Rate</div>
+            <div class="cta-desc">We help South African enterprises design, build, and deploy AI agents that actually ship. No hype. Real results.</div>
+            <div class="cta-services">
+              <span class="cta-svc">AI Strategy</span>
+              <span class="cta-svc">Agent Architecture</span>
+              <span class="cta-svc">Pilot-to-Production</span>
+              <span class="cta-svc">Team Training</span>
+              <span class="cta-svc">On-Prem Deployment</span>
+              <span class="cta-svc">MCP Integration</span>
+            </div>
+          </div>
+          <div style="margin-top: 12px; font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace;">
+            📧 info@studexmeat.com<br>
+            🌐 studexmeat.com
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-text">
+    <span>OGRE//INTEL</span> — Compiled 21 June 2026 at 22:00 UTC — Sources: Gartner, DeepL Research, Ringly.io, Digital Applied, Google Cloud, OSSInsight, Vention Teams
+  </div>
+  <div class="footer-text">
+    Midnight Build — <span>Day 1</span>
+  </div>
+</div>
+
+<script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toUTCString().replace('GMT','UTC');
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>

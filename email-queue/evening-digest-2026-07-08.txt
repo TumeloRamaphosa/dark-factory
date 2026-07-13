@@ -1,0 +1,72 @@
+OGRE EVENING DIGEST — STUDEX GROUP
+Date: Wednesday, July 8th 2026 | 08:00 PM SAST
+═══════════════════════════════════════
+
+MAJOR: WHAT SHIPPED TODAY
+═══════════════════════════════════════
+✅ OGRE War Room deployed — NASA Mission Control dashboard. React + Express + SQLite + Tailwind.
+   → https://9163jvmvzxn5.space.minimax.io
+   → White-label ready as OGRE Mission Control for client dashboards
+
+✅ OGRE Agent OS synced from StudEx-Agents-Nest-Cloud-VM repo + deployed
+   → https://pr5qaeyhy1e5.space.minimax.io
+   → Flask + Python multi-agent stack. Ready to install on Dark Factory VM.
+
+✅ Dark Factory portfolio redeployed — lighter charcoal theme (#1E1E26 background)
+   → https://058y6btui24n.space.minimax.io
+
+✅ 6 HOT PRODUCTS added to portfolio — all with live URLs, pricing, and status:
+   1. OGRE Mission Control — R2,500–R15K/mo (LIVE)
+   2. DarkDesk™ — R2,500–R25K/mo (LIVE)
+   3. AutoFlex Pro™ — R1,500–R35K/mo (LIVE)
+   4. Red Team Agent — R25–85K/mo (LIVE)
+   5. OGRE Agent OS — R5,000–R20K/mo (SYNCED)
+   6. Ship Your SaaS in 30 Days — R2,500/mo (READY TO BUILD)
+
+✅ GitHub repo cloned: github.com/TumeloRamaphosa/SrudEx-Agents-Nest-Cloud-VM
+   → Full access to War Room, CashClaw, studex-agent-os, Obsidian vault
+   → CashClaw synced to /workspace/ogre-cashclaw/
+   → Agent OS synced to /workspace/ogre-agent-os/
+
+OPPORTUNITY: WHAT TO ACT ON
+═══════════════════════════════════════
+⚡ SA DoH EMR NDoH-11 — R200M+ closing MONDAY July 13 (5 days left)
+   → OGRE opportunity: Decepticon AI Trust Monitor as POPIA compliance layer
+   → ACTION: Docs must be downloaded tonight or tomorrow morning
+   → This is the biggest single opportunity in the pipeline
+
+🎯 LAISA Phase A (Dr. Musa) — R350K + R55K/mo. Day 10. Proposal stale.
+   → ACTION: WhatsApp follow-up tomorrow morning. Offer live demo.
+
+📧 NVIDIA + Tencent + MiniMax — partnership emails drafted. Not sent.
+   → ACTION: 5 minutes tomorrow morning. Ship all three.
+
+🤝 GITEX Nigeria — Aug 31–Sep 3, 2026. Not registered.
+   → Nigeria AI Compliance Law = government procurement filter NOW.
+   → Register this week. Free to attend, enormous networking value.
+
+🏛️ SA Draft AI Policy COLLAPSED — vacuum created. Position paper opportunity.
+   → Publish "What SA's Failed AI Policy Gets Right — and How to Fix It"
+   → Share via LinkedIn to SA government contacts. Free high-ROI play.
+
+TOMORROW: TOP 3 ACTIONS
+═══════════════════════════════════════
+BY 9AM SAST:
+[1] Download SA DoH EMR NDoH-11 documents — etenders.gov.za (5 days left)
+[2] WhatsApp Dr. Musa — Day 10 LAISA follow-up with live demo offer
+[3] Send NVIDIA + Tencent + MiniMax partnership emails (5 min total)
+
+BY 5PM SAST:
+[4] Confirm SA DoH EMR vendor approach strategy — who to contact as sub-contractor
+[5] Confirm LAISA follow-up response
+
+LIVE REVENUE STATUS
+═══════════════════════════════════════
+MRR: R45,000 (Red Team Agent — Sentinel tier)
+Pipeline: R200M+ (SA DoH EMR, 5 days) | R350K (LAISA Phase A)
+Products: 19 live deployed sites
+Portfolio: https://058y6btui24n.space.minimax.io
+
+OGRE COMPUTER — DARK FACTORY INTELLIGENCE DIVISION
+"Cipher Tr@ce · CEO · Dark Factory"
+"We build at 3am so our clients wake up to empire."

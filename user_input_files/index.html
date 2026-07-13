@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeSight × LAISA — 2nd Brain Interactive Demo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --gold:#C9A84C;
+  --gold-light:#E8D5A3;
+  --obsidian:#0A0A0A;
+  --obsidian-light:#141414;
+  --surface:#1A1A1A;
+  --text:#F5F0E8;
+  --text-muted:#8A8279;
+  --accent-red:#C84C4C;
+  --accent-green:#4CC98A;
+  --accent-blue:#4C8AC9;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cormorant Garamond',serif;
+  background:var(--obsidian);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  background:radial-gradient(ellipse at center,#1A1510 0%,var(--obsidian) 70%);
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity:0.4;
+}
+.hero-content{position:relative;z-index:2;padding:2rem}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,8vw,7rem);
+  letter-spacing:0.08em;
+  color:var(--gold);
+  text-transform:uppercase;
+  line-height:1;
+  margin-bottom:0.5rem;
+}
+.hero .subtitle{
+  font-size:clamp(1.1rem,2.5vw,1.8rem);
+  color:var(--text-muted);
+  font-weight:400;
+  margin-bottom:2rem;
+  font-style:italic;
+}
+.hero .meta{
+  font-family:'Space Mono',monospace;
+  font-size:0.75rem;
+  color:var(--gold);
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  margin-bottom:3rem;
+}
+.scroll-indicator{
+  position:absolute;
+  bottom:2rem;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0.5rem;
+  color:var(--text-muted);
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  letter-spacing:0.1em;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+
+/* SECTIONS */
+.section{padding:6rem 2rem;max-width:1400px;margin:0 auto;position:relative}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,5vw,4rem);
+  color:var(--gold);
+  letter-spacing:0.05em;
+  margin-bottom:1rem;
+  text-align:center;
+}
+.section-subtitle{
+  text-align:center;
+  color:var(--text-muted);
+  font-size:1.2rem;
+  max-width:700px;
+  margin:0 auto 3rem;
+  font-style:italic;
+}
+
+/* 3D SPHERE SECTION */
+.sphere-section{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--obsidian-light);
+  position:relative;
+}
+#canvas-container{
+  width:100%;
+  height:70vh;
+  position:relative;
+  cursor:grab;
+}
+#canvas-container:active{cursor:grabbing}
+.sphere-ui{
+  position:absolute;
+  bottom:2rem;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:1rem;
+  z-index:10;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.node-badge{
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  padding:0.4rem 0.8rem;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  border-radius:2px;
+  cursor:pointer;
+  transition:all 0.3s;
+  background:rgba(10,10,10,0.8);
+}
+.node-badge:hover,.node-badge.active{
+  background:var(--gold);
+  color:var(--obsidian);
+}
+
+/* DOCUMENT EXPLORER */
+.doc-explorer{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:2rem;
+  min-height:80vh;
+}
+.doc-nav{
+  display:flex;
+  flex-direction:column;
+  gap:0.5rem;
+}
+.doc-nav-btn{
+  text-align:left;
+  padding:1rem 1.2rem;
+  background:var(--surface);
+  border:1px solid transparent;
+  color:var(--text);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;
+  cursor:pointer;
+  transition:all 0.3s;
+  border-left:3px solid transparent;
+}
+.doc-nav-btn:hover{border-color:var(--gold);color:var(--gold)}
+.doc-nav-btn.active{
+  background:var(--obsidian-light);
+  border-left-color:var(--gold);
+  color:var(--gold);
+}
+.doc-nav-btn .doc-num{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  color:var(--text-muted);
+  display:block;
+  margin-bottom:0.2rem;
+}
+.doc-content{
+  background:var(--surface);
+  border:1px solid rgba(201,168,76,0.15);
+  padding:2rem;
+  overflow-y:auto;
+  max-height:80vh;
+  font-size:1.05rem;
+}
+.doc-content h2{
+  font-family:'Bebas Neue',sans-serif;
+  color:var(--gold);
+  font-size:1.8rem;
+  margin-bottom:1rem;
+  letter-spacing:0.03em;
+}
+.doc-content h3{
+  font-family:'Bebas Neue',sans-serif;
+  color:var(--gold-light);
+  font-size:1.3rem;
+  margin:1.5rem 0 0.5rem;
+  letter-spacing:0.03em;
+}
+.doc-content table{
+  width:100%;
+  border-collapse:collapse;
+  margin:1rem 0;
+  font-size:0.95rem;
+  font-family:'Space Mono',monospace;
+}
+.doc-content th{
+  background:rgba(201,168,76,0.15);
+  color:var(--gold);
+  padding:0.6rem;
+  text-align:left;
+  font-weight:700;
+  font-size:0.75rem;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.doc-content td{
+  padding:0.6rem;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  color:var(--text-muted);
+  font-size:0.8rem;
+}
+.doc-content tr:hover td{color:var(--text)}
+.doc-content blockquote{
+  border-left:3px solid var(--gold);
+  padding-left:1rem;
+  margin:1rem 0;
+  color:var(--text-muted);
+  font-style:italic;
+}
+.doc-content p{margin-bottom:1rem}
+.doc-content ul{margin:0.5rem 0 1rem 1.2rem}
+.doc-content li{margin-bottom:0.3rem;color:var(--text-muted)}
+.doc-content strong{color:var(--gold-light)}
+
+/* AI AGENTS GRID */
+.agents-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.5rem;
+}
+.agent-card{
+  background:var(--surface);
+  border:1px solid rgba(201,168,76,0.1);
+  padding:1.5rem;
+  transition:all 0.3s;
+  position:relative;
+  overflow:hidden;
+}
+.agent-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;width:100%;height:2px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.agent-card:hover::before{opacity:1}
+.agent-card:hover{
+  border-color:rgba(201,168,76,0.3);
+  transform:translateY(-3px);
+}
+.agent-num{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  color:var(--gold);
+  margin-bottom:0.5rem;
+}
+.agent-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem;
+  color:var(--text);
+  letter-spacing:0.03em;
+  margin-bottom:0.3rem;
+}
+.agent-role{
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:0.8rem;
+}
+.agent-desc{
+  font-size:0.95rem;
+  color:var(--text-muted);
+  line-height:1.5;
+}
+
+/* ROI CALCULATOR */
+.roi-section{background:var(--obsidian-light)}
+.roi-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  align-items:start;
+}
+.roi-inputs{
+  display:flex;
+  flex-direction:column;
+  gap:1.2rem;
+}
+.input-group label{
+  display:block;
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:0.4rem;
+}
+.input-group input{
+  width:100%;
+  padding:0.8rem 1rem;
+  background:var(--obsidian);
+  border:1px solid rgba(201,168,76,0.2);
+  color:var(--text);
+  font-family:'Space Mono',monospace;
+  font-size:1rem;
+  outline:none;
+  transition:border-color 0.3s;
+}
+.input-group input:focus{border-color:var(--gold)}
+.roi-results{
+  background:var(--surface);
+  border:1px solid rgba(201,168,76,0.15);
+  padding:2rem;
+}
+.roi-metric{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.roi-metric:last-child{border-bottom:none}
+.roi-metric-label{
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+}
+.roi-metric-value{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;
+  color:var(--gold);
+}
+.roi-metric-value.negative{color:var(--accent-red)}
+.roi-metric-value.positive{color:var(--accent-green)}
+
+/* DEMO LINKS */
+.demos-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1.5rem;
+}
+.demo-card{
+  display:block;
+  background:var(--surface);
+  border:1px solid rgba(201,168,76,0.15);
+  padding:2rem 1.5rem;
+  text-align:center;
+  text-decoration:none;
+  color:var(--text);
+  transition:all 0.3s;
+}
+.demo-card:hover{
+  border-color:var(--gold);
+  transform:translateY(-5px);
+  box-shadow:0 10px 40px rgba(201,168,76,0.1);
+}
+.demo-icon{
+  font-size:2.5rem;
+  margin-bottom:1rem;
+  display:block;
+}
+.demo-card h4{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;
+  color:var(--gold);
+  margin-bottom:0.5rem;
+}
+.demo-card p{
+  font-size:0.9rem;
+  color:var(--text-muted);
+}
+
+/* CTA */
+.cta-section{
+  text-align:center;
+  padding:8rem 2rem;
+  background:radial-gradient(ellipse at center,rgba(201,168,76,0.05) 0%,transparent 70%);
+}
+.cta-btn{
+  display:inline-block;
+  padding:1.2rem 3rem;
+  background:var(--gold);
+  color:var(--obsidian);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;
+  letter-spacing:0.08em;
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:all 0.3s;
+  margin-top:2rem;
+}
+.cta-btn:hover{
+  background:var(--gold-light);
+  box-shadow:0 0 40px rgba(201,168,76,0.3);
+}
+
+/* NAV */
+.top-nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1rem 2rem;
+  background:rgba(10,10,10,0.9);
+  backdrop-filter:blur(10px);
+  z-index:1000;
+  border-bottom:1px solid rgba(201,168,76,0.1);
+}
+.top-nav .logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.2rem;
+  color:var(--gold);
+  letter-spacing:0.1em;
+}
+.top-nav .links{
+  display:flex;
+  gap:1.5rem;
+}
+.top-nav .links a{
+  color:var(--text-muted);
+  text-decoration:none;
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  transition:color 0.3s;
+}
+.top-nav .links a:hover{color:var(--gold)}
+
+@media(max-width:900px){
+  .doc-explorer{grid-template-columns:1fr}
+  .doc-nav{flex-direction:row;overflow-x:auto}
+  .roi-grid{grid-template-columns:1fr}
+  .top-nav .links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="logo">SafeSight × LAISA</div>
+  <div class="links">
+    <a href="#sphere">2nd Brain</a>
+    <a href="#documents">Documents</a>
+    <a href="#agents">Agents</a>
+    <a href="#roi">ROI</a>
+    <a href="#demos">Demos</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="meta">StudEx Group — Digital Transformation Proposal</div>
+    <h1>SafeSight × LAISA</h1>
+    <p class="subtitle">Your practice's intelligence, visualised.<br>Scroll to enter the 2nd Brain.</p>
+  </div>
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <span>&#8595;</span>
+  </div>
+</section>
+
+<!-- 3D SPHERE -->
+<section class="sphere-section" id="sphere">
+  <div class="section" style="padding-bottom:0">
+    <h2 class="section-title">The 2nd Brain</h2>
+    <p class="section-subtitle">Every insight, every document, every agent — connected in a living knowledge sphere. Drag to rotate. Click nodes to explore.</p>
+  </div>
+  <div id="canvas-container"></div>
+  <div class="sphere-ui">
+    <div class="node-badge active" onclick="focusNode('proposal')">00 — Proposal</div>
+    <div class="node-badge" onclick="focusNode('current')">01 — Current State</div>
+    <div class="node-badge" onclick="focusNode('future')">02 — Future State</div>
+    <div class="node-badge" onclick="focusNode('roi')">03 — Investment & ROI</div>
+    <div class="node-badge" onclick="resetCamera()">Reset View</div>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section class="section" id="documents" style="background:var(--obsidian)">
+  <h2 class="section-title">Document Explorer</h2>
+  <p class="section-subtitle">The full SafeSight × LAISA knowledge base. Click any document to read.</p>
+  <div class="doc-explorer">
+    <div class="doc-nav">
+      <button class="doc-nav-btn active" onclick="showDoc('proposal')">
+        <span class="doc-num">DOCUMENT 00</span>
+        SafeSight-LAISA Proposal
+      </button>
+      <button class="doc-nav-btn" onclick="showDoc('current')">
+        <span class="doc-num">DOCUMENT 01</span>
+        Where You Are Now
+      </button>
+      <button class="doc-nav-btn" onclick="showDoc('future')">
+        <span class="doc-num">DOCUMENT 02</span>
+        Where We're Taking You
+      </button>
+      <button class="doc-nav-btn" onclick="showDoc('roi')">
+        <span class="doc-num">DOCUMENT 03</span>
+        Investment & ROI
+      </button>
+    </div>
+    <div class="doc-content" id="doc-panel">
+      <!-- Content injected via JS -->
+    </div>
+  </div>
+</section>
+
+<!-- 16 AI AGENTS -->
+<section class="section" id="agents" style="background:var(--obsidian-light)">
+  <h2 class="section-title">16 AI Assistants</h2>
+  <p class="section-subtitle">Your StudEx Operating System team. Each assistant handles a domain, 24/7.</p>
+  <div class="agents-grid">
+    <div class="agent-card"><div class="agent-num">01</div><div class="agent-name">Receptionist</div><div class="agent-role">Patient Support</div><div class="agent-desc">Handles booking enquiries, WhatsApp conversations, and first-point contact. Responds in 30 seconds, 24/7.</div></div>
+    <div class="agent-card"><div class="agent-num">02</div><div class="agent-name">Scheduler</div><div class="agent-role">Appointment Management</div><div class="agent-desc">Manages calendars, optimises slots, handles rescheduling and cancellations automatically.</div></div>
+    <div class="agent-card"><div class="agent-num">03</div><div class="agent-name">Follow-Up Coordinator</div><div class="agent-role">Patient Follow-Up</div><div class="agent-desc">Sends reminders, tracks follow-ups, ensures no patient falls through the cracks.</div></div>
+    <div class="agent-card"><div class="agent-num">04</div><div class="agent-name">Billing Coordinator</div><div class="agent-role">Revenue & Billing</div><div class="agent-desc">Generates invoices, verifies medical aid, syncs with Sage Accounting, tracks payments.</div></div>
+    <div class="agent-card"><div class="agent-num">05</div><div class="agent-name">Content Creator</div><div class="agent-role">Social Media</div><div class="agent-desc">Writes and publishes 3 professional posts per day across Instagram, Facebook, and TikTok.</div></div>
+    <div class="agent-card"><div class="agent-num">06</div><div class="agent-name">Voice Assistant</div><div class="agent-role">Voice Reminders</div><div class="agent-desc">Makes courtesy phone calls for appointment confirmations and no-show follow-ups via ElevenLabs.</div></div>
+    <div class="agent-card"><div class="agent-num">07</div><div class="agent-name">Practice Coordinator</div><div class="agent-role">Operations</div><div class="agent-desc">Oversees daily ops, generates morning briefings, tracks priorities, flags issues.</div></div>
+    <div class="agent-card"><div class="agent-num">08</div><div class="agent-name">Patient Concierge</div><div class="agent-role">24/7 Chatbot</div><div class="agent-desc">Answers patient questions on WhatsApp and website, books appointments around the clock.</div></div>
+    <div class="agent-card"><div class="agent-num">09</div><div class="agent-name">Security & Compliance</div><div class="agent-role">Data Protection</div><div class="agent-desc">Ensures POPIA compliance, manages encryption, controls access, conducts security audits.</div></div>
+    <div class="agent-card"><div class="agent-num">10</div><div class="agent-name">Documentation Specialist</div><div class="agent-role">Training & SOPs</div><div class="agent-desc">Creates training materials and SOPs so your team always knows how to use the tools.</div></div>
+    <div class="agent-card"><div class="agent-num">11</div><div class="agent-name">Quality Assurance</div><div class="agent-role">System Testing</div><div class="agent-desc">Tests every feature before go-live, reports issues, validates everything works as promised.</div></div>
+    <div class="agent-card"><div class="agent-num">12</div><div class="agent-name">Financial Analyst</div><div class="agent-role">Budget & ROI</div><div class="agent-desc">Tracks costs, reports ROI, flags budget concerns before they become problems.</div></div>
+    <div class="agent-card"><div class="agent-num">13</div><div class="agent-name">Knowledge Manager</div><div class="agent-role">Institutional Memory</div><div class="agent-desc">Maintains a complete, searchable knowledge base of your practice — always up to date.</div></div>
+    <div class="agent-card"><div class="agent-num">14</div><div class="agent-name">Market Researcher</div><div class="agent-role">Competitive Intelligence</div><div class="agent-desc">Monitors competitor clinics, tracks industry trends, reports on what's working.</div></div>
+    <div class="agent-card"><div class="agent-num">15</div><div class="agent-name">Marketing Strategist</div><div class="agent-role">Marketing Direction</div><div class="agent-desc">Reviews content strategy, approves campaigns, ensures brand voice is consistent.</div></div>
+    <div class="agent-card"><div class="agent-num">16</div><div class="agent-name">Orchestrator</div><div class="agent-role">Coordination</div><div class="agent-desc">Coordinates all 15 assistants, manages the daily rhythm, ensures nothing falls through.</div></div>
+  </div>
+</section>
+
+<!-- ROI CALCULATOR -->
+<section class="section roi-section" id="roi">
+  <h2 class="section-title">ROI Calculator</h2>
+  <p class="section-subtitle">Adjust your practice numbers. See your monthly and annual impact.</p>
+  <div class="roi-grid">
+    <div class="roi-inputs">
+      <div class="input-group">
+        <label>Monthly Appointments</label>
+        <input type="number" id="appts" value="150" oninput="calcROI()">
+      </div>
+      <div class="input-group">
+        <label>Average Appointment Value (R)</label>
+        <input type="number" id="avgValue" value="1500" oninput="calcROI()">
+      </div>
+      <div class="input-group">
+        <label>No-Show Rate (%)</label>
+        <input type="number" id="noshow" value="20" oninput="calcROI()">
+      </div>
+      <div class="input-group">
+        <label>Daily Admin Hours (Manual)</label>
+        <input type="number" id="adminHrs" value="6.5" oninput="calcROI()">
+      </div>
+      <div class="input-group">
+        <label>Hourly Staff Rate (R)</label>
+        <input type="number" id="hourlyRate" value="250" oninput="calcROI()">
+      </div>
+      <div class="input-group">
+        <label>Monthly Marketing Hours</label>
+        <input type="number" id="marketingHrs" value="4" oninput="calcROI()">
+      </div>
+    </div>
+    <div class="roi-results">
+      <div class="roi-metric">
+        <span class="roi-metric-label">Monthly No-Show Loss</span>
+        <span class="roi-metric-value negative" id="m-noshow">R45,000</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Monthly Admin Waste</span>
+        <span class="roi-metric-value negative" id="m-admin">R32,500</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Monthly Marketing Labour</span>
+        <span class="roi-metric-value negative" id="m-marketing">R8,000</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Total Monthly Loss</span>
+        <span class="roi-metric-value negative" id="m-total">R88,000</span>
+      </div>
+      <div style="height:1px;background:rgba(201,168,76,0.2);margin:1rem 0"></div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Monthly Revenue Gain (Phase 3)</span>
+        <span class="roi-metric-value positive" id="m-gain">R93,000</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Labour Value Recovered</span>
+        <span class="roi-metric-value positive" id="m-labour">R89,815</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Monthly Net Impact</span>
+        <span class="roi-metric-value positive" id="m-net">R193,515</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Annual Net Impact</span>
+        <span class="roi-metric-value positive" id="a-net">R2,322,180</span>
+      </div>
+      <div class="roi-metric">
+        <span class="roi-metric-label">Break-Even Month</span>
+        <span class="roi-metric-value positive" id="breakEven">Month 2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMOS -->
+<section class="section" id="demos" style="background:var(--obsidian)">
+  <h2 class="section-title">Live Demos</h2>
+  <p class="section-subtitle">Interactive prototypes built for SafeSight × LAISA.</p>
+  <div class="demos-grid">
+    <a class="demo-card" href="dashboard-demo.html">
+      <span class="demo-icon">&#128202;</span>
+      <h4>Dashboard</h4>
+      <p>Real-time practice intelligence — revenue, patients, agents.</p>
+    </a>
+    <a class="demo-card" href="whatsapp-bot-demo.html">
+      <span class="demo-icon">&#128172;</span>
+      <h4>WhatsApp Bot</h4>
+      <p>Patient booking, enquiries, and reminders via WhatsApp.</p>
+    </a>
+    <a class="demo-card" href="email-triage-demo.html">
+      <span class="demo-icon">&#9993;</span>
+      <h4>Email Triage</h4>
+      <p>AI-powered email sorting, response drafting, and routing.</p>
+    </a>
+    <a class="demo-card" href="safesight-website.html">
+      <span class="demo-icon">&#127760;</span>
+      <h4>SafeSight Website</h4>
+      <p>Clinical, authoritative web presence for eye surgery patients.</p>
+    </a>
+    <a class="demo-card" href="laisa-website.html">
+      <span class="demo-icon">&#128132;</span>
+      <h4>LAISA Website</h4>
+      <p>Warm, aspirational web presence for aesthetics patients.</p>
+    </a>
+    <a class="demo-card" href="Remotion-Source/">
+      <span class="demo-icon">&#127909;</span>
+      <h4>Cinematic Pitch</h4>
+      <p>Remotion video composition source files.</p>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="section-title">Ready to Transform?</h2>
+  <p class="section-subtitle">The cost of waiting is R88,000+ per month. The break-even is Month 2.</p>
+  <a class="cta-btn" href="mailto:hello@studex.group?subject=SafeSight%20x%20LAISA%20Discovery%20Session">Schedule Discovery Session</a>
+</section>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DOCUMENT CONTENT (embedded for static deployment)
+   ═══════════════════════════════════════════════════════════════ */
+
+const DOCS = {
+  proposal: `<h2>SafeSight × LAISA — Digital Transformation Proposal</h2>
+<blockquote>You built something remarkable. Two practices serving patients who trust you with their vision and their confidence. That trust deserves systems that match the quality of care you deliver.</blockquote>
+
+<h3>Executive Summary</h3>
+<p>Right now, your team of 14 is carrying the weight of operations that should run themselves. Every booking confirmed by hand. Every reminder sent manually. Every patient record on paper. Every marketing post written from scratch.</p>
+<p><strong>We are StudEx Group.</strong> We transform specialist practices into intelligent operations by embedding AI-powered automation into the fabric of your business — not as a tool you learn, but as a team member that works alongside you 24/7.</p>
+
+<h3>What We Will Do</h3>
+<ul>
+<li>Automate your patient journey from first enquiry to post-operative follow-up</li>
+<li>Replace paper records with a secure, searchable digital system</li>
+<li>Deploy AI assistants that handle bookings, reminders, content, and billing coordination</li>
+<li>Build you a real-time dashboard that shows exactly how your business performs, every day</li>
+<li>Position SafeSight × LAISA as the leading multidisciplinary clinic in South Africa</li>
+</ul>
+
+<h3>Current State Assessment</h3>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Clinics</td><td>SafeSight Eye Surgery + LAISA Aesthetics</td></tr>
+<tr><td>Staff</td><td>14 total (5 doctors, 3 admin, 6 support)</td></tr>
+<tr><td>Records</td><td>Paper-based</td></tr>
+<tr><td>CRM</td><td>None</td></tr>
+<tr><td>Automation</td><td>Zero</td></tr>
+<tr><td>System Integration</td><td>None</td></tr>
+<tr><td>Marketing</td><td>Manual, ad hoc</td></tr>
+</table>
+
+<h3>What This Costs You Every Month</h3>
+<table>
+<tr><th>Cost Category</th><th>Monthly Impact</th></tr>
+<tr><td>Admin labor wasted on manual tasks</td><td>R32,500</td></tr>
+<tr><td>Revenue lost to patient no-shows</td><td>R45,000</td></tr>
+<tr><td>Marketing labour (content creation)</td><td>R8,000+</td></tr>
+<tr><td>Medical aid verification time</td><td>R2,500+</td></tr>
+<tr><td><strong>Total measurable monthly loss</strong></td><td><strong>R88,000+</strong></td></tr>
+</table>
+
+<h3>3-Phase Approach</h3>
+<table>
+<tr><th>Phase</th><th>Timeline</th><th>Investment</th></tr>
+<tr><td>Phase 1: Digital Foundation</td><td>Weeks 1-8</td><td>R35,000</td></tr>
+<tr><td>Phase 2: Smart Operations</td><td>Weeks 5-14</td><td>R30,000</td></tr>
+<tr><td>Phase 3: Intelligent Practice</td><td>Weeks 10-24</td><td>R30,000</td></tr>
+<tr><td><strong>Total project investment</strong></td><td></td><td><strong>R95,000</strong></td></tr>
+<tr><td>Monthly hosting & support</td><td>Ongoing</td><td>R5,000/month</td></tr>
+</table>
+
+<p><strong>Break-even: Month 2. Annual net return: R798,000.</strong></p>
+
+<h3>Next Steps</h3>
+<table>
+<tr><th>Step</th><th>Action</th><th>Timeline</th></tr>
+<tr><td>1</td><td>Discovery Session</td><td>Week 1</td></tr>
+<tr><td>2</td><td>Proposal Sign-Off</td><td>Week 1</td></tr>
+<tr><td>3</td><td>System Deployment</td><td>Weeks 2-4</td></tr>
+<tr><td>4</td><td>Team Training</td><td>Weeks 4-6</td></tr>
+<tr><td>5</td><td>Phase 1 Live</td><td>Week 8</td></tr>
+</table>`,
+
+  current: `<h2>Where You Are Now — Current State Assessment</h2>
+<blockquote>You built two practices that patients trust with their vision and their confidence. That trust deserves systems that match the quality of care you deliver. This document is an honest look at where those systems stand today.</blockquote>
+
+<h3>SafeSight Eye Surgery Journey</h3>
+<table>
+<tr><th>Step</th><th>Pain Point</th></tr>
+<tr><td>1. Discovery</td><td>No online booking. No search visibility. After-hours enquiries sit until morning.</td></tr>
+<tr><td>2. Enquiry</td><td>Reception handles every enquiry manually. Calls go unanswered during peak hours.</td></tr>
+<tr><td>3. Booking</td><td>Triple entry: Elixir Live, My Appointment, paper. Typos and double-bookings weekly.</td></tr>
+<tr><td>4. Confirmation</td><td>Entirely manual. If staff is busy, confirmations get skipped.</td></tr>
+<tr><td>5. Arrival & Intake</td><td>Paper forms slow check-in. Handwriting unclear. Data manually typed later.</td></tr>
+<tr><td>6. Diagnostics</td><td>Clinical excellence — no pain point here.</td></tr>
+<tr><td>7. Consultation</td><td>Doctor walks patient to reception for follow-up booking.</td></tr>
+<tr><td>8. Follow-Up Booking</td><td>Same manual process. If patient checks schedule, phone line backs up.</td></tr>
+<tr><td>9. Post-Operative Care</td><td>Ad hoc. No automated recall system. Patients fall through cracks.</td></tr>
+</table>
+<p><strong>Total admin time per eye patient: 40-65 minutes</strong> — of which 25-40 minutes should happen automatically.</p>
+
+<h3>LAISA Aesthetics Journey</h3>
+<table>
+<tr><th>Step</th><th>Pain Point</th></tr>
+<tr><td>1. Discovery</td><td>Social media manual — no strategy, no scheduling, no tracking. 4+ hours/day.</td></tr>
+<tr><td>2. Enquiry</td><td>DMs get missed. WhatsApp piles up. Calls during procedures unanswered.</td></tr>
+<tr><td>3. Booking</td><td>Same triple-entry problem. Same risk of errors and double-bookings.</td></tr>
+<tr><td>4. Confirmation</td><td>Same dependency on staff member remembering and having time.</td></tr>
+<tr><td>5. Arrival & Intake</td><td>Filing cabinets. Physical files pulled, sorted, stored. If filing person away, records hard to find.</td></tr>
+<tr><td>6. Consultation</td><td>Notes handwritten or dictated, not digitised. No searchable record.</td></tr>
+<tr><td>7. Treatment</td><td>Clinical excellence — no pain point here.</td></tr>
+<tr><td>8. Product Sales</td><td>No product catalogue. No automated follow-up on reorders. Revenue left on table.</td></tr>
+<tr><td>9. Follow-Up</td><td>Patients who don't rebook within 7 days are 60% less likely to return. No automated recall.</td></tr>
+</table>
+<p><strong>Total admin time per aesthetics patient: 45-75 minutes</strong> — of which 30-45 minutes should run themselves.</p>
+
+<h3>Measurable Monthly Losses</h3>
+<table>
+<tr><th>Category</th><th>Monthly Cost</th><th>How Calculated</th></tr>
+<tr><td>Admin labour wasted on manual tasks</td><td>R32,500</td><td>6.5 hours/day x R250/hr x 20 days</td></tr>
+<tr><td>Revenue lost to patient no-shows</td><td>R45,000</td><td>~20% no-show rate x R1,500 avg x ~150 monthly appts</td></tr>
+<tr><td>Marketing labour (manual content)</td><td>R8,000+</td><td>4+ hours/day creating social media content</td></tr>
+<tr><td>Medical aid verification time</td><td>R2,500+</td><td>1+ hour/day of staff time calling medical aids</td></tr>
+<tr><td><strong>Total measurable monthly loss</strong></td><td><strong>R88,000+</strong></td><td><strong>Over R1,000,000 per year.</strong></td></tr>
+</table>
+
+<h3>Hidden Costs</h3>
+<ul>
+<li><strong>After-hours enquiries:</strong> Patients who reach out after 5pm get no response. By Monday, many booked with a competitor.</li>
+<li><strong>Inconsistent follow-up:</strong> Aesthetics patients who don't rebook within 7 days are 60% less likely to return.</li>
+<li><strong>Zero visibility:</strong> Cannot see revenue per doctor, per procedure, per day in real time.</li>
+<li><strong>Paper risk:</strong> A single fire, flood, or misfiled folder could compromise years of records.</li>
+<li><strong>Staff burnout:</strong> Team of 14 carrying workload designed for 20+.</li>
+<li><strong>Triple data entry:</strong> Every appointment, invoice, record entered 2-3 times across systems.</li>
+<li><strong>Missed product revenue:</strong> No automated reorder reminders. Simple follow-up could increase product revenue 20-30%.</li>
+<li><strong>Competitor advancement:</strong> Digitally-enabled clinics capturing patients who should be yours.</li>
+</ul>
+
+<h3>Summary</h3>
+<table>
+<tr><th>Metric</th><th>Current State</th></tr>
+<tr><td>Monthly measurable losses</td><td>R88,000+</td></tr>
+<tr><td>Estimated hidden losses</td><td>R20,000-R40,000+</td></tr>
+<tr><td>Total estimated monthly cost of inaction</td><td>R108,000-R128,000+</td></tr>
+<tr><td>Annual cost of inaction</td><td>R1,296,000-R1,536,000+</td></tr>
+<tr><td>No-show rate</td><td>~20%</td></tr>
+<tr><td>Daily admin hours on manual tasks</td><td>6.5+ hours</td></tr>
+<tr><td>System integrations</td><td>Zero</td></tr>
+<tr><td>CRM</td><td>None</td></tr>
+<tr><td>After-hours patient response</td><td>None</td></tr>
+<tr><td>Automated follow-up rate</td><td>0%</td></tr>
+</table>`,
+
+  future: `<h2>Where We're Taking You — Future State Vision</h2>
+<blockquote>This is not about replacing your people or your clinical excellence. It's about giving your team the tools to focus on what they do best — caring for patients — while intelligent systems handle everything else.</blockquote>
+
+<h3>The Principle: Separate Out Front, Unified Behind the Scenes</h3>
+<pre style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--text-muted);background:var(--obsidian);padding:1rem;border-left:3px solid var(--gold);overflow-x:auto">
+PATIENT-FACING (Separate)                    BACKEND (Shared)
+
+safesight.co.za          laisa.aesthetic      Patient Records (tagged by business)
+    |                         |               Billing & Accounting (Sage)
+    v                         v               Scheduling System
+SafeSight WhatsApp      LAISA WhatsApp        AI Agent Team (16 assistants)
+Professional,           Warm, personal,        Knowledge Base
+medical tone            beauty-focused tone     Compliance (POPIA)
+    |                         |               Reporting Dashboard
+    v                         v
+Eye surgery patients    Aesthetics patients    Revenue split by business
+</pre>
+
+<h3>SafeSight Eye Surgery — After Automation</h3>
+<table>
+<tr><th>Step</th><th>What Happens Now</th><th>Time</th></tr>
+<tr><td>1. Discovery</td><td>Patient finds you through Google, social, or referral. Books instantly on website or WhatsApp.</td><td>Instant</td></tr>
+<tr><td>2. Enquiry</td><td>Patient sends WhatsApp or fills form — at any hour. Receptionist responds within 30 seconds.</td><td>30 sec</td></tr>
+<tr><td>3. Booking</td><td>Scheduler confirms appointment, sends branded confirmation. No manual data entry.</td><td>2 min</td></tr>
+<tr><td>4. Reminders</td><td>Follow-Up Coordinator sends WhatsApp reminder 24h before and SMS 2h before.</td><td>Automated</td></tr>
+<tr><td>5. Arrival & Intake</td><td>Patient scans QR code, fills digital forms on phone. Data flows directly into record.</td><td>3 min</td></tr>
+<tr><td>6. Diagnostics</td><td>Same clinical excellence — now with pre-loaded patient record on doctor's screen.</td><td>—</td></tr>
+<tr><td>7. Consultation</td><td>Doctor focuses entirely on patient. Pre-loaded relevant notes. Dictates notes directly into system.</td><td>—</td></tr>
+<tr><td>8. Follow-Up Booking</td><td>System suggests follow-up based on procedure type. One click to confirm.</td><td>1 min</td></tr>
+<tr><td>9. Post-Operative Care</td><td>Automated follow-up sequences: Day 1 check-in, Day 7 recovery check, scheduled reminders.</td><td>Automated</td></tr>
+</table>
+<p><strong>Total admin time per eye patient after transformation: 5-8 minutes</strong> — a reduction of 80-85%.</p>
+
+<h3>LAISA Aesthetics — After Automation</h3>
+<table>
+<tr><th>Step</th><th>What Happens Now</th><th>Time</th></tr>
+<tr><td>1. Discovery</td><td>Patient finds you through professional social content (3 posts/day, scheduled automatically).</td><td>—</td></tr>
+<tr><td>2. Enquiry</td><td>Patient DMs, WhatsApps, or uses website chat. Patient Concierge responds instantly, guides to book.</td><td>30 sec</td></tr>
+<tr><td>3. Booking</td><td>Same seamless process — one entry, automatic confirmation, calendar synced.</td><td>2 min</td></tr>
+<tr><td>4. Reminders</td><td>Automated 24h WhatsApp + 2h SMS reminders. Missed confirmations trigger voice call.</td><td>Automated</td></tr>
+<tr><td>5. Arrival & Intake</td><td>Digital forms on phone or tablet. Returning patients' records pulled automatically.</td><td>3 min</td></tr>
+<tr><td>6. Consultation</td><td>Doctor has full history, previous treatments, product purchases on screen.</td><td>—</td></tr>
+<tr><td>7. Treatment</td><td>Same excellent care — now documented digitally in real time.</td><td>—</td></tr>
+<tr><td>8. Product Sales</td><td>System automatically sends product care instructions and reorder reminder at right interval.</td><td>Automated</td></tr>
+<tr><td>9. Follow-Up</td><td>Automated 7-day follow-up, 30-day check-in, treatment anniversary reminders.</td><td>Automated</td></tr>
+</table>
+<p><strong>Total admin time per aesthetics patient after transformation: 5-8 minutes</strong> — same 80-85% reduction.</p>
+
+<h3>A Day in the Life — After Transformation</h3>
+<p><strong>7:00 AM — Practice Coordinator Briefing</strong></p>
+<p>Your phone buzzes with the morning briefing:</p>
+<ul>
+<li>Today's schedule: 18 appointments across both clinics. 2 patients flagged as no-show risks.</li>
+<li>Revenue yesterday: R32,400 total. SafeSight: R21,200. LAISA: R11,200.</li>
+<li>Overnight enquiries: 7 new WhatsApp messages. 4 handled automatically and booked. 3 flagged for team.</li>
+<li>Follow-ups due: 12 patients. Follow-Up Coordinator already sent 8. 4 require personal calls.</li>
+<li>Content: Today's 3 posts published at 6:30 AM.</li>
+</ul>
+<p><strong>10:00 PM — After Hours</strong></p>
+<p>A potential patient finds your SafeSight website and starts a chat. The Patient Concierge answers questions about PRK pricing, checks availability, and books a consultation for Thursday at 10 AM.</p>
+<p>On the LAISA WhatsApp line, a patient asks about Botox pricing for next weekend. The Patient Concierge responds in LAISA's warm, personal tone, suggests times, and books.</p>
+<p><em>Same system. Different brand. Different patient experience.</em></p>
+
+<h3>Financial Impact — Month by Month (Combined)</h3>
+<table>
+<tr><th>Month</th><th>What's Live</th><th>Monthly Revenue Impact</th><th>Cumulative</th></tr>
+<tr><td>2</td><td>Online booking + reminders</td><td>+R18,000</td><td>+R18,000</td></tr>
+<tr><td>3</td><td>Digital records + intake forms</td><td>+R25,000</td><td>+R43,000</td></tr>
+<tr><td>4</td><td>Workflow automation begins</td><td>+R35,000</td><td>+R78,000</td></tr>
+<tr><td>5</td><td>Billing automation + follow-ups</td><td>+R50,000</td><td>+R128,000</td></tr>
+<tr><td>6</td><td>Content engine live</td><td>+R60,000</td><td>+R188,000</td></tr>
+<tr><td>8</td><td>Phase 2 complete, Phase 3 begins</td><td>+R75,000</td><td>+R331,000</td></tr>
+<tr><td>12</td><td>Full system operational</td><td>+R97,500</td><td>+R685,500</td></tr>
+</table>`,
+
+  roi: `<h2>Investment & ROI — Financial Analysis</h2>
+<blockquote>A transformation that pays for itself by Month 2. This is not a cost — it is the most profitable investment your practice can make this year.</blockquote>
+
+<h3>Phase-by-Phase Investment</h3>
+<table>
+<tr><th>Phase</th><th>What You Get</th><th>Timeline</th><th>Cost</th></tr>
+<tr><td>Phase 1</td><td>Patient Management System, WhatsApp Booking Assistant, Automated Reminders, Digital Intake Forms, System Integration</td><td>Weeks 1-8</td><td>R25,000</td></tr>
+<tr><td>Phase 2</td><td>Workflow Automation Engine, Medical Aid Pre-Verification, AI Content Creator, Automated Billing, Post-Appointment Follow-Up</td><td>Weeks 5-14</td><td>R30,000</td></tr>
+<tr><td>Phase 3</td><td>24/7 Patient Concierge, Real-Time Revenue Dashboard, Doctor Support Tools, Predictive Scheduling, Treatment Recommendations</td><td>Weeks 10-24</td><td>R30,000</td></tr>
+<tr><td><strong>Total Setup</strong></td><td></td><td></td><td><strong>R85,000</strong></td></tr>
+<tr><td>Monthly Hosting</td><td>Monitoring, AI ops, security, support, updates, weekly reports</td><td>Ongoing</td><td>R5,000/mo</td></tr>
+</table>
+
+<h3>Total Cost of Ownership — 3-Year View</h3>
+<table>
+<tr><th>Period</th><th>Setup</th><th>Hosting</th><th>Total</th></tr>
+<tr><td>Year 1</td><td>R85,000</td><td>R60,000</td><td>R145,000</td></tr>
+<tr><td>Year 2</td><td>—</td><td>R60,000</td><td>R60,000</td></tr>
+<tr><td>Year 3</td><td>—</td><td>R60,000</td><td>R60,000</td></tr>
+<tr><td><strong>3-Year Total</strong></td><td><strong>R85,000</strong></td><td><strong>R180,000</strong></td><td><strong>R265,000</strong></td></tr>
+</table>
+
+<h3>ROI Calculation — Conservative Numbers</h3>
+
+<h3>Labour Value Recovered</h3>
+<table>
+<tr><th>Task</th><th>Time Saved/Day</th><th>Monthly Value</th></tr>
+<tr><td>Manual booking calls</td><td>2.5 hours</td><td>R13,750</td></tr>
+<tr><td>Manual filing, scanning, retrieving</td><td>1.75 hours</td><td>R9,625</td></tr>
+<tr><td>Manual appointment reminders</td><td>1.5 hours</td><td>R8,250</td></tr>
+<tr><td>Paper form processing</td><td>0.75 hours</td><td>R4,125</td></tr>
+<tr><td>Content creation (marketing)</td><td>3 hours</td><td>R16,500</td></tr>
+<tr><td>Billing reconciliation</td><td>1.5 hours</td><td>R8,250</td></tr>
+<tr><td>Medical aid phone queries</td><td>0.75 hours</td><td>R4,125</td></tr>
+<tr><td>Follow-up scheduling</td><td>0.83 hours</td><td>R4,565</td></tr>
+<tr><td>FAQ handling (chatbot)</td><td>1.75 hours</td><td>R9,625</td></tr>
+<tr><td>Schedule management</td><td>1 hour</td><td>R5,500</td></tr>
+<tr><td>Reporting</td><td>1 hour</td><td>R5,500</td></tr>
+<tr><td><strong>Total daily time saved</strong></td><td><strong>16.33 hours</strong></td><td><strong>R89,815/mo</strong></td></tr>
+</table>
+
+<h3>Revenue Gained (Conservative)</h3>
+<table>
+<tr><th>Revenue Source</th><th>Monthly Impact</th><th>How</th></tr>
+<tr><td>No-show reduction (20% to 8%)</td><td>R27,000</td><td>18 more kept appointments at R1,500 avg</td></tr>
+<tr><td>New patient acquisition (social media)</td><td>R12,000</td><td>8 new patients/month from consistent content</td></tr>
+<tr><td>Faster billing cycle</td><td>R15,000</td><td>Automated invoicing reduces AR from weeks to days</td></tr>
+<tr><td>Post-treatment follow-up conversions</td><td>R9,000</td><td>Lapsed patients return through automated follow-up</td></tr>
+<tr><td>After-hours booking conversions</td><td>R12,000</td><td>Previously unanswered enquiries now convert</td></tr>
+<tr><td>Optimised scheduling</td><td>R18,000</td><td>Reduced gaps and better calendar utilisation</td></tr>
+<tr><td><strong>Total monthly revenue gain</strong></td><td><strong>R93,000</strong></td><td></td></tr>
+</table>
+
+<h3>Cost Savings</h3>
+<table>
+<tr><th>Category</th><th>Current Monthly</th><th>After</th><th>Savings</th></tr>
+<tr><td>Paper, printing, filing</td><td>R3,000</td><td>R300</td><td>R2,700</td></tr>
+<tr><td>Admin overtime</td><td>R8,000</td><td>R0</td><td>R8,000</td></tr>
+<tr><td><strong>Total monthly savings</strong></td><td></td><td></td><td><strong>R10,700</strong></td></tr>
+</table>
+
+<h3>Total Monthly Impact (Phase 3, Conservative)</h3>
+<table>
+<tr><th>Category</th><th>Amount</th></tr>
+<tr><td>Labour value recovered</td><td>R89,815</td></tr>
+<tr><td>Revenue gained</td><td>R93,000</td></tr>
+<tr><td>Cost savings</td><td>R10,700</td></tr>
+<tr><td><strong>Total monthly impact</strong></td><td><strong>R193,515</strong></td></tr>
+</table>
+
+<h3>Break-Even & Payback</h3>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Total setup investment</td><td>R85,000</td></tr>
+<tr><td>Monthly hosting</td><td>R5,000</td></tr>
+<tr><td>Monthly impact (Phase 3, conservative)</td><td>R193,515</td></tr>
+<tr><td><strong>Break-even point</strong></td><td><strong>Month 2</strong></td></tr>
+</table>
+
+<h3>What You'd Spend on Alternatives</h3>
+<table>
+<tr><th>Approach</th><th>Year 1 Cost</th><th>Covers</th><th>24/7?</th></tr>
+<tr><td><strong>StudEx Operating System</strong></td><td><strong>R145,000</strong></td><td>Booking, reminders, billing, content, follow-up, CRM, dashboards, chatbot, doctor tools, security</td><td>Yes</td></tr>
+<tr><td>Hire 5 additional staff</td><td>R600,000-R732,000</td><td>Manual labour only</td><td>No</td></tr>
+<tr><td>Traditional software (GoodX/Healthbridge)</td><td>R60,000-R96,000 + staff</td><td>Billing, basic scheduling</td><td>No</td></tr>
+<tr><td>Marketing agency</td><td>R180,000-R300,000</td><td>Social media only</td><td>No</td></tr>
+</table>
+
+<h3>Payment Options</h3>
+<table>
+<tr><th>Option</th><th>Structure</th><th>Best For</th></tr>
+<tr><td>A: Standard Phased</td><td>R85,000 setup + R5,000/mo. Pay per phase.</td><td>Standard cash flow</td></tr>
+<tr><td>B: Full Upfront (15% off)</td><td>R72,250 upfront + R5,000/mo. Save R12,750.</td><td>Available capital</td></tr>
+<tr><td>C: Monthly Plan</td><td>R12,083/mo for 12 months (R7,083 project + R5,000 hosting)</td><td>No large upfront</td></tr>
+<tr><td>D: Performance-Based</td><td>R45,000 base + 10% of measurable revenue increase</td><td>Risk-sharing</td></tr>
+</table>
+
+<h3>Success Metrics — What We Track</h3>
+<table>
+<tr><th>Metric</th><th>Current</th><th>Phase 1 Target</th><th>Phase 3 Target</th></tr>
+<tr><td>Booking response time</td><td>Hours</td><td>Under 30 sec</td><td>Under 30 sec, 24/7</td></tr>
+<tr><td>No-show rate</td><td>~20%</td><td>Below 12%</td><td>Below 5%</td></tr>
+<tr><td>Follow-up completion</td><td>Ad hoc</td><td>80%</td><td>100%</td></tr>
+<tr><td>After-hours enquiry capture</td><td>0%</td><td>60%+</td><td>90%+</td></tr>
+<tr><td>Admin hours/day (manual)</td><td>6.5+ hours</td><td>3 hours</td><td>Under 1 hour</td></tr>
+<tr><td>Billing cycle time</td><td>Days</td><td>Hours</td><td>Minutes</td></tr>
+<tr><td>Content posts per week</td><td>2-3 (ad hoc)</td><td>21 (automated)</td><td>21+ (AI-optimised)</td></tr>
+</table>
+
+<h3>The Bottom Line</h3>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>What does it cost?</td><td>R85,000 setup + R5,000/mo hosting. No hidden fees.</td></tr>
+<tr><td>When do I break even?</td><td>Month 2. Full investment repaid by Month 4.</td></tr>
+<tr><td>What's the annual impact?</td><td>Conservative: R2.3 million/year in recovered labour, new revenue, and savings.</td></tr>
+<tr><td>What if it doesn't work?</td><td>Each phase independently deployable and reversible. Option D ties our fee to results.</td></tr>
+<tr><td>What about POPIA compliance?</td><td>Built in from day one. Encryption, consent management, access controls, audit trails.</td></tr>
+<tr><td>What about training?</td><td>Full staff training before every go-live. Ongoing support included in hosting.</td></tr>
+</table>`
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   DOCUMENT SWITCHER
+   ═══════════════════════════════════════════════════════════════ */
+
+function showDoc(key){
+  document.querySelectorAll('.doc-nav-btn').forEach(b=>b.classList.remove('active'));
+  event.target.closest('.doc-nav-btn').classList.add('active');
+  document.getElementById('doc-panel').innerHTML = DOCS[key];
+}
+// init
+showDoc('proposal');
+
+/* ═══════════════════════════════════════════════════════════════
+   ROI CALCULATOR
+   ═══════════════════════════════════════════════════════════════ */
+
+function calcROI(){
+  const appts = +document.getElementById('appts').value || 150;
+  const avgValue = +document.getElementById('avgValue').value || 1500;
+  const noshow = +document.getElementById('noshow').value || 20;
+  const adminHrs = +document.getElementById('adminHrs').value || 6.5;
+  const hourlyRate = +document.getElementById('hourlyRate').value || 250;
+  const marketingHrs = +document.getElementById('marketingHrs').value || 4;
+
+  const noshowLoss = Math.round(appts * (noshow/100) * avgValue);
+  const adminWaste = Math.round(adminHrs * hourlyRate * 20);
+  const marketingCost = Math.round(marketingHrs * hourlyRate * 20);
+  const totalLoss = noshowLoss + adminWaste + marketingCost + 2500;
+
+  const noshowGain = Math.round(appts * ((noshow-8)/100) * avgValue);
+  const newPatients = Math.round(appts * 0.05 * avgValue);
+  const billingGain = Math.round(appts * avgValue * 0.05);
+  const followupGain = Math.round(appts * avgValue * 0.04);
+  const afterHours = Math.round(appts * 0.04 * avgValue);
+  const schedulingGain = Math.round(appts * avgValue * 0.06);
+  const revenueGain = noshowGain + newPatients + billingGain + followupGain + afterHours + schedulingGain;
+
+  const labourRecovered = Math.round(adminHrs * 0.8 * hourlyRate * 20 + marketingHrs * 0.75 * hourlyRate * 20);
+  const savings = 10700;
+  const netImpact = revenueGain + labourRecovered + savings;
+  const annual = netImpact * 12;
+
+  const fmt = n => 'R' + n.toLocaleString('en-ZA');
+
+  document.getElementById('m-noshow').textContent = fmt(noshowLoss);
+  document.getElementById('m-admin').textContent = fmt(adminWaste);
+  document.getElementById('m-marketing').textContent = fmt(marketingCost);
+  document.getElementById('m-total').textContent = fmt(totalLoss);
+  document.getElementById('m-gain').textContent = fmt(revenueGain);
+  document.getElementById('m-labour').textContent = fmt(labourRecovered);
+  document.getElementById('m-net').textContent = fmt(netImpact);
+  document.getElementById('a-net').textContent = fmt(annual);
+
+  const be = Math.ceil(95000 / netImpact);
+  document.getElementById('breakEven').textContent = be <= 1 ? 'Month 1' : 'Month ' + Math.min(be,6);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   THREE.JS 2ND BRAIN SPHERE
+   ═══════════════════════════════════════════════════════════════ */
+
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0A0A0A, 0.035);
+
+const camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 0.1, 1000);
+camera.position.set(0, 0, 18);
+
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+// Lights
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
+const pointLight = new THREE.PointLight(0xC9A84C, 1, 100);
+pointLight.position.set(10, 10, 10);
+scene.add(pointLight);
+const pointLight2 = new THREE.PointLight(0x4C8AC9, 0.6, 100);
+pointLight2.position.set(-10, -5, 10);
+scene.add(pointLight2);
+
+// Groups
+const sphereGroup = new THREE.Group();
+scene.add(sphereGroup);
+const orbitGroup = new THREE.Group();
+sphereGroup.add(orbitGroup);
+
+// Center node — 2nd Brain
+const centerGeo = new THREE.IcosahedronGeometry(1.2, 2);
+const centerMat = new THREE.MeshPhongMaterial({
+  color: 0xC9A84C,
+  emissive: 0xC9A84C,
+  emissiveIntensity: 0.3,
+  shininess: 100,
+  transparent: true,
+  opacity: 0.9
+});
+const centerNode = new THREE.Mesh(centerGeo, centerMat);
+sphereGroup.add(centerNode);
+
+// Center glow
+const glowGeo = new THREE.SphereGeometry(1.6, 32, 32);
+const glowMat = new THREE.MeshBasicMaterial({
+  color: 0xC9A84C,
+  transparent: true,
+  opacity: 0.08
+});
+const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+sphereGroup.add(glowMesh);
+
+// Particle field
+const particlesGeo = new THREE.BufferGeometry();
+const particleCount = 400;
+const pPos = new Float32Array(particleCount * 3);
+for(let i=0;i<particleCount*3;i++){
+  pPos[i] = (Math.random()-0.5) * 25;
+}
+particlesGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+const particlesMat = new THREE.PointsMaterial({
+  color: 0xC9A84C,
+  size: 0.06,
+  transparent: true,
+  opacity: 0.5
+});
+const particles = new THREE.Points(particlesGeo, particlesMat);
+scene.add(particles);
+
+// Document nodes config
+const docConfig = [
+  {key:'proposal',  label:'PROPOSAL',       color:0xC9A84C,  pos:[0, 5, 0]},
+  {key:'current',   label:'CURRENT STATE',  color:0xC84C4C,  pos:[4.33, -2.5, 0]},
+  {key:'future',    label:'FUTURE STATE',   color:0x4CC98A,  pos:[-4.33, -2.5, 0]},
+  {key:'roi',       label:'ROI',            color:0x4C8AC9,  pos:[0, 0, -5]},
+];
+
+const docNodes = [];
+const orbitRadius = 6;
+
+// Create orbital rings
+const ringGeo = new THREE.TorusGeometry(orbitRadius, 0.02, 16, 100);
+const ringMat = new THREE.MeshBasicMaterial({color:0xC9A84C, transparent:true, opacity:0.15});
+const ring = new THREE.Mesh(ringGeo, ringMat);
+ring.rotation.x = Math.PI / 2;
+sphereGroup.add(ring);
+
+const ring2 = new THREE.Mesh(ringGeo, ringMat.clone());
+ring2.rotation.x = Math.PI / 2;
+ring2.rotation.y = Math.PI / 3;
+sphereGroup.add(ring2);
+
+// Sub-nodes data
+const subNodesData = [
+  // Proposal sub-nodes
+  {parent:0, label:'Executive Summary',     color:0xC9A84C},
+  {parent:0, label:'3-Phase Approach',      color:0xC9A84C},
+  {parent:0, label:'Investment',            color:0xC9A84C},
+  {parent:0, label:'Next Steps',            color:0xC9A84C},
+  // Current state sub-nodes
+  {parent:1, label:'Patient Journeys',      color:0xC84C4C},
+  {parent:1, label:'R88K Monthly Loss',     color:0xC84C4C},
+  {parent:1, label:'Hidden Costs',          color:0xC84C4C},
+  {parent:1, label:'Competitive Gap',       color:0xC84C4C},
+  // Future state sub-nodes
+  {parent:2, label:'Two Brands One Backend',color:0x4CC98A},
+  {parent:2, label:'80% Admin Reduction',   color:0x4CC98A},
+  {parent:2, label:'16 AI Assistants',      color:0x4CC98A},
+  {parent:2, label:'R685K Year 1',          color:0x4CC98A},
+  // ROI sub-nodes
+  {parent:3, label:'R85K Setup',            color:0x4C8AC9},
+  {parent:3, label:'Month 2 Break-Even',    color:0x4C8AC9},
+  {parent:3, label:'R193K Monthly Impact',  color:0x4C8AC9},
+  {parent:3, label:'4 Payment Options',     color:0x4C8AC9},
+];
+
+docConfig.forEach((cfg,i)=>{
+  // Position on sphere
+  const phi = Math.acos(-1 + (2*i)/docConfig.length);
+  const theta = Math.sqrt(docConfig.length * Math.PI) * phi;
+  const x = orbitRadius * Math.cos(theta) * Math.sin(phi);
+  const y = orbitRadius * Math.sin(theta) * Math.sin(phi);
+  const z = orbitRadius * Math.cos(phi);
+
+  // Document node mesh
+  const geo = new THREE.IcosahedronGeometry(0.6, 1);
+  const mat = new THREE.MeshPhongMaterial({
+    color: cfg.color,
+    emissive: cfg.color,
+    emissiveIntensity: 0.2,
+    shininess: 80,
+    transparent: true,
+    opacity: 0.85
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(x, y, z);
+  mesh.userData = {key: cfg.key, type:'doc', label: cfg.label, originalColor: cfg.color};
+  sphereGroup.add(mesh);
+  docNodes.push(mesh);
+
+  // Line to center
+  const lineGeo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(0,0,0),
+    new THREE.Vector3(x,y,z)
+  ]);
+  const lineMat = new THREE.LineBasicMaterial({color: cfg.color, transparent:true, opacity:0.25});
+  const line = new THREE.Line(lineGeo, lineMat);
+  sphereGroup.add(line);
+
+  // Sub-nodes orbiting this doc node
+  const subNodes = subNodesData.filter(s=>s.parent===i);
+  subNodes.forEach((sub,si)=>{
+    const subGeo = new THREE.SphereGeometry(0.15, 8, 8);
+    const subMat = new THREE.MeshBasicMaterial({color: sub.color, transparent:true, opacity:0.7});
+    const subMesh = new THREE.Mesh(subGeo, subMat);
+
+    // Orbit position
+    const subAngle = (si / subNodes.length) * Math.PI * 2;
+    const subRadius = 1.8;
+    subMesh.position.set(
+      x + Math.cos(subAngle)*subRadius,
+      y + Math.sin(subAngle)*subRadius,
+      z + Math.cos(subAngle*0.5)*subRadius*0.5
+    );
+    subMesh.userData = {parent: i, type:'sub', label: sub.label};
+    sphereGroup.add(subMesh);
+
+    // Line to parent
+    const slGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(x,y,z),
+      subMesh.position.clone()
+    ]);
+    const slMat = new THREE.LineBasicMaterial({color: sub.color, transparent:true, opacity:0.15});
+    sphereGroup.add(new THREE.Line(slGeo, slMat));
+  });
+});
+
+// Connect docs to each other
+for(let i=0;i<docNodes.length;i++){
+  for(let j=i+1;j<docNodes.length;j++){
+    const lineGeo = new THREE.BufferGeometry().setFromPoints([
+      docNodes[i].position.clone(),
+      docNodes[j].position.clone()
+    ]);
+    const lineMat = new THREE.LineBasicMaterial({color:0xC9A84C, transparent:true, opacity:0.08});
+    sphereGroup.add(new THREE.Line(lineGeo, lineMat));
+  }
+}
+
+// Interaction
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredNode = null;
+let isDragging = false;
+let previousMousePosition = {x:0, y:0};
+
+function onMouseMove(e){
+  const rect = container.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+  if(isDragging){
+    const deltaX = e.clientX - previousMousePosition.x;
+    const deltaY = e.clientY - previousMousePosition.y;
+    sphereGroup.rotation.y += deltaX * 0.005;
+    sphereGroup.rotation.x += deltaY * 0.005;
+    previousMousePosition = {x:e.clientX, y:e.clientY};
+    return;
+  }
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(sphereGroup.children);
+  let found = null;
+  for(let hit of intersects){
+    if(hit.object.userData && (hit.object.userData.type==='doc' || hit.object.userData.type==='sub')){
+      found = hit.object;
+      break;
+    }
+  }
+
+  if(found !== hoveredNode){
+    if(hoveredNode && hoveredNode.userData.type==='doc'){
+      hoveredNode.material.emissiveIntensity = 0.2;
+      hoveredNode.scale.set(1,1,1);
+    }
+    hoveredNode = found;
+    if(hoveredNode && hoveredNode.userData.type==='doc'){
+      hoveredNode.material.emissiveIntensity = 0.6;
+      hoveredNode.scale.set(1.3,1.3,1.3);
+      container.style.cursor = 'pointer';
+    } else {
+      container.style.cursor = 'grab';
+    }
+  }
+}
+
+function onMouseDown(e){
+  isDragging = true;
+  previousMousePosition = {x:e.clientX, y:e.clientY};
+  if(hoveredNode && hoveredNode.userData.type==='doc'){
+    showDoc(hoveredNode.userData.key);
+    // Scroll to documents
+    document.getElementById('documents').scrollIntoView({behavior:'smooth'});
+  }
+}
+function onMouseUp(){isDragging=false}
+
+container.addEventListener('mousemove', onMouseMove);
+container.addEventListener('mousedown', onMouseDown);
+container.addEventListener('mouseup', onMouseUp);
+container.addEventListener('touchmove', e=>{
+  if(e.touches.length===1){
+    const t=e.touches[0];
+    onMouseMove({clientX:t.clientX, clientY:t.clientY});
+  }
+},{passive:true});
+container.addEventListener('touchstart', e=>{
+  if(e.touches.length===1){
+    const t=e.touches[0];
+    onMouseDown({clientX:t.clientX, clientY:t.clientY});
+  }
+},{passive:true});
+container.addEventListener('touchend', onMouseUp);
+
+// Focus functions
+window.focusNode = function(key){
+  const target = docNodes.find(n=>n.userData.key===key);
+  if(!target) return;
+  // Animate camera toward target
+  const targetPos = target.position.clone().applyMatrix4(sphereGroup.matrixWorld);
+  const dir = targetPos.clone().sub(camera.position).normalize();
+  const endPos = targetPos.clone().add(dir.multiplyScalar(-8));
+  animateCamera(endPos);
+  showDoc(key);
+  // Update badges
+  document.querySelectorAll('.node-badge').forEach((b,idx)=>{
+    b.classList.toggle('active', idx===docConfig.findIndex(c=>c.key===key));
+  });
+};
+
+window.resetCamera = function(){
+  animateCamera(new THREE.Vector3(0,0,18));
+};
+
+let camAnim = null;
+function animateCamera(targetPos){
+  if(camAnim) cancelAnimationFrame(camAnim);
+  const start = camera.position.clone();
+  const dur = 1500;
+  const t0 = performance.now();
+  function step(){
+    const elapsed = performance.now() - t0;
+    const t = Math.min(elapsed/dur, 1);
+    const ease = 1 - Math.pow(1-t, 3);
+    camera.position.lerpVectors(start, targetPos, ease);
+    camera.lookAt(0,0,0);
+    if(t<1) camAnim = requestAnimationFrame(step);
+  }
+  step();
+}
+
+// Render loop
+function animate(){
+  requestAnimationFrame(animate);
+  centerNode.rotation.y += 0.005;
+  centerNode.rotation.x += 0.002;
+  glowMesh.scale.setScalar(1 + Math.sin(performance.now()*0.001)*0.05);
+  particles.rotation.y += 0.0003;
+  if(!isDragging){
+    sphereGroup.rotation.y += 0.001;
+  }
+  renderer.render(scene, camera);
+}
+animate();
+
+// Resize
+window.addEventListener('resize', ()=>{
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  camera.aspect = w/h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
+
+// Initial camera animation
+const startCam = new THREE.Vector3(0, 0, 30);
+camera.position.copy(startCam);
+const targetCam = new THREE.Vector3(0, 0, 18);
+const introDur = 2000;
+const introT0 = performance.now();
+function introCam(){
+  const elapsed = performance.now() - introT0;
+  const t = Math.min(elapsed/introDur, 1);
+  const ease = 1 - Math.pow(1-t, 4);
+  camera.position.lerpVectors(startCam, targetCam, ease);
+  camera.lookAt(0,0,0);
+  if(t<1) requestAnimationFrame(introCam);
+}
+introCam();
+
+</script>
+</body>
+</html>

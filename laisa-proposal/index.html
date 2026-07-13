@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeSight × LAISA — AI Transformation Proposal | OGRE Computer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDFAF7; --bg2:#F7F3EE; --bg3:#F0EBE8;
+  --surface:#FFFFFF;
+  --border:#EDE8E1; --border2:#DDD5C8;
+  --rose:#C4897A; --rose-d:#A87060; --rose-l:#F5EBE8;
+  --gold:#B8966A; --gold-l:#F5EDD8;
+  --sage:#7A9E7E; --sage-l:#E8F0E6;
+  --text:#2C2420; --muted:#7A6E66; --muted2:#A89E94;
+  --white:#FFFFFF;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fp:'Playfair Display',Georgia,serif;
+  --fb:'Jost',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.7}
+h1,h2,h3{font-family:var(--fd);font-weight:600;line-height:1.15}
+.mono{font-family:'Courier New',monospace}
+.label{font-family:var(--fb);font-size:9px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:var(--rose)}
+.container{max-width:1160px;margin:0 auto;padding:0 48px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(253,250,247,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fp);font-size:20px;font-weight:600;color:var(--text);text-decoration:none;letter-spacing:.05em}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-family:var(--fb);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--rose)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-cta{font-family:var(--fb);font-size:9px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:9px 20px;background:var(--rose);color:var(--white);text-decoration:none;border-radius:2px;transition:background .2s}
+.nav-cta:hover{background:var(--rose-d)}
+
+/* SECTIONS */
+section{padding:100px 0}
+section.alt{background:var(--bg2)}
+section.dark{background:var(--text);color:var(--white)}
+section.rose{background:var(--rose-l)}
+
+/* PAGE HERO */
+.page-hero{background:linear-gradient(135deg,var(--bg3) 0%,var(--gold-l) 100%);padding:100px 0 60px;border-bottom:1px solid var(--border)}
+.page-hero .label{margin-bottom:16px}
+.page-hero h1{font-size:clamp(36px,5vw,64px);margin-bottom:16px}
+.page-hero h1 em{font-style:italic;color:var(--rose)}
+.page-hero p{font-size:18px;color:var(--muted);max-width:600px;line-height:1.7}
+
+/* TYPOGRAPHY */
+h2{font-size:clamp(28px,4vw,48px);margin-bottom:16px}
+h3{font-size:clamp(20px,2.5vw,28px);margin-bottom:12px}
+.section-intro{color:var(--muted);font-size:17px;line-height:1.7;max-width:680px;margin-bottom:48px}
+.section-label{margin-bottom:12px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);padding:32px}
+.card.hi{border-color:var(--rose);background:var(--rose-l)}
+.card.sage{border-color:var(--sage);background:var(--sage-l)}
+.card.gold{border-color:var(--gold);background:var(--gold-l)}
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.cards-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
+.cards-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+
+/* PAIN MATRIX */
+.matrix-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:32px}
+.matrix-table th{font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--white);background:var(--text);padding:12px 16px;text-align:left}
+.matrix-table th.cat{background:var(--rose)}
+.matrix-table td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.matrix-table tr:hover td{background:var(--rose-l)}
+.matrix-table .prob{color:var(--rose-d);font-weight:600;font-size:12px}
+.matrix-table .cost{font-family:monospace;font-size:12px;color:var(--muted);white-space:nowrap}
+.matrix-table .icon{font-size:16px;margin-bottom:4px}
+
+/* AI AGENT CARDS */
+.agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.agent-card{background:var(--surface);border:1px solid var(--border);padding:24px;transition:all .3s;position:relative;overflow:hidden}
+.agent-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rose),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.agent-card:hover::before{transform:scaleX(1)}
+.agent-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.06);transform:translateY(-2px)}
+.agent-icon{font-size:28px;margin-bottom:12px}
+.agent-name{font-family:var(--fd);font-size:17px;font-weight:600;margin-bottom:4px}
+.agent-role{font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);margin-bottom:10px}
+.agent-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:40px}
+.stat-card{background:var(--surface);border:1px solid var(--border);padding:28px 20px;text-align:center}
+.stat-val{font-family:var(--fd);font-size:clamp(28px,3.5vw,44px);font-weight:600;color:var(--rose);line-height:1;margin-bottom:6px}
+.stat-lbl{font-family:var(--fb);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+/* TIMELINE / PHASES */
+.phases{margin-top:40px}
+.phase{display:grid;grid-template-columns:220px 1fr;gap:0;margin-bottom:2px}
+.phase-left{background:var(--text);color:var(--white);padding:28px 24px;display:flex;flex-direction:column;justify-content:center}
+.phase-left.alt{background:var(--rose)}
+.phase-left.sage{background:var(--sage)}
+.phase-name{font-family:var(--fd);font-size:20px;font-weight:600;margin-bottom:4px}
+.phase-sub{font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:16px}
+.phase-price{font-family:var(--fd);font-size:32px;font-weight:600;color:var(--white);margin-bottom:4px}
+.phase-weeks{font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.phase-right{background:var(--surface);border:1px solid var(--border);border-left:none;padding:28px 32px;flex:1}
+.phase-items{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.phase-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)}
+.phase-item:last-child,.phase-item:nth-last-child(2){border-bottom:none}
+.phase-item-icon{font-size:14px;margin-top:2px;flex-shrink:0}
+.phase-item-title{font-weight:600;font-size:14px;margin-bottom:2px}
+.phase-item-desc{font-size:12px;color:var(--muted)}
+
+/* COMPARISON TABLE */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:32px}
+.compare-table th{font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--white);background:var(--text);padding:14px 20px;text-align:left}
+.compare-table th.usd{background:var(--rose)}
+.compare-table td{padding:14px 20px;border-bottom:1px solid var(--border);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:var(--bg2)}
+.compare-table .our td{background:var(--sage-l);font-weight:600}
+.compare-table .best{color:var(--sage);font-weight:700}
+
+/* ROI GRID */
+.roi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:40px}
+.roi-card{background:var(--surface);border:1px solid var(--border);padding:40px;text-align:center}
+.roi-card.hi{border-color:var(--rose);background:var(--rose-l)}
+.roi-card.gold{border-color:var(--gold);background:var(--gold-l)}
+.roi-val{font-family:var(--fd);font-size:clamp(40px,5vw,64px);font-weight:600;color:var(--rose);line-height:1;margin-bottom:8px}
+.roi-card.sage .roi-val{color:var(--sage)}
+.roi-card.gold .roi-val{color:var(--gold)}
+.roi-lbl{font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.roi-note{font-size:12px;color:var(--muted2)}
+
+/* LABOUR TABLE */
+.lab-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:24px}
+.lab-table th{font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);padding:12px 16px;text-align:left;border-bottom:2px solid var(--rose);background:var(--rose-l)}
+.lab-table td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.lab-table tr:nth-child(even) td{background:var(--bg2)}
+.lab-table .total td{background:var(--sage-l);font-weight:700;border-top:2px solid var(--sage)}
+
+/* CTA */
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.btn{font-family:var(--fb);font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:14px 28px;border:1px solid;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
+.btn-rose{background:var(--rose);color:var(--white);border-color:var(--rose)}
+.btn-rose:hover{background:var(--rose-d)}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--border2)}
+.btn-outline:hover{border-color:var(--rose);color:var(--rose)}
+.btn-white{background:var(--white);color:var(--rose);border-color:var(--white)}
+.btn-white:hover{background:var(--bg)}
+
+/* PAYMENT CARDS */
+.pay-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.pay-card{background:var(--surface);border:1px solid var(--border);padding:28px;text-align:center;transition:border-color .3s}
+.pay-card:hover{border-color:var(--rose)}
+.pay-card.best{border-color:var(--rose);background:var(--rose-l)}
+.pay-name{font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.pay-amount{font-family:var(--fd);font-size:32px;font-weight:600;color:var(--rose);line-height:1;margin-bottom:4px}
+.pay-period{font-family:var(--fb);font-size:9px;color:var(--muted)}
+.pay-desc{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.5}
+
+/* DARK SECTIONS */
+.dark h2{color:var(--white)}
+.dark p{color:rgba(255,255,255,.65)}
+.dark .label{color:var(--rose)}
+.dark-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.dark-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:32px}
+.dark-card-icon{font-size:28px;margin-bottom:16px}
+.dark-card h3{color:var(--white);font-size:18px;margin-bottom:8px}
+.dark-card p{font-size:14px;color:rgba(255,255,255,.55);line-height:1.6}
+
+/* METRICS GRID */
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.metric{background:var(--surface);border:1px solid var(--border);padding:20px 24px;display:flex;align-items:center;gap:16px}
+.metric-icon{font-size:24px;flex-shrink:0}
+.metric-val{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--rose);line-height:1}
+.metric-lbl{font-family:var(--fb);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* QUOTE BLOCK */
+.quote-block{background:var(--surface);border-left:4px solid var(--rose);padding:32px 40px;margin:40px 0}
+.quote-text{font-family:var(--fd);font-size:clamp(18px,2.5vw,26px);font-style:italic;line-height:1.5;color:var(--text);margin-bottom:12px}
+.quote-attr{font-family:var(--fb);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose)}
+
+/* PAGE NAV */
+.page-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.page-nav a{font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--border);color:var(--muted);text-decoration:none;transition:all .2s}
+.page-nav a:hover,.page-nav a.active{border-color:var(--rose);color:var(--rose)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:flex-start;gap:40px}
+.footer-brand{max-width:300px}
+.footer-logo{font-family:var(--fp);font-size:22px;font-weight:600;color:var(--text);margin-bottom:4px}
+.footer-sub{font-family:var(--fb);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--rose);margin-bottom:12px}
+.footer-tagline{font-family:var(--fd);font-size:15px;font-style:italic;color:var(--muted);line-height:1.5}
+.footer-links{display:flex;gap:60px}
+.footer-col-title{font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.footer-col a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-col a:hover{color:var(--rose)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;margin-top:32px;display:flex;justify-content:space-between;align-items:center;width:100%}
+.footer-bottom p{font-family:var(--fb);font-size:9px;letter-spacing:.15em;color:var(--muted2);text-transform:uppercase}
+
+@media(max-width:900px){
+  nav{padding:14px 24px}.nav-links{display:none}.container{padding:0 24px}
+  section{padding:60px 0}
+  .cards-3,.cards-2,.cards-4{grid-template-columns:1fr 1fr}
+  .agent-grid,.pay-cards{grid-template-columns:1fr 1fr}
+  .dark-cards{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .roi-grid{grid-template-columns:1fr}
+  .phase{grid-template-columns:1fr}
+  .phase-left{border-right:none;border-bottom:2px solid var(--white)}
+  .phase-items{grid-template-columns:1fr}
+  .footer{flex-direction:column;padding:40px 24px}.footer-links{flex-wrap:wrap;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .metrics-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .cards-3,.cards-2,.cards-4,.agent-grid,.pay-cards,.stat-row{grid-template-columns:1fr}
+  .compare-table{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">SafeSight × LAISA</a>
+  <ul class="nav-links">
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#solution">The Solution</a></li>
+    <li><a href="#agents">AI Agents</a></li>
+    <li><a href="#phases">Phases</a></li>
+    <li><a href="#roi">ROI</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#pricing" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 00 — COVER                                        -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section style="padding:120px 0 80px;background:linear-gradient(135deg,#F0E8DC 0%,#F5EDD8 50%,#E8D5C4 100%);position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23C4897A\" fill-opacity=\"0.06\"><path d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/></g></g></svg>');opacity:.5"></div>
+<div class="container" style="position:relative">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+<div>
+<div class="label" style="margin-bottom:24px">Prepared for SafeSight Clinic — Sandton, Johannesburg</div>
+<h1 style="font-size:clamp(48px,6vw,80px);margin-bottom:20px;line-height:1.05">Your AI<br><em>Transformation.</em></h1>
+<p style="font-size:18px;color:var(--muted);line-height:1.7;max-width:480px;margin-bottom:40px">A comprehensive proposal from OGRE Computer and LAISA — transforming your practice from manual, reactive operations into an intelligent, automated system that works 24/7 while your team focuses on what only humans can do.</p>
+<div class="stat-row" style="margin-top:0">
+<div style="background:var(--white);border:1px solid var(--border);padding:24px 16px;text-align:center">
+<div style="font-family:var(--fd);font-size:32px;font-weight:600;color:var(--rose);line-height:1">16</div>
+<div style="font-family:var(--fb);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">AI Agents</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);padding:24px 16px;text-align:center">
+<div style="font-family:var(--fd);font-size:32px;font-weight:600;color:var(--rose);line-height:1">R85K</div>
+<div style="font-family:var(--fb);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Total Investment</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);padding:24px 16px;text-align:center">
+<div style="font-family:var(--fd);font-size:32px;font-weight:600;color:var(--sage);line-height:1">Mo 2</div>
+<div style="font-family:var(--fb);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Break-Even</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);padding:24px 16px;text-align:center">
+<div style="font-family:var(--fd);font-size:32px;font-weight:600;color:var(--gold);line-height:1">15.7x</div>
+<div style="font-family:var(--fb);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Annual ROI</div>
+</div>
+</div>
+<div style="text-align:center;padding:40px 0">
+<div style="font-family:var(--fp);font-size:clamp(80px,12vw,140px);font-weight:600;color:var(--text);line-height:1;letter-spacing:.08em;text-shadow:0 2px 24px rgba(196,137,122,.15)">LAISA</div>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--rose);margin-top:12px">Operating System for Business</div>
+<div style="margin-top:40px;display:flex;flex-direction:column;gap:8px">
+<div style="font-family:var(--fb);font-size:11px;color:var(--muted)">Prepared by</div>
+<div style="font-family:var(--fp);font-size:16px;color:var(--text)">OGRE Computer — Studex Group</div>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted2)">D@RK F@C#ORY VM · orgo.ai</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 01 — WHERE YOU ARE NOW (THE PROBLEM)           -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="problem">
+<div class="container">
+<div class="label">Document 01</div>
+<h2>The Problem Is Not Your People.<br>It Is Your System.</h2>
+<p class="section-intro">Every efficiency problem in your practice has the same root cause: manual, disconnected systems that require human effort for tasks machines do better. Here is exactly what that costs you — measured in time, money, and lost patients.</p>
+
+<div class="cards-4">
+<div class="card hi">
+<div style="font-size:28px;margin-bottom:12px">📞</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Booking & Front Desk</div>
+<p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">Your reception team handles 60-80% routine queries manually — eating capacity for complex cases that actually need human judgment.</p>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose)">Cost: R30,000–50,000/mo wasted admin time</div>
+</div>
+<div class="card">
+<div style="font-size:28px;margin-bottom:12px">📱</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Marketing & Acquisition</div>
+<p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">One person bottleneck. No strategy. No content calendar. No engagement tracking. Patients find you — or they find your competitor.</p>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose)">Cost: R120,000–180,000/yr in lost new patients</div>
+</div>
+<div class="card">
+<div style="font-size:28px;margin-bottom:12px">💳</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Billing & Collections</div>
+<p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">Weeks to collect. Revenue leaks through gaps in your billing cycle. No visibility into who's paying and who isn't until month-end.</p>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose)">Cost: R60,000–100,000/yr in preventable losses</div>
+</div>
+<div class="card">
+<div style="font-size:28px;margin-bottom:12px">📋</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Compliance & Data</div>
+<p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">POPIA compliance managed by hand. Staff turnover erases institutional knowledge. Systems don't talk to each other — your team does the talking.</p>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose)">Risk: Regulatory exposure + knowledge loss</div>
+</div>
+</div>
+
+<!-- PAIN MATRIX TABLE -->
+<div style="margin-top:60px">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:16px">Complete Pain Matrix</div>
+<table class="matrix-table">
+<thead>
+<tr>
+<th>Area</th>
+<th>Problem</th>
+<th>Current Reality</th>
+<th>Hidden / Explicit Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="4" style="background:var(--rose-l);font-weight:700;color:var(--rose);white-space:nowrap;padding:16px;font-size:11px;letter-spacing:.05em">BOOKING &<br>FRONT DESK</td>
+<td class="prob">Booking-by-phone only</td>
+<td>Every booking requires a phone call. Staff are occupied with calls that could be handled instantly.</td>
+<td class="cost">R7,500/mo in receptionist time</td>
+</tr>
+<tr>
+<td class="prob">No 24/7 coverage</td>
+<td>After-hours enquiries go to voicemail. Patients find another practice.</td>
+<td class="cost">R15,000–25,000/mo in lost conversions</td>
+</tr>
+<tr>
+<td class="prob">Triple data entry</td>
+<td>Same patient info entered 3 times across different systems. Exhaustive for staff.</td>
+<td class="cost">1.75 hrs/day in duplicated effort</td>
+</tr>
+<tr>
+<td class="prob">No-show rate 20%+</td>
+<td>Manual reminders. Patients forget. Slots go empty.</td>
+<td class="cost">R27,000/mo in lost appointment value</td>
+</tr>
+<tr>
+<td rowspan="4" style="background:var(--gold-l);font-weight:700;color:var(--gold);white-space:nowrap;padding:16px;font-size:11px">MARKETING &<br>PATIENT ACQ.</td>
+<td class="prob">Inconsistent posting</td>
+<td>2-3 posts per week, ad hoc. No content calendar. No strategy.</td>
+<td class="cost">R2,500–5,000/mo for agency</td>
+</tr>
+<tr>
+<td class="prob">Zero engagement tracking</td>
+<td>No data on reach, impressions, or conversions from social.</td>
+<td class="cost">Unknown — unmeasurable</td>
+</tr>
+<tr>
+<td class="prob">No lead capture</td>
+<td>Enquiries from website/Instagram go cold. No follow-up system.</td>
+<td class="cost">30–40% of leads never convert</td>
+</tr>
+<tr>
+<td class="prob">No online presence control</td>
+<td>Google listings unmanaged. Reviews unanswered.</td>
+<td class="cost">R6,000–12,000/yr in missed visibility</td>
+</tr>
+<tr>
+<td rowspan="4" style="background:var(--sage-l);font-weight:700;color:var(--sage);white-space:nowrap;padding:16px;font-size:11px">BILLING &<br>FINANCE</td>
+<td class="prob">Slow invoicing cycle</td>
+<td>Invoices sent days after treatment. Delays cash collection by weeks.</td>
+<td class="cost">R15,000/mo in delayed cash flow</td>
+</tr>
+<tr>
+<td class="prob">Weak collections</td>
+<td>No automated reminders. Outstanding balances grow.</td>
+<td class="cost">R8,000–15,000/mo in uncollected debt</td>
+</tr>
+<tr>
+<td class="prob">No payment options</td>
+<td>Patients want SnapScan, EFT, payment plans. You offer one method.</td>
+<td class="cost">R4,000–8,000/mo in avoided transactions</td>
+</tr>
+<tr>
+<td class="prob">Revenue blindspots</td>
+<td>No per-doctor, per-procedure real-time revenue view.</td>
+<td class="cost">Strategic decisions made on gut feel</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- THE REAL COST SUMMARY -->
+<div style="margin-top:60px">
+<div class="quote-block">
+<div class="quote-text">"The total measurable cost of your current system is R88,000–R128,000 per month in direct financial losses — before accounting for staff frustration, patient experience, and competitive disadvantage."</div>
+<div class="quote-attr">OGRE Computer Analysis — based on SafeSight current state</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 02 — WHERE WE'RE TAKING YOU (THE SOLUTION)       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="solution" class="alt">
+<div class="container">
+<div class="label">Document 02</div>
+<h2>Where We're Taking You</h2>
+<p class="section-intro">Six integrated systems. Sixteen AI agents. One intelligent operating system that runs while your team focuses on what humans do best — care for patients.</p>
+
+<!-- AGENT GRID -->
+<div id="agents">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:16px">Your 16 AI Agents — All Working 24/7</div>
+<div class="agent-grid">
+
+<div class="agent-card">
+<div class="agent-icon">📋</div>
+<div class="agent-name">Front Desk Agent</div>
+<div class="agent-role">Booking & Patient Intake</div>
+<div class="agent-desc">Handles all inbound enquiries, books appointments, sends confirmations and reminders. Works 24/7 via WhatsApp and web. Eliminates phone tag entirely.</div>
+</div>
+<div class="agent-card">
+<div class="agent-icon">💳</div>
+<div class="agent-name">Billing Agent</div>
+<div<div class="agent-icon">💳</div><div class="agent-name">Billing Agent</div><div class="agent-role">Invoicing & Collections</div><div class="agent-desc">Generates invoices the moment treatment is complete. Sends EFT details. Tracks outstanding balances. Follows up automatically on overdue accounts.</div></div><div class="agent-card"><div class="agent-icon">🎙</div><div class="agent-name">Voice Agent</div><div class="agent-role">Transcription & Notes</div><div class="agent-desc">Transcribes voice notes from practitioners. Files key actions directly into the patient record. Summarises consultations in seconds.</div></div><div class="agent-card"><div class="agent-icon">💬</div><div class="agent-name">Communications Agent</div><div class="agent-role">WhatsApp & SMS</div><div class="agent-desc">Manages all WhatsApp and SMS communication. Appointment reminders, confirmation requests, after-hours enquiries, post-treatment care instructions.</div></div><div class="agent-card"><div class="agent-icon">📧</div><div class="agent-name">Inbox Agent</div><div class="agent-role">Email Triage & Response</div><div class="agent-desc">Categorises, prioritises, and drafts responses to all incoming email. Routes urgent items to the correct team member. Archives everything.</div></div><div class="agent-card"><div class="agent-icon">📊</div><div class="agent-name">Marketing Agent</div><div class="agent-role">Content & Scheduling</div><div class="agent-desc">Creates, schedules, and publishes social media content. Tracks engagement. Monitors Google reviews and responds. Builds your online presence automatically.</div></div><div class="agent-card"><div class="agent-icon">🛡</div><div class="agent-name">Compliance Agent</div><div class="agent-role">POPIA & Audit</div><div class="agent-desc">Logs every data access event. Manages patient consent. Produces audit reports on demand. Keeps you POPIA-compliant without manual effort.</div></div>
+
+</div>
+</div>
+
+<!-- THE 6 TRANSFORMATION PILLARS -->
+<div style="margin-top:80px">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:20px">What Changes — System by System</div>
+<div class="cards-2">
+<div class="card">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px">01 — BOOKING & INTAKE</div>
+<h3 style="margin-bottom:12px">From Phone-Only to Omnichannel AI Intake</h3>
+<p style="color:var(--muted);font-size:15px;line-height:1.7">Every channel — WhatsApp, website, phone, Instagram — becomes a booking channel. AI handles the full intake conversation: collects patient details, checks availability, books the slot, sends confirmation, and reminds automatically. Zero human involvement for routine bookings.</p>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> WhatsApp booking — instant, 24/7</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> Pre-appointment forms sent automatically</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> 24-hour + 2-hour reminders</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> No-show prediction + proactive outreach</div>
+</div>
+</div>
+<div class="card">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px">02 — BILLING & FINANCE</div>
+<h3 style="margin-bottom:12px">From Slow Invoicing to Instant, Automated Billing</h3>
+<p style="color:var(--muted);font-size:15px;line-height:1.7">Invoices generated the moment treatment is logged. EFT details sent automatically. Outstanding balances tracked daily. Follow-up sequences run without human input. Collections improve dramatically — patients pay faster when it's frictionless.</p>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> Invoice generated at treatment completion</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> EFT details + SnapScan sent via WhatsApp</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> 7/14/30-day auto-follow-up sequences</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> Real-time revenue dashboard</div>
+</div>
+</div>
+<div class="card">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px">03 — PATIENT EXPERIENCE</div>
+<h3 style="margin-bottom:12px">From Paper Forms to Intelligent Digital Experience</h3>
+<p style="color:var(--muted);font-size:15px;line-height:1.7">Patients receive a WhatsApp message before their appointment with everything they need: directions, pre-treatment instructions, consent forms. After treatment: care instructions, follow-up schedule, satisfaction check. Every touchpoint elevated.</p>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Digital consent forms — sign on WhatsApp</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Pre-treatment instructions auto-sent</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Post-treatment care sequence</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Satisfaction survey — catch problems before they become reviews</div>
+</div>
+</div>
+<div class="card">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px">04 — MARKETING & GROWTH</div>
+<h3 style="margin-bottom:12px">From Ad-Hoc to Always-On Patient Acquisition</h3>
+<p style="color:var(--muted);font-size:15px;line-height:1.7">A content machine that never sleeps. Three posts per week minimum, generated around your services and patient education. Automated engagement on comments and DMs. Google review requests after every appointment. A lead capture system that follows up within 5 minutes of any enquiry.</p>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> 3 posts/week minimum — curated and scheduled</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> Review requests after every appointment</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> Lead response within 5 minutes</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--rose)">→</span> Re-engagement campaigns for lapsed patients</div>
+</div>
+</div>
+<div class="card">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px">05 — KNOWLEDGE & OPERATIONS</div>
+<h3 style="margin-bottom:12px">From Institutional Memory Loss to AI-Powered Knowledge</h3>
+<p style="color:var(--muted);font-size:15px;line-height:1.7">Every policy, every FAQ, every consent form, every protocol — all digitised and accessible to AI and staff. When a new receptionist joins, they have instant access to your complete knowledge base. Staff turnover no longer means starting from zero.</p>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> Internal knowledge base — AI searchable</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> Policy and procedure automation</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> New staff onboarding — 80% faster</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--sage)">→</span> FAQ bot for common patient questions</div>
+</div>
+</div>
+<div class="card">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:12px">06 — PRACTICE INTELLIGENCE</div>
+<h3 style="margin-bottom:12px">From Gut-Feel Decisions to Real-Time Data</h3>
+<p style="color:var(--muted);font-size:15px;line-height:1.7">A live dashboard showing your pipeline, daily bookings, revenue, no-show risk scores, patient lifetime value, and marketing ROI. Every metric that matters — updated in real-time. Make strategic decisions with data, not gut feel.</p>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Revenue dashboard — real-time</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Per-doctor, per-procedure breakdown</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> No-show prediction model</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)"><span style="color:var(--gold)">→</span> Patient LTV tracking</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 03 — INVESTMENT & PHASES                        -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="phases">
+<div class="container">
+<div class="label">Document 03</div>
+<h2>The Investment &<br>Implementation Phases</h2>
+<p class="section-intro">Three implementation phases. Each phase delivers working functionality — not a project that ends with a PowerPoint. You see results from week one.</p>
+
+<div class="phases">
+
+<div class="phase">
+<div class="phase-left">
+<div class="phase-name">Phase 01</div>
+<div class="phase-sub">Foundation — Weeks 1–3</div>
+<div class="phase-price">R25,000</div>
+<div class="phase-weeks">3 Weeks to Working</div>
+</div>
+<div class="phase-right">
+<div class="phase-items">
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">WhatsApp AI — Enquiry Flow</div><div class="phase-item-desc">AI greets, collects info, books appointments, sends confirmations on WhatsApp. Goes live in week 1.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Smart Reminder System</div><div class="phase-item-desc">Automated appointment reminders at 24 hours and 2 hours before. Reduces no-shows from day one.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">After-Hours AI Coverage</div><div class="phase-item-desc">AI handles all WhatsApp and web enquiries after hours. No more missed patients.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Supabase Data Architecture</div><div class="phase-item-desc">Central database for all patient records, appointments, and interactions. The foundation everything else builds on.</div></div>
+</div>
+</div>
+</div>
+
+<div class="phase">
+<div class="phase-left alt">
+<div class="phase-name">Phase 02</div>
+<div class="phase-sub">Intelligence — Weeks 4–7</div>
+<div class="phase-price">R30,000</div>
+<div class="phase-weeks">4 Weeks to Full System</div>
+</div>
+<div class="phase-right">
+<div class="phase-items">
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Medical Aid Pre-Verification</div><div class="phase-item-desc">AI contacts medical aid before appointments to verify benefits. No more surprise patient costs.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Automated Billing & Invoicing</div><div class="phase-item-desc">Invoices generated automatically after treatment. EFT details sent via WhatsApp. Payment tracking begins.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Practice Knowledge Base</div><div class="phase-item-desc">Your protocols, FAQs, and procedures — AI accessible. New staff onboard 80% faster.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Social Media Automation</div><div class="phase-item-desc">3 posts per week minimum. Automated engagement. Review requests after every appointment.</div></div>
+</div>
+</div>
+</div>
+
+<div class="phase">
+<div class="phase-left sage">
+<div class="phase-name">Phase 03</div>
+<div class="phase-sub">Intelligence Suite — Weeks 8–12</div>
+<div class="phase-price">R30,000</div>
+<div class="phase-weeks">12 Weeks to Complete</div>
+</div>
+<div class="phase-right">
+<div class="phase-items">
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Patient Lifecycle Campaigns</div><div class="phase-item-desc">Automated re-engagement for lapsed patients. Birthday messages. Review requests. Post-treatment care sequences.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Practice Intelligence Dashboard</div><div class="phase-item-desc">Real-time revenue, bookings, no-show risk, patient LTV, marketing ROI. All in one view, updated live.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">Compliance Automation</div><div class="phase-item-desc">POPIA audit trail. Patient consent management. Data access logging. Audit-ready at all times.</div></div>
+<div class="phase-item"><div class="phase-item-icon">✓</div><div class="phase-item-title">RevOps Command Centre</div><div class="phase-item-desc">Full operations dashboard. Every metric that matters. Dr. Mentor, Dr. Ramasodi — all access from any device.</div></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- INVESTMENT SUMMARY -->
+<div style="margin-top:60px">
+<div style="background:var(--surface);border:2px solid var(--rose);padding:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;text-align:center">
+<div>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Total Investment</div>
+<div style="font-family:var(--fd);font-size:48px;font-weight:600;color:var(--rose);line-height:1">R85,000</div>
+<div style="font-family:var(--fb);font-size:9px;color:var(--muted);margin-top:4px">~$4,530 USD</div>
+</div>
+<div>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Monthly Hosting</div>
+<div style="font-family:var(--fd);font-size:48px;font-weight:600;color:var(--text);line-height:1">R5,000</div>
+<div style="font-family:var(--fb);font-size:9px;color:var(--muted);margin-top:4px">~$267 USD / month</div>
+</div>
+<div>
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Break-Even</div>
+<div style="font-family:var(--fd);font-size:48px;font-weight:600;color:var(--sage);line-height:1">Month 2</div>
+<div style="font-family:var(--fb);font-size:9px;color:var(--muted);margin-top:4px">From R193,515/month impact</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 04 — ROI & VALUE                             -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="roi" class="alt">
+<div class="container">
+<div class="label">Document 04</div>
+<h2>The Return on Investment</h2>
+<p class="section-intro">Measured in hours saved, revenue gained, and risks eliminated. This is what the transformation is worth — in numbers your accountant will understand.</p>
+
+<!-- ROI CARDS -->
+<div class="roi-grid">
+<div class="roi-card hi">
+<div class="roi-val">15.7x</div>
+<div class="roi-lbl">Annual Return on Investment</div>
+<div class="roi-note">R85,000 investment ÷ R1,334,160 annual net benefit = 1,575% ROI</div>
+</div>
+<div class="roi-card">
+<div class="roi-val">R193,515</div>
+<div class="roi-lbl">Monthly Impact Created</div>
+<div class="roi-note">R107,300 recovered + R60,000 revenue + R26,215 cost savings</div>
+</div>
+<div class="roi-card">
+<div class="roi-val">Month 2</div>
+<div class="roi-lbl">Payback Period</div>
+<div class="roi-note">R85,000 ÷ R193,515/month = 0.44 months. Fully paid back by Month 2.</div>
+</div>
+</div>
+
+<!-- LABOUR RECOVERY TABLE -->
+<div style="margin-top:60px">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:16px">Monthly Labour Hours Recovered — by Function</div>
+<table class="lab-table">
+<thead><tr><th>Function</th><th>Current Monthly Hours</th><th>AI Handles</th><th>Human Hours Saved</th><th>Value @ R250/hr</th></tr></thead>
+<tbody>
+<tr><td><strong>Booking & Front Desk</strong></td><td>160 hrs</td><td>148 hrs (93%)</td><td>148 hrs</td><td>R37,000</td></tr>
+<tr><td><strong>Billing & Collections</strong></td><td>44 hrs</td><td>38 hrs (86%)</td><td>38 hrs</td><td>R9,500</td></tr>
+<tr><td><strong>Social Media & Marketing</strong></td><td>60 hrs</td><td>54 hrs (90%)</td><td>54 hrs</td><td>R13,500</td></tr>
+<tr><td><strong>Patient Follow-Up</strong></td><td>40 hrs</td><td>38 hrs (95%)</td><td>38 hrs</td><td>R9,500</td></tr>
+<tr><td><strong>Reporting & Admin</strong></td><td>20 hrs</td><td>14 hrs (70%)</td><td>14 hrs</td><td>R3,500</td></tr>
+<tr><td><strong>New Enquiry Response</strong></td><td>40 hrs</td><td>38 hrs (95%)</td><td>38 hrs</td><td>R9,500</td></tr>
+<tr class="total"><td><strong>TOTAL RECOVERED PER MONTH</strong></td><td>364 hrs</td><td>330 hrs (91%)</td><td><strong>330 hrs</strong></td><td><strong>R82,500</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- VALUE CREATED -->
+<div style="margin-top:60px">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:16px">Monthly Value Created — Three Streams</div>
+<div class="cards-3">
+<div class="card sage">
+<div style="font-size:28px;margin-bottom:12px">⏱</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Labour Recovery</div>
+<div style="font-family:var(--fd);font-size:36px;font-weight:600;color:var(--sage);margin-bottom:8px">R82,500</div>
+<div style="font-size:13px;color:var(--muted);line-height:1.5">330 hours/month of admin work recovered across all functions. Staff free to focus on patient care and complex cases.</div>
+</div>
+<div class="card gold">
+<div style="font-size:28px;margin-bottom:12px">📈</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Revenue Growth</div>
+<div style="font-family:var(--fd);font-size:36px;font-weight:600;color:var(--gold);margin-bottom:8px">R60,000</div>
+<div style="font-size:13px;color:var(--muted);line-height:1.5">New patients acquired through AI-powered marketing + 40% reduction in no-shows recovering lost appointment slots.</div>
+</div>
+<div class="card hi">
+<div style="font-size:28px;margin-bottom:12px">🛡</div>
+<div style="font-family:var(--fd);font-size:18px;font-weight:600;margin-bottom:8px">Cost Savings & Risk</div>
+<div style="font-family:var(--fd);font-size:36px;font-weight:600;color:var(--rose);margin-bottom:8px">R51,015</div>
+<div style="font-size:13px;color:var(--muted);line-height:1.5">Reduced no-show write-offs, eliminated duplicate staff hires, avoided compliance fines, faster debt collection.</div>
+</div>
+</div>
+</div>
+
+<div style="margin-top:60px">
+<div class="quote-block">
+<div class="quote-text">"After 12 months: R85,000 invested. R1,334,160 in annual benefit. A 15.7x return on investment — and a practice that runs itself between appointments."</div>
+<div class="quote-attr">OGRE Computer — Value Analysis</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PRICING — GLOBAL COMPARISON                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="pricing">
+<div class="container">
+<div class="label">Pricing & Global Comparison</div>
+<h2>What This Costs — And<br>What It Would Cost in America</h2>
+<p class="section-intro">SafeSight is getting enterprise-grade AI at a South African price. Here is exactly what comparable systems cost in the United States — and why.</p>
+
+<!-- MONTHLY COMPARISON -->
+<div style="margin-top:48px">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:16px">Monthly Cost Comparison — AI Receptionist & CRM Systems (USA)</div>
+<table class="compare-table">
+<thead><tr><th>Company / Product</th><th>What It Does</th><th class="usd">Monthly Cost (USD)</th><th class="usd">Annual Cost (USD)</th></tr></thead>
+<tbody>
+<tr><td><strong>Air.AI</strong><br><span style="font-size:12px;color:var(--muted)">24/7 AI sales/receptionist calls</span></td><td>AI phone calls — 24/7. Works as a receptionist. No human for routine calls.</td><td class="usd">$2,400–4,800/mo</td><td class="usd">$28,800–57,600</td></tr>
+<tr><td><strong>Synthflow AI</strong><br><span style="font-size:12px;color:var(--muted)">AI voice booking agent</span></td><td>Voice AI for appointment booking. Integrates with Google Calendar and call systems.</td><td class="usd">$395–1,199/mo</td><td class="usd">$4,740–14,388</td></tr>
+<tr><td><strong> Bland AI</strong><br><span style="font-size:12px;color:var(--muted)">Enterprise voice AI</span></td><td>Voice AI for inbound calls. Custom personas. Medical, legal, dental verticals.</td><td class="usd">$1,000–10,000/mo</td><td class="usd">$12,000–120,000</td></tr>
+<tr><td><strong>Otter.ai</strong><br><span style="font-size:12px;color:var(--muted)">Transcription + meeting notes</span></td><td>Voice transcription for meetings and consultations. Auto-generated notes.</td><td class="usd">$480–960/mo</td><td class="usd">$5,760–11,520</td></tr>
+<tr><td><strong>Drift (Sitebot)</strong><br><span style="font-size:12px;color:var(--muted)">Conversational AI for websites</span></td><td>AI chat widget for websites. Books appointments, qualifies leads.</td><td class="usd">$500–1,500/mo</td><td class="usd">$6,000–18,000</td></tr>
+<tr><td><strong>Oracle Health (Cerner)</strong><br><span style="font-size:12px;color:var(--muted)">Enterprise medical CRM</span></td><td>Full enterprise EMR + practice management for large medical groups. $500K+ implementation.</td><td class="usd">$40,000–100,000/mo</td><td class="usd">$480,000–1,200,000</td></tr>
+<tr><td><strong>HubSpot CRM + AI</strong><br><span style="font-size:12px;color:var(--muted)">Full CRM + marketing automation</span></td><td>Full CRM, email marketing, social management, analytics, AI features. Enterprise tier.</td><td class="usd">$3,200–8,000/mo</td><td class="usd">$38,400–96,000</td></tr>
+<tr><td><strong>Custom Built (Agency)</strong><br><span style="font-size:12px;color:var(--muted)">USA agency builds equivalent system</span></td><td>A US software agency building the same 16-agent system with US developers.</td><td class="usd">$50,000–200,000</td><td class="usd">$600,000–2,400,000</td></tr>
+<tr class="our"><td><strong style="color:var(--sage)">SafeSight × LAISA (OGRE Computer)</strong><br><span style="font-size:12px;color:var(--muted)">16 agents, full system, South Africa pricing</span></td><td>Full 16-agent AI OS: booking, billing, voice, WhatsApp, marketing, compliance, dashboard — everything listed above.</td><td class="usd" style="color:var(--sage)"><strong>R5,000/mo = ~$267</strong></td><td class="usd" style="color:var(--sage)"><strong>R60,000/yr = ~$3,200</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ANNUAL COMPARISON -->
+<div style="margin-top:60px">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:16px">Annual Total Cost Comparison — Full System</div>
+<div class="pay-cards">
+<div class="pay-card">
+<div class="pay-name">Air.AI Only</div>
+<div class="pay-amount">$57,600</div>
+<div class="pay-period">per year — USA</div>
+<div class="pay-desc">Voice AI calls only. No CRM, no billing, no marketing. Just calls.</div>
+</div>
+<div class="pay-card">
+<div class="pay-name">Synthflow + HubSpot</div>
+<div class="pay-amount">$25,000</div>
+<div class="pay-period">per year — USA</div>
+<div class="pay-desc">Voice AI + CRM. No billing automation, no marketing content, no compliance layer. Two separate systems.</div>
+</div>
+<div class="pay-card">
+<div class="pay-name">Custom USA Build</div>
+<div class="pay-amount">$600K</div>
+<div class="pay-period">per year — USA Agency</div>
+<div class="pay-desc">An agency builds you a bespoke 16-agent system. 12-month build. $600K minimum.</div>
+</div>
+<div class="pay-card best">
+<div class="pay-name" style="color:var(--rose)">SafeSight × LAISA</div>
+<div class="pay-amount" style="color:var(--rose)">$3,200</div>
+<div class="pay-period" style="color:var(--rose)">per year — OGRE</div>
+<div class="pay-desc" style="border-top:1px solid var(--rose);padding-top:12px;margin-top:12px">Full 16-agent AI OS. Everything. Complete. Plus R85,000 implementation (one-time).</div>
+</div>
+</div>
+</div>
+
+<!-- SAFE VS USA SUMMARY -->
+<div style="margin-top:60px">
+<div style="background:var(--sage-l);border:1px solid var(--sage);padding:40px;text-align:center">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--sage);margin-bottom:12px">SAFESIGHT × LAISA vs USA ALTERNATIVES</div>
+<div style="font-family:var(--fd);font-size:clamp(28px,4vw,48px);font-weight:600;color:var(--sage);margin-bottom:12px">18–187 Times More Affordable Than US Alternatives</div>
+<div style="font-family:var(--fb);font-size:16px;color:var(--muted);max-width:600px;margin:0 auto;line-height:1.7">The full SafeSight AI OS — 16 agents, every feature, complete implementation, ongoing hosting — costs less per year than one month of Air.AI or Synthflow alone in the USA.</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- CLOSING — FINAL PROPOSAL SUMMARY                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="dark">
+<div class="container">
+<div class="label" style="color:var(--rose)">The Proposal</div>
+<h2 style="color:var(--white);margin-top:12px;margin-bottom:16px">Your Practice.<br>Transformed in 12 Weeks.</h2>
+<p style="color:rgba(255,255,255,.6);font-size:17px;line-height:1.7;max-width:600px;margin-bottom:48px">Here is exactly what you get — at the price that makes this the easiest business decision you will make this year.</p>
+
+<div class="dark-cards">
+<div class="dark-card">
+<div class="dark-card-icon">⏱</div>
+<h3 style="color:var(--white)">12 Weeks</h3>
+<p>From signed proposal to fully operational AI operating system. Phase 1 live in week one.</p>
+</div>
+<div class="dark-card">
+<div class="dark-card-icon">💰</div>
+<h3 style="color:var(--white)">R85,000</h3>
+<p>Total investment. R5,000/month thereafter. Break-even by Month 2.</p>
+</div>
+<div class="dark-card">
+<div class="dark-card-icon">📈</div>
+<h3 style="color:var(--white)">R193,515/mo</h3>
+<p>Monthly impact created. 15.7x annual ROI. R1.3M+ per year in recovered time and revenue.</p>
+</div>
+</div>
+
+<div style="margin-top:60px;padding:40px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)">
+<div style="font-family:var(--fb);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:20px">What Happens Next</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div>
+<div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--white);margin-bottom:12px">1. Accept This Proposal</div>
+<div style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.7">Sign the proposal. Pay 50% upfront (R42,500). We begin within 48 hours.</div>
+</div>
+<div>
+<div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--white);margin-bottom:12px">2. We Build Phase 01</div>
+<div style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.7">WhatsApp AI goes live within week one. You see working AI handling patients immediately.</div>
+</div>
+<div>
+<div style="font-family:var(--fd);font-size:24px;font-weight:600;color:var(--white);margin-bottom:12px">3. Full System by Week 12</div>
+<div style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.7">Phases 02 and 03 complete. All 16 agents live. Dashboard running. Practice transformed.</div>
+</div>
+</div>
+</div>
+
+<div style="margin-top:40px;padding:40px;background:var(--rose);text-align:center">
+<div style="font-family:var(--fd);font-size:clamp(24px,3vw,36px);font-weight:600;color:var(--white);margin-bottom:12px">Ready to transform your practice?</div>
+<div style="font-family:var(--fb);font-size:14px;color:rgba(255,255,255,.8);margin-bottom:32px">Contact Dr. Mentor or Dr. Ramasodi at LAISA Aesthetics — or reply to this proposal to begin.</div>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+<a href="mailto:info@studexmeat.com" class="btn btn-white">Accept Proposal</a>
+<a href="mailto:info@studexmeat.com?subject=Questions About LAISA Proposal" class="btn" style="border-color:rgba(255,255,255,.4);color:var(--white)">Ask Questions</a>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="footer-brand">
+<div class="footer-logo">LAISA</div>
+<div class="footer-sub">Operating System for Business</div>
+<p class="footer-tagline">"The best time to transform your practice was when you opened it.<br>The second best time is now."</p>
+</div>
+<div class="footer-links">
+<div class="footer-col">
+<div class="footer-col-title">The Proposal</div>
+<ul>
+<li><a href="#problem">The Problem</a></li>
+<li><a href="#solution">The Solution</a></li>
+<li><a href="#agents">AI Agents</a></li>
+<li><a href="#phases">Phases</a></li>
+<li><a href="#roi">ROI</a></li>
+<li><a href="#pricing">Pricing</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<div class="footer-col-title">Contact</div>
+<ul>
+<li>info@studexmeat.com</li>
+<li>Laisa@safesight.co.za</li>
+<li>+27 11 346 5088</li>
+<li>159 Rivonia Road, Sandton</li>
+</ul>
+</div>
+<div class="footer-col">
+<div class="footer-col-title">Built By</div>
+<ul>
+<li>OGRE Computer</li>
+<li>Studex Group</li>
+<li>D@RK F@C#ORY VM</li>
+<li>orgo.ai</li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p>© 2026 SafeSight Clinic × LAISA Aesthetics × OGRE Computer — Studex Group, South Africa</p>
+<p>Confidential — Prepared for SafeSight Clinic</p>
+</div>
+</footer>
+
+</body>
+</html>

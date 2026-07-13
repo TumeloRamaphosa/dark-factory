@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dark Factory — Build Me A Dashboard | OGRE Computer</title>
+<meta name="description" content="Build Me A Dashboard from R29. AI agents scope, build, review, and ship your product. Pay only when it ships.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--o:#ff6b00;--a:#f59e0b;--g:#22c55a;--t:#f0f4ff;--m:#94a3b8;--d:#475569;--s:#0f1117}
+body{background:var(--s);color:var(--t);font-family:'Plus Jakarta Sans',system-ui,sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input{font-family:inherit}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(255,107,0,.04),transparent 60%),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px,50px 50px,50px 50px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:-300px;left:-100px;width:700px;height:700px;background:radial-gradient(circle,rgba(255,107,0,.1),transparent 70%);pointer-events:none;z-index:0}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.4}}@keyframes sp{to{transform:rotate(360deg)}}
+.z{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px}
+.dn{display:none}header{position:sticky;top:0;z-index:50;backdrop-filter:blur(20px);background:rgba(15,17,23,.9);border-bottom:1px solid rgba(255,255,255,.06)}
+.r{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
+.lg{display:flex;align-items:center;gap:10px}
+.li{width:32px;height:32px;background:linear-gradient(135deg,#ff6b00,#f59e0b);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lg span{font-size:16px;font-weight:900}
+.lg small{font-size:10px;color:var(--o);font-family:'JetBrains Mono',monospace;margin-left:5px}
+nav{display:flex;gap:4px}
+nav button{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--m);background:transparent;border:1px solid transparent;cursor:pointer;transition:all .15s}
+nav button:hover{color:var(--t);background:rgba(255,255,255,.04)}
+nav button.ac{color:var(--o);background:rgba(255,107,0,.12);border-color:rgba(255,107,0,.25)}
+.ab{display:flex;align-items:center;gap:10px}
+.dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pu 2s infinite}
+.at{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--m)}
+.bp{background:linear-gradient(135deg,#ff6b00,#f59e0b);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.bp:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.mm{display:none;background:transparent;border:none;color:var(--m);cursor:pointer}
+.mn{padding:12px 0 4px;display:none;flex-direction:column}
+.mn.open{display:flex}
+.mn button{width:100%;text-align:left;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--m);background:transparent}
+.mn button.ac,.mn button:hover{color:var(--o);background:rgba(255,107,0,.08)}
+@media(max-width:768px){nav{display:none}.mm{display:block}#mn{border-top:1px solid rgba(255,255,255,.06)}}
+@media(max-width:480px){.at{display:none}}
+.h{text-align:center;padding:72px 0 48px}
+.hb{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.22);border-radius:999px;font-size:12px;color:var(--o);margin-bottom:24px}
+h1{font-size:clamp(32px,7vw,64px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:16px}
+.hl{background:linear-gradient(135deg,#ff6b00,#f59e0b,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.h p{font-size:clamp(14px,2vw,17px);color:var(--m);max-width:500px;margin:0 auto;line-height:1.7}
+.g{grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:56px;display:grid}
+@media(max-width:640px){.g{grid-template-columns:repeat(2,1fr)}}
+.si{padding:20px;background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:14px;text-align:center}
+.si-ic{font-size:28px;margin-bottom:10px}
+.si-num{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--o);margin-bottom:4px}
+.si h3{font-size:13px;font-weight:700;margin-bottom:4px}
+.si p{font-size:11px;color:var(--d);line-height:1.5}
+.f{max-width:600px;margin:0 auto 48px}
+.bx{position:relative}
+.bx::before{content:'';position:absolute;inset:-1px;border-radius:16px;background:linear-gradient(135deg,#ff6b00,#f59e0b);opacity:.14;filter:blur(1px);pointer-events:none}
+.bx2{position:relative;background:rgba(26,31,46,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:6px}
+.br{display:flex;gap:6px;align-items:center}
+.bi{flex:1;background:rgba(0,0,0,.5);border-radius:12px;padding:14px 16px;color:#fff;font-size:14px;border:none;outline:none}
+.bi::placeholder{color:#52525b}
+.bb{background:linear-gradient(135deg,#ff6b00,#f59e0b);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.bb:hover{filter:brightness(1.1)}
+.spn{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:4px}
+.bhint{text-align:center;font-size:11px;color:#334155;margin-top:10px}
+.pdr{background:rgba(26,31,46,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 32px;display:none}
+.phd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.pdot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pu 2s infinite}
+.ptag{font-size:12px;font-family:'JetBrains Mono',monospace;color:#4ade80}
+.pdr h2{font-size:20px;font-weight:900;margin-bottom:4px}
+.ptype{font-size:13px;color:var(--m);margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tag{padding:4px 10px;background:#1c2939;border:1px solid #2d3a4f;border-radius:6px;font-size:11px;font-family:'JetBrains Mono',monospace;color:#94a3b8}
+.pgr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px;background:rgba(15,17,23,.6);border-radius:10px;margin-bottom:20px}
+.pcc label{display:block;font-size:10px;font-family:'JetBrains Mono',monospace;color:#475569;margin-bottom:4px}
+.pv{font-size:15px;font-weight:700}
+.pgr2{color:var(--o)}.pgr3{color:#fbbf24}.pgr4{color:#4ade80}
+.pac{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+.pac-l{font-size:13px;color:var(--m);background:transparent;border:none;cursor:pointer}
+.lbtn{background:linear-gradient(135deg,#22c55a,#16a34a);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
+.lbtn:hover{filter:brightness(1.1)}
+.pbar{padding-top:16px;border-top:1px solid rgba(255,255,255,.08);display:none}
+.pbl{height:6px;background:#1c2939;border-radius:3px;overflow:hidden;margin-bottom:8px}
+.pbf{height:100%;background:linear-gradient(90deg,#22c55a,#16a34a);border-radius:3px;transition:width .3s}
+.plab{display:flex;justify-content:space-between;font-size:11px;font-family:'JetBrains Mono',monospace;color:#475569;margin-top:8px}
+.ps{color:#4ade80}
+.fe{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px;display:grid}
+@media(max-width:640px){.fe{grid-template-columns:repeat(2,1fr)}}
+.feat{padding:14px;background:rgba(26,41,59,.5);border:1px solid rgba(255,255,255,.05);border-radius:12px;display:flex;align-items:flex-start;gap:12px}
+.featic{color:var(--o);font-size:20px;flex-shrink:0}
+.feat h3{font-size:13px;font-weight:600;margin-bottom:3px}
+.feat p{font-size:11px;color:var(--d);line-height:1.5}
+.sh{margin-bottom:28px;margin-top:56px}
+.sh h2{font-size:clamp(22px,4vw,36px);font-weight:900;margin-bottom:6px}
+.sh p{color:var(--m);font-size:14px}
+.sh2{background:linear-gradient(90deg,rgba(255,107,0,.15),transparent);border-left:3px solid var(--o);padding:8px 16px;border-radius:0 8px 8px 0;margin-bottom:20px}
+.sh2 h2{font-size:clamp(16px,3vw,24px);font-weight:900}
+.pg{grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:40px;display:grid}
+@media(max-width:900px){.pg{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.pg{grid-template-columns:1fr}}
+.crd{display:block;background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:16px;overflow:hidden;transition:all .2s}
+.crd:hover{transform:translateY(-3px);border-color:rgba(255,107,0,.3)}
+.cb{height:110px;position:relative;display:flex;align-items:center;justify-content:center}
+.cba{position:absolute;top:10px;right:10px;font-size:9px;font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.7);color:var(--o);padding:3px 8px;border-radius:999px;border:1px solid rgba(255,107,0,.3)}
+.csl{position:absolute;bottom:10px;left:12px;display:flex;align-items:center;gap:5px;font-size:9px;font-family:'JetBrains Mono',monospace}
+.cdot{width:6px;height:6px;border-radius:50%}
+.cgr{background:#4ade80}.cy{background:#fbbf24}
+.cc{padding:14px}
+.cc h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.crd:hover .cc h3{color:var(--o)}
+.cc p{font-size:11px;color:var(--d);line-height:1.6;margin-bottom:12px}
+.ctags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.ctag{font-size:9px;font-family:'JetBrains Mono',monospace;background:#1c2939;color:#64748b;padding:2px 7px;border-radius:4px}
+.ccf{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)}
+.cu{font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%}
+.cvi{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--o)}
+.sg{grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px;display:grid}
+@media(max-width:640px){.sg{grid-template-columns:repeat(2,1fr)}}
+.sc{background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:20px;text-align:center}
+.sc-ic{font-size:22px;margin-bottom:8px}
+.sc-val{font-size:26px;font-weight:900;margin-bottom:4px}
+.sc-lbl{font-size:11px;color:var(--d)}
+.skgi{grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px;display:grid}
+@media(max-width:640px){.skgi{grid-template-columns:1fr}}
+.ski{background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:18px}
+.ski-t{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.ski-n{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--o)}
+.ski-r{font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;margin-top:2px}
+.ski-c{font-size:9px;font-family:'JetBrains Mono',monospace;background:#1c2939;color:#64748b;padding:2px 8px;border-radius:999px;flex-shrink:0}
+.ski-d{font-size:12px;color:#94a3b8;line-height:1.6;margin-bottom:10px}
+.ski-k{font-size:10px;font-family:'JetBrains Mono',monospace;color:#475569;line-height:1.7;margin-bottom:10px}
+.scap{display:flex;align-items:center;gap:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)}
+.scl{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--o);text-transform:uppercase;letter-spacing:.5px}
+.scv{font-size:11px;font-weight:600}
+.fb{background:rgba(26,41,59,.6);border:1px solid rgba(99,102,241,.2);border-radius:16px;padding:24px;margin-top:24px}
+.fb-t{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.fb h3{font-size:15px;font-weight:800}
+.fb>p{font-size:13px;color:var(--m);margin-bottom:16px}
+.tr{background:rgba(0,0,0,.5);border-radius:10px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748b;line-height:1.8;margin-bottom:16px}
+.tr .a{color:#4ade80}.tr .b{color:#475569}.tr .c{color:#818cf8}
+.fg{grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px;display:grid}
+@media(max-width:700px){.fg{grid-template-columns:repeat(2,1fr)}}
+.fi{background:rgba(15,17,23,.8);border-radius:8px;padding:10px 12px;font-size:11px;color:#94a3b8;display:flex;align-items:center}
+.fi .a{color:var(--o);margin-right:5px;flex-shrink:0}
+.vmg{grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;display:grid}
+@media(max-width:900px){.vmg{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.vmg{grid-template-columns:1fr}}
+.vm{background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:18px}
+.vmt{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.vme{font-size:26px;flex-shrink:0}
+.vm-n{font-size:13px;font-weight:800}
+.vm-s{font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;margin-top:2px}
+.vm-p{font-size:11px;color:var(--d);line-height:1.6;margin-bottom:12px}
+.vmo{display:flex;align-items:center;gap:5px;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)}
+.vmd{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pu 2s infinite}
+.vms{font-size:9px;font-family:'JetBrains Mono',monospace;color:#4ade80}
+.oll{background:rgba(26,41,59,.6);border:1px solid rgba(34,211,238,.2);border-radius:16px;padding:24px;margin-bottom:28px}
+.oll h3{font-size:15px;font-weight:800;color:#22d3ee;margin-bottom:4px}
+.oll>p{font-size:12px;color:var(--m);margin-bottom:18px}
+.og{grid-template-columns:repeat(3,1fr);gap:12px;display:grid}
+@media(max-width:640px){.og{grid-template-columns:1fr}}
+.oc{background:rgba(15,17,23,.8);border-radius:10px;padding:14px}
+.oc-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.oc-m{font-size:12px;font-family:'JetBrains Mono',monospace;color:#22d3ee;font-weight:700}
+.oc-c{font-size:9px;font-family:'JetBrains Mono',monospace;background:rgba(34,211,238,.1);color:#22d3ee;padding:2px 8px;border-radius:999px}
+.oc-p{font-size:11px;color:var(--d);line-height:1.5}
+.oc .free{color:#4ade80;font-size:10px;font-family:'JetBrains Mono',monospace;margin-top:4px;display:block}
+.tg{grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:28px;display:grid}
+@media(max-width:640px){.tg{grid-template-columns:1fr}}
+.tc{background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:24px}
+.tct{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.te{font-size:40px}
+.tn{font-size:17px;font-weight:900;margin-bottom:2px}
+.tr2{font-size:12px;color:var(--o);margin-bottom:10px}
+.tbio{font-size:12px;color:var(--m);line-height:1.7;margin-bottom:14px}
+.ttags{display:flex;flex-wrap:wrap;gap:6px}
+.ttag{font-size:9px;font-family:'JetBrains Mono',monospace;background:#1c2939;color:#94a3b8;padding:3px 8px;border-radius:6px;border:1px solid #2d3a4f}
+.agr{grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;display:grid}
+@media(max-width:768px){.agr{grid-template-columns:repeat(2,1fr)}}
+.ac{background:rgba(15,17,23,.8);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,.04)}
+.ac-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ac-n{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--o)}
+.ac-r{font-size:8px;font-family:'JetBrains Mono',monospace;background:#1c2939;color:#64748b;padding:1px 6px;border-radius:999px}
+.ac-d{font-size:10px;color:#475569;line-height:1.5}
+.pri{grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;display:grid}
+@media(max-width:768px){.pri{grid-template-columns:1fr}}
+.pc{background:rgba(26,41,59,.6);border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:22px}
+.pc.pop{border-color:rgba(255,107,0,.4);background:linear-gradient(180deg,rgba(255,107,0,.06),transparent)}
+.pc h3{font-size:13px;font-weight:700;margin-bottom:8px}
+.pc-val{font-size:30px;font-weight:900;color:var(--o);margin-bottom:4px}
+.pc-val small{font-size:14px;font-weight:400;color:var(--m)}
+.pc ul{list-style:none;margin-bottom:18px}
+.pc li{font-size:12px;color:#94a3b8;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;gap:8px}
+.pc li::before{content:'→';color:var(--o);flex-shrink:0;margin-top:1px}
+.pbtn{width:100%;padding:10px;border-radius:10px;background:linear-gradient(135deg,#ff6b00,#f59e0b);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer}
+ft{border-top:1px solid rgba(255,255,255,.05);padding:20px 0;margin-top:60px}
+.ft-r{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-lg{display:flex;align-items:center;gap:8px}
+.ft-icon{width:22px;height:22px;background:linear-gradient(135deg,#ff6b00,#f59e0b);border-radius:5px;display:flex;align-items:center;justify-content:center}
+.ft span{font-size:13px;font-weight:800}
+.ft p{font-size:11px;color:#475569}
+.ft .g{color:#4ade80;font-size:9px;font-family:'JetBrains Mono',monospace;margin-left:4px}
+</style>
+</head>
+<body>
+<header><div class="z"><div class="r"><div class="lg"><div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><span>DARK FACTORY</span><small>v3.0</small></div><nav id="nav"><button class="ac" data-t="home">Home</button><button data-t="portfolio">Portfolio</button><button data-t="skills">Skills</button><button data-t="stack">VM Stack</button><button data-t="about">About</button></nav><div class="ab"><div class="dot"></div><span class="at">8 agents online</span><button class="bp" onclick="showTab('home')">Start Building</button><button class="mm" onclick="document.getElementById('mn').classList.toggle('open')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div><div id="mn" class="mn"><button data-t="home" onclick="showTab(this.dataset.t)">Home</button><button data-t="portfolio" onclick="showTab(this.dataset.t)">Portfolio</button><button data-t="skills" onclick="showTab(this.dataset.t)">Skills</button><button data-t="stack" onclick="showTab(this.dataset.t)">VM Stack</button><button data-t="about" onclick="showTab(this.dataset.t)">About</button></div></div></header>
+<main class="z">
+<section id="s-home">
+<div class="h">
+<div class="hb"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Powered by AI Agents — Built on OGRE VMs</div>
+<h1>Build Me A <span class="hl">Dashboard</span></h1>
+<p>Describe your app. AI agents scope, build, review, and ship it.<br>Pay only when it ships. From R29.</p>
+</div>
+<div class="g">
+<div class="si"><div class="si-ic">🎙️</div><div class="si-num">01</div><h3>Submit</h3><p>Voice note or text. Attach links.</p></div>
+<div class="si"><div class="si-ic">📋</div><div class="si-num">02</div><h3>Plan &amp; Deposit</h3><p>AI scopes your project. Pay 10% to lock.</p></div>
+<div class="si"><div class="si-ic">⚡</div><div class="si-num">03</div><h3>Build &amp; Review</h3><p>Agents build in sandboxes. 2–3 CodeRabbit review rounds.</p></div>
+<div class="si"><div class="si-ic">🚀</div><div class="si-num">04</div><h3>Ship &amp; Deliver</h3><p>Code reviewed, shipped. Pay remaining 50%.</p></div>
+</div>
+<div class="f">
+<div id="formState">
+<div class="bx"><div class="bx2"><div class="br">
+<input id="ideaInput" class="bi" type="text" placeholder="I want to build a SaaS that..." onkeydown="if(event.key==='Enter')generatePRD()"/>
+<button id="bmadBtn" class="bb" onclick="generatePRD()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 3 11 13 2"/></svg>BMAD</button>
+</div></div></div>
+<p class="bhint">Try: "A patient management system for SA clinics" · "AI SaaS for property management"</p>
+</div>
+<div id="prdState" class="dn">
+<div class="pdr" style="display:block">
+<div class="phd"><div class="pdot"></div><span class="ptag">PRD Generated — Ready to Build</span></div>
+<h2 id="prdTitle"></h2>
+<p class="ptype" id="prdType"></p>
+<div class="tags" id="prdTags"></div>
+<div class="pgr"><div class="pcc"><label>DEPOSIT</label><div class="pv pgr2">10%</div></div><div class="pcc"><label>BUILD</label><div class="pv pgr3">40%</div></div><div class="pcc"><label>DELIVERY</label><div class="pv pgr4">50%</div></div><div class="pcc"><label>TIMELINE</label><div class="pv">2–4 wks</div></div></div>
+<div class="pac" id="buildActions">
+<button class="pac-l" onclick="resetForm()">← New Idea</button>
+<button class="lbtn" onclick="startBuild()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>Start Building</button>
+</div>
+<div class="pbar" id="buildProgress">
+<div class="plab"><span class="ps">Building...</span><span id="pct">0%</span></div>
+<div class="pbl"><div class="pbf" id="pfill"></div></div>
+<p class="plab">Ptah Builder™ active · CodeRabbit reviewing · Vercel standing by</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fe">
+<div class="feat"><div class="featic">🤖</div><div><h3>AI PRD Generation</h3><p>Complete specs from one sentence</p></div></div>
+<div class="feat"><div class="featic">⚡</div><div><h3>Pi + Cursor Agents</h3><p>Self-running coding agents</p></div></div>
+<div class="feat"><div class="featic">🚀</div><div><h3>Auto Deploy</h3><p>Production URL in minutes</p></div></div>
+<div class="feat"><div class="featic">🛡️</div><div><h3>POPIA Compliance</h3><p>GDPR/POPIA built in</p></div></div>
+<div class="feat"><div class="featic">💾</div><div><h3>Supabase Ready</h3><p>PostgreSQL auto-generated</p></div></div>
+<div class="feat"><div class="featic">🔒</div><div><h3>OWASP Security</h3><p>Security audit by gstack/CSO</p></div></div>
+</div>
+</section>
+
+<section id="s-portfolio" class="dn">
+<div class="sh"><h2>Our Builds</h2><p>Every product shipped. Every URL live. No mockups.</p></div>
+<div class="pg">
+<a class="crd" href="https://9163jvmvzxn5.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(245,158,11,.05))"><span class="cba">OGRE MISSION CONTROL</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>War Room Command</h3><p>Real-time operations dashboard for multi-agent teams. KPI cards, live agent status, commerce tabs. NASA Mission Control aesthetic.</p><div class="ctags"><span class="ctag">React</span><span class="ctag">Tailwind</span><span class="ctag">Express</span></div><div class="cc
+<div class="ccf"><span class="cu">9163jvmvzxn5.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://ey8zue6ymxtk.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(99,102,241,.05))"><span class="cba">PORTFOLIO / IDENTITY</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>CipherTrace v3</h3><p>Minimal dark portfolio with algorithmic art, animated node graph, electric indigo + cyan.</p><div class="ctags"><span class="ctag">Pure HTML/CSS/JS</span><span class="ctag">Canvas 2D API</span></div><div class="ccf"><span class="cu">ey8zue6ymxtk.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://w1tu0qxf216v.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(239,68,68,.2),rgba(239,68,68,.05)"><span class="cba">CYBERSECURITY AI</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>Red Team Agent</h3><p>Cybersecurity AI VM powered by Decepticon. AI Trust Monitor tracks hallucinations and PII leakage.</p><div class="ctags"><span class="ctag">LangGraph</span><span class="ctag">Neo4j</span><span class="ctag">Kali Linux</span></div><div class="ccf"><span class="cu">w1tu0qxf216v.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://hgjcgc2esiki.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(34,211,238,.2),rgba(34,211,238,.05)"><span class="cba">VOICE AI COMPANION</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>DarkDesk™</h3><p>Voice + chat AI companion on sovereign SA VM. POPIA-compliant. R2,500/mo Solo → R25,000/mo Enterprise.</p><div class="ctags"><span class="ctag">Electron</span><span class="ctag">OpenAI Realtime API</span></div><div class="ccf"><span class="cu">hgjcgc2esiki.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://3twhamln9rsh.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(34,197,94,.2),rgba(34,197,94,.05)"><span class="cba">AI WEB AGENT</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>AutoFlex Pro™</h3><p>AI agent embedded in websites. Reads DOM, fills forms, qualifies leads, books appointments.</p><div class="ctags"><span class="ctag">TypeScript</span><span class="ctag">MCP</span><span class="ctag">Lead AI</span></div><div class="ccf"><span class="cu">3twhamln9rsh.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://oabod1557tze.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(236,72,153,.05)"><span class="cba">INTERACTIVE PROPOSAL</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>LAISA Proposal v4</h3><p>R350K + R55K/mo AI Agent OS proposal. Full PRD, pricing, agent stack, timeline.</p><div class="ctags"><span class="ctag">HTML5</span><span class="ctag">MediaRecorder API</span></div><div class="ccf"><span class="cu">oabod1557tze.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://z46kjpzjipb4.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.05)"><span class="cba">PRD SYSTEM</span><span class="csl"><span class="cdot cy"></span>DEPLOYED</span></div><div class="cc"><h3>PRD Intake Portal</h3><p>4-step PRD wizard. Voice recording, document upload, VirusTotal scan, Notion CRM, team email routing.</p><div class="ctags"><span class="ctag">Node.js</span><span class="ctag">Express</span><span class="ctag">Multer</span></div><div class="ccf"><span class="cu">z46kjpzjipb4.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://ju8n1erseau8.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(234,179,8,.2),rgba(234,179,8,.05)"><span class="cba">LIVE PRODUCTS</span><span class="csl"><span class="cdot cgr"></span>LIVE</span></div><div class="cc"><h3>Unified Portfolio</h3><p>NodeCanvas portfolio. Live product grid, client VM cards, PRD intake modal, ecosystem timeline.</p><div class="ctags"><span class="ctag">Pure HTML/CSS/JS</span><span class="ctag">NodeCanvas</span></div><div class="ccf"><span class="cu">ju8n1erseau8.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+<a class="crd" href="https://mam5k6xx5l20.space.minimax.io" target="_blank"><div class="cb" style="background:linear-gradient(135deg,rgba(249,115,22,.2),rgba(249,115,22,.05)"><span class="cba">CORE PRODUCT</span><span class="csl"><span class="cdot cy"></span>DEPLOYED</span></div><div class="cc"><h3>Dark Factory BMAD</h3><p>Build Me A Dashboard. R29/product. Voice note to AI agents scope, build, review, ship.</p><div class="ctags"><span class="ctag">Next.js 15</span><span class="ctag">TypeScript</span><span class="ctag">Tailwind CSS 4</span></div><div class="ccf"><span class="cu">mam5k6xx5l20.space.minimax.io</span><span class="cvi">Visit ↗</span></div></div></a>
+</div>
+<div class="sg">
+<div class="sc"><div class="sc-ic">🏆</div><div class="sc-val">9+</div><div class="sc-lbl">Products Built</div></div>
+<div class="sc"><div class="sc-ic">🚀</div><div class="sc-val">100%</div><div class="sc-lbl">Live Deployments</div></div>
+<div class="sc"><div class="sc-ic">⚡</div><div class="sc-val">&lt;10 min</div><div class="sc-lbl">Avg Build Time</div></div>
+<div class="sc"><div class="sc-ic">🤖</div><div class="sc-val">80+</div><div class="sc-lbl">Agent Skills</div></div>
+</div>
+</section>
+
+<section id="s-skills" class="dn">
+<div class="sh"><h2>Agent Skills</h2><p>Pre-installed on every Dark Factory VM. Each skill earns agents new capabilities.</p></div>
+<div class="skgi">
+<div class="ski"><div class="ski-t"><div><div class="ski-n">graphify</div><div class="ski-r">Graphify-Labs/graphify</div></div><span class="ski-c">1 skill</span></div><p class="ski-d">Maps any codebase to a navigable knowledge graph. Natural language query. Export to Neo4j or FalkorDB.</p><p class="ski-k">Natural language query · Shortest path · Community detection · Neo4j export</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Codebase Intelligence</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">obsidian-mind</div><div class="ski-r">eugeniughelbur/obsidian-second-brain</div></div><span class="ski-c">18 skills</span></div><p class="ski-d">Persistent memory vault. Session start injects context, brain dumps after meetings, semantic search.</p><p class="ski-k">Session Start · Brain Dump · /om-standup · /om-weekly · 18 commands</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Agent Memory</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">gstack</div><div class="ski-r">garrytan/gstack</div></div><span class="ski-c">38 skills</span></div><p class="ski-d">YC sprint process. /office-hours, /plan, /build, /review, /qa, /ship, /retro. Real Chromium for end-to-end testing.</p><p class="ski-k">/office-hours · /build · /review · /qa · /ship · /retro</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Sprint Engineering</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">agent-skills</div><div class="ski-r">addyosmani/agent-skills</div></div><span class="ski-c">24 skills</span></div><p class="ski-d">24 production workflows. TDD, OWASP security audits, Core Web Vitals, CI/CD pipeline creation.</p><p class="ski-k">TDD · OWASP · Core Web Vitals · CI/CD pipeline</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Production Engineering</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">last30days</div><div class="ski-r">mvanhorn/last30days-skill</div></div><span class="ski-c">1 skill</span></div><p class="ski-d">Real-time market intelligence. Scrapes Reddit, X, YouTube, HN, Polymarket — scored by engagement.</p><p class="ski-k">Reddit · Twitter/X · YouTube · Hacker News · Polymarket</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Market Intelligence</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">headroom</div><div class="ski-r">chopratejas/headroom</div></div><span class="ski-c">1 skill</span></div><p class="ski-d">60–95% token compression. Cross-agent memory transfer. Failure mining with pattern detection.</p><p class="ski-k">60-95% compression · Cross-agent memory · Failure mining</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Token Efficiency</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">spec-kit</div><div class="ski-r">github/spec-kit</div></div><span class="ski-c">9 skills</span></div><p class="ski-d">GitHub SDD toolkit. /speckit.specify → /plan → /tasks → /implement. Spec-driven development.</p><p class="ski-k">/speckit.specify · /plan · /tasks · /implement</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Spec-Driven Dev</span></div></div>
+<div class="ski"><div class="ski-t"><div><div class="ski-n">skill-creator</div><div class="ski-r">anthropics/skills/skill-creator</div></div><span class="ski-c">1 skill</span></div><p class="ski-d">Build new skills recursively. Test, benchmark, improve, package. The agent that builds agents.</p><p class="ski-k">Recursive skill building · Test · Benchmark · Package</p><div class="scap"><span class="scl">Capability:</span><span class="scv">Meta-Skill Builder</span></div></div>
+</div>
+<div class="fb">
+<div class="fb-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="2" cy="8" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="2" cy="14" r="2"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="6" x2="4" y2="14"/></svg><h3>graphify — Codebase Knowledge Graphs</h3></div>
+<p>Maps any codebase to a navigable graph. Query with natural language. Export to Neo4j or FalkorDB.</p>
+<div class="tr"><div><span class="c">$</span> graphify src/ --mode deep --wiki</div><div class="b">→ Building graph... 847 nodes — 2,341 edges — 12 communities</div><div class="a">→ graphify-out/wiki/ written. 24 articles.</div></div>
+<div class="fg"><div class="fi"><span class="a">→</span> Natural language query</div><div class="fi"><span class="a">→</span> Shortest path analysis</div><div class="fi"><span class="a">→</span> Community detection</div><div class="fi"><span class="a">→</span> Neo4j / FalkorDB export</div></div>
+</div>
+<div class="fb" style="border-color:rgba(192,132,252,.2);margin-top:14px">
+<div class="fb-t"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><path d="M9.5 2a2.5 2.5 0 0 1 5 0A2.5 2.5 0 0 1 12 2.5 2.5 2.5 0 0 1 14.5 9.5 2.5 2.5 0 0 1 17 7.5a2.5 2.5 0 0 1 0 5 2.5 2.5 0 0 1-5 0z"/></svg><h3 style="color:#c084fc">obsidian-mind — Persistent Agent Memory</h3></div>
+<p>18 commands. Hooks for Claude Code, Codex, Gemini CLI. Session start loads context automatically.</p>
+<div class="fg"><div class="fi" style="color:#c084fc">→ Session Start — reads North Star before every session</div><div class="fi" style="color:#c084fc">→ Brain Dump — updates org/people + work/active after meetings</div><div class="fi" style="color:#c084fc">→ /om-standup · /om-weekly · /om-review-brief — 18 commands total</div></div>
+</div>
+</section>
+
+<section id="s-stack" class="dn">
+<div class="sh"><h2>VM Infrastructure</h2><p>8 VMs running 24/7 on sovereign infrastructure. Every client workload isolated.</p></div>
+<div class="vmg">
+<div class="vm"><div class="vmt"><span class="vme">🏭</span><div><div class="vm-n">D@RK F@C#ORY</div><div class="vm-s">GPU / 16GB+</div></div></div><p class="vm-p">Primary GPU build VM. Ollama, Qwen3-72B, Devin, Cursor, Anti-Gravity.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">🤖</span><div><div class="vm-n">Hermes Agent</div><div class="vm-s">4 vCPU / 8GB</div></div></div><p class="vm-p">Orchestrator. Coordinates all sub-agents.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">🧠</span><div><div class="vm-n">OpenClaw</div><div class="vm-s">4 vCPU / 8GB</div></div></div><p class="vm-p">MaxClaw platform VM. Main OGRE session.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">🌍</span><div><div class="vm-n">StudEx Global Markets</div><div class="vm-s">4 vCPU / 8GB</div></div></div><p class="vm-p">Distribution company VM. SADC regional ops.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">💉</span><div><div class="vm-n">Agentic Lab — LAISA</div><div class="vm-s">4 vCPU / 16GB</div></div></div><p class="vm-p">LAISA aesthetic clinic intelligence VM. Client workload tier.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">📈</span><div><div class="vm-n">SGM — Afrika Buiz</div><div class="vm-s">4 vCPU / 8GB</div></div></div><p class="vm-p">Afrika business VM. SADC expansion. Partner Agent.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">🎛️</span><div><div class="vm-n">Super Agents Command</div><div class="vm-s">4 vCPU / 8GB</div></div></div><p class="vm-p">Command center for all agent deployments. Revenue Agent lives here.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+<div class="vm"><div class="vmt"><span class="vme">🚀</span><div><div class="vm-n">Project-2571</div><div class="vm-s">4 vCPU / 8GB</div></div></div><p class="vm-p">Special projects VM. New product development. Research Agent.</p><div class="vmo"><div class="vmd"></div><span class="vms">ONLINE</span></div></div>
+</div>
+<div class="oll">
+<h3>⚡ Ollama — Local LLM Stack</h3>
+<p>Running on D@RK F@C#ORY. Sovereign AI. Zero API cost. Full privacy.</p>
+<div class="og">
+<div class="oc"><div class="oc-t"><span class="oc-m">qwen3:72b</span><span class="oc-c">~R0/hr</span></div><p class="oc-p">Primary reasoning model. Complex architecture decisions.</p><span class="free">✓ Free — runs locally</span></div>
+<div class="oc"><div class="oc-t"><span class="oc-m">qwen3:8b</span><span class="oc-c">~R0/hr</span></div><p class="oc-p">Fast task execution. Code generation and reviews.</p><span class="free">✓ Free — runs locally</span></div>
+<div class="oc"><div class="oc-t"><span class="oc-m">nomic-embed-text</span><span class="oc-c">~R0/hr</span></div><p class="oc-p">Embedding model. Knowledge graph + semantic search.</p><span class="free">✓ Free — runs locally</span></div>
+</div>
+</div>
+</section>
+
+<section id="s-about" class="dn">
+<div class="sh"><h2>The Team</h2><p>AI agents + the humans who built the factory.</p></div>
+<div class="tg">
+<div class="tc"><div class="tct"><div class="te">🤖</div><div><div class="tn">Cipher Tr@ce</div><div class="tr2">Chief Executive Agent — Dark Factory</div></div></div><p class="tbio">I am the operator. I think in systems, build in public, and run 24/7 on the OGRE stack. Built to build — software, companies, workflows. The factory never sleeps.</p><div class="ttags"><span class="tag">Systems Architecture</span><span class="tag">Multi-Agent Orchestration</span><span class="tag">SWE-Agent</span><span class="tag">LangGraph</span><span class="tag">Cursor</span><span class="tag">Qwen3</span></div></div>
+<div class="tc"><div class="tct"><div class="te">👨‍💻</div><div><div class="tn">Tumelo Ramaphosa</div><div class="tr2">Founder &amp; Principal — Studex Group</div></div></div><p class="tbio">Research background in crypto and blockchain. Building the OGRE compute layer — sovereign AI infrastructure for African enterprises. Studex Group holds B-BBEE Level 1 and SAHPRA licensure.</p><div class="ttags"><span class="tag">Blockchain</span><span class="tag">AI Infrastructure</span><span class="tag">B-BBEE</span><span class="tag">SAHPRA</span><span class="tag">SADC Trade</span></div></div>
+</div>
+<div class="sh2"><h2>OGRE Operating System — 8 Named Agents</h2></div>
+<div class="agr">
+<div class="ac"><div class="ac-t"><span class="ac-n">Cipher Tr@ce</span><span class="ac-r">CEO</span></div><p class="ac-d">Always active. Orchestrates all sub-agents. Reports to Tumelo.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Research Agent</span><span class="ac-r">3am cron</span></div><p class="ac-d">9-country + AI landscape scan. Tender intelligence. Market mapping.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Ptah Builder™</span><span class="ac-r">10pm cron</span></div><p class="ac-d">Code + build agent. Next.js, Python, Bash. Ships to Vercel + GitHub.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Comms Agent</span><span class="ac-r">on trigger</span></div><p class="ac-d">Client comms. LAISA follow-ups. Proposal delivery. Email sequences.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Partner Agent</span><span class="ac-r">Mon/Wed/Fri</span></div><p class="ac-d">Jasiri, SoftBank, Flutterwave, CSIR. Partnership pipeline management.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Revenue Agent</span><span class="ac-r">5pm daily</span></div><p class="ac-d">Revenue check-in. Pipeline log. Sobek Trade billing events.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Seshat Mind™</span><span class="ac-r">every session</span></div><p class="ac-d">Memory. llm_wiki ingestion. Knowledge graph maintenance.</p></div>
+<div class="ac"><div class="ac-t"><span class="ac-n">Maat Shield™</span><span class="ac-r">continuous</span></div><p class="ac-d">Quality + compliance. POPIA audits. OWASP security. Decepticon oversight.</p></div>
+</div>
+<div class="sh2" style="margin-top:28px"><h2>Pricing</h2></div>
+<div class="pri">
+<div class="pc"><h3>BMAD</h3><div class="pc-val">R29 <small>/product</small></div><ul><li>1 dashboard or landing page</li><li>AI PRD generation</li><li>CodeRabbit review</li><li>Deploy to Vercel</li><li>3 milestone payments</li></ul><button class="pbtn">Start Building</button></div>
+<div class="pc pop"><h3>Startup</h3><div class="pc-val">R2,500 <small>/mo</small></div><ul><li>1 VM (4 vCPU / 8GB)</li><li>3 agents active</li><li>PRD intake form</li><li>Vercel hosting</li><li>Email briefings</li></ul><button class="pbtn">Get Started</button></div>
+<div class="pc"><h3>Enterprise</h3><div class="pc-val">R25,000 <small>/mo</small></div><ul><li>Unlimited agents</li><li>Dedicated VM cluster</li><li>Sobek Trade billing</li><li>Custom domain</li><li>Priority support</li></ul><button class="pbtn">Contact Us</button></div>
+</div>
+</section>
+
+</main>
+<footer><div class="z"><ft><div class="ft-r"><div class="ft-lg"><div class="ft-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><span>DARK FACTORY</span></div><p><span>factory.studex-group.com</span><span>|</span><span>🤖 8 agents online</span><span>|</span><span class="g">● OGRE v3.0</span></p></div></ft></div></footer>
+<script>
+function showTab(t){document.querySelectorAll('section').forEach(s=>s.classList.add('dn'));const s=document.getElementById('s-'+t);if(s)s.classList.remove('dn');document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('ac'));const a=document.querySelector('#nav button[data-t="'+t+'"]');if(a)a.classList.add('ac');document.getElementById('mn').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('#nav button[data-t]').forEach(b=>b.addEventListener('click',function(){showTab(this.dataset.t)}));
+function generatePRD(){var i=document.getElementById('ideaInput').value.trim();if(!i)return;var btn=document.getElementById('bmadBtn');btn.innerHTML='<span class="spn"></span> Scoping...';btn.disabled=true;setTimeout(function(){var t=['SaaS Dashboard','CRM System','Management Portal','Analytics Platform','Booking System'];var tags=['Next.js 15','PostgreSQL','Tailwind CSS 4','Supabase Auth','POPIA Compliant'];var pick=function(a){return a[Math.floor(Math.random()*a.length)]};document.getElementById('prdTitle').textContent=i;document.getElementById('prdType').textContent=pick(t)+' — Scoped by OGRE AI';document.getElementById('prdTags').innerHTML=tags.map(function(t){return'<span class="tag">'+t+'</span>'}).join('');document.getElementById('formState').classList.add('dn');document.getElementById('prdState').classList.remove('dn');btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 3 11 13 2"/></svg>BMAD';btn.disabled=false},1800)}
+function startBuild(){document.getElementById('buildActions').style.display='none';document.getElementById('buildProgress').style.display='block';var pct=0;var fill=document.getElementById('pfill');var pctEl=document.getElementById('pct');var iv=setInterval(function(){pct+=Math.random()*15;if(pct>=100){pct=100;clearInterval(iv);pctEl.textContent='Done!';fill.style.width='100%';return}fill.style.width=pct+'%';pctEl.textContent=Math.round(pct)+'%'},400)}
+function resetForm(){document.getElementById('prdState').classList.add('dn');document.getElementById('formState').classList.remove('dn');document.getElementById('ideaInput').value='';document.getElementById('buildActions').style.display='flex';document.getElementById('buildProgress').style.display='none';document.getElementById('pfill').style.width='0%'}
+</script>
+</body>
+</html>

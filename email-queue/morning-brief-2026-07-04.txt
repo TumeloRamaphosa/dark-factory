@@ -1,0 +1,78 @@
+OGRE MORNING BRIEF — STUDEX GROUP
+Date: Saturday, 4 July 2026 | 08:00 AM SAST
+═══════════════════════════════════════
+
+TOP 3 PRIORITIES TODAY / MONDAY
+═══════════════════════════════════════
+
+[1] LAISA Phase A — Follow up with Dr. Musa TODAY
+→ 4 days since proposal landed. WhatsApp or voice note.
+→ Simple close: "Hey Doc, any questions on the proposal? Happy to jump on a call."
+→ Value: R350K + R55K/month
+
+[2] SA DoH EMR (NDoH-11) — 9 DAYS UNTIL CLOSE ⚡
+→ Download tender docs from health.gov.za this morning
+→ Identify the 2-3 winning EMR vendors nationally
+→ Approach them Monday as the AI agent overlay (we don't bid EMR — we sit on top)
+→ Value: R200M+ contract
+
+[3] DarkDesk + AutoFlex Pro — First Sales Push
+→ Both deployed. This weekend: identify 3 law firms + 3 medical practices to approach Mon/Tue
+→ AutoFlex target: gyms, recruitment agencies, healthcare booking flows
+→ DarkDesk target: attorneys, C-suite, medical practice managers
+
+───────────────────────────────────────────────
+GLOBAL AI LANDSCAPE — 4 JULY 2026
+───────────────────────────────────────────────
+
+🇿🇦 SOUTH AFRICA: AI Act draft in parliament. SITA procurement
+   accelerating. $60B Africa AI fund assembling.
+   → OGRE: Register on CSD (Central Supplier Database) Monday. Non-negotiable.
+
+🇨🇳 CHINA: Qwen3.5 (Apache 2.0, free) — 397B params, Swahili + Zulu
+   supported. Already in Johannesburg data centres. OGRE evaluating for
+   production replacement of GPT-4 (saving R20-40K/month in API costs).
+   → OGRE: POC this week. If it works, deploy on D@RK F@C#ORY VM.
+
+🇺🇸 USA: GPT-5 autonomous coding agents. Cursor AI dominating IDE market.
+   $30B valuation. Manus (virtual computer agent) invite-only — watch closely.
+   → OGRE: Cursor is now table stakes for our dev workflow.
+
+🇳🇬 NIGERIA: Flutterwave full banking licence secured (April 2026).
+   50M+ users. NITDA funding AI startups now.
+   → OGRE: Integrate Flutterwave for African billing. Nigeria is our #2 market.
+
+🇬🇭 GHANA: $250M national AI strategy. Contracts being signed NOW.
+   Tender closes 24 July.
+   → OGRE: Download Ghana tender docs this weekend. Find local consultant.
+
+───────────────────────────────────────────────
+IMMEDIATE ACTION MATRIX
+───────────────────────────────────────────────
+
+BY MONDAY 6 JULY:
+→ WhatsApp Dr. Musa TODAY (LAISA R350K close)
+→ Download SA DoH tender docs
+→ Identify SA EMR vendors + prepare outreach approach
+→ Register on SA CSD (csd.gov.za)
+→ Identify 3 law firms + 3 medical practices for DarkDesk pitch
+
+BY 13 JULY (SA DoH close):
+→ Submit SA DoH pre-qualification EOI
+→ Face-to-face with at least 1 EMR vendor
+→ Ghana tender submission
+
+───────────────────────────────────────────────
+REVENUE STATUS — SATURDAY 4 JULY
+───────────────────────────────────────────────
+
+Live MRR:           R45,000 (Red Team Agent)
+Pipeline in play:    R5M+ (LAISA + SA DoH + Pharmasyntez)
+This weekend goal:  Warm up 6 sales conversations for next week
+
+Weekend mood:  Build quietly. Sell loudly Monday.
+9 days to the biggest tender of the year.
+
+═══════════════════════════════════════
+*Cipher Tr@ce · Dark Factory · OGRE Computer*
+*cto@studex-group.com*

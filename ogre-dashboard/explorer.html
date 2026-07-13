@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Global AI Intelligence Explorer — June 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
+
+:root {
+  --gold: #C9A84C;
+  --gold-d: #A68A3E;
+  --gold-l: #E8C96A;
+  --bg: #0A0A0A;
+  --bg2: #0F0F0F;
+  --panel: #131313;
+  --panel2: #181818;
+  --border: #1E1E1E;
+  --border2: #2A2A2A;
+  --text: #F0EDE6;
+  --muted: #888;
+  --green: #3DBA6C;
+  --red: #E05A5A;
+  --amber: #F5A623;
+  --cyan: #29B6F6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 56px;
+  gap: 16px;
+}
+.topbar-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.topbar-logo {
+  width: 28px; height: 28px;
+  background: var(--gold); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  color: #0A0A0A; letter-spacing: -0.5px;
+}
+.topbar-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px; }
+.topbar-sep { width: 1px; height: 20px; background: var(--border2); }
+.topbar-title { font-size: 13px; color: var(--muted); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.live-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.clock { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
+
+/* HERO */
+.hero { padding: 48px 32px 32px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #111 0%, var(--bg) 100%); }
+.hero-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.hero h1 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; color: var(--text); line-height: 1.2; margin-bottom: 14px; }
+.hero h1 em { color: var(--gold); font-style: normal; }
+.hero-sub { font-size: 14px; color: var(--muted); max-width: 680px; line-height: 1.65; margin-bottom: 24px; }
+.hero-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; gap: 2px; }
+.hero-stat-n { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--gold); line-height: 1; }
+.hero-stat-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* TABS */
+.tabbar { display: flex; gap: 0; padding: 0 32px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; background: var(--bg2); }
+.tabbar::-webkit-scrollbar { display: none; }
+.tab { padding: 13px 18px; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s, border-color 0.15s; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* LAYOUT */
+.panels { display: grid; grid-template-columns: 1fr 300px; min-height: calc(100vh - 220px); }
+@media (max-width: 900px) { .panels { grid-template-columns: 1fr; } }
+
+.main-panel { padding: 28px 32px; border-right: 1px solid var(--border); overflow-y: auto; max-height: calc(100vh - 160px); position: sticky; top: 56px; }
+@media (max-width: 900px) { .main-panel { position: static; max-height: none; border-right: none; } }
+
+.sidebar { padding: 24px; background: var(--bg2); overflow-y: auto; max-height: calc(100vh - 160px); position: sticky; top: 56px; }
+@media (max-width: 900px) { .sidebar { position: static; max-height: none; border-top: 1px solid var(--border); } }
+
+/* COUNTRY SECTIONS */
+.country-section { display: none; }
+.country-section.active { display: block; }
+
+.country-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--panel2); border: 1px solid var(--border2); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; margin-bottom: 12px; flex-wrap: wrap; }
+.country-tag-severity { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.sev-high { background: rgba(224,90,90,0.18); color: var(--red); }
+.sev-medium { background: rgba(245,166,35,0.18); color: var(--amber); }
+.sev-low { background: rgba(61,186,108,0.18); color: var(--green); }
+
+.country-title { font-family: 'Newsreader', Georgia, serif; font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.2; }
+.country-desc { font-size: 13px; color: var(--muted); line-height: 1.65; max-width: 640px; margin-bottom: 20px; }
+
+/* METRICS */
+.metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+@media (max-width: 500px) { .metrics-row { grid-template-columns: 1fr; } }
+.metric-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
+.metric-n { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+.metric-l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* CARDS */
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+.card-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 8px; }
+.card h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; line-height: 1.35; }
+.card p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+
+.cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+@media (max-width: 600px) { .cards-grid { grid-template-columns: 1fr; } }
+.cards-grid .card { margin-bottom: 0; }
+
+.card-action { margin-top: 10px; padding: 10px 12px; background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.18); border-radius: 6px; display: flex; gap: 10px; align-items: flex-start; }
+.card-action-icon { width: 20px; height: 20px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #0A0A0A; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.card-action p { font-size: 12px; color: var(--text); line-height: 1.5; }
+.card-action-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 3px; display: block; }
+
+.section-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+.cta-strip { margin-top: 20px; padding: 16px; background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.02) 100%); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; }
+.cta-strip h4 { font-size: 14px; font-weight: 600; color: var(--gold); margin-bottom: 5px; }
+.cta-strip p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* SIDEBAR */
+.sidebar-section { margin-bottom: 24px; }
+.sidebar-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
+
+.timeline-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+.tl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-top: 5px; flex-shrink: 0; box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--gold); }
+.tl-dot.red { background: var(--red); box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--red); }
+.tl-dot.green { background: var(--green); box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--green); }
+.tl-dot.cyan { background: var(--cyan); box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--cyan); }
+.tl-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); margin-bottom: 2px; }
+.tl-text { font-size: 11.5px; color: var(--text); line-height: 1.4; }
+
+.action-item { padding: 10px 12px; background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 0 5px 5px 0; margin-bottom: 7px; cursor: pointer; transition: background 0.15s; }
+.action-item:hover { background: var(--panel2); }
+.action-item.red { border-left-color: var(--red); }
+.action-item.amber { border-left-color: var(--amber); }
+.action-country { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.action-text { font-size: 11.5px; color: var(--text); line-height: 1.4; }
+.action-urgency { display: inline-block; margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; padding: 1px 5px; border-radius: 2px; }
+.urgency-high { background: rgba(224,90,90,0.15); color: var(--red); }
+.urgency-medium { background: rgba(245,166,35,0.15); color: var(--amber); }
+.urgency-low { background: rgba(61,186,108,0.15); color: var(--green); }
+
+/* FOOTER */
+.footer { padding: 14px 32px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; background: var(--bg2); }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
+.footer-text span { color: var(--gold); }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">OG</div>
+    <div class="topbar-name">OGRE COMPUTER</div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-title">Global AI Intelligence Explorer</div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-dot"></div>
+    <span class="clock" id="clock">--:--:-- UTC</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">OGRE MIDNIGHT BUILD — DAY 3 &nbsp;·&nbsp; 23 JUNE 2026</div>
+  <h1>Global AI Intelligence <em>Explorer</em></h1>
+  <p class="hero-sub">Navigate 8 strategic markets and their AI landscapes. Each country card shows what the world is building, what OGRE can implement, and how urgently to act. Built from nightly 3AM research scans.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-n">8</div><div class="hero-stat-l">Markets Covered</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">$45B+</div><div class="hero-stat-l">AI Investment Tracked</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">21</div><div class="hero-stat-l">Action Items</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">5</div><div class="hero-stat-l">High Urgency Markets</div></div>
+  </div>
+</div>
+
+<!-- COUNTRY TABS -->
+<div class="tabbar" id="tabbar">
+  <button class="tab active" data-country="usa">🇺🇸 USA</button>
+  <button class="tab" data-country="china">🇨🇳 China</button>
+  <button class="tab" data-country="japan">🇯🇵 Japan</button>
+  <button class="tab" data-country="india">🇮🇳 India</button>
+  <button class="tab" data-country="brazil">🇧🇷 Brazil</button>
+  <button class="tab" data-country="mexico">🇲🇽 Mexico</button>
+  <button class="tab" data-country="nigeria">🇳🇬 Nigeria</button>
+  <button class="tab" data-country="southafrica">🇿🇦 SA</button>
+</div>
+
+<!-- PANELS -->
+<div class="panels">
+
+  <!-- ==================== USA ==================== -->
+  <div class="main-panel country-section active" id="panel-usa">
+    <div class="country-tag">🇺🇸 United States &nbsp;·&nbsp; AI Superpower &nbsp;<span class="country-tag-severity sev-high">HIGH URGENCY</span></div>
+    <h2 class="country-title">OpenAI · Anthropic · Google AI</h2>
+    <p class="country-desc">The US leads frontier model development and enterprise deployment. GPT-6 launching with AWS distribution (breaking Azure-only exclusivity). Anthropic's Claude Fable/Mythos 5 launched June 9. Google Gemini 3.5 is the cheapest frontier-adjacent model per token.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">GPT-6</div><div class="metric-l">Weeks from launch</div></div>
+      <div class="metric-card"><div class="metric-n">$200B+</div><div class="metric-l">2026 US AI spend</div></div>
+      <div class="metric-card"><div class="metric-n">Gemini 3.5</div><div class="metric-l">Lowest cost/token</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">OpenAI</div>
+        <h3>GPT-6 + AWS Partnership</h3>
+        <p>Breaking Azure-only exclusivity — OpenAI deploying GPT-6 directly on AWS, signalling mass-market B2B API pricing wars that will commoditise frontier AI for Sub-Saharan Africa within 6–9 months.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Anthropic</div>
+        <h3>Claude Fable 5 & Mythos 5</h3>
+        <p>Claude Mythos 5 launched June 9 — Anthropic's first Mythos-class models. June 15 billing change cut off cheap third-party agent access, displacing thousands of developers globally seeking alternatives.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Google AI</div>
+        <h3>Gemini 3.5 — cheapest frontier model</h3>
+        <p>Gemma 4, DiffusionGemma 4x, Nano Banana multimodal model all launched June 2026. Gemini 3.5 Omni integrated into Google Search at the lowest cost-per-token of any frontier-adjacent model.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Microsoft</div>
+        <h3>Copilot Agents GA</h3>
+        <p>Microsoft Copilot Studio agents now generally available. Azure AI Foundry enabling enterprise agents with long-running autonomous tasks across the Azure ecosystem.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Immediate · 0–3 months</span>
+          <p>License OpenAI/Azure GPT-6 API access for Studex's healthcare and pharmaceutical enterprise products in South Africa and AU market — embed clinical decision support into OGRE's LAISA medical platform before global pharma rivals do.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>Partner with Anthropic's enterprise channel to deploy Claude-powered legal-contract analysis and regulatory compliance tooling for SA financial services firms — filling the gap left by cut-rate third-party agent bans.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Opportunistic · Now</span>
+          <p>Use Google Cloud's Gemini 3.5 API + Vertex AI to build Studex's supply chain visibility dashboard for African pharmaceutical distribution — Gemini Omni can parse handwritten AWB forms and blurry pharmacy receipts in rural SA clinics.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇺🇸 USA Window</h4>
+      <p>GPT-6 launch in weeks + AWS partnership signals pricing wars. OGRE has a 3-month window to lock in preferential API pricing before agentic AI becomes table stakes for SA enterprise.</p>
+    </div>
+  </div>
+
+  <!-- ==================== CHINA ==================== -->
+  <div class="main-panel country-section" id="panel-china">
+    <div class="country-tag">🇨🇳 China &nbsp;·&nbsp; Open-Source Empire &nbsp;<span class="country-tag-severity sev-high">HIGH URGENCY</span></div>
+    <h2 class="country-title">ByteDance · Alibaba Qwen · Baidu · DeepSeek</h2>
+    <p class="country-desc">China dominates open-source agentic models and is the world's most competitive AI market. Doubao has 345M MAUs at 90% lower cost than GPT-5.2. Alibaba shifted Qwen to commercial licensing. DeepSeek continues closing the gap with OpenAI at a fraction of the cost.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">345M</div><div class="metric-l">Doubao MAU</div></div>
+      <div class="metric-card"><div class="metric-n">90%</div><div class="metric-l">Cheaper than GPT-5.2</div></div>
+      <div class="metric-card"><div class="metric-n">Qwen 3.5</div><div class="metric-l">Agentic era models</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">ByteDance / Doubao</div>
+        <h3>Doubao 2.0 — 345M users</h3>
+        <p>Doubao 2.0 launched February 2026 with multimodal reasoning, autonomous task execution, and pricing 90% below GPT-5.2. Doubao trialling tiered AI subscriptions — the Chinese app-distribution playbook for AI at scale.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Alibaba Qwen</div>
+        <h3>Qwen 3.5 — now commercially licensed</h3>
+        <p>Qwen 3.5 released February 2026 for the agentic AI era. Qwen-Robot Suite launched June 15 for physical world AI. Shift from open-source to closed commercial licensing — early adopters get preferential terms.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Baidu ERNIE</div>
+        <h3>ERNIE 4.5 Turbo + X1 Turbo</h3>
+        <p>34.8% factual accuracy jump, 12.5% instruction-following improvement. 300M+ cumulative users. API on Qianfan platform. Mandarin-language regulatory docs + supplier comms at a fraction of human translation cost.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">DeepSeek</div>
+        <h3>V4 Flash & V4 Pro — April 2026</h3>
+        <p>Major reasoning advancements, top-tier coding benchmarks. Cost a fraction of OpenAI's frontier. Continues compressing the gap with GPT-class models after January 2025 breakthrough.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Immediate · 0–3 months</span>
+          <p>Integrate Doubao's cost-efficient translation and content-moderation APIs into OGRE's cross-border trade facilitation platform — low-cost Zulu/Xhosa/Afrikaans multilingual AI for SA-Sino trade corridors.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>License Qwen 3.5 agentic models for OGRE's Johannesburg warehouse and logistics automation — Qwen's agentic loop (plan → act → verify) for multi-step pharmaceutical cold-chain compliance without human in the loop.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Quick Win · This quarter</span>
+          <p>Use Baidu ERNIE X1 Turbo's multilingual Chinese-English API to build the OGRE Studex China Desk — an AI portal for SA pharmaceutical importers navigating Mandarin regulatory documentation and supplier communications.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇨🇳 China Window</h4>
+      <p>China's AI price-performance is 60–80% below US equivalents. OGRE has a narrow window to lock in SA-China AI bridge capabilities before Southeast Asian markets are saturated and pricing normalises.</p>
+    </div>
+  </div>
+
+  <!-- ==================== JAPAN ==================== -->
+  <div class="main-panel country-section" id="panel-japan">
+    <div class="country-tag">🇯🇵 Japan &nbsp;·&nbsp; Physical AI & Robotics &nbsp;<span class="country-tag-severity sev-medium">MEDIUM URGENCY</span></div>
+    <h2 class="country-title">SoftBank · Preferred Networks · Japan AI JV</h2>
+    <p class="country-desc">Japan investing ¥2 trillion (~USD 13.5B) in AI data centres in 2026 alone, anchored by a 700,000 m² Hokkaido facility on 100% renewable energy. A new Japan AI Foundation Model JV (SoftBank, Sony, Honda, NEC) is building physical AI for robotics and autonomous machines.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">¥2T</div><div class="metric-l">2026 AI spend</div></div>
+      <div class="metric-card"><div class="metric-n">700K m²</div><div class="metric-l">Hokkaido facility</div></div>
+      <div class="metric-card"><div class="metric-n">100%</div><div class="metric-l">Renewable energy</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">SoftBank Corp</div>
+        <h3>¥2 trillion AI infrastructure programme</h3>
+        <p>Fiscal 2026 anchor project: 700,000 m² Hokkaido data centre on 100% renewable energy. The single largest corporate AI infrastructure commitment outside the US in 2026.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Japan AI Foundation Model JV</div>
+        <h3>Physical AI for robotics — April 2026</h3>
+        <p>SoftBank, Sony, Honda, NEC joint venture launched April 2026. Building foundation models for physical AI and autonomous machines — OGRE can position Studex as the African deployment arm.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Preferred Networks</div>
+        <h3>MN-Core L Series + industrial AI</h3>
+        <p>Advancing AI chips and mission-critical industrial AI in joint research with Toyota. Physical AI for manufacturing — directly applicable to SA mining sector automation needs.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Strategic · 6–12 months</span>
+          <p>Partner with Preferred Networks or SoftBank's Japan AI JV for a South African physical AI use case — position Studex as the African deployment arm for Japan-made industrial AI systems, particularly SA mining sector automation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Immediate · 0–3 months</span>
+          <p>SA's load-shedding crisis and mining sector create immediate demand for autonomous industrial AI. Initiate a partnership conversation now while the Japan AI JV is actively seeking international deployment partners.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇯🇵 Japan Window</h4>
+      <p>Japan AI JV is actively seeking international deployment partners. SA's structural challenges are Japan's physical AI sweet spot. A unique strategic alignment worth exploring before the window closes.</p>
+    </div>
+  </div>
+
+  <!-- ==================== INDIA ==================== -->
+  <div class="main-panel country-section" id="panel-india">
+    <div class="country-tag">🇮🇳 India &nbsp;·&nbsp; AI Cloud & Multilingual &nbsp;<span class="country-tag-severity sev-high">HIGH URGENCY</span></div>
+    <h2 class="country-title">Krutrim · Infosys · AI4India · India AI Mission</h2>
+    <p class="country-desc">India's AI ecosystem reached profitability and scale in 2026. Krutrim tripled revenue to ₹300 crore with an India-specific AI Cloud. India AI Impact Summit 2026 brought 15 heads of state. Government driving AI across agriculture, healthcare, and language localisation at national scale.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">₹300Cr</div><div class="metric-l">Krutrim revenue</div></div>
+      <div class="metric-card"><div class="metric-n">15</div><div class="metric-l">Heads of state at summit</div></div>
+      <div class="metric-card"><div class="metric-n">$500M</div><div class="metric-l">Infosys GCC deal</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">Krutrim (Ola-backed)</div>
+        <h3>India AI Cloud — profitable 2026</h3>
+        <p>Krutrim achieved profitability in 2026, tripling revenue to ₹300 crore with an India-specific AI Cloud platform. Proof that homegrown frontier AI can reach commercial scale outside the US.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Infosys</div>
+        <h3>$500M GCC deal with Truist</h3>
+        <p>Infosys landed a landmark Global Capability Centre deal worth $500M. Running the Infosys AI Summit as a platform for enterprise AI adoption. India's GCC model is the fastest path to enterprise AI delivery.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">India AI Mission</div>
+        <h3>National scale deployment</h3>
+        <p>India AI Impact Summit 2026: 15 heads of state, 300+ exhibitors, 10 pavilions. Government driving AI across agriculture, healthcare, and language localisation at national scale — a blueprint for emerging market AI adoption.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Immediate · 0–3 months</span>
+          <p>Integrate Krutrim's multilingual AI models for African language localisation — OGRE can build an Africa-India AI bridge using Krutrim's Indic language stack adapted for South African vernaculars (Zulu, Xhosa, Afrikaans).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>With Ghana's National AI Strategy launching and SA's policy stalled, India is the fastest path for OGRE to acquire deployable African-language AI capabilities. Use Krutrim's production-proven stack as the foundation.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="cta-strip">
+      <h4>🇮🇳 India Window</h4>
+      <p>India's AI infrastructure is production-proven and cost-competitive. With SA policy stalled, India is the fastest path for OGRE to acquire deployable African-language AI capabilities within this quarter.</p>
+    </div>
+  </div>
+
+  <!-- ==================== BRAZIL ==================== -->
+  <div class="main-panel country-section" id="panel-brazil">
+    <div class="country-tag">🇧🇷 Brazil &nbsp;·&nbsp; AI-Native Fintech &nbsp;<span class="country-tag-severity sev-high">HIGH URGENCY</span></div>
+    <h2 class="country-title">Nubank · Wildlife Studios · SuperFX</h2>
+    <p class="country-desc">Nubank (110M+ customers) is investing R$45B (~USD 8.2B) in 2026 with AI at its core — credit modelling, fraud detection, and personalised financial agents. Acquired Hyperplane AI to accelerate proprietary model development. Brazil leads Latin America in AI financial sector adoption.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">R$45B</div><div class="metric-l">Nubank 2026 AI investment</div></div>
+      <div class="metric-card"><div class="metric-n">110M+</div><div class="metric-l">Nubank customers</div></div>
+      <div class="metric-card"><div class="metric-n">1B+</div><div class="metric-l">Wildlife Studios players</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">Nubank</div>
+        <h3>R$45B AI investment — 2026</h3>
+        <p>Nubank investing R$45B (~USD 8.2B) in 2026 with AI at the core of credit modelling, fraud detection, and personalised financial agents. Acquired US AI data startup Hyperplane to accelerate proprietary model development.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Wildlife Studios</div>
+        <h3>AI-generated game content at scale</h3>
+        <p>1B+ mobile players. Integrating AI-generated game content at scale — demonstrating the commercial viability of AI-native entertainment products at massive user scale.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">SuperFX</div>
+        <h3>AI-driven fintech automation</h3>
+        <p>Advancing AI-driven fintech automation for Brazil's Pix/open finance ecosystem — a model for real-time payment-integrated AI that SA's financial sector can learn from.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Strategic · 3–9 months</span>
+          <p>Adopt Nubank's AI-first banking architecture as the blueprint for a South African embedded finance product — Studex Group can license the AI decisioning stack pattern for SA SME lending and financial inclusion.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>Discovery Bank and TymeBank are directly competing in AI-native financial services. OGRE needs to position Studex as the intelligence layer — the AI decisioning engine that makes embedded finance work for SA's underbanked.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇧🇷 Brazil Window</h4>
+      <p>Nubank's USD $8.2B AI investment validates the AI-native financial services model. South African fintechs (Discovery Bank, TymeBank) are competing in this space — OGRE needs to position Studex as the intelligence layer today.</p>
+    </div>
+  </div>
+
+  <!-- ==================== MEXICO ==================== -->
+  <div class="main-panel country-section" id="panel-mexico">
+    <div class="country-tag">🇲🇽 Mexico &nbsp;·&nbsp; AI Fintech &nbsp;<span class="country-tag-severity sev-medium">MEDIUM URGENCY</span></div>
+    <h2 class="country-title">Kavak · ODAIA · Bitso · Fintual</h2>
+    <p class="country-desc">Mexico leads Latin America in AI financial sector adoption (Finnosummit 2026). Kavak has originated over USD 1B in AI-scored loans. ODAIA provides AI-driven B2B sales intelligence. Bitso integrating AI for crypto-asset management. A March 2026 Finnosummit report confirms Mexico as the regional AI finance leader.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">$1B+</div><div class="metric-l">Kavak AI loans originated</div></div>
+      <div class="metric-card"><div class="metric-n">#1</div><div class="metric-l">LATAM AI finance adoption</div></div>
+      <div class="metric-card"><div class="metric-n">AI + stablecoins</div><div class="metric-l">2026 payment shift</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">Kavak</div>
+        <h3>$1B+ AI-scored vehicle loans</h3>
+        <p>Kavak (used-car fintech) has originated over USD 1B in loans using proprietary AI credit scoring. The data-under-sparse-conditions approach is directly applicable to SA's underbanked vehicle finance and micro-SME lending markets.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">ODAIA</div>
+        <h3>AI-driven B2B sales intelligence</h3>
+        <p>ODAIA providing AI-driven B2B sales intelligence for Mexican enterprises — a model for how OGRE can position its own AI consulting services as a B2B intelligence product for SA mid-market companies.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Bitso</div>
+        <h3>AI + stablecoin payments integration</h3>
+        <p>Bitso integrating AI for crypto-asset management and compliance. Mexico's AI + stablecoins redefining payments in 2026 — a leading indicator for where SA's cross-border payment landscape is heading.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>Study Kavak's AI credit-scoring model for application to South Africa's underbanked vehicle finance market — adapt the data-under-sparse-conditions approach for SA micro-SME lending and taxi/fleet finance.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Medium-term · 6–12 months</span>
+          <p>South Africa has a structural gap in AI-powered vehicle and asset finance. Kavak's proven model in a comparable emerging market provides a copy-but-adapt play that bypasses years of R&D for OGRE's Studex financial products.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇲🇽 Mexico Window</h4>
+      <p>South Africa has a structural gap in AI-powered vehicle and asset finance. Kavak's proven model in a comparable emerging market provides a copy-but-adapt play that bypasses years of R&D — OGRE should move now.</p>
+    </div>
+  </div>
+
+  <!-- ==================== NIGERIA ==================== -->
+  <div class="main-panel country-section" id="panel-nigeria">
+    <div class="country-tag">🇳🇬 Nigeria &nbsp;·&nbsp; AI Fintech &nbsp;<span class="country-tag-severity sev-high">HIGH URGENCY</span></div>
+    <h2 class="country-title">Flutterwave · Jasiri AI · Touchless.ai</h2>
+    <p class="country-desc">Flutterwave secured a Nigerian banking licence in April 2026 — enabling a full AI-powered embedded banking platform on top of its pan-African payments rails. Jasiri AI and Touchless.ai building voice-AI and no-code automation for Nigerian SMEs. Africa's AI wave in 2026 is being led by Nigeria's fintech sector.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">Banking licence</div><div class="metric-l">Flutterwave — April 2026</div></div>
+      <div class="metric-card"><div class="metric-n">34+</div><div class="metric-l">African countries covered</div></div>
+      <div class="metric-card"><div class="metric-n">AI-native</div><div class="metric-l">Embedded banking platform</div></div>
+    </div>
+
+    <div class="section-title">Key Developments</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">Flutterwave</div>
+        <h3>Nigerian banking licence — April 2026</h3>
+        <p>Flutterwave secured a Nigerian banking licence in April 2026. Enables direct deposit holding and a full AI-powered embedded banking platform on top of its pan-African payments rails — a fundamental expansion of product surface.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Jasiri AI</div>
+        <h3>Voice-AI for Nigerian SMEs</h3>
+        <p>Building voice-AI automation for Nigerian SMEs — a direct model for what OGRE could build for SA's informal retail sector, where voice interfaces are more accessible than text-based ones.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Touchless.ai</div>
+        <h3>No-code AI automation</h3>
+        <p>No-code AI automation for Nigerian SMEs. The no-code AI wrapper model is immediately replicable in South Africa — OGRE could white-label or adapt this approach for SA's township enterprise ecosystem.</p>
+      </div>
+    </div>
+
+    <div class="section-title">What OGRE Can Implement</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Immediate · 0–3 months</span>
+          <p>Integrate Flutterwave's API infrastructure for OGRE's cross-border payment orchestration across SADC — combine with Flutterwave's new AI banking layer for a unified Africa-wide financial product through Studex Group.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>OGRE has a narrow window to lock in strategic integration status with Flutterwave before the platform becomes a dominant African banking-as-a-service player. Initiate partnership discussions this quarter.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Medium-term · 6–12 months</span>
+          <p>Adapt Touchless.ai's no-code AI automation model for SA's township enterprise ecosystem — OGRE's Studex platform could become the Touchless.ai equivalent for South Africa's informal retail and SME sector.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇳🇬 Nigeria Window</h4>
+      <p>Flutterwave's banking licence fundamentally changes its product surface. OGRE has a narrow window to lock in strategic integration status before Flutterwave becomes a dominant African banking-as-a-service player.</p>
+    </div>
+  </div>
+
+  <!-- ==================== SOUTH AFRICA ==================== -->
+  <div class="main-panel country-section" id="panel-southafrica">
+    <div class="country-tag">🇿🇦 South Africa &nbsp;·&nbsp; OGRE Home Market &nbsp;<span class="country-tag-severity sev-high">HIGH URGENCY</span></div>
+    <h2 class="country-title">SA AI Landscape — OGRE's Competitive Position</h2>
+    <p class="country-desc">South Africa is at a critical juncture — 72% of knowledge workers concerned about AI job displacement, but SA's national AI strategy is stalled while Ghana launches its own. Load-shedding creates unique demand for autonomous systems. OGRE has a 3–6 month window to establish itself as the dominant AI consulting force in SA before the market crystallises.</p>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-n">72%</div><div class="metric-l">SA workers concerned about AI</div></div>
+      <div class="metric-card"><div class="metric-n">40%</div><div class="metric-l">Enterprise AI adoption</div></div>
+      <div class="metric-card"><div class="metric-n">3–6 mo</div><div class="metric-l">OGRE window to lead</div></div>
+    </div>
+
+    <div class="section-title">OGRE's Competitive Position</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-label">Strength</div>
+        <h3>LAISA medical AI platform</h3>
+        <p>OGRE's LAISA medical AI platform is a unique, differentiated asset. With GPT-6 and Gemini 3.5 APIs available at low cost, LAISA can embed clinical decision support and pharmaceutical intelligence that global rivals haven't reached yet.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Opportunity</div>
+        <h3>Studex Group integration</h3>
+        <p>Studex Group provides OGRE with an existing commercial distribution network across SA and SADC. AI-powered pharmaceutical distribution, cold-chain compliance, and cross-border trade facilitation are immediately monetisable.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Threat</div>
+        <h3>International players moving in</h3>
+        <p>Infosys GCC model, Flutterwave's AI banking layer, and India's AI infrastructure players are all eyeing Sub-Saharan Africa. OGRE must establish itself as the go-to SA AI consultancy before international players build local presence.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Urgency</div>
+        <h3>SA policy gap = opportunity gap</h3>
+        <p>While SA's national AI strategy is stalled, Ghana is launching its National AI Strategy. Every month of policy vacuum is a month international players use to establish position. OGRE should move aggressively now.</p>
+      </div>
+    </div>
+
+    <div class="section-title">OGRE's Immediate Priority Actions</div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon" style="background: var(--red);">!</div>
+        <div>
+          <span class="card-action-label">Critical · This week</span>
+          <p>Launch the OGRE Global AI Intelligence Briefing as a weekly email to info@studexmeat.com — positioning OGRE as the authoritative AI intelligence voice in SA before international consultancies fill the vacuum.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Immediate · 0–3 months</span>
+          <p>Integrate Gemini 3.5 Omni API for Studex pharmaceutical supply chain — parsing handwritten AWB forms and blurry pharmacy receipts in rural SA clinics. Low cost, high impact, immediate differentiator.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-action">
+        <div class="card-action-icon">→</div>
+        <div>
+          <span class="card-action-label">Short-term · 3–6 months</span>
+          <p>Initiate Flutterwave partnership for SADC cross-border payment orchestration. Initiate Krutrim dialogue for African language localisation. Run both in parallel — the combination creates an Africa-wide AI infrastructure moat.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h4>🇿🇦 SA Summary</h4>
+      <p>OGRE has a 3–6 month window to establish itself as the dominant AI consulting force in South Africa. The combination of LAISA medical AI + Studex distribution network + the intelligence from these nightly 3AM scans creates a unique, defensible position that no international player can replicate quickly.</p>
+    </div>
+  </div>
+
+</div><!-- end main panel -->
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Global AI Timeline — June 2026</div>
+
+    <div class="timeline-item">
+      <div class="tl-dot red"></div>
+      <div>
+        <div class="tl-date">14 Jun 2026</div>
+        <div class="tl-text">Qwen-Robot Suite launched — Alibaba physical AI</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot red"></div>
+      <div>
+        <div class="tl-date">15 Jun 2026</div>
+        <div class="tl-text">Anthropic billing change — third-party agents cut off</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-date">9 Jun 2026</div>
+        <div class="tl-text">Claude Fable 5 & Mythos 5 — Anthropic's Mythos debut</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot cyan"></div>
+      <div>
+        <div class="tl-date">Jun 2026</div>
+        <div class="tl-text">Gemma 4, DiffusionGemma 4x, Nano Banana — Google</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-date">May 2026</div>
+        <div class="tl-text">Gemini 3.5 launched at Google I/O 2026</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot green"></div>
+      <div>
+        <div class="tl-date">Apr 2026</div>
+        <div class="tl-text">Flutterwave secures Nigerian banking licence</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-date">Apr 2026</div>
+        <div class="tl-text">DeepSeek V4 Flash & V4 Pro — major reasoning jump</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot green"></div>
+      <div>
+        <div class="tl-date">Feb 2026</div>
+        <div class="tl-text">Doubao 2.0 — 345M MAU, 90% cheaper than GPT-5.2</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-date">Feb 2026</div>
+        <div class="tl-text">Qwen 3.5 — Alibaba's agentic era models</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot green"></div>
+      <div>
+        <div class="tl-date">Apr 2026</div>
+        <div class="tl-text">Japan AI Foundation Model JV — SoftBank/Sony/Honda/NEC</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot cyan"></div>
+      <div>
+        <div class="tl-date">2026</div>
+        <div class="tl-text">GPT-6 weeks from launch — OpenAI + AWS partnership</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Action Queue — All Countries</div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=usa]').click()">
+      <div class="action-country">🇺🇸 USA</div>
+      <div class="action-text">License GPT-6 API for LAISA medical AI</div>
+      <span class="action-urgency urgency-high">High · Now</span>
+    </div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=usa]').click()">
+      <div class="action-country">🇺🇸 USA</div>
+      <div class="action-text">Use Gemini 3.5 for Studex supply chain dashboard</div>
+      <span class="action-urgency urgency-high">High · Now</span>
+    </div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=china]').click()">
+      <div class="action-country">🇨🇳 China</div>
+      <div class="action-text">Build Studex China Desk with Baidu ERNIE API</div>
+      <span class="action-urgency urgency-high">High · This Q</span>
+    </div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=china]').click()">
+      <div class="action-country">🇨🇳 China</div>
+      <div class="action-text">Integrate Doubao translation APIs for SA-Sino trade</div>
+      <span class="action-urgency urgency-high">High · 0–3mo</span>
+    </div>
+
+    <div class="action-item" onclick="document.querySelector('[data-country=india]').click()">
+      <div class="action-country">🇮🇳 India</div>
+      <div class="action-text">Explore Krutrim for African language localisation</div>
+      <span class="action-urgency urgency-high">High · 0–3mo</span>
+    </div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=nigeria]').click()">
+      <div class="action-country">🇳🇬 Nigeria</div>
+      <div class="action-text">Initiate Flutterwave partnership for SADC payments</div>
+      <span class="action-urgency urgency-high">High · This Q</span>
+    </div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=brazil]').click()">
+      <div class="action-country">🇧🇷 Brazil</div>
+      <div class="action-text">Study Nubank AI architecture for SA embedded finance</div>
+      <span class="action-urgency urgency-high">High · 3–6mo</span>
+    </div>
+
+    <div class="action-item amber" onclick="document.querySelector('[data-country=mexico]').click()">
+      <div class="action-country">🇲🇽 Mexico</div>
+      <div class="action-text">Adapt Kavak credit model for SA vehicle finance</div>
+      <span class="action-urgency urgency-medium">Med · 3–6mo</span>
+    </div>
+
+    <div class="action-item amber" onclick="document.querySelector('[data-country=japan]').click()">
+      <div class="action-country">🇯🇵 Japan</div>
+      <div class="action-text">Initiate Japan AI JV partnership conversation</div>
+      <span class="action-urgency urgency-medium">Med · Now</span>
+    </div>
+
+    <div class="action-item red" onclick="document.querySelector('[data-country=southafrica]').click()">
+      <div class="action-country">🇿🇦 SA</div>
+      <div class="action-text">Launch weekly OGRE Intelligence Briefing email</div>
+      <span class="action-urgency urgency-high">High · This week</span>
+    </div>
+
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Urgency Matrix</div>
+    <div style="font-size: 11px; color: var(--muted); line-height: 1.7;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;flex-shrink:0;"></span>
+        <span style="color: var(--text);">High: Move this week</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0;"></span>
+        <span style="color: var(--text);">Medium: Move this quarter</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;"></span>
+        <span style="color: var(--text);">Low: Strategic horizon</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">About This Explorer</div>
+    <p style="font-size: 11px; color: var(--muted); line-height: 1.6;">Built from nightly 3AM global AI research scans. Covers 8 strategic markets. Updated daily by the OGRE Midnight Build agent. Data sourced from company announcements, industry reports, and market intelligence.</p>
+    <p style="font-size: 11px; color: var(--gold); margin-top: 8px; font-family: 'JetBrains Mono', monospace;">v1.0 — 23 June 2026</p>
+  </div>
+
+</div><!-- end sidebar -->
+
+</div><!-- end panels -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-text">OGRE COMPUTER <span>·</span> Global AI Intelligence Explorer <span>·</span> Midnight Build Day 3</div>
+  <div class="footer-text">Built <span>2026-06-23</span> 22:00 UTC <span>·</span> Research: nightly 3AM scans</div>
+</div>
+
+<script>
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toUTCString().slice(17,25) + ' UTC';
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.country-section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.country).classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

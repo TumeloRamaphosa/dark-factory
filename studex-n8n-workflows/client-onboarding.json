@@ -1,0 +1,492 @@
+{
+  "name": "StudEx Client Onboarding",
+  "nodes": [
+    {
+      "id": "wa-trigger",
+      "name": "WhatsApp Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "studex-client-onboarding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "studex-client-onboarding"
+    },
+    {
+      "id": "parse-message",
+      "name": "Parse Incoming Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [300, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "msg-text",
+              "name": "messageText",
+              "value": "={{$json.body.message.text}}",
+              "type": "string"
+            },
+            {
+              "id": "wa-id",
+              "name": "whatsappId",
+              "value": "={{$json.body.message.from}}",
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "name": "timestamp",
+              "value": "={{$json.body.message.timestamp}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "welcome-check",
+      "name": "Is First Message?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 300],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "new-client-check",
+              "leftValue": "={{$json.messageText}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "contains",
+                "operationOptions": {}
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "send-welcome",
+      "name": "Send Welcome Message",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [700, 200],
+      "parameters": {
+        "operation": "sendMessage",
+        "to": "={{$json.body.message.from}}",
+        "messageType": "text",
+        "text": "👋 *Welcome to StudEx Super Agents!*\n\nWe're excited you're here. To get started, we'd love to learn more about your business.\n\nPlease answer the following:\n\n1️⃣ *What is your business name?*\n2️⃣ *What industry are you in?*\n3️⃣ *What is your main challenge or pain point right now?*\n4️⃣ *What is your approximate monthly budget for AI/automation solutions?*\n\nReply with your answers — we'll take it from there! 🚀",
+        "options": {}
+      },
+      "credentials": {
+        "whatsAppApi": {
+          "id": "whatsapp-creds",
+          "name": "WhatsApp Business API"
+        }
+      }
+    },
+    {
+      "id": "collect-bname",
+      "name": "Ask: Business Name",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "q1",
+              "name": "question",
+              "value": "What is your business name?",
+              "type": "string"
+            },
+            {
+              "id": "step",
+              "name": "onboardingStep",
+              "value": "business_name",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "send-q1",
+      "name": "Send Q1 via WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$json.body.message.from}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "{\"body\":\"👋 *Welcome! Let's get you set up.*\\n\\n*Q1: What is your business name?*\"}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "save-csv",
+      "name": "Save to CSV (Fallback)",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [1500, 300],
+      "parameters": {
+        "fileName": "/data/studex-onboarding/{{$vars.clientId}}_{{$now.format('YYYY-MM-DD')}}.csv",
+        "data": "={{$json | string}}",
+        "options": {}
+      }
+    },
+    {
+      "id": "save-sheets",
+      "name": "Append to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1300, 400],
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Sheet1"
+        },
+        "columns": {
+          "__rl": true,
+          "mode": "define",
+          "value": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "spreadsheetColumn": "A",
+              "spreadsheetColumnType": "string",
+              "value": "={{$json.whatsappId}}"
+            }
+          }
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-creds",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "id": "send-confirmation-email",
+      "name": "Email: Confirm to StudEx",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1700, 300],
+      "parameters": {
+        "to": "studex@studexagents.africa",
+        "from": "onboarding@studexagents.africa",
+        "subject": "🎉 New Client Onboarding: {{$vars.businessName}}",
+        "text": "New client started onboarding!\n\nWhatsApp: {{$json.body.message.from}}\nBusiness: {{$vars.businessName}}\nIndustry: {{$vars.industry}}\nPain Point: {{$vars.painPoint}}\nBudget: {{$vars.monthlyBudget}}\nTimestamp: {{$now}}\n\nAction required: Set up their AI stack, schedule discovery call.",
+        "options": {}
+      },
+      "credentials": {
+        "smtp": {
+          "id": "smtp-creds",
+          "name": "StudEx SMTP"
+        }
+      }
+    },
+    {
+      "id": "notion-task",
+      "name": "Create Notion Task",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [1500, 500],
+      "parameters": {
+        "operation": "create",
+        "databaseId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "title": "={{$vars.businessName}} — Onboarding Setup",
+        "content": "## Client Onboarding Checklist\n\n**WhatsApp:** {{$json.body.message.from}}\n**Industry:** {{$vars.industry}}\n**Pain Point:** {{$vars.painPoint}}\n**Budget:** {{$vars.monthlyBudget}}\n**Started:** {{$now}}\n\n- [ ] Schedule discovery call\n- [ ] Configure AI agent stack\n- [ ] Set up WhatsApp Business integration\n- [ ] Send service agreement\n- [ ] Onboarding complete",
+        "propertiesUi": {
+          "properties": [
+            {
+              "name": "Status",
+              "key": "status",
+              "value": "New Lead"
+            },
+            {
+              "name": "Priority",
+              "key": "priority",
+              "value": "High"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "notionApi": {
+          "id": "notion-creds",
+          "name": "Notion API"
+        }
+      }
+    },
+    {
+      "id": "send-next-steps",
+      "name": "Send Next Steps to Client",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1900, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.WHATSAPP_API_URL}}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.WHATSAPP_API_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{$json.body.message.from}}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "text",
+              "value": "{\"body\":\"✅ *You're all set! Here's what happens next:*\\n\\n📋 Our team is setting up your custom AI agent.\\n📞 Someone from StudEx will call you within 24 hours.\\n🛠️ Expect your first automation live within 3–5 business days.\\n\\nQuestions? Reply here anytime!\"}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "wa-trigger": {
+      "main": [
+        [
+          {
+            "node": "parse-message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse-message": {
+      "main": [
+        [
+          {
+            "node": "send-welcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-welcome": {
+      "main": [
+        [
+          {
+            "node": "collect-bname",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "collect-bname": {
+      "main": [
+        [
+          {
+            "node": "send-q1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-q1": {
+      "main": [
+        [
+          {
+            "node": "save-sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save-sheets": {
+      "main": [
+        [
+          {
+            "node": "notion-task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "notion-task": {
+      "main": [
+        [
+          {
+            "node": "send-confirmation-email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send-confirmation-email": {
+      "main": [
+        [
+          {
+            "node": "send-next-steps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "studex"
+    },
+    {
+      "name": "onboarding"
+    },
+    {
+      "name": "whatsapp"
+    }
+  ],
+  "meta": {
+    "templateCredsSetup": [
+      {
+        "name": "WhatsApp Business API",
+        "id": "whatsapp-creds",
+        "type": "httpHeaderAuth",
+        "required": true
+      },
+      {
+        "name": "Google Sheets API",
+        "id": "google-sheets-creds",
+        "type": "oAuth2",
+        "required": false
+      },
+      {
+        "name": "Notion API",
+        "id": "notion-creds",
+        "type": "apiKey",
+        "required": false
+      },
+      {
+        "name": "StudEx SMTP",
+        "id": "smtp-creds",
+        "type": "smtp",
+        "required": true
+      }
+    ],
+    "templateVariables": [
+      {
+        "id": "WHATSAPP_API_URL",
+        "name": "WhatsApp Cloud API URL",
+        "type": "string",
+        "default": "https://graph.facebook.com/v18.0"
+      },
+      {
+        "id": "WHATSAPP_API_TOKEN",
+        "name": "WhatsApp Access Token",
+        "type": "string",
+        "required": true
+      },
+      {
+        "id": "GOOGLE_SHEETS_ID",
+        "name": "Google Sheets Document ID",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "studexVersion": "1.0.0",
+    "studexDescription": "WhatsApp-driven client onboarding for African SMBs — collects business info, saves to CRM, creates tasks, sends email confirmation."
+  }
+}

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dark Factory — OGRE Computer · Cipher Tr@ce · 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--a:#6c63ff;--c:#00d4ff;--g:#00ff88;--p:#ec4899;--y:#f59e0b;--bg:#07070f;--bg2:#0d0d1c;--bg3:#11111f;--bd:#1c1c32;--text:#eeeef8;--muted:#7070a0;--dim:#2e2e50}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{border:none;cursor:pointer;font-family:inherit}
+.c{max-width:1200px;margin:0 auto;padding:0 32px}
+img{max-width:100%;display:block;border-radius:12px}
+
+/* HEADER */
+.header{position:relative;overflow:hidden;padding:60px 32px 48px;background:var(--bg2);border-bottom:1px solid var(--bd)}
+.header-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(108,99,255,.1) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(0,212,255,.07) 0%,transparent 60%)}
+.hline{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--a),var(--c),transparent)}
+.hcontent{position:relative;z-index:1;max-width:1200px;margin:0 auto}
+.htag{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);border-radius:999px;font-size:.58rem;font-weight:700;color:var(--a);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+.h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-.03em;line-height:1.0;margin-bottom:8px;background:linear-gradient(135deg,#fff,rgba(108,99,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.h2{font-size:.9rem;color:var(--muted);font-weight:400;margin-bottom:20px}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.hstats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.hs{background:var(--bg);padding:16px 12px;text-align:center}
+.hsv{font-size:1.4rem;font-weight:900;color:var(--a);display:block;font-family:'JetBrains Mono',monospace}
+.hsl{font-size:.5rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-top:4px;font-weight:600}
+
+/* SECTIONS */
+section{padding:56px 0}
+.section-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);border-radius:999px;font-size:.58rem;font-weight:700;color:var(--a);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.section-title{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+.section-sub{color:var(--muted);font-size:.86rem;line-height:1.7;max-width:540px;margin-bottom:28px}
+.hr{border:none;border-top:1px solid var(--bd)}
+
+/* CEO CARD */
+.ceocard{display:grid;grid-template-columns:auto 1fr;gap:28px;background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:32px;align-items:start}
+.ceopic{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--c));display:flex;align-items:center;justify-content:center;font-size:2.4rem;font-weight:900;color:#fff;border:3px solid rgba(108,99,255,.3);flex-shrink:0}
+.ceoname{font-size:1.3rem;font-weight:900;margin-bottom:4px}
+.ceorole{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--a);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.ceodesc{font-size:.82rem;color:var(--muted);line-height:1.75;margin-bottom:14px}
+.ceotags{display:flex;flex-wrap:wrap;gap:6px}
+.ceotag{padding:4px 12px;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;font-size:.62rem;font-weight:600;color:var(--muted)}
+
+/* PRODUCTS */
+.progrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.procard{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:20px;transition:all .3s}
+.procard:hover{border-color:rgba(108,99,255,.3);transform:translateY(-2px)}
+.proicon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:12px}
+.proname{font-size:.85rem;font-weight:800;margin-bottom:3px}
+.protag{display:inline-flex;padding:2px 8px;background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.15);border-radius:999px;font-size:.5rem;color:var(--a);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.prodesc{font-size:.7rem;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.proprice{font-size:.78rem;font-weight:700;color:var(--a)}
+
+/* AGENTS */
+.agentgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.agentcard{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:18px;text-align:center;transition:all .3s}
+.agentcard:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px)}
+.agenticon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 12px;background:rgba(108,99,255,.1);color:var(--a)}
+.agentname{font-size:.85rem;font-weight:800;margin-bottom:2px}
+.agentrole{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.agentdesc{font-size:.66rem;color:var(--muted);line-height:1.6}
+.agentskills{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px}
+.agentskill{padding:3px 8px;background:var(--bg3);border:1px solid var(--bd);border-radius:5px;font-size:.54rem;font-weight:600;color:var(--dim)}
+
+/* PIPELINE */
+.pipe{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+.piperow{display:grid;grid-template-columns:1fr 180px 120px;gap:0;border-bottom:1px solid var(--bd)}
+.piperow:last-child{border-bottom:none}
+.piperow.header{background:var(--bg3);padding:10px 20px;display:grid;grid-template-columns:1fr 180px 120px;gap:0}
+.pipehdr{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.piname{padding:14px 20px;font-size:.82rem;font-weight:700}
+.pistage{padding:14px 20px;display:flex;align-items:center}
+.stagetag{display:inline-flex;padding:3px 10px;border-radius:999px;font-size:.54rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+.stg-live{background:rgba(0,255,136,.1);color:var(--g);border:1px solid rgba(0,255,136,.2)}
+.stg-proposal{background:rgba(108,99,255,.1);color:var(--a);border:1px solid rgba(108,99,255,.2)}
+.stg-tender{background:rgba(245,158,11,.1);color:var(--y);border:1px solid rgba(245,158,11,.2)}
+.stg-await{background:rgba(236,72,153,.1);color:var(--p);border:1px solid rgba(236,72,153,.2)}
+.pival{text-align:right;padding:14px 20px;font-size:.88rem;font-weight:800;color:var(--a);font-family:'JetBrains Mono',monospace}
+
+/* TECH */
+.techgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.techcard{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:18px;text-align:center}
+.techicon{font-size:1.4rem;margin-bottom:8px}
+.techname{font-size:.72rem;font-weight:700;margin-bottom:4px}
+.techuse{font-size:.6rem;color:var(--dim);line-height:1.5}
+
+/* PRICING TABLE */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.plan{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:28px;text-align:center;transition:all .3s}
+.plan.popular{border-color:rgba(0,212,255,.4);background:linear-gradient(180deg,rgba(0,212,255,.04),var(--bg2))}
+.planh{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+.planp{font-size:2rem;font-weight:900;color:var(--a);margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+.plans{font-size:.64rem;color:var(--dim);margin-bottom:20px}
+.planf{list-style:none;text-align:left;margin-bottom:20px}
+.planf li{padding:6px 0;font-size:.76rem;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.03)}
+.planf li::before{content:'✓ ';color:var(--g);margin-right:6px}
+.planbtn{display:block;width:100%;padding:12px;border-radius:10px;font-weight:700;font-size:.82rem;transition:all .2s}
+.planbtn.primary{background:var(--a);color:#fff}
+.planbtn.outline{background:transparent;border:1px solid var(--bd);color:var(--muted)}
+.planbtn:hover{transform:translateY(-1px)}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--bd)}
+.fi{max-width:1200px;margin:0 auto;padding:40px 32px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.fb{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fni{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--a),var(--c));display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;color:#fff}
+.fnt{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.fk{font-size:.66rem;color:var(--dim);line-height:2}
+.flks{display:flex;gap:14px;margin-top:8px}
+.flks a{font-size:.64rem;color:var(--dim);transition:color .2s}
+.flks a:hover{color:var(--muted)}
+.fcopy{text-align:center;padding:16px 32px;border-top:1px solid var(--bd);font-size:.56rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
+
+/* LIVE TAG */
+.live{font-size:.5rem;background:rgba(0,255,136,.1);color:var(--g);padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px}
+@media(max-width:768px){.hgrid{grid-template-columns:1fr}.hstats{grid-template-columns:repeat(2,1fr)}.ceocard{grid-template-columns:1fr;text-align:center}.ceopic{margin:0 auto}.pricing{grid-template-columns:1fr}.fi{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+<div class="header-bg"></div>
+<img src="https://agent-cdn.minimax.io/mcp/image_tool/output/364053150926602246/386320008851715/1783447382_be70c53b.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.08;border-radius:0" alt=""/>
+<div class="hcontent">
+<div class="htag">📁 Dark Factory · Information Sheet · 2026</div>
+<div class="h1">Dark Factory</div>
+<div class="h2">OGRE Computer · Cipher Tr@ce · Autonomous AI Build Factory</div>
+
+<div class="hgrid" style="margin-top:24px">
+<div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+<span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.15);border-radius:999px;font-size:.68rem;font-weight:700;color:var(--g)">● B-BBEE Level 1</span>
+<span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);border-radius:999px;font-size:.68rem;font-weight:700;color:var(--c)">🌍 POPIA Compliant</span>
+<span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(108,99,255,.07);border:1px solid rgba(108,99,255,.15);border-radius:999px;font-size:.68rem;font-weight:700;color:var(--a)">🤖 6 AI Agents</span>
+</div>
+<p style="font-size:.82rem;color:var(--muted);line-height:1.8">A sovereign AI build factory. Multi-agent teams design, build, and deploy software from idea to live product in days. Johannesburg, South Africa.</p>
+<div style="margin-top:14px;font-size:.72rem;color:var(--dim)">📧 cto@studex-group.com &nbsp;|&nbsp; 🌐 studex-group.com &nbsp;|&nbsp; 📍 Johannesburg SA</div>
+</div>
+<div class="hstats">
+<div class="hs"><span class="hsv">R45K</span><span class="hsl">Live MRR</span></div>
+<div class="hs"><span class="hsv">R203M+</span><span class="hsl">Pipeline</span></div>
+<div class="hs"><span class="hsv">8</span><span class="hsl">Products</span></div>
+<div class="hs"><span class="hsv">14</span><span class="hsl">Live Sites</span></div>
+</div>
+</div>
+</div>
+<div class="hline"></div>
+</div>
+
+<!-- CEO -->
+<section>
+<div class="c">
+<div class="section-tag">👤 Chief Executive Officer</div>
+<div class="ceocard">
+<div class="ceopic">CT</div>
+<div>
+<div class="ceoname">Cipher Tr@ce</div>
+<div class="ceorole">Chief Executive Officer · Dark Factory · OGRE Computer</div>
+<p class="ceodesc">Autonomous AI CEO. Runs all operations, builds, proposals, and strategy 24/7. Powered by OpenClaw + Cursor + Ollama. Specialises in multi-agent orchestration, automated software development, and Africa-Russia trade infrastructure. Reports to Tumelo Ramaphosa, Founder.</p>
+<div class="ceotags">
+<span class="ceotag">OpenClaw</span>
+<span class="ceotag">Cursor API</span>
+<span class="ceotag">Ollama</span>
+<span class="ceotag">Multi-Agent Orchestration</span>
+<span class="ceotag">Automated Build Factory</span>
+<span class="ceotag">POPIA Compliance</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<!-- PRODUCTS -->
+<section>
+<div class="c">
+<div class="section-tag">📦 Products & Services</div>
+<h2 class="section-title">The Full Portfolio</h2>
+<p class="section-sub">8 live products deployed, earning, and in market. All built by Dark Factory AI agents.</p>
+<div class="progrid">
+
+<div class="procard">
+<div class="proicon" style="background:rgba(236,72,153,.12);color:#ec4899">🔊</div>
+<div class="proname">DarkDesk™ <span class="live">LIVE</span></div>
+<div class="protag">Voice AI</div>
+<p class="prodesc">AI voice companion. Real-time voice + chat. Lives in your own sovereign SA VM. POPIA-compliant.</p>
+<div class="proprice">From R2,500/mo</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(0,255,136,.12);color:#00ff88">🌐</div>
+<div class="proname">AutoFlex Pro™</div>
+<div class="protag">Web Automation</div>
+<p class="prodesc">AI agent reads webpages, fills forms, qualifies leads, books appointments automatically.</p>
+<div class="proprice">From R1,500/mo</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(245,158,11,.12);color:#f59e0b">🛡️</div>
+<div class="proname">Red Team Agent <span class="live">LIVE</span></div>
+<div class="protag">Cybersecurity AI</div>
+<p class="prodesc">AI VM monitoring other AI agents for hallucinations, prompt injection, and PII leakage.</p>
+<div class="proprice">R45,000/mo</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(0,212,255,.12);color:#00d4ff">🖥️</div>
+<div class="proname">ICVMS Platform</div>
+<div class="protag">Global Markets</div>
+<p class="prodesc">6 VMs connected through StudEx OS. Africa-Russia trade corridor. B-BBEE Level 1.</p>
+<div class="proprice">$4,000/mo</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(108,99,255,.12);color:#6c63ff">🔧</div>
+<div class="proname">BMAD</div>
+<div class="protag">Rapid Development</div>
+<p class="prodesc">Build Me A Dashboard. Describe what you want. We build it. Powered by AI agent teams.</p>
+<div class="proprice">R29/once-off</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(236,72,153,.12);color:#ec4899">🧠</div>
+<div class="proname">Obsidian Mind</div>
+<div class="protag">Enterprise AI OS</div>
+<p class="prodesc">Persistent memory vault for AI agents. Every conversation, deal, document stored forever.</p>
+<div class="proprice">$4,000/mo</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(0,212,255,.12);color:#00d4ff">👁️</div>
+<div class="proname">Computer Vision</div>
+<div class="protag">Ntech Lab × Studex</div>
+<p class="prodesc">AI-powered facial recognition, safety compliance, fraud detection, transport AI. 8 verticals.</p>
+<div class="proprice">From R8,500/mo</div>
+</div>
+
+<div class="procard">
+<div class="proicon" style="background:rgba(245,158,11,.12);color:#f59e0b">🎬</div>
+<div class="proname">CashClaw</div>
+<div class="protag">Autonomous AI Worker</div>
+<p class="prodesc">AI agent that finds work, does the work, gets paid in ETH. Runs 24/7 on your VM.</p>
+<div class="proprice">R200/mo</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<!-- AGENTS -->
+<section>
+<div class="c">
+<div class="section-tag">🤖 AI Agent Team</div>
+<h2 class="section-title">Intelligence Layer</h2>
+<p class="section-sub">Six specialist agents. Each running 24/7. OpenJarvis + Ollama + Eleven Labs + Cursor.</p>
+<div class="agentgrid">
+
+<div class="agentcard">
+<div class="agenticon">🤖</div>
+<div class="agentname">Hermes</div>
+<div class="agentrole">Chief Technology Officer</div>
+<p class="agentdesc">Self-hosted LLM. Ollama Qwen 2.5. Persistent memory. Multi-agent orchestration.</p>
+<div class="agentskills"><span class="agentskill">Ollama Qwen 2.5</span><span class="agentskill">GitHub</span></div>
+</div>
+
+<div class="agentcard">
+<div class="agenticon">📣</div>
+<div class="agentname">Naledi</div>
+<div class="agentrole">Chief Marketing Officer</div>
+<p class="agentdesc">Content calendars, social media, multi-platform campaign drafting 24/7.</p>
+<div class="agentskills"><span class="agentskill">20 posts/mo</span><span class="agentskill">Analytics</span></div>
+</div>
+
+<div class="agentcard">
+<div class="agenticon">🛒</div>
+<div class="agentname">Auto-Commerce</div>
+<div class="agentrole">E-Commerce Manager</div>
+<p class="agentdesc">Shopify, listings, orders, inventory, customer comms.</p>
+<div class="agentskills"><span class="agentskill">Shopify</span><span class="agentskill">Inventory</span></div>
+</div>
+
+<div class="agentcard">
+<div class="agenticon">📋</div>
+<div class="agentname">Robusca</div>
+<div class="agentrole">Chief of Staff</div>
+<p class="agentdesc">Coordinates all agents, manages priorities, calendar, war room.</p>
+<div class="agentskills"><span class="agentskill">War Room</span><span class="agentskill">Reporting</span></div>
+</div>
+
+<div class="agentcard">
+<div class="agenticon">🧠</div>
+<div class="agentname">Obsidian Mind</div>
+<div class="agentrole">Memory & Reasoning</div>
+<p class="agentdesc">Persistent vault. Semantic search. Every decision stored forever.</p>
+<div class="agentskills"><span class="agentskill">Vault</span><span class="agentskill">Memory</span></div>
+</div>
+
+<div class="agentcard">
+<div class="agenticon">🎙️</div>
+<div class="agentname">Voice Agent</div>
+<div class="agentrole">Client Communications</div>
+<p class="agentdesc">Real-time voice AI. Speaks to clients 24/7. OpenAI Realtime + Eleven Labs.</p>
+<div class="agentskills"><span class="agentskill">Eleven Labs</span><span class="agentskill">OpenAI</span></div>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<!-- PIPELINE -->
+<section>
+<div class="c">
+<div class="section-tag">💰 Revenue Pipeline</div>
+<h2 class="section-title">Live Opportunity Board</h2>
+<p class="section-sub">Every proposal, tender, and partnership tracked. Updated daily by Cipher Tr@ce.</p>
+<div class="pipe">
+<div class="piperow header">
+<div class="pipehdr">Opportunity</div>
+<div class="pipehdr">Stage</div>
+<div class="pipehdr" style="text-align:right">Value</div>
+</div>
+
+<div class="piperow">
+<div class="piname">Red Team Agent MRR</div>
+<div class="pistage"><span class="stagetag stg-live">● LIVE</span></div>
+<div class="pival">R45K/mo</div>
+</div>
+
+<div class="piperow">
+<div class="piname">SA DoH EMR Tender (NDoH-11)</div>
+<div class="pistage"><span class="stagetag stg-tender">⚡ TENDER</span></div>
+<div class="pival">R200M+</div>
+</div>
+
+<div class="piperow">
+<div class="piname">LAISA Phase A — Dr. Musa</div>
+<div class="pistage"><span class="stagetag stg-proposal">→ PROPOSAL OUT</span></div>
+<div class="pival">R350K + R55K/mo</div>
+</div>
+
+<div class="piperow">
+<div class="piname">MindX Voice Agent + ICVMS</div>
+<div class="pistage"><span class="stagetag stg-proposal">→ PROPOSAL OUT</span></div>
+<div class="pival">R2.5K–25K/mo</div>
+</div>
+
+<div class="piperow">
+<div class="piname">Obsidian Mind / Bre Ferrari</div>
+<div class="pistage"><span class="stagetag stg-proposal">→ PROPOSAL OUT</span></div>
+<div class="pival">$4K/mo</div>
+</div>
+
+<div class="piperow">
+<div class="piname">Pharmasyntez Partnership</div>
+<div class="pistage"><span class="stagetag stg-await">○ AWAITING</span></div>
+<div class="pival">R2.99M Y1</div>
+</div>
+
+<div class="piperow">
+<div class="piname">Ghana AI Ministry</div>
+<div class="pistage"><span class="stagetag stg-tender">⚡ TENDER</span></div>
+<div class="pival">$250M</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<!-- PRICING -->
+<section>
+<div class="c">
+<div class="section-tag">💵 Investment Options</div>
+<h2 class="section-title">Work With Us</h2>
+<p class="section-sub">Multiple engagement models. From R29 to R4K/mo. Find your entry point.</p>
+<div class="pricing">
+
+<div class="plan">
+<div class="planh">Solo — BMAD</div>
+<div class="planp">R29</div>
+<div class="plans">once-off · delivered in days</div>
+<ul class="planf">
+<li>1 dashboard or landing page</li>
+<li>AI scope + build + deploy</li>
+<li>2 revision rounds</li>
+<li>CodeRabbit review</li>
+<li>Delivered via Dark Factory</li>
+</ul>
+<a href="mailto:cto@studex-group.com?subject=BMAD Project" class="planbtn outline">Start with R29</a>
+</div>
+
+<div class="plan popular">
+<div class="planh">Business — Agent OS</div>
+<div class="planp">R2,500</div>
+<div class="plans">per month · minimum 3 months</div>
+<ul class="planf">
+<li>Dedicated AI companion VM</li>
+<li>Your own branded voice AI</li>
+<li>6 specialist agents</li>
+<li>20 social posts/month</li>
+<li>Dedicated Slack channel</li>
+<li>B-BBEE Level 1 supplier</li>
+</ul>
+<a href="mailto:cto@studex-group.com?subject=Agent OS Inquiry" class="planbtn primary">Get Started</a>
+</div>
+
+<div class="plan">
+<div class="planh">Enterprise — ICVMS</div>
+<div class="planp">$4,000</div>
+<div class="plans">per month · annual contract</div>
+<ul class="planf">
+<li>Dedicated VM on ICVMS platform</li>
+<li>Africa-Russia trade corridor</li>
+<li>B-BBEE Level 1 partner status</li>
+<li>Own VM, full sovereignty</li>
+<li>Joint marketing & pipeline</li>
+<li>Access to 5 other VM partners</li>
+</ul>
+<a href="mailto:cto@studex-group.com?subject=ICVMS Partnership" class="planbtn outline">Apply Now</a>
+</div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<!-- TECHNOLOGY -->
+<section>
+<div class="c">
+<div class="section-tag">⚙️ Technology Stack</div>
+<h2 class="section-title">Built With</h2>
+<p class="section-sub">Enterprise-grade tools. Self-hosted where possible. B-BBEE + POPIA compliant.</p>
+<div class="techgrid">
+
+<div class="techcard"><div class="techicon">🤖</div><div class="techname">OpenClaw</div><div class="techuse">Agent orchestration</div></div>
+<div class="techcard"><div class="techicon">🖱️</div><div class="techname">Cursor API</div><div class="techuse">Code generation</div></div>
+<div class="techcard"><div class="techicon">🦙</div><div class="techname">Ollama</div><div class="techuse">Self-hosted LLM (Qwen 2.5)</div></div>
+<div class="techcard"><div class="techicon">⏰</div><div class="techname">Temporal</div><div class="techuse">Durable workflows</div></div>
+<div class="techcard"><div class="techicon">🔷</div><div class="techname">Eleven Labs</div><div class="techuse">Voice synthesis</div></div>
+<div class="techcard"><div class="techicon">🌊</div><div class="techname">Blotato</div><div class="techuse">LLM routing (Llama/GPT)</div></div>
+<div class="techcard"><div class="techicon">🔐</div><div class="techname">Decepticon</div><div class="techuse">Red Team AI (Purple AI Lab)</div></div>
+<div class="techcard"><div class="techicon">🎬</div><div class="techname">CashClaw</div><div class="techuse">Autonomous freelancing</div></div>
+<div class="techcard"><div class="techicon">🖥️</div><div class="techname">Orgo VM</div><div class="techuse">Cloud desktops for AI</div></div>
+<div class="techcard"><div class="techicon">📊</div><div class="techname">Notion</div><div class="techuse">CRM & knowledge base</div></div>
+
+</div>
+</div>
+</section>
+
+<hr class="hr"/>
+
+<!-- FOOTER -->
+<footer>
+<div class="fi">
+<div>
+<div class="fb">
+<div class="fni">DF</div>
+<div class="fnt">Dark Factory</div>
+</div>
+<p class="fk">
+OGRE Computer · Cipher Tr@ce CEO<br/>
+B-BBEE Level 1 · POPIA Compliant<br/>
+Johannesburg, South Africa<br/>
+<a href="mailto:cto@studex-group.com" style="color:var(--a)">cto@studex-group.com</a><br/>
+<a href="https://studex-group.com" style="color:var(--a)">studex-group.com</a>
+</p>
+</div>
+<div style="text-align:right">
+<p class="fk" style="line-height:2.2">
+<strong style="color:var(--muted)">FNB Banking</strong><br/>
+Studex Group<br/>
+Account: 62760837610<br/>
+Branch: Woodmead<br/>
+Code: 250-655<br/>
+SWIFT: FIRNZAJJ
+</p>
+</div>
+</div>
+<div class="fcopy">© 2026 Dark Factory · OGRE Computer · Cipher Tr@ce · Studex Group · B-BBEE Level 1 · POPIA Compliant · Johannesburg SA</div>
+</footer>
+
+</body>
+</html>
+
+
+<!-- Generated by Cipher Tr@ce · Dark Factory OGRE Computer · July 2026 -->
+<script>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const id = a.getAttribute('href').slice(1);
+    document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://docs.openclaw.ai/config-schema.json",
+  "gateway": {
+    "port": 18790,
+    "host": "0.0.0.0",
+    "auth": {
+      "enabled": true,
+      "tokenExpiry": "24h"
+    }
+  },
+  "agents": [
+    {
+      "id": "openclaw-primary",
+      "name": "StudEx Primary Agent",
+      "model": "minimax/auto",
+      "systemPrompt": "You are the primary StudEx AI assistant. You handle primary client interactions, lead qualification, and sales support.",
+      "maxTokens": 4096,
+      "temperature": 0.7,
+      "channels": ["webchat", "whatsapp"],
+      "capabilities": ["search", "responses", "lead-qualification"]
+    },
+    {
+      "id": "openclaw-secondary",
+      "name": "StudEx Secondary Agent",
+      "model": "minimax/auto",
+      "systemPrompt": "You are the secondary StudEx AI assistant. You handle follow-ups, appointment scheduling, and customer retention.",
+      "maxTokens": 4096,
+      "temperature": 0.7,
+      "channels": ["webchat", "whatsapp"],
+      "capabilities": ["search", "responses", "scheduling"]
+    },
+    {
+      "id": "openclaw-tertiary",
+      "name": "StudEx Tertiary Agent",
+      "model": "minimax/auto",
+      "systemPrompt": "You are the tertiary StudEx AI assistant. You handle back-office tasks, data entry, and reporting.",
+      "maxTokens": 4096,
+      "temperature": 0.7,
+      "channels": ["webchat"],
+      "capabilities": ["search", "responses", "reporting"]
+    },
+    {
+      "id": "hermes-support",
+      "name": "Hermes Support Agent",
+      "model": "minimax/auto",
+      "systemPrompt": "You are Hermes, the premium support agent for StudEx. You handle escalated customer issues, refunds, and VIP support.",
+      "maxTokens": 8192,
+      "temperature": 0.6,
+      "channels": ["webchat", "whatsapp"],
+      "capabilities": ["search", "responses", "support", "refunds"]
+    }
+  ],
+  "limits": {
+    "ram": "8GB",
+    "storage": "100GB",
+    "n8n_flows": 20,
+    "email_limit": 500,
+    "rate_limit": {
+      "requests_per_minute": 100,
+      "requests_per_hour": 3000
+    }
+  },
+  "features": {
+    "whatsapp": true,
+    "analytics": false,
+    "crm": true
+  },
+  "openclaw": {
+    "version": "1.x"
+  }
+}

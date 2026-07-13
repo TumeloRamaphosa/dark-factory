@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OGRE Tender Tracker — Government AI Opportunities</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-dim:rgba(201,168,76,0.12);--gold-border:rgba(201,168,76,0.3);
+  --bg:#0A0A0A;--surface:#111114;--surface2:#18181C;--surface3:#1E1E26;--border:#252530;
+  --text:#E8E8F0;--muted:#6B6B80;--green:#00D67D;--red:#FF4D4D;
+  --amber:#FFAA00;--cyan:#00C9E4;--purple:#A78BFA;--orange:#FF7A3D;
+}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,10,0.96);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:56px;display:flex;align-items:center;gap:16px;
+}
+.topbar-brand{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  color:var(--gold);letter-spacing:0.08em;
+}
+.topbar-brand span{color:var(--muted);font-weight:400}
+.topbar-sep{flex:1}
+.topbar-nav{display:flex;gap:4px}
+.topbar-nav a{
+  font-size:12px;color:var(--muted);text-decoration:none;padding:6px 12px;
+  border-radius:4px;transition:all 0.15s;letter-spacing:0.03em;
+}
+.topbar-nav a:hover,.topbar-nav a.active{color:var(--gold);background:var(--gold-dim)}
+.topbar-clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.signal-dot{
+  width:7px;height:7px;background:var(--green);border-radius:50%;
+  animation:pulse 2s ease-in-out infinite;display:inline-block;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* LAYOUT */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.section{padding:40px 0}
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;
+}
+.section-title{
+  font-family:Newsreader,serif;font-size:22px;color:var(--text);
+}
+.section-sub{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* HERO */
+.hero{padding:48px 0 36px;border-bottom:1px solid var(--border);margin-bottom:0}
+.hero-grid{
+  display:grid;grid-template-columns:1fr auto;align-items:start;gap:32px;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+  letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.hero h1{
+  font-family:Newsreader,serif;font-size:clamp(28px,4vw,44px);
+  color:var(--text);line-height:1.2;margin-bottom:14px;
+}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-desc{color:var(--muted);font-size:15px;max-width:560px;line-height:1.7}
+.hero-right{}
+.hero-stat-card{
+  background:var(--surface);border:1px solid var(--gold-border);
+  border-radius:8px;padding:20px 24px;min-width:200px;text-align:center;
+  margin-bottom:12px;
+}
+.hero-stat-card .val{
+  font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;
+  color:var(--gold);display:block;
+}
+.hero-stat-card .lbl{
+  font-size:11px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:0.1em;margin-top:4px;
+}
+.hero-stat-row{display:flex;gap:12px}
+
+/* STAT CARDS ROW */
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:32px 0;
+  border-bottom:1px solid var(--border);
+}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:20px;
+}
+.stat-card .val{
+  font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;
+  color:var(--text);display:block;
+}
+.stat-card.amber .val{color:var(--amber)}
+.stat-card.green .val{color:var(--green)}
+.stat-card.cyan .val{color:var(--cyan)}
+.stat-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px}
+.stat-card .sub{font-size:12px;color:var(--gold);margin-top:8px}
+
+/* COUNTRY TABS */
+.country-tabs{
+  display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;
+}
+.country-tab{
+  padding:8px 18px;border-radius:20px;font-size:13px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border);color:var(--muted);
+  background:var(--surface);transition:all 0.15s;
+}
+.country-tab:hover{border-color:var(--gold-border);color:var(--gold)}
+.country-tab.active{
+  background:var(--gold-dim);border-color:var(--gold);color:var(--gold);
+}
+
+/* TENDER CARDS */
+.tenders-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.tender-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:24px;transition:border-color 0.15s;
+}
+.tender-card:hover{border-color:var(--gold-border)}
+.tender-card.hot{border-color:rgba(255,77,77,0.4)}
+.tender-card-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;
+}
+.tender-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.badge{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;
+  border-radius:3px;
+}
+.badge-hi{background:rgba(255,77,77,0.15);color:var(--red);border:1px solid rgba(255,77,77,0.3)}
+.badge-mid{background:rgba(255,170,0,0.15);color:var(--amber);border:1px solid rgba(255,170,0,0.3)}
+.badge-low{background:rgba(0,214,125,0.1);color:var(--green);border:1px solid rgba(0,214,125,0.2)}
+.badge-open{background:rgba(0,201,228,0.1);color:var(--cyan);border:1px solid rgba(0,201,228,0.25)}
+.badge-closed{background:rgba(107,107,128,0.15);color:var(--muted);border:1px solid rgba(107,107,128,0.3)}
+.tender-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.tender-title{
+  font-family:Newsreader,serif;font-size:20px;color:var(--text);line-height:1.3;flex:1;
+}
+.tender-agency{font-size:12px;color:var(--muted);margin-top:4px}
+.tender-country{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+  background:var(--gold-dim);padding:3px 10px;border-radius:3px;border:1px solid var(--gold-border);
+  white-space:nowrap;
+}
+.tender-body{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.tender-metric{
+  background:var(--surface2);border-radius:6px;padding:12px 14px;
+}
+.tender-metric .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.tender-metric .value{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--text)}
+.tender-metric .value.gold{color:var(--gold)}
+.tender-metric .value.red{color:var(--red)}
+.tender-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.tender-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tag{
+  font-size:11px;padding:3px 9px;border-radius:3px;
+  background:rgba(201,168,76,0.08);color:var(--gold);border:1px solid rgba(201,168,76,0.2);
+}
+.tender-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;
+  cursor:pointer;border:none;transition:all 0.15s;font-family:Inter,sans-serif;
+}
+.btn-primary{background:var(--gold);color:#0A0A0A}
+.btn-primary:hover{background:#d4b256}
+.btn-outline{
+  background:transparent;color:var(--gold);border:1px solid var(--gold-border);
+}
+.btn-outline:hover{background:var(--gold-dim)}
+.btn-copy{
+  background:rgba(0,214,125,0.1);color:var(--green);border:1px solid rgba(0,214,125,0.25);
+  padding:6px 12px;font-size:12px;
+}
+.btn-copy:hover{background:rgba(0,214,125,0.2)}
+.btn-copy.copied{background:rgba(0,214,125,0.25)}
+
+/* SCORE TABLE */
+.score-section{padding:40px 0;border-top:1px solid var(--border)}
+.score-table{width:100%;border-collapse:collapse}
+.score-table th{
+  font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;
+  letter-spacing:0.1em;color:var(--muted);padding:10px 12px;text-align:left;
+  border-bottom:1px solid var(--border);
+}
+.score-table td{
+  padding:12px 12px;border-bottom:1px solid rgba(37,37,48,0.5);
+  font-size:13px;vertical-align:middle;
+}
+.score-table tr:hover td{background:var(--gold-dim)}
+.score-table .name-col{font-family:Newsreader,serif;font-size:15px;color:var(--text)}
+.score-table .mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.score-bar-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{
+  height:6px;background:rgba(201,168,76,0.15);border-radius:3px;
+  flex:1;max-width:120px;overflow:hidden;
+}
+.score-fill{height:100%;border-radius:3px;background:var(--gold)}
+.score-fill.hi{background:var(--green)}
+.score-fill.mid{background:var(--amber)}
+.score-fill.lo{background:var(--muted)}
+
+/* FIT MATRIX */
+.fit-section{padding:40px 0;border-top:1px solid var(--border)}
+.fit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fit-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;
+}
+.fit-card.hot{border-color:rgba(255,77,77,0.3)}
+.fit-card .country-flag{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;
+}
+.fit-card h3{
+  font-family:Newsreader,serif;font-size:16px;color:var(--text);margin-bottom:8px;
+}
+.fit-card .score-big{
+  font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;
+  color:var(--green);display:block;margin-bottom:4px;
+}
+.fit-card .score-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
+.fit-list{list-style:none;margin-top:12px}
+.fit-list li{
+  font-size:12px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(37,37,48,0.5);
+  display:flex;align-items:flex-start;gap:6px;
+}
+.fit-list li::before{content:'›';color:var(--gold);flex-shrink:0}
+
+/* NEXT ACTIONS */
+.actions-section{padding:40px 0;border-top:1px solid var(--border)}
+.actions-list{display:grid;grid-template-columns:1fr;gap:10px}
+.action-row{
+  display:flex;align-items:center;gap:14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:14px 18px;
+}
+.action-row.hot{border-color:rgba(255,77,77,0.3)}
+.action-pri{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.action-pri.red{background:rgba(255,77,77,0.15);color:var(--red);border:1px solid rgba(255,77,77,0.3)}
+.action-pri.amber{background:rgba(255,170,0,0.15);color:var(--amber);border:1px solid rgba(255,170,0,0.3)}
+.action-pri.cyan{background:rgba(0,201,228,0.1);color:var(--cyan);border:1px solid rgba(0,201,228,0.25)}
+.action-content{flex:1}
+.action-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.action-meta{font-size:11px;color:var(--muted)}
+.action-country{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);
+  background:var(--gold-dim);padding:2px 8px;border-radius:3px;
+}
+.action-deadline{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+/* ADD TENDER FORM */
+.add-section{padding:40px 0;border-top:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-full{grid-column:1/-1}
+.form-group{}
+.form-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;
+  letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;display:block;
+}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:6px;padding:9px 12px;color:var(--text);font-size:13px;
+  font-family:Inter,sans-serif;transition:border-color 0.15s;outline:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold-border)}
+.form-textarea{resize:vertical;min-height:80px}
+.form-select{cursor:pointer}
+.form-select option{background:var(--surface2)}
+.btn-add{background:var(--gold);color:#0A0A0A;padding:9px 20px;border:none;border-radius:6px;
+  font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;}
+.btn-add:hover{background:#d4b256}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--surface2);border:1px solid var(--green);
+  color:var(--green);padding:10px 18px;border-radius:6px;
+  font-size:13px;font-family:'JetBrains Mono',monospace;
+  opacity:0;transition:opacity 0.2s;pointer-events:none;
+}
+.toast.show{opacity:1}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .tender-body{grid-template-columns:1fr}
+  .fit-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .hero-stat-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">OGRE<span> /// TENDER TRACKER</span></div>
+  <div class="topbar-sep"></div>
+  <nav class="topbar-nav">
+    <a href="index.html">Dashboard</a>
+    <a href="roi-calculator.html">ROI Calc</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="compare.html">Compare</a>
+    <a href="portal.html">Portal</a>
+    <a href="signal-builder.html">Signals</a>
+    <a href="tools-stack.html">Tools</a>
+    <a href="deal-tracker.html">Deals</a>
+    <a href="tender-tracker.html" class="active">Tenders</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="signal-dot"></span>
+    <span class="topbar-clock" id="clock">--:-- UTC</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-eyebrow"><span class="signal-dot"></span> Government AI Procurement Intelligence</div>
+      <h1>Active <em>Tender</em> Pipeline</h1>
+      <p class="hero-desc">Track live government AI tenders across South Africa, Nigeria, and Kenya. Score OGRE's fit, copy positioning notes, and manage your government sales pipeline — all from one tool.</p>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat-row">
+        <div class="hero-stat-card">
+          <span class="val">R350M+</span>
+          <div class="lbl">Total Pipeline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAT CARDS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <span class="val">3</span>
+    <div class="lbl">Active Tenders</div>
+    <div class="sub">Jul 2026 — Open</div>
+  </div>
+  <div class="stat-card amber">
+    <span class="val">R250M</span>
+    <div class="lbl">Largest Single</div>
+    <div class="sub">SA DoH — Health AI</div>
+  </div>
+  <div class="stat-card green">
+    <span class="val">Jul 10</span>
+    <div class="lbl">Nearest Deadline</div>
+    <div class="sub">Nigeria NITDA</div>
+  </div>
+  <div class="stat-card cyan">
+    <span class="val">3</span>
+    <div class="lbl">OGRE Fit &gt;70%</div>
+    <div class="sub">High Priority</div>
+  </div>
+</div>
+
+<!-- COUNTRY FILTER -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Open Tenders</div>
+      <div class="section-sub">July 2026 — Government AI Procurement</div>
+    </div>
+    <div class="country-tabs" id="countryTabs">
+      <div class="country-tab active" data-country="all">All Markets</div>
+      <div class="country-tab" data-country="ZA">South Africa</div>
+      <div class="country-tab" data-country="NG">Nigeria</div>
+      <div class="country-tab" data-country="KE">Kenya</div>
+    </div>
+  </div>
+
+  <div class="tenders-grid" id="tendersGrid">
+    <!-- Populated by JS -->
+  </div>
+</div>
+
+<!-- OGRE FIT SCORE MATRIX -->
+<div class="fit-section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">OGRE Fit Score Matrix</div>
+      <div class="section-sub">How well does each tender match OGRE's capabilities?</div>
+    </div>
+  </div>
+  <div class="fit-grid" id="fitGrid">
+    <!-- Populated by JS -->
+  </div>
+</div>
+
+<!-- PRIORITY ACTION TABLE -->
+<div class="score-section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Tender Pursuit Priority</div>
+      <div class="section-sub">Ranked by OGRE win probability × deal size</div>
+    </div>
+  </div>
+  <table class="score-table" id="scoreTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tender</th>
+        <th>Country</th>
+        <th>Budget</th>
+        <th>Deadline</th>
+        <th>OGRE Fit</th>
+        <th>Win Prob</th>
+        <th>Score</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="scoreBody">
+      <!-- Populated by JS -->
+    </tbody>
+  </table>
+</div>
+
+<!-- NEXT ACTIONS -->
+<div class="actions-section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">90-Day Tender Action Plan</div>
+      <div class="section-sub">Prioritised by urgency × OGRE readiness</div>
+    </div>
+  </div>
+  <div class="actions-list" id="actionsList">
+    <!-- Populated by JS -->
+  </div>
+</div>
+
+<!-- ADD TENDER FORM -->
+<div class="add-section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Add Tender Opportunity</div>
+      <div class="section-sub">Track new tenders as you discover them</div>
+    </div>
+  </div>
+  <div class="form-grid">
+    <div class="form-group">
+      <label class="form-label">Tender / RFP Name</label>
+      <input class="form-input" id="f-title" placeholder="e.g. AI Health Records System — Gauteng DoH">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Issuing Agency</label>
+      <input class="form-input" id="f-agency" placeholder="e.g. South Africa Department of Health">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Country</label>
+      <select class="form-select" id="f-country">
+        <option value="ZA">South Africa</option>
+        <option value="NG">Nigeria</option>
+        <option value="KE">Kenya</option>
+        <option value="GH">Ghana</option>
+        <option value="EG">Egypt</option>
+        <option value="ET">Ethiopia</option>
+        <option value="TZ">Tanzania</option>
+        <option value="UG">Uganda</option>
+        <option value="MZ">Mozambique</option>
+        <option value="OTHER">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Budget (ZAR)</label>
+      <input class="form-input" id="f-budget" placeholder="e.g. 5000000 or 5M">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Submission Deadline</label>
+      <input class="form-input" type="date" id="f-deadline">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tender Reference #</label>
+      <input class="form-input" id="f-ref" placeholder="e.g. SA-DoH-AI-2026-089">
+    </div>
+    <div class="form-full">
+      <label class="form-label">OGRE Positioning Notes</label>
+      <textarea class="form-textarea" id="f-notes" placeholder="How does OGRE fit this tender? What services would we pitch?"></textarea>
+    </div>
+    <div class="form-full" style="display:flex;align-items:center;gap:12px;padding-top:4px">
+      <button class="btn-add" onclick="addTender()">+ Add to Pipeline</button>
+      <span id="addFeedback" style="font-size:12px;color:var(--muted)"></span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+// LIVE CLOCK
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=
+    now.toUTCString().split(' ')[4]+' UTC';
+}
+setInterval(updateClock,1000);updateClock();
+
+// TENDER DATA
+const TENDERS = [
+  {
+    id:'SA-DoH-2026-AI',
+    title:'AI Health Records Digitisation System',
+    agency:'South Africa Department of Health',
+    country:'ZA',
+    countryName:'South Africa',
+    ref:'SA-DoH-AI-2026-R200M',
+    budget:'R200,000,000',
+    budgetRaw:200000000,
+    deadline:'2026-07-28',
+    urgency:'high',
+    status:'open',
+    description:'End-to-end AI-powered digitisation of patient health records across 420 public health facilities in KwaZulu-Natal, Gauteng, and Western Cape. Includes NLP for clinical note extraction, OCR for legacy paper records, and a FHIR-compliant data layer for integration with Discovery Health and provincial health systems.',
+    requirements:[
+      'FHIR R4 compliant data layer',
+      'NLP for clinical note extraction in English, Zulu, Xhosa, Afrikaans',
+      'OCR for legacy paper records at scale',
+      'Discovery Health API integration',
+      '5+ years healthcare AI deployment experience',
+      'B-BBEE Level 1-4 required',
+    ],
+    tags:['Healthcare AI','NLP','OCR','FHIR','B-BBEE','Local Language'],
+    fitScore:88,
+    winProb:42,
+    reasons:[
+      'OGRE has existing health AI positioning (Discovery Vitality AI in prior research)',
+      'Strong South Africa enterprise relationships via Studex Group',
+      'NLP + local language capability directly matches requirement',
+      'FHIR compliance achievable via OpenClaw data pipeline',
+    ],
+    challenges:[
+      'Large budget attracts multinationals (IBM, Microsoft SA, Accenture)',
+      'B-BBEE requirement — OGRE needs Level 4 or better',
+      'KZN/Gauteng/WC scope is large — consider prime + sub structure',
+    ],
+    ogreAction:'Pitch as prime contractor with local health-tech sub (e.g. Discovery Health AI division). Lead on NLP/local language layer. Partner with a B-BBEE Level 1 sub for compliance.',
+    copyNote:'OGRE + Studex Group — AI health records NLP pipeline. FHIR-compliant. English/Zulu/Xhosa/Afrikaans. B-BBEE compliant. SA enterprise relationships.',
+  },
+  {
+    id:'NG-NITDA-2026',
+    title:'National AI Strategy Implementation Programme',
+    agency:'Nigeria National Information Technology Development Agency (NITDA)',
+    country:'NG',
+    countryName:'Nigeria',
+    ref:'NITDA-AI-STRAT-2026',
+    budget:'$50,000,000',
+    budgetRaw:950000000,
+    deadline:'2026-07-10',
+    urgency:'high',
+    status:'open',
+    description:'NITDA is deploying a $50M World Bank–backed national AI programme covering: AI skills development (50,000 citizens trained), local LLM development for Hausa/Yoruba/Igbo, AI regulatory sandbox, and enterprise AI adoption support for Nigerian SMME sector. Multiple sub-contracts available for AI firms.',
+    requirements:[
+      'Proven AI training and curriculum delivery at national scale',
+      'Local LLM fine-tuning experience (Hausa, Yoruba, Igbo)',
+      'Registered Nigerian tech company or joint venture with local entity',
+      'World Bank procurement compliance',
+      'SMME AI adoption track record',
+    ],
+    tags:['LLM Fine-tuning','Local Languages','Training','World Bank','SMME'],
+    fitScore:72,
+    winProb:35,
+    reasons:[
+      'OGRE\'s OpenClaw + n8n stack is ideal for SMME AI adoption workflow',
+      'Qwen3 119-language support covers Hausa/Yoruba/Igbo directly',
+      'Nigeria is an OGRE priority market per midnight build research',
+    ],
+    challenges:[
+      'Requires Nigerian registered entity or local JV partner',
+      'World Bank procurement process is lengthy (6-12 months)',
+      'Global consulting firms (Deloitte, PwC Nigeria) also bidding',
+    ],
+    ogreAction:'Register as sub-contractor through a Nigerian JV partner. Target the SMME AI adoption workstream — OGRE\'s n8n + OpenClaw stack is purpose-built for this. Pitch Studex Group as enterprise AI delivery partner.',
+    copyNote:'OGRE + Nigerian JV partner — SMME AI adoption programme. n8n + OpenClaw pipeline. Qwen3 for Hausa/Yoruba/Igbo LLM. World Bank compliant. Jul 10 deadline.',
+  },
+  {
+    id:'KE-ICT-2026-045',
+    title:'AI for Government Service Delivery — KA-2026-045',
+    agency:'Kenya ICT Authority (KIA)',
+    country:'KE',
+    countryName:'Kenya',
+    ref:'KA-2026-045',
+    budget:'KSh 180,000,000',
+    budgetRaw:2200000,
+    deadline:'2026-08-15',
+    urgency:'mid',
+    status:'open',
+    description:'Kenya ICT Authority procurement for AI-powered government service delivery modernisation. Covers: AI chatbot for citizen services (e.g. eCitizen portal), predictive analytics for service demand, and AI-driven permit/license processing automation. Part of Kenya\'s Digital Economy Blueprint 2.0.',
+    requirements:[
+      'AI chatbot deployment in East African government context',
+      'Swahili + English NLP capability',
+      'Predictive analytics experience',
+      'KE Government security clearance capability',
+      'Registered Kenyan entity or partnership required',
+    ],
+    tags:['Government Chatbot','Swahili NLP','Predictive Analytics','KE Gov','Citizen Services'],
+    fitScore:65,
+    winProb:28,
+    reasons:[
+      'OpenClaw + n8n is ideal for government workflow automation',
+      'Swahili NLP aligns with Kenya\'s language priority',
+      'Kenya is East Africa hub — winning here opens Tanzania, Uganda',
+    ],
+    challenges:[
+      'Requires Kenyan registered entity or local partner',
+      'Competitive — several Kenyan AI startups (including those at Nairobi AI Forum) will bid',
+      'Security clearance process adds 4-6 weeks',
+    ],
+    ogreAction:'Target as part of East Africa expansion. Find Kenyan AI firm as JV partner — OGRE leads on AI pipeline architecture, partner handles local compliance. Scope AI chatbot + permit automation as primary deliverables.',
+    copyNote:'OGRE + Kenyan JV partner — AI government chatbot + permit automation. Swahili/English NLP. n8n workflow automation. Predictive analytics. Kenya ICT Authority — KA-2026-045.',
+  },
+];
+
+// Custom tenders from form (persisted in sessionStorage)
+function getCustomTenders(){
+  try{return JSON.parse(sessionStorage.getItem('ogre-custom-tenders')||'[]');}
+  catch(e){return [];}
+}
+function saveCustomTenders(arr){
+  sessionStorage.setItem('ogre-custom-tenders',JSON.stringify(arr));
+}
+
+// COUNTRY FLAGS
+const FLAGS={'ZA':'🇿🇦','NG':'🇳🇬','KE':'🇰🇪','GH':'🇬🇭','EG':'🇪🇬','ET':'🇪🇹','TZ':'🇹🇿','UG':'🇺🇬','MZ':'🇲🇿','OTHER':'🌍'};
+const COUNTRY_NAMES={'ZA':'South Africa','NG':'Nigeria','KE':'Kenya','GH':'Ghana','EG':'Egypt','ET':'Ethiopia','TZ':'Tanzania','UG':'Uganda','MZ':'Mozambique','OTHER':'Other'};
+
+// RENDER TENDER CARDS
+function renderTenders(countryFilter){
+  const grid=document.getElementById('tendersGrid');
+  const all=[...TENDERS,...getCustomTenders()];
+  const filtered=countryFilter==='all'?all:all.filter(t=>t.country===countryFilter);
+  if(filtered.length===0){
+    grid.innerHTML='<div style="text-align:center;padding:60px;color:var(--muted)"><div style="font-size:36px;margin-bottom:12px">📋</div><div>No tenders in this market yet.<br><a href="javascript:document.querySelector(\'.btn-add\').closest(\'.section\').scrollIntoView();" style="color:var(--gold)">Add one below ↓</a></div></div>';
+    return;
+  }
+  grid.innerHTML=filtered.map(t=>{
+    const urgClass=t.urgency==='high'?'hot':'';
+    const badge=t.status==='open'?'<span class="badge badge-open">● OPEN</span>':'<span class="badge badge-closed">■ CLOSED</span>';
+    const urgBadge=t.urgency==='high'?'<span class="badge badge-hi">🔴 HIGH</span>':t.urgency==='mid'?'<span class="badge badge-mid">🟡 MED</span>':'<span class="badge badge-low">🔵 WATCH</span>';
+    const deadline=new Date(t.deadline);
+    const daysLeft=Math.ceil((deadline-new Date())/(1000*60*60*24));
+    const deadlineStr=daysLeft<0?'<span style="color:var(--red)">Expired '+Math.abs(daysLeft)+'d ago</span>':
+      daysLeft<=7?'<span style="color:var(--red)">'+daysLeft+' days left ⚠</span>':
+      daysLeft<=30?'<span style="color:var(--amber)">'+daysLeft+' days left</span>':
+      '<span style="color:var(--muted)">'+daysLeft+' days</span>';
+    return`<div class="tender-card ${urgClass}" data-country="${t.country}">
+      <div class="tender-card-header">
+        <div style="flex:1">
+          <div class="tender-meta">${badge}${urgBadge}<span class="tender-id">${FLAGS[t.country]||'🌍'} ${t.ref}</span></div>
+          <div class="tender-title">${t.title}</div>
+          <div class="tender-agency">${t.agency}</div>
+        </div>
+        <div class="tender-country">${FLAGS[t.country]||'🌍'} ${t.countryName||COUNTRY_NAMES[t.country]||t.country}</div>
+      </div>
+      <div class="tender-body">
+        <div class="tender-metric">
+          <div class="label">Budget</div>
+          <div class="value gold">${t.budget}</div>
+        </div>
+        <div class="tender-metric">
+          <div class="label">Deadline</div>
+          <div class="value">${t.deadline}</div>
+          <div style="font-size:11px;margin-top:2px">${deadlineStr}</div>
+        </div>
+        <div class="tender-metric">
+          <div class="label">OGRE Fit Score</div>
+          <div class="value ${t.fitScore>=80?'gold':t.fitScore>=65?'amber':''}">${t.fitScore}/100</div>
+        </div>
+        <div class="tender-metric">
+          <div class="label">Est. Win Probability</div>
+          <div class="value">${t.winProb}%</div>
+        </div>
+      </div>
+      <p class="tender-desc">${t.description}</p>
+      <div class="tender-tags">${t.tags.map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
+      <div class="tender-actions">
+        <button class="btn btn-primary" onclick="copyNote('${t.id}')">📋 Copy OGRE Pitch</button>
+        <button class="btn btn-outline" onclick="toggleDetails('${t.id}')">View Details ▾</button>
+      </div>
+      <div id="details-${t.id}" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:10px">Requirements</div>
+            <ul style="list-style:none">${(t.requirements||[]).map(r=>`<li style="font-size:12px;color:var(--muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--red)">□</span>${r}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:10px">OGRE Strengths</div>
+            <ul style="list-style:none">${(t.reasons||[]).map(r=>`<li style="font-size:12px;color:var(--muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--green)">✓</span>${r}</li>`).join('')}</ul>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--amber);margin:12px 0 8px">⚠ Risks</div>
+            <ul style="list-style:none">${(t.challenges||[]).map(c=>`<li style="font-size:12px;color:var(--muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--amber)">!</span>${c}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:6px;padding:12px 14px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:6px">Recommended Pursuit Strategy</div>
+          <div style="font-size:13px;color:var(--text)">${t.ogreAction||'Contact OGRE team to discuss pursuit strategy.'}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// TOGGLE DETAILS
+function toggleDetails(id){
+  const el=document.getElementById('details-'+id);
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+// COPY NOTE
+function copyNote(id){
+  const all=[...TENDERS,...getCustomTenders()];
+  const t=all.find(x=>x.id===id);
+  if(!t)return;
+  const text=`OGRE COMPUTER — TENDER PITCH NOTE\n${'='.repeat(40)}\nTender: ${t.title}\nReference: ${t.ref}\nAgency: ${t.agency}\nBudget: ${t.budget}\nDeadline: ${t.deadline}\n\n${t.description}\n\nOGRE FIT: ${t.fitScore}/100 | WIN PROB: ${t.winProb}%\n\nPURSUIT STRATEGY:\n${t.ogreAction}\n\nPITCH NOTE:\n${t.copyNote}`;
+  navigator.clipboard.writeText(text).then(()=>showToast('OGRE pitch copied!'));
+}
+
+// SHOW TOAST
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg||'Copied!';t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// COUNTRY TAB FILTERING
+document.getElementById('countryTabs').addEventListener('click',e=>{
+  const tab=e.target.closest('.country-tab');
+  if(!tab)return;
+  document.querySelectorAll('.country-tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  renderTenders(tab.dataset.country);
+});
+
+// RENDER FIT SCORE CARDS
+function renderFitScores(){
+  const grid=document.getElementById('fitGrid');
+  const all=[...TENDERS,...getCustomTenders()];
+  all.sort((a,b)=>b.fitScore-a.fitScore);
+  grid.innerHTML=all.map(t=>`
+    <div class="fit-card ${t.urgency==='high'?'hot':''}">
+      <div class="country-flag">${FLAGS[t.country]||'🌍'} ${t.countryName||COUNTRY_NAMES[t.country]||t.country}</div>
+      <h3>${t.title.length>40?t.title.slice(0,40)+'…':t.title}</h3>
+      <span class="score-big">${t.fitScore}<span style="font-size:16px;color:var(--muted)">/100</span></span>
+      <div class="score-lbl">OGRE Fit Score</div>
+      <ul class="fit-list">
+        ${(t.reasons||[]).slice(0,3).map(r=>`<li>${r}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+}
+
+// RENDER PRIORITY TABLE
+function renderScoreTable(){
+  const tbody=document.getElementById('scoreBody');
+  const all=[...TENDERS,...getCustomTenders()];
+  all.sort((a,b)=>{
+    const scoreA=a.fitScore*a.winProb*a.budgetRaw;
+    const scoreB=b.fitScore*b.winProb*b.budgetRaw;
+    return scoreB-scoreA;
+  });
+  tbody.innerHTML=all.map((t,i)=>{
+    const barW=Math.round(t.fitScore*0.8);
+    const barClass=t.fitScore>=80?'hi':t.fitScore>=65?'mid':'lo';
+    const priorityScore=Math.round(t.fitScore*t.winProb*t.budgetRaw/1000000);
+    return`<tr>
+      <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)">P${i+1}</span></td>
+      <td class="name-col">${t.title.length>42?t.title.slice(0,42)+'…':t.title}<br><span class="mono">${t.ref}</span></td>
+      <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)">${FLAGS[t.country]||'🌍'} ${t.countryName||COUNTRY_NAMES[t.country]||''}</span></td>
+      <td class="mono" style="color:var(--gold)">${t.budget}</td>
+      <td class="mono">${t.deadline}</td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill ${barClass}" style="width:${barW}%"></div></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text)">${t.fitScore}</span>
+        </div>
+      </td>
+      <td class="mono">${t.winProb}%</td>
+      <td><span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)">${priorityScore.toLocaleString()}</span></td>
+      <td><button class="btn-copy" onclick="copyNote('${t.id}')">Copy pitch</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// RENDER ACTIONS
+function renderActions(){
+  const list=document.getElementById('actionsList');
+  const all=[...TENDERS,...getCustomTenders()];
+  all.sort((a,b)=>{
+    const ua=a.urgency==='high'?0:a.urgency==='mid'?1:2;
+    const ub=b.urgency==='high'?0:b.urgency==='mid'?1:2;
+    return ua-ub;
+  });
+  const actions=all.map((t,i)=>({
+    title:`Register/pitch for ${t.title}`,
+    tender:t.ref,
+    country:t.country,
+    countryName:t.countryName||COUNTRY_NAMES[t.country]||'',
+    deadline:t.deadline,
+    urgency:t.urgency,
+    ogreAction:t.ogreAction,
+  }));
+  list.innerHTML=actions.map((a,i)=>`
+    <div class="action-row ${a.urgency==='high'?'hot':''}">
+      <div class="action-pri ${a.urgency==='high'?'red':a.urgency==='mid'?'amber':'cyan'}">P${i+1}</div>
+      <div class="action-content">
+        <div class="action-title">${a.title}</div>
+        <div class="action-meta">${a.ogreAction}</div>
+      </div>
+      <span class="action-country">${FLAGS[a.country]||'🌍'} ${a.countryName}</span>
+      <span class="action-deadline">${a.deadline}</span>
+    </div>`).join('');
+}
+
+// ADD TENDER
+function addTender(){
+  const title=document.getElementById('f-title').value.trim();
+  const agency=document.getElementById('f-agency').value.trim();
+  const country=document.getElementById('f-country').value;
+  const budget=document.getElementById('f-budget').value.trim();
+  const deadline=document.getElementById('f-deadline').value;
+  const ref=document.getElementById('f-ref').value.trim();
+  const notes=document.getElementById('f-notes').value.trim();
+  if(!title||!agency||!budget||!deadline){
+    document.getElementById('addFeedback').textContent='⚠ Fill in all required fields.';
+    document.getElementById('addFeedback').style.color='var(--red)';
+    return;
+  }
+  const budgetRaw=budget.replace(/[^0-9.]/g,'');
+  const custom={
+    id:'custom-'+Date.now(),
+    title,agency,country,
+    countryName:COUNTRY_NAMES[country]||country,
+    ref:ref||'CUSTOM-'+Date.now(),
+    budget,budgetRaw:parseFloat(budgetRaw)*100||0,
+    deadline,urgency:'mid',status:'open',
+    description:notes||'Custom tender opportunity added to pipeline.',
+    requirements:[],tags:['Custom'],
+    fitScore:50,winProb:20,
+    reasons:['Custom opportunity — review and score manually.'],
+    challenges:['Not yet assessed.'],
+    ogreAction:notes||'Review this tender opportunity and assess OGRE fit.',
+    copyNote:`OGRE COMPUTER — CUSTOM TENDER\nTender: ${title}\nAgency: ${agency}\nBudget: ${budget}\nDeadline: ${deadline}\nNotes: ${notes||'No notes provided.'}`,
+  };
+  const arr=getCustomTenders();
+  arr.push(custom);
+  saveCustomTenders(arr);
+  document.getElementById('addFeedback').textContent='✓ Added to pipeline!';
+  document.getElementById('addFeedback').style.color='var(--green)';
+  setTimeout(()=>{
+    document.getElementById('addFeedback').textContent='';
+    ['f-title','f-agency','f-budget','f-deadline','f-ref','f-notes'].forEach(id=>document.getElementById(id).value='');
+  },2000);
+  renderAll();
+}
+
+// INIT
+function renderAll(){
+  renderTenders(document.querySelector('.country-tab.active')?.dataset.country||'all');
+  renderFitScores();
+  renderScoreTable();
+  renderActions();
+}
+renderAll();
+</script>
+</body>
+</html>

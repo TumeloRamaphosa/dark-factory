@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAISA Agent OS — VM-Powered SaaS Proposal | Studex Group | June 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --obsidian: #0a0a0a;
+    --obsidian-light: #141414;
+    --obsidian-border: #222222;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dark: #a8893a;
+    --cream: #f5f0e8;
+    --text: #e8e8e8;
+    --text-muted: #888888;
+    --accent-orange: #f97316;
+    --accent-purple: #8b5cf6;
+    --accent-green: #22c55e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--obsidian);
+    color: var(--text);
+    font-size: 11pt;
+    line-height: 1.6;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @media print {
+    body { background: white; color: #1a1a1a; font-size: 10pt; }
+    .page-break { page-break-before: always; }
+    .no-print { display: none !important; }
+    .skill-card { break-inside: avoid; }
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 40px; }
+  .header {
+    text-align: center;
+    padding: 60px 40px;
+    border-bottom: 1px solid var(--obsidian-border);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+  .header-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid var(--gold);
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header h2 {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .header-meta span { display: flex; align-items: center; gap: 6px; }
+  .section { padding: 48px 0; border-bottom: 1px solid var(--obsidian-border); }
+  .section:last-child { border-bottom: none; }
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h3::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+  }
+  h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 12px;
+    margin-top: 20px;
+  }
+  p { color: #c0c0c0; margin-bottom: 12px; }
+  ul { list-style: none; margin-bottom: 16px; }
+  ul li { padding: 6px 0; padding-left: 20px; position: relative; color: #b0b0b0; }
+  ul li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-family: 'JetBrains Mono', monospace; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  thead tr { border-bottom: 2px solid var(--gold); }
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--obsidian-border);
+    font-size: 10.5pt;
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(201,168,76,0.03); }
+  .price-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .price-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+  .tier {
+    background: var(--obsidian-light);
+    border: 1px solid var(--obsidian-border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .tier.recommended {
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(201,168,76,0.1);
+  }
+  .tier.recommended::before {
+    content: '★ RECOMMENDED';
+    position: absolute;
+    top: 12px; right: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .tier-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+  .tier-desc {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--obsidian-border);
+  }
+  .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .skill-card {
+    background: var(--obsidian-light);
+    border: 1px solid var(--obsidian-border);
+    border-radius: 8px;
+    padding: 16px;
+    page-break-inside: avoid;
+  }
+  .skill-card h5 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .skill-card p { font-size: 9.5px; color: var(--text-muted); margin: 0; }
+  .comparison-table { margin-top: 24px; }
+  .comparison-table td:first-child { color: var(--text-muted); font-size: 10px; }
+  .comparison-table td:last-child { color: var(--accent-green); font-weight: 600; }
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+    border-left: 3px solid var(--gold);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .highlight-box p { color: var(--cream); font-size: 11pt; }
+  .footer {
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid var(--obsidian-border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .footer .studex {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--gold);
+    color: var(--obsidian);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .step-content { font-size: 10.5pt; }
+  .step-content strong { color: var(--cream); display: block; margin-bottom: 4px; }
+  .step-content p { font-size: 10px; color: var(--text-muted); margin: 0; }
+  @media print {
+    .tier { break-inside: avoid; }
+    .skill-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">Confidential — June 2026</div>
+  <h1>LAISA Agent OS</h1>
+  <h2>VM-Powered AI SaaS for South African Clinics</h2>
+  <div class="header-meta">
+    <span>📍 Johannesburg, South Africa</span>
+    <span>🏢 Studex Group (Pty) Ltd</span>
+    <span>👤 Tumelo Ramaphosa — Partner Director</span>
+    <span>🤖 Powered by AI Agents — 24/7</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="section">
+  <h3>Executive Summary</h3>
+  <p>LAISA Agent OS is a dedicated cloud computer (VM) for your clinic — pre-loaded with AI agents that work 24/7. They build your dashboards, manage your social media, automate your admin, and report directly to your browser. You see the dashboards. We manage the machine. The agents run behind it.</p>
+  <div class="highlight-box">
+    <p><strong>Your clinic gets a full-time AI engineering team. Starting at R599/month.</strong><br>No ad agencies. No freelancers. No 9-5 limitations. One VM. One partner. Full accountability.</p>
+  </div>
+  <p>Every morning, your agent checks appointments and sends reminders, reviews social performance, drafts content, monitors Google Ads, updates your dashboard, and flags anything needing attention. When you ask for something new — it writes the spec, you approve, it builds, tests, and reports back. You never wait more than 24 hours.</p>
+</div>
+
+<!-- THE PROBLEM -->
+<div class="section">
+  <h3>The Problem We Solve</h3>
+  <p>Private aesthetic clinics in South Africa face a common challenge: the digital work never ends. Social posts, Google Ads, monthly reports, new forms, website fixes — and there aren't enough hours in the day.</p>
+  <p>Most clinics hire a digital agency — which means email chains instead of action, 3-5 day response times, black-box reporting, expensive hourly rates, and no memory between weeks.</p>
+  <p><strong>LAISA Agent OS solves this differently.</strong> We give you a private AI agent sitting on a dedicated cloud computer that works on your digital infrastructure around the clock, every single day — and reports directly to your browser.</p>
+</div>
+
+<!-- SKILL STACK -->
+<div class="section">
+  <h3>The Full Skill Stack — What Your Agents Know How to Do</h3>
+  <p>Every LAISA VM comes pre-installed with this production-grade agent skill stack:</p>
+
+  <div class="skill-grid">
+    <div class="skill-card">
+      <h5>gstack — YC Sprint Process</h5>
+      <p>38 specialist roles. Y Combinator sprint methodology. /office-hours, /plan, /build, /review, /qa, /ship, /retro. Real Chromium browser testing.</p>
+    </div>
+    <div class="skill-card">
+      <h5>agent-skills — 24 Engineering Workflows</h5>
+      <p>Production-grade: TDD, security audits (OWASP+STRIDE), performance optimization, code review, CI/CD, observability. By ex-Google engineer Addy Osmani.</p>
+    </div>
+    <div class="skill-card">
+      <h5>graphify — Codebase Mapping</h5>
+      <p>Maps any codebase into a visual knowledge graph. Your agent understands the full system instantly — every file, every connection, every dependency.</p>
+    </div>
+    <div class="skill-card">
+      <h5>spec-kit — Spec-Driven Development</h5>
+      <p>GitHub's official SDD toolkit. Agent writes the spec first, you approve it, then builds exactly what you signed off on. No surprises.</p>
+    </div>
+    <div class="skill-card">
+      <h5>obsidian-skills — Knowledge Wiki</h5>
+      <p>Persistent memory across all sessions. Every decision, pattern, and lesson — stored in markdown and searchable forever. Agent never forgets.</p>
+    </div>
+    <div class="skill-card">
+      <h5>last30days-skill — Market Intelligence</h5>
+      <p>Searches Reddit, X, YouTube, TikTok, HN, Polymarket, GitHub — in parallel — scored by real engagement. Real-time competitor and patient sentiment research.</p>
+    </div>
+    <div class="skill-card">
+      <h5>headroom — Context Compression</h5>
+      <p>60-95% token reduction while keeping quality. Cross-agent memory — Charlie speaks to a patient, DenchClaw knows to prepare the invoice.</p>
+    </div>
+    <div class="skill-card">
+      <h5>skill-creator — Build New Skills</h5>
+      <p>Anthropics' framework. Your agent builds new skills recursively — test, benchmark, improve, and package. Your VM grows its own capabilities.</p>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Custom LAISA Skills (Built for SafeSight)</h4>
+  <ul>
+    <li><strong>laisa-proposal-generator</strong> — Generates formatted SAAS proposals in Studex branding in minutes</li>
+    <li><strong>hex-dashboard-generator</strong> — Builds hex.tech-style analytics dashboards from a description</li>
+    <li><strong>n8n-workflow-builder</strong> — Natural language to n8n workflow JSON for automation pipelines</li>
+    <li><strong>laisa-skills-marketplace</strong> — Skills registry so agents can dynamically activate new capabilities</li>
+  </ul>
+</div>
+
+<!-- PRICING TIERS -->
+<div class="section">
+  <h3>VM Pricing — Choose Your Tier</h3>
+  <p>All prices in South African Rand. Billed monthly. 6-month minimum commitment. No setup fees on 12-month prepay.</p>
+
+  <div class="tier">
+    <div class="tier-name">Essential VM</div>
+    <div class="tier-desc">A private cloud computer for small clinics establishing their digital presence</div>
+    <div class="tier-price">
+      <span class="price-tag">R599</span>
+      <span class="price-sub">/month · USD $32</span>
+    </div>
+    <ul>
+      <li>Dedicated Ubuntu 22.04 VM (4 vCPU, 16GB RAM, 500GB SSD)</li>
+      <li>South African IP address</li>
+      <li>LAISA Agent OS pre-installed (gstack + agent-skills + graphify + obsidian)</li>
+      <li>Branded client dashboard (browser — no app download needed)</li>
+      <li>WhatsApp Business notifications</li>
+      <li>Daily automated reports</li>
+      <li>Email support</li>
+    </ul>
+    <p style="font-size:9.5px; color:var(--text-muted); margin-top:12px;">Best for: Single-location clinics. Organic growth focus. Basic automation.</p>
+  </div>
+
+  <div class="tier recommended">
+    <div class="tier-name">Intelligence VM</div>
+    <div class="tier-desc">Everything in Essential + real-time intelligence and voice agent</div>
+    <div class="tier-price">
+      <span class="price-tag">R1,499</span>
+      <span class="price-sub">/month · USD $81</span>
+    </div>
+    <ul>
+      <li>Everything in Essential VM</li>
+      <li>last30days-skill configured for SA aesthetic medicine market</li>
+      <li>Real-time competitor research (updated weekly)</li>
+      <li>Charlie voice agent for patient calls and appointment booking</li>
+      <li>Advanced analytics dashboard (revenue, leads, social, agents)</li>
+      <li>Google Ads daily optimization</li>
+      <li>Monthly strategy review call</li>
+    </ul>
+    <p style="font-size:9.5px; color:var(--text-muted); margin-top:12px;">Best for: Growing clinics with active patient acquisition. Multi-channel marketing.</p>
+  </div>
+
+  <div class="tier">
+    <div class="tier-name">Enterprise VM</div>
+    <div class="tier-desc">Full AI department. Dedicated agent training. White-label option.</div>
+    <div class="tier-price">
+      <span class="price-tag">R3,499</span>
+      <span class="price-sub">/month · USD $189</span>
+    </div>
+    <ul>
+      <li>Everything in Intelligence VM</li>
+      <li>Custom skill development (we build skills specifically for your clinic)</li>
+      <li>Dedicated agent training on your brand, services, and workflows</li>
+      <li>SADC regional expansion (Botswana, Namibia, Lesotho)</li>
+      <li>White-label portal (remove Studex branding, your clinic brand)</li>
+      <li>Priority SLA — same-day response</li>
+      <li>Quarterly strategy retreat (1-hour video call)</li>
+      <li>API access for your developers</li>
+    </ul>
+    <p style="font-size:9.5px; color:var(--text-muted); margin-top:12px;">Best for: Multi-location clinics. Agencies. Businesses building on the platform.</p>
+  </div>
+
+  <h4>Add-Ons</h4>
+  <table>
+    <thead><tr><th>Service</th><th>Price</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Additional language (voice agent)</td><td>R500/month</td><td>Per language</td></tr>
+      <tr><td>Extra platform (TikTok, LinkedIn)</td><td>R750/month</td><td>Full management</td></tr>
+      <tr><td>Custom video content</td><td>R1,500/video</td><td>30-60 seconds</td></tr>
+      <tr><td>Google Ads management</td><td>R1,000/month</td><td>Included in Intelligence+</td></tr>
+      <tr><td>White-label portal</td><td>R1,500/month</td><td>Enterprise only</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- COMPARISON -->
+<div class="section">
+  <h3>LAISA vs Traditional Agency</h3>
+  <table class="comparison-table">
+    <thead><tr><th>Metric</th><th>Traditional Agency</th><th>LAISA Agent OS</th></tr></thead>
+    <tbody>
+      <tr><td>Cost per month</td><td>R15,000 – R40,000</td><td>R599 – R3,499</td></tr>
+      <tr><td>Working hours</td><td>9-5 weekdays</td><td>24/7 including weekends</td></tr>
+      <tr><td>Response time</td><td>24-72 hours</td><td>Same day, often same hour</td></tr>
+      <tr><td>Who does the work</td><td>1 human</td><td>6+ AI agents simultaneously</td></tr>
+      <tr><td>Memory</td><td>Lost between weeks</td><td>Persistent across all sessions</td></tr>
+      <tr><td>New features</td><td>Quoted separately</td><td>Agent builds as part of retainer</td></tr>
+      <tr><td>Reporting</td><td>Monthly PDF</td><td>Live dashboard, updated daily</td></tr>
+      <tr><td>Visibility</td><td>Black box</td><td>Full transparency — watch the agent work</td></tr>
+      <tr><td>Scalability</td><td>Hire more humans</td><td>Add more agents instantly</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <h3>How It Works — Getting Started</h3>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <strong>Review + Sign</strong>
+      <p>Review this proposal and select your VM tier. Sign the LAISA Agent OS service agreement.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <strong>VM Provisioned in 48 Hours</strong>
+      <p>We provision your dedicated cloud VM and install the full agent skill stack. You get a dashboard URL and WhatsApp number.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <strong>Account Connections (1 hour)</strong>
+      <p>We connect your Instagram, Google Ads, calendar, and WhatsApp Business. You approve each connection.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <strong>Agent Baseline Training</strong>
+      <p>Your agent spends the first week learning your business — services, brand, patients, goals. You approve its understanding before active work begins.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <strong>24/7 Ongoing Work</strong>
+      <p>Submit requests via WhatsApp or dashboard. Agent builds, tests, and reports back. Every Friday: automated retrospective.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CURRENT DEPLOYMENTS -->
+<div class="section">
+  <h3>Current LAISA Deployments on Ogre</h3>
+  <table>
+    <thead><tr><th>Client</th><th>VM Name</th><th>Status</th><th>Tier</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>LAISA Aesthetic Clinic</strong><br><span style="font-size:9px;color:var(--text-muted)">Primary demo client. Aesthetic medical clinic.</span></td>
+        <td><code style="font-size:9px">Agentic Lab - LAISA M...</code></td>
+        <td>Phase A in progress</td>
+        <td>Intelligence VM</td>
+      </tr>
+      <tr>
+        <td><strong>Studex Global Markets</strong><br><span style="font-size:9px;color:var(--text-muted)">Black-owned SA distribution company. B-BBEE Level 1.</span></td>
+        <td><code style="font-size:9px">StudEx Global Markets</code></td>
+        <td>Opportunity stage</td>
+        <td>Essential VM</td>
+      </tr>
+      <tr>
+        <td><strong>D@RK F@C#ORY</strong><br><span style="font-size:9px;color:var(--text-muted)">Agentic build factory. SaaS from idea to deployment.</span></td>
+        <td><code style="font-size:9px">D@RK F@C#ORY</code></td>
+        <td>Active development</td>
+        <td>Enterprise VM</td>
+      </tr>
+      <tr>
+        <td><strong>SafeSight Aesthetic Clinic</strong><br><span style="font-size:9px;color:var(--text-muted)">Anchor client. Full LAISA deployment.</span></td>
+        <td><code style="font-size:9px">Agentic Lab - LAISA M...</code></td>
+        <td>Phase A 40% complete</td>
+        <td>Intelligence VM</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DARK FACTORY -->
+<div class="section">
+  <h3>Dark Factory — Agentic Build Factory</h3>
+  <p>The Dark Factory is our software development VM — a BMAD (Build Me A Dashboard) system where clients describe an app idea and get a complete PRD in seconds, then our AI agents build it and deploy it live.</p>
+  <div class="highlight-box">
+    <p><strong>The workflow:</strong> Client enters idea → BMAD AI generates PRD → Client approves → Pi + Cursor agents build it → Auto-deploy to live URL in minutes → $29 per product.</p>
+  </div>
+  <p><strong>Tech stack:</strong> Next.js 16 + TypeScript + Prisma ORM + PostgreSQL + Stripe + Radix UI + Framer Motion + Tailwind CSS 4</p>
+  <p><strong>Dark Factory VMs available:</strong> D@RK F@C#ORY, Super Agents Command, Hermes Agent, OpenClaw — all on Ogre infrastructure, ready for agent deployments.</p>
+</div>
+
+<!-- PARTNERSHIP MODEL -->
+<div class="section">
+  <h3>The Studex Group Difference</h3>
+  <p>Studex Group manages the VM, trains the agents, and oversees the work. You're not just buying software — you're buying a managed digital department.</p>
+  <table>
+    <thead><tr><th>What We Manage</th><th>What the Agent Does Automatically</th></tr></thead>
+    <tbody>
+      <tr><td>VM health, security, and updates</td><td>All digital operations (social, ads, content, automations)</td></tr>
+      <tr><td>Agent training and prompt refinement</td><td>Daily self-diagnostics and health checks</td></tr>
+      <tr><td>Quality gate on all deliverables</td><td>New feature development within agreed scope</td></tr>
+      <tr><td>Client relationship and strategy</td><td>Dashboard updates and improvements</td></tr>
+      <tr><td>Escalations and troubleshooting</td><td>Weekly retrospectives and reports</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PHARMASYNTZ OPPORTUNITY -->
+<div class="section">
+  <h3>Bonus Opportunity — Pharmasyntez Partnership</h3>
+  <p>Pharmasyntez (Russia's #1 hospital medicines company) is seeking an Africa distribution partner. Studex Global Markets — with B-BBEE Level 1 status and SAHPRA wholesaler license — is positioned to be that partner. LAISA clinic facilities serve as the distribution hub.</p>
+  <p><strong>Market:</strong> Africa pharmaceutical market — USD 29.3 billion (2025) → USD 44.1 billion (2032). SA market: USD 7.88 billion growing at 5.3% CAGR.</p>
+  <p><strong>Key products:</strong> Anti-TB, HIV/AIDS, oncology, diabetes — all high-burden in South Africa. 7.8 million South Africans living with HIV. 320,000+ TB patients.</p>
+  <p>LAISA VM infrastructure powers the Pharmasyntez SA office — research, CRM, WhatsApp client communication, and automated reporting all managed by AI agents. <strong>Pharmasyntez SA VM: R8,500-R15,000/month.</strong></p>
+</div>
+
+<!-- NEXT STEPS -->
+<div class="section">
+  <h3>Next Steps</h3>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <strong>Review this proposal</strong>
+      <p>Review with your team and select your VM tier.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <strong>Sign the LAISA Agent OS agreement</strong>
+      <p>Digital service agreement — no lengthy procurement process.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <strong>Submit 50% first month deposit</strong>
+      <p>Essential: R299 deposit. Intelligence: R749 deposit. Enterprise: R1,749 deposit.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <strong>We provision your VM within 48 hours</strong>
+      <p>Full agent stack installed. Dashboard live. WhatsApp connected.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="studex">STUDEX GROUP</div>
+  <p>Johannesburg, South Africa · Partner Director: Tumelo Ramaphosa</p>
+  <p>info@studexgroup.co.za · orgo.ai/workspaces</p>
+  <p style="margin-top:16px; color: #444;">LAISA Agent OS — VM-Powered AI for South African Clinics<br>Proposal valid for 30 days from date of issue · Version 3.0 — June 2026</p>
+</div>
+
+</body>
+</html>
